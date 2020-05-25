@@ -50,7 +50,7 @@ require(['jquery',
 	'gonrin',
 	'app/router',
 	'app/nav/NavbarView',
-	'text!app/base/tpl/mobilelayout.html',
+	'text!app/base/tpl/index.html',
 	'i18n!app/nls/app',
 	'vendor/lodash-4.17.10'],
 	function ($, Gonrin, Router, Nav, layout, lang, lodash) {
