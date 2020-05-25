@@ -3,6 +3,7 @@ define(function (require) {
     var $ = require('jquery'),
         _ = require('underscore'),
         Gonrin = require('gonrin'),
+        storejs = require('vendor/store'),
         tpl = require('text!app/login/tpl/login.html');
     var template = gonrin.template(tpl)({});
     return Gonrin.View.extend({
@@ -39,9 +40,21 @@ define(function (require) {
                 url: self.getApp().serviceURL + "/api/v1/login",
                 type: 'post',
                 data: data,
-                success: function (response) {
-                    console.log("a>>>>>>>>>>>>>>>>>>>>>>", self.getApp());
-                    self.getApp().postLogin(response);
+                success: function (data) {
+                    // if (data.active === 1 || data.active === '1') {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-USER-TOKEN': data.token
+                        }
+                    });
+                    storejs.set('X-USER-TOKEN', data.token);
+                    gonrinApp().postLogin(data);
+                    // }
+                    //  else {
+                    //     gonrinApp().notify("Tài khoản của bạn đã bị khóa");
+                    // }
+                    // console.log("a>>>>>>>>>>>>>>>>>>>>>>", self.getApp());
+                    // self.getApp().postLogin(response);
                 },
                 error: function (xhr) {
                     self.getApp().notify({ message: "Tài khoản hoặc mật khẩu không chính xác" }, { type: "danger", delay: 1000 });

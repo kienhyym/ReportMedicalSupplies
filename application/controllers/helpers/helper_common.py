@@ -123,6 +123,7 @@ def generator_salt():
 
 def current_uid(request):
     user_token = request.headers.get("X-USER-TOKEN", None)
+    print("user_token=======================", user_token)
     if user_token is None:
         return None
     uid = redisdb.get("sessions:" + user_token)
@@ -139,24 +140,25 @@ def generate_user_token(uid):
     token =  binascii.hexlify(uuid.uuid4().bytes).decode()
     p = redisdb.pipeline()
     p.set("sessions:" + token, uid)
+    print("token22222222222=====", token)
     p.expire("sessions:" + token, app.config.get('SESSION_EXPIRE_TIME', 86400))
     p.execute()
     return token
 
 
-def current_uid_canbo(request):
-    user_token = request.headers.get("X-USER-TOKEN", None)
-    if user_token is None:
-        return None
-    uid = redisdb.get("sessions-canbo:" + user_token)
-    if uid is not None:
-        p = redisdb.pipeline()
-        p.set("sessions-canbo:" + user_token, uid)
-        p.expire("sessions-canbo:" + user_token, app.config.get('SESSION_EXPIRED', 86400))
-        p.execute()
-        return uid.decode('utf8')
+# def current_uid_canbo(request):
+#     user_token = request.headers.get("X-USER-TOKEN", None)
+#     if user_token is None:
+#         return None
+#     uid = redisdb.get("sessions-canbo:" + user_token)
+#     if uid is not None:
+#         p = redisdb.pipeline()
+#         p.set("sessions-canbo:" + user_token, uid)
+#         p.expire("sessions-canbo:" + user_token, app.config.get('SESSION_EXPIRED', 86400))
+#         p.execute()
+#         return uid.decode('utf8')
     
-    return None
+#     return None
 
 async def get_current_user(request, userId):
     if userId is not None:
@@ -169,6 +171,7 @@ async def get_current_user(request, userId):
 def response_current_user(user):
     response = {}
     token = generate_user_token(user.id)
+    print("token1=================", token)
     response["id"] = user.id
     response["name"] = user.name
     response["phone"] = user.phone
@@ -178,6 +181,7 @@ def response_current_user(user):
     response["organization_id"] = user.organization_id
     response["accountName"] = user.accountName
     response["Organization"] = to_dict(user.Organization)
+    response["token"] = token
     
     roles = []
     if user.roles is not None:
@@ -188,13 +192,14 @@ def response_current_user(user):
 
 
 
-def generate_user_token(uid_user):
-    token =  binascii.hexlify(uuid.uuid4().bytes).decode()
-    p1 = redisdb.pipeline()
-    p1.set("sessions:" + token, uid_user)
-    p1.expire("sessions:" + token, app.config.get('SESSION_EXPIRE_TIME', 86400))
-    p1.execute()
-    return token
+# def generate_user_token(uid_user):
+#     token =  binascii.hexlify(uuid.uuid4().bytes).decode()
+#     print("token2==================", token)
+#     p1 = redisdb.pipeline()
+#     p1.set("sessions:" + token, uid_user)
+#     p1.expire("sessions:" + token, app.config.get('SESSION_EXPIRE_TIME', 86400))
+#     p1.execute()
+#     return token
 
 
 async def hasRole(request, role):

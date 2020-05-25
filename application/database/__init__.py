@@ -6,7 +6,7 @@ import redis
 # mdb_migrate = Motor()
 
 db = SQLAlchemy()
-redisdb = redis.StrictRedis(host='localhost', port=6379, db=5)
+redisdb = redis.StrictRedis(host='localhost', port=6379, db=7)
 
 
 def init_database(app):

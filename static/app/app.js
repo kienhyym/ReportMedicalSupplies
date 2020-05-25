@@ -52,8 +52,9 @@ require(['jquery',
 	'app/nav/NavbarView',
 	'text!app/base/tpl/mobilelayout.html',
 	'i18n!app/nls/app',
-	'vendor/lodash-4.17.10'],
-	function ($, Gonrin, Router, Nav, layout, lang, lodash) {
+	'vendor/lodash-4.17.10',
+	'vendor/store'],
+	function ($, Gonrin, Router, Nav, layout, lang, lodash, storejs) {
 		$.ajaxSetup({
 			headers: {
 				'content-type': 'application/json'
@@ -74,11 +75,24 @@ require(['jquery',
 			},
 			getCurrentUser: function () {
 				var self = this;
+				var token = storejs.get('X-USER-TOKEN');
+                $.ajaxSetup({
+                    headers: {
+                        'X-USER-TOKEN': token
+                    }
+                });
 				$.ajax({
 					url: self.serviceURL + "/api/v1/current_user",
 					dataType: "json",
 					success: function (data) {
-						self.postLogin(data);
+						$.ajaxSetup({
+							headers: {
+								'X-USER-TOKEN': data.token
+							}
+						});
+						storejs.set('X-USER-TOKEN', data.token);
+						gonrinApp().postLogin(data);
+						// self.postLogin(data);
 					},
 					error: function (XMLHttpRequest, textStatus, errorThrown) {
 						loader.hide();
