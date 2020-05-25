@@ -15,7 +15,7 @@ from application.controllers.helpers.helper_common import *
 from application.extensions import auth
 from sqlalchemy import or_, and_
 from gatco_restapi.helpers import to_dict
-from application.models.models import User, Role, Patient
+from application.models.models import User, Role
 
 from application.controllers.helpers.EmailClient import send_active_account
 
@@ -593,9 +593,3 @@ apimanager.create_api(Role,
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_admin], PUT_SINGLE=[validate_admin], DELETE_SINGLE=[validate_admin]),
     collection_name='role')
-
-apimanager.create_api(Patient,
-    methods=['GET', 'POST', 'DELETE', 'PUT'],
-    url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_admin], PUT_SINGLE=[validate_admin], DELETE_SINGLE=[validate_admin]),
-    collection_name='patient')

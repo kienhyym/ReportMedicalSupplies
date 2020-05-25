@@ -24,7 +24,7 @@ from gatco_restapi import  ProcessingException
 from application.controllers.helpers.helper_common import generator_salt, convert_text_khongdau, default_uuid
 from application.models.model_danhmuc import QuocGia, TinhThanh, QuanHuyen, XaPhuong, DanToc
 import json
-from application.models.models import Role, User, Organization,roles_users, Ticket
+from application.models.models import Role, User, Organization,roles_users
 import xlrd
 
 manager = Manager()
@@ -40,7 +40,7 @@ def create_test_models():
     db.session.add(role1)
     user1 = User(email='admin', name='Admin', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
     user1.roles.append(role1)
-    
+
     db.session.add(user1)
     db.session.flush()
     db.session.commit()
@@ -68,8 +68,8 @@ def init_danhmuc():
     # print("add role==========")
     # add_role()
 
-    print("migrate ten khong dau======")
-    migrate_tenkhongdau()
+    # print("migrate ten khong dau======")
+    # migrate_tenkhongdau()
 
 @manager.command
 def add_quoc_gia():
@@ -91,6 +91,7 @@ def add_danhmuc_tinhthanh():
             if tinhthanh_filter is None:
                 quocgia_filter = db.session.query(QuocGia).filter(QuocGia.ma == 'VN').first()
                 tinhthanh_filter = TinhThanh(ten = item_dstinhthanh["tentinhthanh"], ma = item_dstinhthanh["matinhthanh"], quocgia_id = quocgia_filter.id)
+                tinhthanh_filter.tenkhongdau = convert_text_khongdau(tinhthanh_filter.ten)
                 db.session.add(tinhthanh_filter)
                 db.session.commit()
     except Exception as e:
@@ -107,6 +108,7 @@ def add_danhmuc_quanhuyen():
             if quanhuyen_filter is None:
                 tinhthanh_filter = db.session.query(TinhThanh).filter(TinhThanh.ma == item_dsquanhuyen["matinhthanh"]).first()
                 quanhuyen_filter = QuanHuyen(ten = item_dsquanhuyen["tenquanhuyen"], ma = item_dsquanhuyen["maquanhuyen"], tinhthanh_id = tinhthanh_filter.id)
+                quanhuyen_filter.tenkhongdau = convert_text_khongdau(quanhuyen_filter.ten)
                 db.session.add(quanhuyen_filter)
         db.session.commit()
     except Exception as e:
@@ -123,6 +125,7 @@ def add_danhmuc_xaphuong():
             if xaphuong_filter is None:
                 quanhuyen_filter = db.session.query(QuanHuyen).filter(QuanHuyen.ma == item_dsxaphuong["maquanhuyen"]).first()
                 xaphuong_filter = XaPhuong(ten = item_dsxaphuong["tenxaphuong"], ma = item_dsxaphuong["maxaphuong"], quanhuyen_id = quanhuyen_filter.id)
+                xaphuong_filter.tenkhongdau = convert_text_khongdau(xaphuong_filter.ten)
                 db.session.add(xaphuong_filter)
         db.session.commit()
     except Exception as e:
@@ -138,6 +141,7 @@ def add_danhmuc_dantoc():
             check_dantoc = db.session.query(DanToc).filter(DanToc.ma == str(item_dantoc["value"])).first()
             if check_dantoc is None:
                 dantoc = DanToc(ma = str(item_dantoc["value"]), ten = item_dantoc["text"])
+                dantoc.tenkhongdau = convert_text_khongdau(dantoc.ten)
                 db.session.add(dantoc)
         db.session.commit()
     except Exception as e:
@@ -220,12 +224,6 @@ def migrate_tenkhongdau():
             item.tenkhongdau = convert_text_khongdau(item.ten)
     db.session.commit()
 
-    # unsigned_patientname
-    list_item = db.session.query(Ticket).all()
-    for item in list_item:
-        if item is not None and item.patient_name is not None:
-            item.unsigned_patientname = convert_text_khongdau(item.patient_name)
-    db.session.commit()
 
 @manager.command
 def import_data_donvi_and_admin():

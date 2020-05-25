@@ -14,7 +14,7 @@ import aiofiles
 import hashlib
 from application.models.model_file import FileInfo
 from application.controllers.helpers.helper_common import current_uid
-from application.controllers.helpers.MinIOConnector import uploadFromData
+# from application.controllers.helpers.MinIOConnector import uploadFromData
 
 import uuid
 
@@ -125,66 +125,4 @@ async def write_file(file, fileId, attrs, uid_current):
     db.session.commit()
     return json(to_dict(fileInfo), status=200)
 
-
-
-async def write_file_minio(file, fileId, attrs, uid_current):
-    url = app.config['FILE_SERVICE_URL']
-    # fsroot = app.config['FS_ROOT_FILE']
-    # if not os.path.exists(fsroot):
-    #     os.makedirs(fsroot)
-    file_name = os.path.splitext(file.name)[0]
-    extname = os.path.splitext(file.name)[1]
-        
-    BLOCKSIZE = 65536
-    sha256 = hashlib.sha256()
-    file_data = file.body
-    data_length = len(file_data)
-    if(data_length<=0):
-        return json({"error_code": "Error","error_message": "File không hợp lệ"}, status=520)
-    elif (data_length<BLOCKSIZE):
-        BLOCKSIZE = data_length
-
-    # f = file.body.open('rb')
-    # if f.multiple_chunks():
-    #     for chunk in f.chunks():
-    #         sha256.update(chunk)
-    # else:    
-    #         sha256.update(f.read())
-    # f.close()
-    sha256.update(file_data)
-    # file_buffer = file_data.read(BLOCKSIZE)
-    # while len(file_buffer) > 0:
-    #     sha256.update(file_buffer)
-    #     file_buffer = file_data.read(BLOCKSIZE)
-            
-    str_sha256 = sha256.hexdigest()   
-    check_exist = db.session.query(FileInfo).filter(FileInfo.sha256 == str_sha256).first()
-    if check_exist is not None:
-        return json(to_dict(check_exist))
-    
-    # async with aiofiles.open(fsroot + str_sha256 + extname, 'wb+') as f:
-    #     await f.write(file.body)
-    # f.close()
-
-    bucket_name = app.config.get('BUCKET_NAME',None)
-    object_name = str(str_sha256) + str(extname)
-    url_file = await uploadFromData(bucket_name,object_name , file_data, data_length)
-    print("upload file url ====", url)
-
-    
-    if fileId is None:
-        fileId = str(uuid.uuid4())
-    fileInfo = FileInfo()
-    fileInfo.id = fileId
-    fileInfo.sha256 = str_sha256
-    fileInfo.user_id = uid_current
-    fileInfo.name = file_name
-    fileInfo.extname = extname
-    fileInfo.link = str(url)  + "/" + str(str_sha256) + str(extname)
-    fileInfo.attrs = attrs
-    fileInfo.size = data_length
-    fileInfo.kind = "fileserver"
-    db.session.add(fileInfo)
-    db.session.commit()
-    return json(to_dict(fileInfo), status=200)
 

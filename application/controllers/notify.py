@@ -23,7 +23,7 @@ from application.controllers.helpers.helper_notify import send_notify_single,\
 
 # from application.controllers.helpers.helper_common import current_uid
 
-from application.models.models import User, Organization, Ticket
+from application.models.models import User, Organization
 from application.controllers.helpers.helper_common import *
 
 

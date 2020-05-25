@@ -28,6 +28,6 @@ init_extensions(app)
 init_controllers(app)
 
 
-cred = credentials.Certificate("./application/config/drlinks-60439-7dd5cd02649d.json")
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate("./application/config/drlinks-60439-7dd5cd02649d.json")
+# firebase_admin.initialize_app(cred)
 # default_app = firebase_admin.initialize_app()
