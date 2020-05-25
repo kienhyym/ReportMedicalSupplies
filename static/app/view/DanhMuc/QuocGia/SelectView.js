@@ -4,9 +4,9 @@ define(function (require) {
         _                   = require('underscore'),
         Gonrin				= require('gonrin');
     
-    var template 			= require('text!app/view/DanhMuc/QuocGia/tpl/collection.html'),
+    var template 			= require('text!tpl/DanhMuc/QuocGia/collection.html'),
     	schema 				= require('json!app/view/DanhMuc/QuocGia/Schema.json');
-    var CustomFilterView      = require('app/base/view/CustomFilterView');
+    var CustomFilterView      = require('app/bases/CustomFilterView');
 
     return Gonrin.CollectionDialogView.extend({
     	template : template,
@@ -58,7 +58,7 @@ define(function (require) {
 	    	},
 	    	onRendered: function(e){
 	    		this.trigger("onRendered");
-			    //gonrinApp().responsive_table();
+			    gonrinApp().responsive_table();
             }
     	},
     	render:function(){

@@ -4,7 +4,7 @@ define(function (require) {
 		_ = require('underscore'),
 		Gonrin = require('gonrin');
 
-	var template = require('text!app/view/DanhMuc/TuyenDonVi/tpl/collection.html'),
+	var template = require('text!app/view/quanlyCanbo/DangkiDonVi/tpl/collection.html'),
 		schema = require('json!app/view/quanlyCanbo/DangkiDonVi/SchemaDonviDangki.json');
 	var CustomFilterView      = require('app/base/view/CustomFilterView');
 
@@ -12,7 +12,7 @@ define(function (require) {
 	return Gonrin.CollectionView.extend({
 		template: template,
 		modelSchema: schema,
-		urlPrefix: "/api/v1/",
+		urlPrefix: "/canbo/api/v1/",
 		collectionName: "donvidangki",
 		tools: [
 		],

@@ -72,12 +72,12 @@ apimanager.create_api(ThonXom,
 
 
 
-# apimanager.create_api(TuyenDonVi,
-#     methods=['GET', 'POST', 'DELETE', 'PUT'],
-#     url_prefix='/api/v1',
-#     preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_user, check_exist_danhmuc,update_name_khongdau], PUT_SINGLE=[validate_user,update_name_khongdau]),
-#     postprocess=dict(POST=[],PUT_SINGLE=[]),
-#     collection_name='tuyendonvi')
+apimanager.create_api(TuyenDonVi,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_user, check_exist_danhmuc,update_name_khongdau], PUT_SINGLE=[validate_user,update_name_khongdau]),
+    postprocess=dict(POST=[],PUT_SINGLE=[]),
+    collection_name='tuyendonvi')
 
 
 apimanager.create_api(DanToc,

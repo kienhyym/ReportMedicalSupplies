@@ -20,7 +20,7 @@ define(function (require) {
     return Gonrin.ModelView.extend({
     	template : template,
     	modelSchema	: schema,
-    	urlPrefix: "/api/v1/",
+    	urlPrefix: "/canbo/api/v1/",
     	collectionName: "user",
     	uiControl:{
 	    		fields:[

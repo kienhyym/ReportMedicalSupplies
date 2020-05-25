@@ -187,7 +187,42 @@ require(['jquery',
 				}
 				return displayName;
 			},
-
+			hasRole: function(role){
+				return (gonrinApp().currentUser != null && gonrinApp().currentUser.roles!=null) && gonrinApp().currentUser.roles.indexOf(role)>=0;
+			},
+			convert_khongdau: function (strdata) {
+				var kituA=["á","à","ạ","ã","ả","â","ấ","ầ","ậ","ẫ","ă","ằ","ắ","ẳ"],
+					kituE=["é","è","ẹ","ẻ","ẽ","ê","ế","ề","ệ","ễ","ể"],
+					kituI=["í","ì","ị","ỉ","ĩ"],
+					kituO=["ò","ó","ọ","ỏ","õ","ô","ồ","ố","ộ","ổ","ỗ","ơ","ờ","ớ","ợ","ở","ỡ"],
+					kituU=["ù","ú","ụ","ủ","ũ","ư","ừ","ứ","ự","ử","ữ"],
+					kituY=["ỳ","ý","ỵ","ỷ","ỹ"];
+	
+				var str2=strdata.toLowerCase();
+				for(var i=0;i<kituA.length;i++){
+					str2=str2.replace(kituA[i],"a");
+				}
+				for(var i=0;i<kituE.length;i++){
+					str2=str2.replace(kituE[i],"e");
+				}
+				for(var i=0;i<kituI.length;i++){
+					str2=str2.replace(kituI[i],"i");
+				}
+				for(var i=0;i<kituO.length;i++){
+					str2=str2.replace(kituO[i],"o");
+				}
+				for(var i=0;i<kituU.length;i++){
+					str2=str2.replace(kituU[i],"u");
+				}
+				for(var i=0;i<kituY.length;i++){
+					str2=str2.replace(kituY[i],"y");
+				}
+				str2=str2.replace("đ","d");
+				// if(upper === true){
+				// 	return str2.toUpperCase();
+				// }
+				return str2;
+			},
 			saveLog: function (action, object_type, object_no, workstation_id, workstation_name, items, created_at) {
 				var self = this;
 				$.ajax({

@@ -10,7 +10,7 @@ define(function (require) {
     return Gonrin.CollectionDialogView.extend({
     	template : template,
     	modelSchema	: schema,
-    	urlPrefix: "/canbo/api/v1/",
+    	urlPrefix: "/api/v1/",
     	collectionName: "tuyendonvi",
     	textField: "ten",
     	tools : [

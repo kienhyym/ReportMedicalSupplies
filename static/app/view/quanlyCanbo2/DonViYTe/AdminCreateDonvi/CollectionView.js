@@ -4,33 +4,14 @@ define(function (require) {
         _                   = require('underscore'),
         Gonrin				= require('gonrin');
     
-    var template 			= require('text!app/view/quanlyCanbo/DonViYTe/tpl/collection.html'),
+    var template 			= require('text!app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/tpl/collection.html'),
     	schema 				= require('json!app/view/quanlyCanbo/DonViYTe/DonViYTeSchema.json');
 	var CustomFilterView      = require('app/base/view/CustomFilterView');
     return Gonrin.CollectionView.extend({
     	template : template,
     	modelSchema	: schema,
-    	urlPrefix: "/api/v1/",
+    	urlPrefix: "/canbo/api/v1/",
 		collectionName: "donvi",
-		tools: [
-      	    {
-      	    	name: "default",
-      	    	type: "group",
-      	    	groupClass: "toolbar-group",
-      	    	buttons: [
-  					{
-  		    	    	name: "create",
-  		    	    	type: "button",
-  		    	    	buttonClass: "btn-success btn-sm",
-  		    	    	label: "TRANSLATE:CREATE",
-  		    	    	command: function(){
-  		    	    		var self = this;
-  		    	    		self.getApp().getRouter().navigate("canbo/DonViYTe/create");
-  		    	    	}
-  		    	    },
-      	    	]
-      	    },
-      	 ],
     	uiControl:{
     		fields: [
 		     	{ field: "ten", label: "Tên đơn vị"},
@@ -65,8 +46,6 @@ define(function (require) {
 					template: (rowData) => {
 						if(rowData.active == false) {
 							return '<div class="text-danger">Đang bị khóa</div>';
-						} else if (rowData.active == true) {
-							return '<div class="text-primary">Đang hoạt động</div>';
 						}
 						return '';
 					}
@@ -100,14 +79,14 @@ define(function (require) {
     			el: self.$el.find("#grid_search"),
     			sessionKey: self.collectionName +"_filter"
 			});
-			var captren_id = self.getApp().currentUser.donvi_id;
+			var created_by = self.getApp().currentUser.id;
     		filter.render();
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
     			var filters = {"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }};
     			self.uiControl.filters = filters;
 			}
-			var filters_donvidangki = {"captren_id": {"$eq":captren_id  }};
+			var filters_donvidangki = {"created_by": {"$eq":created_by  }};
 			self.uiControl.filters = filters_donvidangki;
     		self.applyBindings(); 		
     		filter.on('filterChanged', function(evt) {
@@ -118,7 +97,7 @@ define(function (require) {
 						
 						var filters = { "$and": [
 							{"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							{"captren_id": {"$eq":captren_id  }}
+							{"created_by": {"$eq":created_by  }}
 						]};
 						$col.data('gonrin').filter(filters);
 						
@@ -128,6 +107,7 @@ define(function (require) {
 			});
 			self.$el.find("table").addClass("table-hover");
 			self.$el.find("table").removeClass("table-striped");
+			self.applyBindings();
 			return this;
 		},
     	

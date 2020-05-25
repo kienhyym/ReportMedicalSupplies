@@ -23,8 +23,8 @@ from gatco.response import json,text
 from gatco_restapi import  ProcessingException
 
 from application.controllers.helpers.helper_common import generator_salt, convert_text_khongdau, default_uuid
-from application.models.model_danhmuc import QuocGia, TinhThanh, QuanHuyen, XaPhuong, DanToc
-from application.models.model_quanlykho import *
+from application.models.model_danhmuc import QuocGia, TinhThanh, QuanHuyen, XaPhuong, DanToc, TuyenDonVi
+# from application.models.model_quanlykho import *
 import json
 from application.models.models import Role, User, Organization,roles_users
 import xlrd
@@ -294,6 +294,30 @@ def migrate_tenkhongdau():
         if item is not None and item.ten is not None:
             item.tenkhongdau = convert_text_khongdau(item.ten)
     db.session.commit()
+
+@manager.command
+def add_tuyendonvi():
+    #add  tuyen don vi
+    from application.config.development import Config
+    app.config.from_object(Config)
+    init_database(app)
+    try:
+        SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+        json_url_tuyendonvi = os.path.join(SITE_ROOT, "application/data", "TuyenDonViEnum.json")
+        data_tuyendonvi = json.load(open(json_url_tuyendonvi))
+        for item_tuyendonvi in data_tuyendonvi:
+            print("tuyendonvi>>>",item_tuyendonvi)
+            tuyendonvi_filter = db.session.query(TuyenDonVi).filter(TuyenDonVi.ma == item_tuyendonvi["value"]).first()
+            if tuyendonvi_filter is None:
+                tuyendonvi = TuyenDonVi()
+                # tuyendonvi.id = item_tuyendonvi["value"]
+                tuyendonvi.ma = item_tuyendonvi["value"]
+                tuyendonvi.ten = item_tuyendonvi.get('text', None)
+                tuyendonvi.tenkhongdau = convert_text_khongdau(tuyendonvi.ten)
+                db.session.add(tuyendonvi)
+                db.session.commit()
+    except Exception as e:
+        print("TUYEN DON VI ERROR",e)
 
 
 @manager.command
