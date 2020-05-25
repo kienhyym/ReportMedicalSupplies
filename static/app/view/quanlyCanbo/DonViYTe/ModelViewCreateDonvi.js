@@ -5,7 +5,7 @@ define(function (require) {
 		Gonrin = require('gonrin');
 
 	var template = require('text!app/view/quanlyCanbo/DonViYTe/tpl/modelcreatedonvi.html'),
-		schema = require('json!app/view/quanlyCanbo/DangkiDonVi/SchemaDonviDangki.json');
+		schema = require('json!app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/DonViYTeSchema.json');
 	var TinhThanhSelectView = require("app/view/DanhMuc/TinhThanh/SelectView");
 	var QuanHuyenSelectView = require("app/view/DanhMuc/QuanHuyen/SelectView");
 	var XaPhuongSelectView = require("app/view/DanhMuc/XaPhuong/SelectView");
@@ -82,8 +82,8 @@ define(function (require) {
 								return
 							}
 
-							self.model.set("fullname", fullname.toUpperCase());
-							self.model.set("donvi_ten", donvi_ten.toUpperCase());
+							self.model.set("name", fullname.toUpperCase());
+							self.model.set("donvi_name", donvi_ten.toUpperCase());
 
 							self.model.save(null, {
 								success: function (model, respose, options) {
@@ -91,7 +91,17 @@ define(function (require) {
 									self.getApp().getRouter().navigate('canbo/donvi/collection');
 								},
 								error: function (xhr, status, error) {
-									self.getApp().notify({ message: status.responseJSON.error_message}, { type: "danger", delay: 1000});
+									try {
+										if (($.parseJSON(xhr.responseText).error_code) === "SESSION_EXPIRED") {
+											self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
+											self.getApp().getRouter().navigate("login");
+										} else {
+											self.getApp().notify({ message: $.parseJSON(xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+										}
+									}
+									catch (err) {
+										self.getApp().notify({ message: "Lỗi truy cập dữ liệu, vui lòng thử lại sau" }, { type: "danger", delay: 1000 });
+									}
 								}
 							});
 						}
@@ -141,7 +151,7 @@ define(function (require) {
 			var self = this;
 			var curUsr = self.getApp().currentUser;
 			if (curUsr) {
-				var url = self.getApp().serviceURL + "/canbo/api/v1/donvi/" + curUsr.id;
+				var url = self.getApp().serviceURL + "/api/v1/donvi/" + curUsr.organization_id;
 				$.ajax({
 					url: url,
 					method: "GET",
@@ -149,6 +159,7 @@ define(function (require) {
 					success: function (obj) {
 						self.select_tuyendonvi(obj);
 						self.model.set("parent", obj);
+						// console.log("parent", self.model.get("parent"));
 						self.$el.find("#donvicaptren").prop("disabled", true);
 					},
 					error: function (xhr, status, error) {
@@ -187,60 +198,68 @@ define(function (require) {
 				}
 			});
 		},
+		get_tuyendonvi: function (obj, matuyendonvi = null) {
+			var self = this,
+				url;
+			if (matuyendonvi !== null) {
+				url = self.getApp().serviceURL + "/api/v1/tuyendonvi?ma=" + matuyendonvi;
+			} else {
+				var tuyendonvi_id = obj.tuyendonvi_id;
+				url = self.getApp().serviceURL + "/api/v1/tuyendonvi?id=" + tuyendonvi_id;
+			}
+			$.ajax({
+				url: url,
+				method: "GET",
+				contentType: "application/json",
+				success: function (data) {
+					if (!!data.objects){
+						if (matuyendonvi == null) {
+							self.trigger("get_tuyendonvi_1", {"data": data.objects[0]});
+						} else {
+							self.model.set("tuyendonvi", data.objects[0])
+							self.$el.find("#tuyendonvi").prop("disabled", true);
+						}
+					}
+				},
+				error: function (xhr, status, error) {
+					try {
+						if (($.parseJSON(xhr.responseText).error_code) === "SESSION_EXPIRED") {
+							self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
+							self.getApp().getRouter().navigate("login");
+						} else {
+							self.getApp().notify({ message: $.parseJSON(xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+						}
+					}
+					catch (err) {
+						self.getApp().notify({ message: "Lỗi truy cập dữ liệu, vui lòng thử lại sau" }, { type: "danger", delay: 1000 });
+					}
+				}
+			});
+		},
 		select_tuyendonvi: function (obj) {
 			var self = this;
-			if (obj.tuyendonvi_id == "05") {
-				self.getApp().notify("Bạn không có quyền tạo đơn vị!");
-				self.$el.find(".taodonvi").hide();
-				self.getApp().getRouter().navigate('canbo/donvi/collection');
-			}
-			self.model.on("change:tinhthanh", function () {
-				var filterobj = { "tinhthanh_id": { "$eq": self.model.get("tinhthanh_id") } };
-				self.getFieldElement("quanhuyen").data("gonrin").setFilters(filterobj);
-				self.model.set({ "quanhuyen": null, "xaphuong": null });
-			});
-			self.model.on("change:quanhuyen", function () {
-				var filterobj = { "quanhuyen_id": { "$eq": self.model.get("quanhuyen_id") } };
-				self.getFieldElement("xaphuong").data("gonrin").setFilters(filterobj);
-				self.model.set({ "xaphuong": null });
-			});
-			self.model.on("change", function () {
-				var tuyendonvi_id = obj.tuyendonvi_id;
-				if (tuyendonvi_id == "01") {
-					var filters = {
-						"$or": [
-							{ "id": { "$eq": "02" } },
-						]
-					};
-					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
+			self.get_tuyendonvi(obj);
+			self.on("get_tuyendonvi_1", function (event) {
+				var data_tuyendonvi = event.data;
+				var matuyendonvi = data_tuyendonvi.ma;
+				if (matuyendonvi == "01") {
+					self.get_tuyendonvi(null, "02");
 				}
-				else if (tuyendonvi_id == "03") {
-					var filters = {
-						"$or": [
-							{ "id": { "$eq": "02" } },
-						]
-					};
-					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
-				}
-				else if (tuyendonvi_id == "04") {
+				else if (matuyendonvi == "02") {
+					self.get_tuyendonvi(null, "03");
 					self.model.set("tinhthanh", obj.tinhthanh);
-					self.$el.find("#matinhthanh").prop("disabled", false);
-					var filters = {
-						"$or": [
-							{ "id": { "$eq": "05" } },
-						]
-					};
-					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
-				} else if (tuyendonvi_id == "07" || tuyendonvi_id == "08" || tuyendonvi_id == "09") {
-					self.model.set({ "tinhthanh": obj.tinhthanh, "quanhuyen": obj.quanhuyen });
-					var filters = {
-						"$or": [
-							{ "id": { "$eq": "10" } },
-						]
-					};
-					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
-					self.$el.find("#matinhthanh").prop("disabled", false);
-					self.$el.find("#maquanhuyen").prop("disabled", false);
+				}
+				else if (matuyendonvi == "03") {
+					self.get_tuyendonvi(null, "04");
+					self.model.set("tinhthanh", obj.tinhthanh);
+				}
+				else if (matuyendonvi == "04") {
+					self.model.set({"tinhthanh": obj.tinhthanh}, {"quanhuyen": obj.quanhuyen});
+					self.get_tuyendonvi(null, "05");
+				} else if (obj.tuyendonvi_id == "05") {
+					self.getApp().notify("Bạn không có quyền tạo đơn vị!");
+					self.$el.find(".taodonvi").hide();
+					self.getApp().getRouter().navigate('canbo/donvi/collection');
 				}
 			});
 		},
@@ -255,39 +274,40 @@ define(function (require) {
 		},
 		valiedate_tuyendonvi: function () {
 			var self = this;
-			var tuyendonvi_id = self.model.get("tuyendonvi_id"),
+			var tuyendonvi = self.model.get("tuyendonvi"),
 				tinhthanh = self.model.get("tinhthanh"),
 				quanhuyen = self.model.get("quanhuyen"),
 				xaphuong = self.model.get("xaphuong");
-			if ((tuyendonvi_id == "04" || tuyendonvi_id == "05" || tuyendonvi_id == "06") && (tinhthanh == null || tinhthanh == undefined)) {
-				self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố " });
-				return false;
+			if (tuyendonvi && tuyendonvi.ma) {
+				var matuyendonvi = tuyendonvi.ma;
+				if ((matuyendonvi == "02" || matuyendonvi == "03") && (tinhthanh == null || tinhthanh == undefined)) {
+					self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố " });
+					return false;
+				}
+				else if (tuyendonvi_id == "04") {
+					if (tinhthanh == null || tinhthanh == undefined) {
+						self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
+						return false
+					} else if (quanhuyen == null || quanhuyen == undefined){
+						self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
+						return false
+					}
+				}
+				else if (tuyendonvi_id == "05") {
+					if (tinhthanh == null || tinhthanh == undefined) {
+						self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
+						return false;
+	
+					} else if (quanhuyen == null || quanhuyen == undefined) {
+						self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
+						return false;
+	
+					} else if (xaphuong == null || xaphuong == undefined){
+						self.getApp().notify({ message: "Vui lòng chọn  Xã/Phường!" });
+						return false;
+					}
+				};
 			}
-			else if ((tuyendonvi_id == "07" || tuyendonvi_id == "08" || tuyendonvi_id == "09") && (quanhuyen == null || quanhuyen == undefined)) {
-				if (tinhthanh == null || tinhthanh == undefined) {
-					self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
-					return false
-				}
-				else {
-					self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
-					return false
-				}
-			}
-			else if ((tuyendonvi_id == "10") && (xaphuong == null || xaphuong == undefined)) {
-				if (tinhthanh == null || tinhthanh == undefined) {
-					self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
-					return false;
-
-				} else if (quanhuyen == null || quanhuyen == undefined) {
-					self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
-					return false;
-
-				} else {
-					self.getApp().notify({ message: "Vui lòng chọn  Xã/Phường!" });
-					return false;
-				}
-
-			};
 			return true;
 		}
 	});

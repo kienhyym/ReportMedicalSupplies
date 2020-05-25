@@ -10,12 +10,7 @@ define(function (require) {
     var QuanHuyenSelectView 	= require("app/view/DanhMuc/QuanHuyen/SelectView");
     var XaPhuongSelectView 	= require("app/view/DanhMuc/XaPhuong/SelectView");
     var TuyenDonViSelectView = require("app/view/DanhMuc/TuyenDonVi/SelectView");
-	var DonviSelectView = require("app/view/quanlyCanbo/DangkiDonVi/DonviCaptrenSelectView");
-    var RoleSelectView = require('app/view/HeThong/RoleQLCB/SelectView');
-    // var DanTocSelectView 	= require("app/view/quanlyCanbo/DanhMuc/DanToc/SelectView");
-    // var QuocGiaSelectView 	= require("app/view/quanlyCanbo/DanhMuc/QuocGia/SelectView");
 	var UserDonViDialogView = require('app/view/quanlyCanbo/DonViYTe/UserDonVi/view/ModelDialogView');
-	var CollectionUserDonvi = require('app/view/quanlyCanbo/DonViYTe/UserDonVi/view/CollectionView');
 	return Gonrin.ModelView.extend({
 		template: template,
 		modelSchema: schema,
@@ -60,8 +55,8 @@ define(function (require) {
 						},
 						command: function () {
 							var self = this;
-							var ten = self.model.get("ten");
-							var sodienthoai = self.model.get("sodienthoai");
+							var ten = self.model.get("name");
+							var sodienthoai = self.model.get("phone");
 							var email = self.model.get("email");
 							if(!!email) {
 								self.model.set("email",email.toLowerCase());
@@ -75,41 +70,15 @@ define(function (require) {
 								self.getApp().notify("Số điện thoại không được để trống.Vui lòng nhập số điện thoại!");
 								return false;
 							}
-							// self.model.set("active",1);
-							self.model.set("ten",ten.toUpperCase());
+							self.model.set("name",ten.toUpperCase());
 							self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
-							var url = self.getApp().serviceURL + "/api/v1/admin/donvi/update";
-							
-							$.ajax({
-								url: url,
-								method: "POST",
-								data:JSON.stringify(self.model.toJSON()),
-								contentType: "application/json",
-								success: function (data) {
-									self.getApp().notify("Lưu dữ liệu thành công!");
-									var id = self.model.get("id");
-									if (id === self.getApp().currentUser.id) {
-										self.getApp().getRouter().refresh();
-									} 
-									else if(gonrinApp().hasRole("admin")) {
-										self.getApp().getRouter().navigate("admin/donvi/collection");
-									} else {
-										self.getApp().getRouter().navigate("canbo/donvi/collection");
-									}
-
+							self.model.save(null, {
+								success: function (model, respose, options) {
+									self.getApp().notify("Sửa đơn vị thành công!");
+									self.getApp().getRouter().refresh();
 								},
 								error: function (xhr, status, error) {
-									self.getApp().hideloading();
-										try {
-										if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED"){
-											self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
-										} else {
-											self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
-										}
-									}
-									catch (err) {
-										self.getApp().notify({ message: "Lưu dữ liệu không thành công"}, { type: "danger", delay: 1000 });
-									}
+									self.getApp().notify({ message: status.responseJSON.error_message}, { type: "danger", delay: 1000});
 								}
 							});
 						}

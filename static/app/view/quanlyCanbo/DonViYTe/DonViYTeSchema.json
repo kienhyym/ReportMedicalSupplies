@@ -25,7 +25,7 @@
         "type": "string",
         "primary": true
     },
-    "ma": {
+    "code": {
         "type": "string",
         "length": 255
     },
@@ -46,7 +46,7 @@
         "type": "string",
         "length": 255
     },
-    "ghichu": {
+    "description": {
         "type": "string",
         "length": 255
     },
@@ -62,19 +62,9 @@
         "type": "string",
         "length": 255
     },
-    "quocgia_id": {
-        "type": "string",
-        "length": 255
-    },
     "tuyendonvi_id": {
         "type": "string",
         "length": 255
-    },
-    "coquanchuquan": {
-        "type": "string"
-    },
-    "appkey": {
-        "type": "string"
     },
     "parent_id": {
         "type": "string"
@@ -95,9 +85,6 @@
     "tinhthanh": {
         "type": "dict"
     },
-    "quocgia": {
-        "type": "dict"
-    },
     "tuyendonvi": {
         "type": "dict"
     },
@@ -106,8 +93,5 @@
     },
     "children": {
         "type": "list"
-    },
-    "parent": {
-        "type": "dict"
     }
 }

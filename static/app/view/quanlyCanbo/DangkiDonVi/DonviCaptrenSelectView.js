@@ -5,14 +5,14 @@ define(function (require) {
         Gonrin				= require('gonrin');
     
     var template 			= require('text!app/view/DanhMuc/TuyenDonVi/tpl/collection.html'),
-    	schema 				= require('json!app/view/DanhMuc/TuyenDonVi/Schema.json');
+    	schema 				= {};
 	var CustomFilterView      = require('app/base/view/CustomFilterView');
     return Gonrin.CollectionDialogView.extend({
     	template : template,
     	modelSchema	: schema,
-    	urlPrefix: "/canbo/api/v1/",
+    	urlPrefix: "/api/v1/",
     	collectionName: "donvi",
-    	textField: "ten",
+    	textField: "name",
     	tools : [
     	    {
     	    	name: "defaultgr",
@@ -39,7 +39,7 @@ define(function (require) {
 			// ],
     		fields: [
 				// { field: "ma", label: "Mã", width:100},
-				{ field: "ten", label: "Tên", width:350 },
+				{ field: "name", label: "Tên", width:350 },
 		    ],
 		    onRowClick: function(event){
 	    		this.uiControl.selectedItems = event.selectedItems;
@@ -55,11 +55,11 @@ define(function (require) {
     			sessionKey: self.collectionName +"_filter"
     		});
     		filter.render();
-    		self.uiControl.orderBy = [{"field": "ma", "direction": "asc"}];
+    		self.uiControl.orderBy = [{"field": "name", "direction": "asc"}];
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
     			var filters = { "$or": [
-					{"ten": {"$likeI": text }},
+					{"name": {"$likeI": text }},
 				] };
     			self.uiControl.filters = filters;
     		}
@@ -71,7 +71,7 @@ define(function (require) {
 				if ($col) {
 					if (text !== null){
 						var filters = { "$or": [
-							{"ten": {"$likeI": text }},
+							{"name": {"$likeI": text }},
 						] };
 						$col.data('gonrin').filter(filters);
 					} else {

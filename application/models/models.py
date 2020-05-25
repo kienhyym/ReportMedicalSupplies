@@ -105,7 +105,7 @@ class Organization(CommonModel):
         # many to one + adjacency list - remote_side
         # is required to reference the 'id'
         # column in the join condition.
-        backref=backref("captren", remote_side=id),
+        backref=backref("parent", remote_side=id),
         # children will be represented as a dictionary
         # on the "id" attribute.
         collection_class=attribute_mapped_collection('id'),

@@ -33,7 +33,7 @@ define(function (require) {
       	 ],
     	uiControl:{
     		fields: [
-		     	{ field: "ten", label: "Tên đơn vị"},
+		     	{ field: "name", label: "Tên đơn vị"},
 	           	{
 	            	 field: "tinhthanh_id", 
 	            	 label: "Tỉnh thành",
