@@ -5,51 +5,75 @@ define(function(require) {
         Gonrin = require('gonrin');
     return [
         {
-            "text": "Quản lý đơn vị",
-            "icon": "fa fa-user",
-            "type": "category",
-            "entries": [{
-                    "text": "Tạo đơn vị Y Tế",
-                    "type": "view",
-                    "collectionName": "donvi",
-                    "route": "admin/DonViYTe/create",
+            "text":"Quản lý đơn vị",
+            "icon":"fa fa-user",
+            "type":"category",
+            "visible": function(){
+                return (this.userHasRole("admin")||this.userHasRole("admin_donvi"));
+            },
+            "entries":[
+                {
+                    "text":"Tạo đơn vị Y Tế",
+                    "type":"view",
+                    "collectionName":"donvi",
+                    "route":"admin/DonViYTe/create",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/ModelView",
-                    "visible": function() {
-                        return (this.userHasRole("admin"));
+                    "visible": function(){
+                        return (this.userHasRole("admin")) ;
                     }
                 },
                 {
-                    "text": "Danh sách đơn vị",
-                    "type": "view",
-                    "collectionName": "donvidangki",
-                    "route": "admin/donvi/collection",
+                    "text":"Danh sách đơn vị trực thuộc",
+                    "type":"view",
+                    "collectionName":"donvidangki",
+                    "route":"admin/donvi/collection",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/CollectionView",
-                    "visible": function() {
+                    "visible": function(){
                         return (this.userHasRole("admin"));
                     }
                 },
                 {
-                    "text": "Đơn vị Y Tế",
-                    "type": "view",
-                    "collectionName": "donvi",
-                    "route": "canbo/DonViYTe/model",
+                    "text":"Đơn vị Y Tế",
+                    "type":"view",
+                    "collectionName":"donvi",
+                    "route":"canbo/DonViYTe/model",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/ModelView",
-                    "visible": function() {
-                        return (this.userHasRole("admin_tyt") || this.userHasRole("canbo_tyt") || this.userHasRole("admin_benhvien") || this.userHasRole("canbo_banhvien"));
+                    "visible": function(){
+                        return (this.userHasRole("admin_donvi") || this.userHasRole("canbo") ) ;
+                    }
+                },
+                // {
+                //     "text":"Danh sách đơn vị đăng kí",
+                //     "type":"view",
+                //     "collectionName":"donvidangki",
+                //     "route":"canbo/donvidangki/collection",
+                //     "$ref": "app/view/quanlyCanbo/DangkiDonVi/CollectionView",
+                //     "visible": function(){
+                //         return (this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("10") == false));
+                //     }
+                // },
+                {
+                    "text":"Danh sách đơn vị trực thuộc",
+                    "type":"view",
+                    "collectionName":"donvidangki",
+                    "route":"canbo/donvi/collection",
+                    "$ref": "app/view/quanlyCanbo/DonViYTe/CollectionView",
+                    "visible": function(){
+                        return (this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("10") == false));
                     }
                 },
                 {
-                    "text": "Danh sách người dùng trực thuộc",
-                    "type": "view",
-                    "collectionName": "user",
-                    "route": "canbo/user/collection",
+                    "text":"Danh sách người dùng trực thuộc",
+                    "type":"view",
+                    "collectionName":"user",
+                    "route":"canbo/user/collection",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/UserDonVi/view/CollectionView",
-                    "visible": function() {
-                        return (this.userHasRole("admin_benhvien") || this.userHasRole("admin_tyt"));
+                    "visible":function() {
+                        return (this.userHasRole("admin_donvi"));
                     }
                 },
-            ]
-        },
+
+        ]},
         {
             "text": "Danh mục",
             "icon": "fa fa-list-ul",

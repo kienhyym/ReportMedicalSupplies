@@ -135,6 +135,11 @@ define(function(require) {
             "route": "baocaodonvi/model(/:id)",
             "$ref": "app/baocaodonvi/view/ModelView"
         },
+	{
+            "collectionName":"donvidangki",
+            "route":"canbo/donvi/collection",
+            "$ref": "app/view/quanlyCanbo/DonViYTe/CollectionView"
+	}
     ];
 
 });
