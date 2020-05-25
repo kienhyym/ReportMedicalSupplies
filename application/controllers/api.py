@@ -178,30 +178,32 @@ def respone_user(user,prepare_role=None):
             if isinstance(role, str):
                 if "canbo" not in result['roles']:
                     result['roles'].append('canbo')
-                if "admin_donvi" == role:
-                    result['roles'].append("admin_donvi")
-                if "editor" == role:
-                    result['roles'].append('editor')
-                if "manager" == role:
-                    result['roles'].append("manager")
+                if "admin" == role:
+                    result['roles'].append("admin")
+                # if "editor" == role:
+                #     result['roles'].append('editor')
+                # if "manager" == role:
+                #     result['roles'].append("manager")
             elif isinstance(role, dict):
                 if "canbo" not in result['roles']:
                     result['roles'].append('canbo')
-                if "admin_donvi" == role["name"]:
-                    result['roles'].append("admin_donvi")
-                if "editor" == role["name"]:
-                    result['roles'].append("editor")
-                if "manager" == role["name"]:
-                    result['roles'].append("manager")
+                if "admin" == role["name"]:
+                    result['roles'].append("admin")
+                # if "editor" == role["name"]:
+                #     result['roles'].append("editor")
+                # if "manager" == role["name"]:
+                #     result['roles'].append("manager")
             else:
                 if "canbo" not in result['roles']:
                     result['roles'].append('canbo')
-                if "admin_donvi" == role.name:
-                    result['roles'].append("admin_donvi")
-                if "editor" == role.name:
-                    result['roles'].append("editor")
-                if "manager" == role.name:
-                    result['roles'].append("manager")
+                if "admin" == role.name:
+                    result['roles'].append("admin")
+                # if "admin_donvi" == role.name:
+                #     result['roles'].append("admin_donvi")
+                # if "editor" == role.name:
+                #     result['roles'].append("editor")
+                # if "manager" == role.name:
+                #     result['roles'].append("manager")
         
         version = {}
         version['url_apple_store'] = app.config.get('URL_APPLE_STORE', 'https://itunes.apple.com/us/app/somevabe/id1258218759')
