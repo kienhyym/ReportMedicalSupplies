@@ -342,13 +342,13 @@ def convert_columexcel_to_string(value):
 
 @manager.command
 def run():
-    """ Starts server on port 10008. """
+    """ Starts server on port 12002. """
     # run_app(host="0.0.0.0", mode="development")
     run_app(host="0.0.0.0", mode="production")
 
 @manager.command
 def rundev():
-    """ Starts server on port 10008. """
+    """ Starts server on port 12002. """
     run_app(host="0.0.0.0", mode="development")
     # run_app(host="0.0.0.0", mode="production")
 

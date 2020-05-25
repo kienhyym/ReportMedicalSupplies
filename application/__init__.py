@@ -2,7 +2,7 @@ import os
 from .server import app
 
 
-def run_app(host="127.0.0.1", port=10008, debug=False, mode='production'):
+def run_app(host="127.0.0.1", port=12002, debug=False, mode='production'):
     """ Function for bootstrapping gatco app. """
     
     if mode == 'development':
