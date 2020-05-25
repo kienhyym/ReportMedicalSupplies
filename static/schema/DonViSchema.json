@@ -29,16 +29,16 @@
         "type": "string",
         "length": 255
     },
-    "ten": {
+    "name": {
         "type": "string",
         "required": true,
         "length": 255
     },
-    "sodienthoai": {
+    "phone": {
         "type": "string",
         "length": 63
     },
-    "diachi": {
+    "addess": {
         "type": "string",
         "length": 255
     },
