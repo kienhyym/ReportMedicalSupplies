@@ -135,6 +135,19 @@ define(function(require) {
             "route": "baocaodonvi/model(/:id)",
             "$ref": "app/baocaodonvi/view/ModelView"
         },
+
+        {
+            "collectionName": "donvi",
+            "route": "donvicungung/collection",
+            "$ref": "app/donvicungung/view/CollectionView"
+        },
+        {
+            "collectionName": "donvi",
+            "route": "donvicungung/model(/:id)",
+            "$ref": "app/donvicungung/view/ModelView"
+        },
+
+
 	    {
             "collectionName":"donvidangki",
             "route":"canbo/donvi/collection",

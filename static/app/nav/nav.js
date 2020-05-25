@@ -143,6 +143,18 @@ define(function(require) {
                 return this.userHasRole("admin");
             }
         },
+
+        {
+            "text":"Đơn vị sản xuất",
+            "type":"view",
+            "collectionName":"donvi",
+            "route":"donvicungung/collection",
+            "$ref": "app/donvicungung/view/CollectionView",
+            "visible": function(){
+                return this.userHasRole("admin");
+            }
+        },
+
         {
             "text": "Báo cáo",
             "type": "view",
