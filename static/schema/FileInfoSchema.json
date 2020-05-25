@@ -1,0 +1,57 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "sha256": {
+        "type": "string",
+        "required": true
+    },
+    "user_id": {
+        "type": "string",
+        "required": true
+    },
+    "name": {
+        "type": "string"
+    },
+    "extname": {
+        "type": "string"
+    },
+    "link": {
+        "type": "string"
+    },
+    "description": {
+        "type": "string"
+    },
+    "attrs": {
+        "type": "json"
+    },
+    "size": {
+        "type": "number"
+    },
+    "kind": {
+        "type": "string"
+    }
+}
