@@ -1,0 +1,93 @@
+<div class="card  card-small">
+    <div class="card-header border-bottom">
+        <div class="row">
+            <div class="col-md-5 col-sm-12">
+                <div block-bind="toolbar"></div>
+            </div>
+            <div class="col-md-7 col-sm-12">
+                <div class=" text-right" id="grid_search">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <h4 class="text-uppercase col-md-12 p-2">Thông tin đơn vị</h4>
+            <div class="col-md-6 col-sm-12 col-12 border-right">
+                <div class="form-group required">
+                    <label>Tên Đơn Vị</label>
+                    <input type="text" data-bind="value:donvi_name" placeholder="Nhập tên đơn vị" class="form-control text-uppercase">
+                </div>
+                <div class="form-group required">
+                    <label>Tuyến đơn vị</label>
+                    <input type="text" data-bind="value:level" placeholder="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text" data-bind="value:donvi_phone" placeholder="Nhập số điện thoại" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" data-bind="value:donvi_email" placeholder="" class="form-control text-lowercase">
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12 col-12">
+                <div class="form-group">
+                    <label>Tỉnh/Thành phố</label>
+                    <input id="matinhthanh" type="text" data-bind="dict:tinhthanh" placeholder="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Quận/Huyện</label>
+                    <input id="maquanhuyen" type="text" data-bind="dict:quanhuyen" placeholder="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Xã/Phường</label>
+                    <input id="maxaphuong" type="text" data-bind="dict:xaphuong" placeholder="" class="form-control">
+                </div>
+                <div class="form-group parent_donvi d-none">
+                    <label>Đơn vị cấp trên</label>
+                    <input id="donvicaptren" type="text" data-bind="dict:parent" placeholder="" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 col-12 border-right">
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea rows="2" data-bind="value:description" placeholder="Nhập ghi chú" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 col-12">
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <textarea rows="2" data-bind="value:donvi_address" placeholder="Nhập địa chỉ" class="form-control"></textarea>
+                </div>
+            </div>
+            <h4 class="text-uppercase col-md-12 p-2">Thông tin người dùng</h4>
+            <div class="col-md-6 col-sm-12 col-12 border-right">
+                <div class="form-group required">
+                    <label>Họ và tên</label>
+                    <input type="text" data-bind="value:name" placeholder="Nhập số họ tên người dùng" class="form-control text-uppercase">
+                </div>
+                <div class="form-group required">
+                    <label>Số điện thoại</label>
+                    <input type="text" data-bind="value:phone" placeholder="Nhập số điện thoại người dùng" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 col-12">
+                <div class="form-group required">
+                    <label>Email</label>
+                    <input type="text" data-bind="value:email" placeholder="" class="form-control text-lowercase">
+                </div>
+                <div class="form-group required">
+                    <label>Mật khẩu</label>
+                    <input type="password" data-bind="value:password" placeholder="Nhập mật khẩu" class="form-control ">
+                </div>
+                <div class="form-group required">
+                    <label>Xác nhận mật khẩu</label>
+                    <input type="password" data-bind="value:cfpassword" placeholder="Xác nhận mật khẩu" class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

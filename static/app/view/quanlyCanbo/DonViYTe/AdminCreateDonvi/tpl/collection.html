@@ -1,0 +1,30 @@
+<!-- Page Header -->
+<div class="page-header row no-gutters py-4">
+    <div class="col-12 text-center text-sm-left mb-0">
+        <span class="text-uppercase page-subtitle"> </span>
+        <h3 class="page-title pl-2">Danh sách đơn vị Y Tế</h3>
+    </div>
+</div>
+<!-- End Page Header -->
+
+<div class="card  card-small">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 row">
+                <div class="col-5"><label for="">Chọn Tỉnh/Thành phố:</label></div>
+                <div class="col-7"> <input id="Tinhthanh">
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group text-right" id="grid_search">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body pt-0 danhsachdonvi">
+        <div id="grid" data-bind='collection:$collection'></div>
+    </div>
+</div>
+
+<input type="file" class="form-control d-none" id="upload_files" lang="vi" accept="audio/*|video/*|image/*|MIME_type">

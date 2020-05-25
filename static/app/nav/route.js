@@ -9,6 +9,75 @@ define(function(require) {
             "route": "user/collection",
             "$ref": "app/hethong/user/js/CollectionView",
         },
+        {
+            "text": "Dân Tộc",
+            "type": "view",
+            "collectionName": "dantoc",
+            "route": "dantoc/collection",
+            "$ref": "app/view/DanhMuc/DanToc/CollectionView",
+            "visible": function() {
+                return this.userHasRole("admin");
+            }
+        },
+        {
+            "type": "view",
+            "collectionName": "dantoc",
+            "route": "dantoc/model",
+            "$ref": "app/view/DanhMuc/DanToc/ModelView",
+            "visible": false
+        },
+        {
+            "text": "Quốc Gia",
+            "type": "view",
+            "collectionName": "quocgia",
+            "route": "quocgia/collection",
+            "$ref": "app/view/DanhMuc/QuocGia/CollectionView",
+        },
+        {
+            "type": "view",
+            "collectionName": "quocgia",
+            "route": "quocgia/model",
+            "$ref": "app/view/DanhMuc/QuocGia/ModelView",
+        },
+        {
+            "text": "Tỉnh Thành",
+            "type": "view",
+            "collectionName": "tinhthanh",
+            "route": "tinhthanh/collection",
+            "$ref": "app/view/DanhMuc/TinhThanh/CollectionView",
+        },
+        {
+            "type": "view",
+            "collectionName": "tinhthanh",
+            "route": "tinhthanh/model",
+            "$ref": "app/view/DanhMuc/TinhThanh/ModelView",
+        },
+        {
+            "text": "Quận Huyện",
+            "type": "view",
+            "collectionName": "quanhuyen",
+            "route": "quanhuyen/collection",
+            "$ref": "app/view/DanhMuc/QuanHuyen/CollectionView",
+        },
+        {
+            "type": "view",
+            "collectionName": "quanhuyen",
+            "route": "quanhuyen/model",
+            "$ref": "app/view/DanhMuc/QuanHuyen/ModelView",
+        },
+        {
+            "text": "Xã Phường",
+            "type": "view",
+            "collectionName": "xaphuong",
+            "route": "xaphuong/collection",
+            "$ref": "app/view/DanhMuc/XaPhuong/CollectionView",
+        },
+        {
+            "type": "view",
+            "collectionName": "xaphuong",
+            "route": "xaphuong/model",
+            "$ref": "app/view/DanhMuc/XaPhuong/ModelView",
+        },
     ];
 
 });

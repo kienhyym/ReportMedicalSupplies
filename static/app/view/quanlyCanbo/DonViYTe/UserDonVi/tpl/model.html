@@ -1,0 +1,61 @@
+<!-- Page Header -->
+<div class="content">
+
+    <div class="page-header row no-gutters py-4">
+        <div class="col-12 text-center text-sm-left mb-0">
+            <span class="text-uppercase page-subtitle"> </span>
+            <h3 class="page-title text-uppercase pl-2">Thông tin tài khoản quản lý đơn vị</h3>
+        </div>
+    </div>
+    <!-- End Page Header -->
+    <div class="card  card-small">
+        <div class="card-header  border-bottom">
+            <div class="">
+                <div block-bind="toolbar"></div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div class="row" id="content_dialog">
+                <div class="col-md-6">
+                    <div class="form-group required">
+                        <label>Họ tên</label>
+                        <input required type="text" data-bind="value:name" placeholder="Nhập họ và tên" class="form-control text-uppercase">
+                    </div>
+                    <div class="form-group required">
+                        <label>Tên đăng nhập</label>
+                        <input required type="text" data-bind="value:accountName" placeholder="Nhập tên đăng nhập" class="form-control">
+                    </div>
+                    <div class="form-group required">
+                        <label>Điện thoại</label>
+                        <input required type="text" data-bind="value:phone" placeholder="Nhập số điện thoại" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input required type="text" data-bind="value:email" placeholder="" class="form-control text-lowercase">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!-- <div class="form-group required">
+                        <label>Mã đơn vị</label>
+                        <input required type="text" disabled class="form-control">
+                    </div> -->
+                    <div class="form-group roless">
+                        <label>Vai trò</label>
+                        <input required type="text" data-bind="list:roles" class="form-control">
+                    </div>
+                    <div class="form-group required">
+                        <label>Mật khẩu</label>
+                        <input id="password" required data-bind="value:password" type="password" class="form-control">
+                    </div>
+                    <div class="form-group required">
+                        <label>Nhập lại mật khẩu</label>
+                        <input id="confirm_password" required type="password" class="form-control">
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+
+</div>

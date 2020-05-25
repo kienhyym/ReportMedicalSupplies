@@ -1,0 +1,41 @@
+{
+  "id":{
+		"type": "number",
+		"primary": true
+  },
+  "madangky": {
+    "type": "string"
+  },
+  "user_id": {
+    "type": "number"
+  },
+  "trangthai": {
+    "type": "number"
+  },
+  "donvi_sodienthoai": {
+    "type": "string"
+  },
+  "captren_id": {
+    "type":"ref",
+    "$ref": "app/view/DanhMuc/DonVi/SelectView",
+    "required":true
+  },
+  "donvi_ten": {
+    "type": "string"
+  },
+  "donvi_tuyendonvi": {
+    "type": "number"
+  },
+  "donvi_diachi": {
+    "type": "string"
+  },
+  "user_name": {
+    "type": "string"
+  },
+  "user_phone": {
+    "type": "string"
+  },
+  "user_email": {
+    "type": "string"
+  }
+}

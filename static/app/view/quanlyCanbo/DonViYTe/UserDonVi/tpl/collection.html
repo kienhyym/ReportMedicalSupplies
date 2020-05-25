@@ -1,0 +1,27 @@
+
+<!-- Page Header -->
+<div id="content">
+<div class="page-header row no-gutters py-4">
+        <div class="col-12 text-center text-sm-left mb-0">
+          <span class="text-uppercase page-subtitle"> </span>
+          <h3 class="page-title pl-2">Danh sách cán bộ trực thuộc đơn vị</h3>
+        </div>
+      </div>
+      <!-- End Page Header -->
+<div class="card  card-small">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-5 col-sm-12">
+                <div block-bind="toolbar"></div>
+            </div>	
+            <div class="col-md-7 col-sm-12">
+                <div class="form-group text-right" id="grid_search">
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    <div class="card-body pt-0 danhsachdonvi">
+        <div id="grid" data-bind='collection:$collection'></div>
+    </div>
+</div>

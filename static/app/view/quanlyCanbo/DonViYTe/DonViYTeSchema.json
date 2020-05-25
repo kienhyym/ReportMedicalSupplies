@@ -1,0 +1,96 @@
+{
+    "created_at": {
+        "type": ""
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": ""
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": ""
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "code": {
+        "type": "string",
+        "length": 255
+    },
+    "name": {
+        "type": "string",
+        "required": true,
+        "length": 255
+    },
+    "phone": {
+        "type": "string",
+        "length": 63
+    },
+    "address": {
+        "type": "string",
+        "length": 255
+    },
+    "email": {
+        "type": "string",
+        "length": 255
+    },
+    "description": {
+        "type": "string"
+    },
+    "xaphuong_id": {
+        "type": "string",
+        "length": 255
+    },
+    "quanhuyen_id": {
+        "type": "string",
+        "length": 255
+    },
+    "tinhthanh_id": {
+        "type": "string",
+        "length": 255
+    },
+    "level": {
+        "type": "string",
+        "length": 255
+    },
+    "parent_name": {
+        "type": "string"
+    },
+    "parent_id": {
+        "type": "string"
+    },
+    "unsigned_name": {
+        "type": "string"
+    },
+    "active": {
+        "type": "boolean",
+        "default": false
+    },
+    "xaphuong": {
+        "type": "dict"
+    },
+    "quanhuyen": {
+        "type": "dict"
+    },
+    "tinhthanh": {
+        "type": "dict"
+    },
+    "users": {
+        "type": "list"
+    },
+    "children": {
+        "type": "list"
+    }
+}

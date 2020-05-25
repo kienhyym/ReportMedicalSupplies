@@ -1,0 +1,17 @@
+{
+	"id":{
+		"type": "number",
+		"primary": true
+	},
+	"ma":{
+		"type":"string",
+		"required": true
+	},
+	"ten":{
+		"type":"string",
+		"required": true
+	},
+	"tenkhongdau": {
+		"type":"string"
+	}
+}

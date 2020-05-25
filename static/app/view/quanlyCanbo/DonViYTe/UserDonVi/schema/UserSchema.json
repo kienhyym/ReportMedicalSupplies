@@ -1,0 +1,62 @@
+{
+    "created_at": {
+        "type": "string"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "string"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": ""
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "name": {
+        "type": "string"
+    },
+    "accountName": {
+        "type": "string"
+    },
+    "phone": {
+        "type": "string"
+    },
+    "email": {
+        "type": "string"
+    },
+    "password": {
+        "type": "string"
+    },
+    "confirmed_at": {
+        "type": "datetime"
+    },
+    "salt": {
+        "type": "string"
+    },
+    "active": {
+        "type": "boolean",
+        "default": true
+    },
+    "organization_id": {
+        "type": "string"
+    },
+    "unsigned_name": {
+        "type": "string"
+    },
+    "roles": {
+        "type": "list"
+    }
+}

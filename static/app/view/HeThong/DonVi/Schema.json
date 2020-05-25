@@ -1,0 +1,66 @@
+{
+  "id": {
+    "type": "string",
+    "primary": true
+  },
+  "ma": {
+    "type": "string"
+  }, 
+  "ten": {
+    "type": "string"
+  },
+  "sodienthoai": {
+    "type": "string"
+  },
+  "diachi": {
+    "type": "string"
+  }, 
+  "email": {
+    "type": "string"
+  }, 
+  "ghichu": {
+    "type": "string"
+  },
+  "parent_id": {
+    "type":"number"
+  }, 
+  "captren":{
+  	"type": "dict"
+  },
+  "coquanchuquan": {
+    "type": "string"
+  }, 
+  "tuyendonvi_id": {
+    "type": "string"
+  },
+  "tuyendonvi": {
+    "type": "dict"
+  },
+  "quocgia_id":{
+		"type":"string"
+	},
+	"quocgia":{
+		"type":"dict"
+	},
+	"tinhthanh_id":{
+		"type":"string"
+	},
+	"tinhthanh":{
+		"type":"dict"
+	},
+	"quanhuyen_id":{
+		"type":"string"
+	},
+	"quanhuyen":{
+		"type":"dict"
+	},
+	"xaphuong_id":{
+		"type":"string"
+	},
+	"xaphuong":{
+		"type":"dict"
+	},
+  "users":{
+   	"type":"list"
+   }
+}

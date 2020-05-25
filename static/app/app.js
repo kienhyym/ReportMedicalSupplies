@@ -96,7 +96,6 @@ require(['jquery',
 					},
 					error: function (XMLHttpRequest, textStatus, errorThrown) {
 						loader.hide();
-
 						self.router.navigate("login");
 					}
 				});

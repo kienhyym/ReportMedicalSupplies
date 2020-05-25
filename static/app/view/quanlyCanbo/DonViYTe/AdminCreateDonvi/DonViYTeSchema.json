@@ -1,0 +1,102 @@
+{
+    "created_at": {
+        "type": ""
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": ""
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": ""
+    },
+    "name": {
+        "type": "string",
+        "length": 255
+    },
+    "email": {
+        "type": "string",
+        "length": 255
+    },
+    "password": {
+        "type": "string",
+        "length": 255
+    },
+    "cfpassword": {
+        "type": "string",
+        "length": 255
+    },
+    "phone": {
+        "type": "string",
+        "length": 255
+    },
+    "donvi_phone": {
+        "type": "string"
+    },
+    "donvi_code": {
+        "type": "string",
+        "length": 255
+    },
+    "donvi_email": {
+        "type": "string",
+        "length": 255
+    },
+    "donvi_address": {
+        "type": "string"
+    },
+    "donvi_name": {
+        "type": "string"
+    },
+    "description": {
+        "type": "string"
+    },
+    "xaphuong_id": {
+        "type": "string"
+    },
+    "quanhuyen_id": {
+        "type": "string"
+    },
+    "tinhthanh_id": {
+        "type": "string"
+    },
+    "level": {
+        "type": "string",
+        "length": 255
+    },
+    "parent_id": {
+        "type": "string"
+    },
+    "parent_name": {
+        "type": "string"
+    },
+    "active": {
+        "type": "boolean",
+        "default": false
+    },
+    "xaphuong": {
+        "type": "dict"
+    },
+    "quanhuyen": {
+        "type": "dict"
+    },
+    "tinhthanh": {
+        "type": "dict"
+    },
+    "unsigned_name": {
+        "type": "string"
+    },
+    "parent": {
+        "type": "dict"
+    }
+}

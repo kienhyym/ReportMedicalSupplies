@@ -1,0 +1,102 @@
+<div class="login">
+
+    <!-- BEGIN LOGIN -->
+    <div class="content">
+        <!-- BEGIN LOGIN FORM -->
+        <div block-bind="content">
+            <div class="login-form" id="register-form">
+                <div class="text-center">
+                    <img src="static/images/logo-boyte.png" style="width:50px;height:50px;margin:auto" />
+                </div>
+                <!-- <div class="form-group  text-center">
+				<label style="font-size:16px; padding-top:15px;" class="control-label font-weight-bold">SỔ THEO DÕI SỨC KHỎE BÀ MẸ VÀ TRẺ EM</label>
+			</div> -->
+                <div class="form-group text-center">
+                    <p class="h4">Lấy lại mật khẩu</p>
+                </div>
+                <div role="tabpanel">
+                    <nav class="nav nav-pills flex-sm-row" id="nav-tab" role="tablist">
+                        <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#tab_email" role="tab" aria-controls="email" aria-selected="true">Thông qua Email/Số điện thoại</a>
+                        <a class="flex-sm-fill text-sm-center nav-link" id="nav-address-tab" data-toggle="tab" href="#tab_address" role="tab" aria-controls="address" aria-selected="false">Thông qua địa chỉ</a>
+                        <!-- <a class="flex-sm-fill text-sm-center nav-link" id="nav-password-tab" data-toggle="tab" href="#tab_password" role="tab" aria-controls="password" aria-selected="false">Qua số điện thoại</a> -->
+                    </nav>
+                    <!-- <div class="nav nav-tabs" id="nav-tab" role="tablist">
+				    <a class="nav-item nav-link active" id="nav-email-tab" data-toggle="tab" href="#tab_email" role="tab" aria-controls="email" aria-selected="true">Thông qua Email</a>
+				    <a class="nav-item nav-link" id="nav-address-tab" data-toggle="tab" href="#tab_address" role="tab" aria-controls="address" aria-selected="false">Thông qua địa chỉ</a>
+				</div> -->
+                    <div id="TabContent" class="tab-content">
+                        <div id="tab_email" class="tab-pane active" role="tabpanel">
+                            <div style="margin-top:15px;">
+                                <div class="form-group">
+                                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                                    <label class="control-label visible-ie8 visible-ie9">Email</label>
+                                    <input placeholder="Nhập email hoặc số điện thoại đăng ký" class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" id="email" name="email" />
+                                </div>
+                                <div class="form-actions">
+                                    <a class="btn btn-default uppercase" href="#login">Quay lại</a>
+                                    <button id='btn_resetpw_email' class="btn btn-success uppercase">Lấy mật khẩu</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab_address" class="tab-pane" role="tabpanel">
+                            <div style="margin-top:15px;">
+                                <div class="form-group required">
+                                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                                    <label class="control-label visible-ie8 visible-ie9">Họ và tên</label>
+                                    <input placeholder="Nhập đầy đủ họ và tên" class="form-control form-control-solid placeholder-no-fix" autofocus type="text" autocomplete="off" data-bind="value:hoten" />
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label visible-ie8 visible-ie9">Ngày sinh</label>
+                                    <input placeholder="Nhập ngày/tháng/năm sinh" class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" data-bind="value:ngaysinh" />
+                                </div>
+                                <!-- <div class="form-group">
+								<label class="control-label visible-ie8 visible-ie9">Mã công dân (CMND/Hộ chiếu...)</label>
+								<input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" name="macongdan"/>
+							</div> -->
+                                <div class="form-group required">
+                                    <label class="control-label visible-ie8 visible-ie9">Tỉnh thành</label>
+                                    <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" data-bind="dict:tinhthanh" />
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label visible-ie8 visible-ie9">Quận/Huyện</label>
+                                    <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" data-bind="dict:quanhuyen" />
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label visible-ie8 visible-ie9">Xã/Phường/Thị Trấn</label>
+                                    <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" data-bind="dict:xaphuong" />
+                                </div>
+                                <div class="form-actions">
+                                    <a class="btn btn-default uppercase" href="#login">Quay lại</a>
+                                    <button id="btn_recover" class="btn btn-success uppercase">Lấy mật khẩu</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div id="tab_password" class="tab-pane" role="tabpanel">
+                            <div style="margin-top:20px;">
+                                <span class="text-warning"> *Lấy lại mật khẩu bằng số điện thoại chỉ áp dung cho người dùng đã từng đăng nhập qua số điện thoại</span>
+                                <div class="form-group pt-2">
+
+                                    <label class="control-label visible-ie8 visible-ie9">Số điện thoại</label>
+                                    <input placeholder="Nhập số điệnt thoại" class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" id="phone" name="phone" />
+                                </div>
+                                <div class="form-actions">
+                                    <a class="btn btn-default uppercase" href="#login">Quay lại</a>
+                                    <button id='btn_reset_password' class="btn btn-success uppercase">Lấy mật khẩu</button>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- end tab -->
+
+
+
+            </div>
+            <!-- END LOGIN FORM -->
+        </div>
+
+    </div>
+    <div class="copyright">
+        2016 © Vụ Sức khoẻ bà mẹ và trẻ em.
+    </div>
+</div>

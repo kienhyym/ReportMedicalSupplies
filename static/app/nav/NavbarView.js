@@ -24,6 +24,12 @@ define(function (require) {
 			}
 			return false;
 		},
+		userHasRole: function(role) {
+            return (gonrinApp().currentUser != null && gonrinApp().currentUser.roles != null) && gonrinApp().currentUser.roles.indexOf(role) >= 0;
+        },
+        checkTuyenDonVi: function(tuyendonvi_id) {
+            return (gonrinApp().currentUser != null && gonrinApp().currentUser.roles != null) && (gonrinApp().currentUser.tuyendonvi_id == tuyendonvi_id);
+        },
 		requireRole: function (role) {
 			var user = gonrinApp().currentUser;
 			// console.log("user.role====", user.role);

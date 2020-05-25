@@ -1,0 +1,17 @@
+{
+  "id": {
+    "type": "number",
+    "primary": true
+  },
+  "donvi_id": {
+    "type":"ref",
+	"$ref": "app/view/DanhMuc/DonVi/SelectView",
+	"required":true
+  }, 
+  "tenmuc": {
+    "type": "string"
+  }, 
+  "noidung": {
+    "type": "string"
+  }
+}
