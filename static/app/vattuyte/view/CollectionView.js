@@ -62,7 +62,12 @@ define(function(require) {
                     direction: "desc"
                 }
             ],
-            fields: [{
+            fields: [
+                {
+                    field: "code",
+                    label: "Mã"
+                },
+                {
                     field: "name",
                     label: "Tên",
                     // width: "30px",
@@ -75,10 +80,14 @@ define(function(require) {
                     //     return "";
                     // }
                 },
+                {
+                    field: "unit",
+                    label: "Đơn vị tính"
+                },
             ],
             onRowClick: function(event) {
                 if (event.rowId) {
-                    var path = this.collectionName + '/model?id=' + event.rowId;
+                    var path = '/vattuyte/model?id=' + event.rowId;
                     this.getApp().getRouter().navigate(path);
                 }
 
@@ -90,6 +99,37 @@ define(function(require) {
         },
         render: function() {
             var self = this;
+            self.$el.find("#chonfile").on("change", function () {
+                var http = new XMLHttpRequest();
+                var fd = new FormData();
+                fd.append('file', this.files[0]);
+                http.open('POST', '/api/v1/link_file_upload');
+                http.upload.addEventListener('progress', function (evt) {
+                    if (evt.lengthComputable) {
+                        var percent = evt.loaded / evt.total;
+                        percent = parseInt(percent * 100);
+                    }
+                }, false);
+                http.addEventListener('error', function () {
+                }, false);
+
+                http.onreadystatechange = function () {
+                    if (http.status === 200) {
+                        if (http.readyState === 4) {
+                            var data_file = JSON.parse(http.responseText), link, p, t;
+                            self.getApp().notify("Tải lên thành công");
+                            self.getApp().getRouter().refresh();
+                        }
+                    } else {
+                        self.getApp().notify({ message: "Không thể tải tệp tin lên máy chủ, Có thể nội dung file sai" }, { type: "danger", delay: 1000 });
+                        self.getApp().getRouter().refresh();
+                    }
+                };
+                http.send(fd);
+            });
+
+
+
             var filter = new CustomFilterView({
                 el: self.$el.find("#grid_search"),
                 sessionKey: this.collectionName + "_filter"
