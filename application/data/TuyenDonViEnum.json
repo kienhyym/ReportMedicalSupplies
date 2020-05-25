@@ -1,5 +1,20 @@
 [
-      {"value":"04","text":"Sở Y tế","ma":"captinh"},
-      {"value":"08","text":"Bệnh viện cấp huyện","ma":"caphuyen"},
-      {"value":"11","text":"Trạm y tế xã","ma":"capxa"}
+      {"value":"01","text":"Đơn vị cung ứng"},
+      {"value":"02","text":"Cục khám chữa bệnh"},
+      {"value":"03","text":"Y tế dự phòng"},
+      {"value":"04","text":"Vụ trang thiết bị "},
+      {"value":"05","text":"Vụ kế hoạch tài chính"},
+      {"value":"06","text":"Sở y tế"},
+      {"value":"07","text":"bệnh viện trung ương "},
+      {"value":"08","text":"Viện vệ sinh dịch tễ"},
+      {"value":"09","text":"CDC"},
+      {"value":"10","text":"Phòng y tế"},
+      {"value":"11","text":"Bệnh viện tỉnh"},
+      {"value":"12","text":"Trung tâm y tế dự phòng"},
+      {"value":"13","text":"Trung tâm Đa chức năng "},
+      {"value":"14","text":"Phòng khám đa khoa "},
+      {"value":"15","text":"Bệnh viện huyện "},
+      {"value":"16","text":"Phòng y tế"},
+      {"value":"17","text":"Trạm y tế"},
+      {"value":"18","text":"Phòng khám "}
 ]
