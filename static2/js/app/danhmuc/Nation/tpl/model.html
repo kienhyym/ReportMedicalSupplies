@@ -1,0 +1,71 @@
+<!-- <div class="panel panel-default">
+	<div class="panel-heading">
+		<h3>Thông tin quốc gia</h3>
+	</div>
+	<div style="margin-left: 16px; margin-top: 20px" block-bind="toolbar"></div>
+	<div class="" style="text-align: left; margin-top: 20px;" block-bind="content">
+		<div class="row text-center" style="margin-bottom:10px">
+			<div class="col-md-2 text-right"><label>Mã</label></div>
+			<div class="col-md-3">
+				<input type="text" data-nation-bind="value:code" />
+			</div>
+		</div>
+		<div class="row text-center" style="margin-bottom:10px">
+			<div class="col-md-2 text-right"><label>Tên</label></div>
+			<div class="col-md-3">
+				<input type="text" data-nation-bind="value:name" />
+			</div>
+		</div>
+	</div>
+</div> -->
+
+<div block-bind="content">
+	<!-- Page Header -->
+	<div class="page-header row no-gutters py-2">
+
+	</div>
+	<!-- End Page Header -->
+	<div class="row">
+		<div class="col-lg-8 col-md-12">
+			<div class="card  card-small mb-4">
+				<div class="card-header  border-bottom">
+					<div class="row">
+						<div class="col-md-7">
+							<h6 class="m-0 pt-2">Thông tin quốc gia</h6>
+						</div>
+						<div class="col-md-5 text-right">
+							<div block-bind="toolbar"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-body">
+					<div class="needs-validation" novalidate="">
+						<div class="row mb-3">
+
+							<div class="col-md-6 ">
+								<label>Mã</label>
+								<input type="text" class="form-control" id="code" data-nation-bind="value:code"
+									placeholder="Nhập mã " required="">
+								<div class="invalid-feedback">
+									Vui lòng nhập mã.
+								</div>
+							</div>
+
+
+							<div class="col-md-6">
+								<label for="name">Quốc gia <span class="text-muted"></span></label>
+								<input type="text" class="form-control" id="name" data-nation-bind="value:name"
+									placeholder="nhập tên quốc gia">
+								<div class="invalid-feedback">
+									Vui lòng nhập tên quốc gia.
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

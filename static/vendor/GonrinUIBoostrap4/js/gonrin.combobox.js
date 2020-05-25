@@ -357,11 +357,10 @@
             
             widget.on('mousedown', false);
             widget.show();
-            textElement.off("focus");
-            subscribeEvents();
-//            if (options.focusOnShow && !textElement.is(':focus')) {
-//                textElement.focus();
-//            }
+            
+            if (options.focusOnShow && !textElement.is(':focus')) {
+                textElement.focus();
+            }
             
             notifyEvent({
                 type: 'show.gonrin'
@@ -374,9 +373,6 @@
             }
         	//$(window).off('resize', place);
             widget.off('mousedown', false);
-            if (textElement.is(':focus')) {
-                textElement.blur();
-            }
             widget.hide();
             
             notifyEvent({
@@ -711,12 +707,6 @@
         	if(groupElement){
         		groupElement.show();
         	}
-        },
-        setDataSource = function(dataSource){
-        	if(!!dataSource){
-        		options.dataSource = dataSource;
-        		setupWidget();
-        	}
         }
         ;
 
@@ -754,7 +744,6 @@
         //grobject.getIndex = getIndex;
         grobject.validate = validate;
         grobject.setState = setState;
-        grobject.setDataSource = setDataSource;
         
         
         grobject.disable = function () {
@@ -944,7 +933,7 @@
     	readonly: false,
     	debug: false,
     	/*The delay in milliseconds between a keystroke and when the widget displays the popup.*/
-    	delay: 100,
+    	delay: 200,
     	textField: null,
         valueField: null,
         /*dataSource: The data source of the widget which is used to display a list of values. 

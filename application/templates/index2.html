@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Bác sĩ Xã - Hệ thống hỗ trợ khám chữa bệnh tại Xã/Phường</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="shortcut icon" href="{{static_url}}/images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{static_url}}/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{static_url}}/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{static_url}}/images/favicon/favicon-16x16.png">
+    <link href="{{static_url}}/vendor/bootstrap4/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="{{static_url}}/vendor/GonrinUI/css/gonrin.grid.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{static_url}}/vendor/font-awesome/css/font-awesome.min.css">
+    <!--   custom style -->
+    <link rel="stylesheet" href="{{static_url}}/css/shards-dashboards.1.1.0.css">
+    <link rel="stylesheet" href="{{static_url}}/css/styles.css?bcaa0377935ee0eb739f">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+    <link href="{{static_url}}/vendor/GonrinUI/css/gonrin.pagination.css" rel="stylesheet">
+    <!-- <link  href="{{static_url}}/vendor/GonrinUI/css/gonrin.datetimepicker.css" rel="stylesheet"> -->
+    <link href="{{static_url}}/vendor/GonrinUI/css/gonrin.tokenfield.css" rel="stylesheet">
+    <link href="{{static_url}}/vendor/GonrinUI/css/gonrin.ref.css" rel="stylesheet">
+    <link href="{{static_url}}/vendor/GonrinUI/css/gonrin.radio.css" rel="stylesheet">
+    <link href="{{static_url}}/vendor/GonrinUI/css/gonrin.editor.css" rel="stylesheet">
+    <link href="{{static_url}}/vendor/editor_new/editor_new.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/vendor/photoswipe/photoswipe.css">
+    <link rel="stylesheet" href="static/vendor/photoswipe/default-skin/default-skin.css">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="{{static_url}}/vendor/GonrinUIBoostrap4/css/gonrin.datetimepicker.css">
+
+    <!-- Google Font -->
+    <link href="{{static_url}}/css/loader.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="loader">
+        <div class="spinner-icon"></div>
+        <div class="spinner-content ellipsis-161"></div>
+    </div>
+
+    <div class="content-contain">
+    </div>
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+        <!-- Background of PhotoSwipe.
+             It's a separate element as animating opacity is faster than rgba(). -->
+        <div class="pswp__bg"></div>
+    
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+    
+            <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+    
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+    
+                <div class="pswp__top-bar">
+    
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+    
+                    <div class="pswp__counter"></div>
+    
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+    
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+    
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+    
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+    
+                    <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                    <!-- element will get class pswp__preloader--active when preloader is running -->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                          <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+    
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+    
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+    
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+
+
+
+</body>
+<script type="text/javascript" src="{{static_url}}/js/index.bundle.js?bcaa0377935ee0eb739f"></script>
+<script src="{{static_url}}/vendor/bootstrap4/js/popper.min.js" crossorigin="anonymous"></script>
+<script src="{{static_url}}/vendor/bootstrap4/bootstrap-select/js/bootstrap-select.min.js" crossorigin="anonymous"></script>
+<script>
+    var static_url = "{{static_url}}";
+</script>
+
+<script src="{{static_url}}/vendor/jquery-validation/js/jquery.validate.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/jquery/jquery.numeric.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/hashids/hashids.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.core.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.accounting.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.currency.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.notify.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/GonrinUIBoostrap4/js/gonrin.dialog.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.radio.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.checkbox.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.editor.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/editor_new/editor_new.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUIBoostrap4/js/gonrin.pagination.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUI/js/gonrin.textbox.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUIBoostrap4/js/gonrin.grid.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUIBoostrap4/js/gonrin.ref.js" type="text/javascript"></script>
+<script src="{{static_url}}/vendor/GonrinUI/js/moment.js" type="text/javascript"></script>
+
+<script src="{{static_url}}/vendor/GonrinUIBoostrap4/js/gonrin.datetimepicker.js" type="text/javascript"></script>
+<!-- <script src="{{static_url}}/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script> -->
+
+
+<script src="{{static_url}}/vendor/GonrinUIBoostrap4/js/gonrin.combobox.js" type="text/javascript"></script>
+
+<script src='https://meet01.vindeo.io/external_api.js'></script>
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-messaging.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="static/vendor/photoswipe/photoswipe.min.js"></script>
+<script src="static/vendor/photoswipe/photoswipe-ui-default.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
+
+
+<script data-main="{{static_url}}/js/app" src="{{static_url}}/js/require.js"></script>
+
+</html>

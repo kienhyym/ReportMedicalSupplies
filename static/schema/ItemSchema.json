@@ -1,0 +1,146 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "pricelist_id": {
+        "type": "string"
+    },
+    "item_exid": {
+        "type": "string",
+        "length": 100
+    },
+    "item_name": {
+        "type": "string"
+    },
+    "item_no": {
+        "type": "string"
+    },
+    "tenant_id": {
+        "type": "string"
+    },
+    "specification": {
+        "type": "string"
+    },
+    "unit_id": {
+        "type": "string"
+    },
+    "unit_code": {
+        "type": "string"
+    },
+    "description": {
+        "type": "string"
+    },
+    "manufacturer": {
+        "type": "string",
+        "length": 200
+    },
+    "importer": {
+        "type": "string",
+        "length": 200
+    },
+    "list_price": {
+        "type": "number",
+        "default": 0
+    },
+    "purchase_cost": {
+        "type": "number",
+        "default": 0
+    },
+    "pack_size": {
+        "type": "number"
+    },
+    "weight": {
+        "type": "number"
+    },
+    "cost_factor": {
+        "type": "number"
+    },
+    "discontinued": {
+        "type": "boolean"
+    },
+    "vendor_part_no": {
+        "type": "string"
+    },
+    "allow_delivery": {
+        "type": "boolean"
+    },
+    "image": {
+        "type": "string",
+        "default": "static/images/default-dist.jpeg"
+    },
+    "item_type": {
+        "type": "string",
+        "default": "material"
+    },
+    "parent_id": {
+        "type": "string"
+    },
+    "package_products": {
+        "type": "json"
+    },
+    "position": {
+        "type": "number"
+    },
+    "extension_data": {
+        "type": "json"
+    },
+    "status": {
+        "type": "string"
+    },
+    "hierarchy": {
+        "type": "string",
+        "length": 50
+    },
+    "area": {
+        "type": "string",
+        "length": 50
+    },
+    "medicalequipment_id": {
+        "type": "string"
+    },
+    "types_of_equipment": {
+        "type": "string",
+        "length": 255
+    },
+    "categories": {
+        "type": "list"
+    },
+    "unit": {
+        "type": "dict"
+    },
+    "medicalequipment": {
+        "type": "dict"
+    },
+    "preparationtools": {
+        "type": "list"
+    },
+    "list_of_equipment_details": {
+        "type": "list"
+    },
+    "List_of_equipment_inspection_procedures": {
+        "type": "list"
+    }
+}

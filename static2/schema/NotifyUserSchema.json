@@ -1,0 +1,43 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "user_id": {
+        "type": "string"
+    },
+    "notify_id": {
+        "type": "string"
+    },
+    "notify_at": {
+        "type": "number"
+    },
+    "read_at": {
+        "type": "number"
+    },
+    "notify": {
+        "type": "dict"
+    }
+}

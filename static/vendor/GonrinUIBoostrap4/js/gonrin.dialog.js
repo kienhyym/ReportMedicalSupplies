@@ -25,7 +25,7 @@
   // the base DOM structure needed to create a modal
   var templates = {
     dialog:
-      "<div class='modal' tabindex='-1' role='dialog'>" +
+      "<div class='bootbox modal' tabindex='-1' role='dialog'>" +
         "<div class='modal-dialog'>" +
           "<div class='modal-content'>" +
             "<div class='modal-body'><div class='bootbox-body'></div></div>" +
@@ -38,8 +38,9 @@
       "</div>",
     footer:
       "<div class='modal-footer'></div>",
-    closeButton:
-    	"<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>",
+    closeButton: `<div class="col-lg-12 col-md-12 col-sm-12 col-12" style="min-height: 25px; padding: 0px;">
+        <button type='button' class='bootbox-close-button close' data-dismiss='modal' aria-hidden='true' style="width: 25px; height: 25px;">&times;</button>
+      </div>`,
     form:
       "<form class='bootbox-form'></form>",
     inputs: {
@@ -618,21 +619,21 @@
 
     if (options.title) {
       body.before(templates.header);
-      dialog.find(".modal-title").html(options.title);
     }
 
     if (options.closeButton) {
       var closeButton = $(templates.closeButton);
-      
+
       if (options.title) {
-    	  dialog.find(".modal-header").append(closeButton);
+        dialog.find(".modal-header").prepend(closeButton);
       } else {
-    	  body.prepend(closeButton);
-    	  closeButton.addClass("row px-3");
+        closeButton.css("margin-top", "0px").prependTo(body);
       }
     }
 
-    
+    if (options.title) {
+      dialog.find(".modal-title").html(options.title);
+    }
 
     if (buttonStr.length) {
       body.after(templates.footer);
@@ -721,11 +722,12 @@
       processCallback(e, dialog, callbacks[callbackKey]);
     });
 
-    dialog.on("click", "button.close", function(e) {
+    dialog.on("click", ".bootbox-close-button", function(e) {
       // onEscape might be falsy but that's fine; the fact is
       // if the user has managed to click the close button we
       // have to close the dialog, callback or not
       processCallback(e, dialog, callbacks.onEscape);
+     
     });
 
     dialog.on("keyup", function(e) {
@@ -955,12 +957,7 @@
       OK      : "OK",
       CANCEL  : "取消",
       CONFIRM : "確認"
-    },
-    vi : {
-        OK      : "Đồng ý",
-        CANCEL  : "Hủy bỏ",
-        CONFIRM : "Xác nhận"
-      }
+    }
   };
 
   exports.addLocale = function(name, values) {

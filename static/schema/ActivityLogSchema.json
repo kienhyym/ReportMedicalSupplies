@@ -1,0 +1,60 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "action": {
+        "type": "string",
+        "length": 20
+    },
+    "actor": {
+        "type": "string",
+        "required": true,
+        "length": 255
+    },
+    "object_type": {
+        "type": "string"
+    },
+    "object_no": {
+        "type": "string"
+    },
+    "workstation_id": {
+        "type": "string"
+    },
+    "workstation_name": {
+        "type": "string"
+    },
+    "tenant_id": {
+        "type": "string",
+        "required": true
+    },
+    "user_id": {
+        "type": "string",
+        "required": true
+    },
+    "items": {
+        "type": "json"
+    }
+}

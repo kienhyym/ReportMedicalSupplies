@@ -1,0 +1,108 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "tenant_id": {
+        "type": "string"
+    },
+    "purchaseorder_no": {
+        "type": "string"
+    },
+    "purchaseorder_no_book": {
+        "type": "string"
+    },
+    "department": {
+        "type": "string"
+    },
+    "organization_name": {
+        "type": "string"
+    },
+    "organization_id": {
+        "type": "string"
+    },
+    "tax_code": {
+        "type": "string"
+    },
+    "address": {
+        "type": "string"
+    },
+    "proponent": {
+        "type": "string"
+    },
+    "phone": {
+        "type": "string"
+    },
+    "description": {
+        "type": "string"
+    },
+    "payment_status": {
+        "type": "string",
+        "length": 20,
+        "default": "pending"
+    },
+    "workstation_id": {
+        "type": "string"
+    },
+    "workstation_name": {
+        "type": "string"
+    },
+    "is_pos": {
+        "type": "boolean",
+        "default": false
+    },
+    "net_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "amount": {
+        "type": "number",
+        "default": 0
+    },
+    "discount_percent": {
+        "type": "number",
+        "default": 0
+    },
+    "discount_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "item_discount": {
+        "type": "number",
+        "default": 0
+    },
+    "warehouse_id": {
+        "type": "string"
+    },
+    "custom_fields": {
+        "type": "json"
+    },
+    "details": {
+        "type": "list"
+    },
+    "paymentdetails": {
+        "type": "list"
+    }
+}

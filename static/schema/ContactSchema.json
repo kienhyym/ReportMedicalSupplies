@@ -1,0 +1,183 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "contact_exid": {
+        "type": "string",
+        "length": 100
+    },
+    "contact_no": {
+        "type": "string"
+    },
+    "contact_code": {
+        "type": "string",
+        "length": 20
+    },
+    "contact_name": {
+        "type": "string",
+        "required": true,
+        "length": 255
+    },
+    "contact_type": {
+        "type": "string",
+        "length": 100
+    },
+    "contact_image": {
+        "type": "string",
+        "length": 255
+    },
+    "gender": {
+        "type": "string",
+        "length": 30
+    },
+    "birthday": {
+        "type": "datetime"
+    },
+    "tenant_id": {
+        "type": "string"
+    },
+    "bdate": {
+        "type": "number"
+    },
+    "bmonth": {
+        "type": "number"
+    },
+    "byear": {
+        "type": "number"
+    },
+    "email": {
+        "type": "string",
+        "length": 100
+    },
+    "email_other": {
+        "type": "string",
+        "length": 100
+    },
+    "phone": {
+        "type": "string",
+        "required": true,
+        "length": 50
+    },
+    "phone_other": {
+        "type": "string",
+        "length": 50
+    },
+    "department": {
+        "type": "string",
+        "length": 30
+    },
+    "score": {
+        "type": "number",
+        "default": 0
+    },
+    "used_time": {
+        "type": "number",
+        "default": 0
+    },
+    "last_order_date": {
+        "type": "datetime"
+    },
+    "donotcall": {
+        "type": "boolean"
+    },
+    "emailoptout": {
+        "type": "string",
+        "length": 3
+    },
+    "reference": {
+        "type": "string",
+        "length": 3
+    },
+    "reportsto": {
+        "type": "string",
+        "length": 30
+    },
+    "notify_owner": {
+        "type": "string",
+        "length": 3
+    },
+    "tags": {
+        "type": "string",
+        "length": 1
+    },
+    "note": {
+        "type": "string"
+    },
+    "address_city": {
+        "type": "string",
+        "length": 30
+    },
+    "address_code": {
+        "type": "string",
+        "length": 30
+    },
+    "address_country": {
+        "type": "string",
+        "length": 30
+    },
+    "address_state": {
+        "type": "string",
+        "length": 30
+    },
+    "address_street": {
+        "type": "string",
+        "length": 250
+    },
+    "address_pobox": {
+        "type": "string",
+        "length": 30
+    },
+    "other_address_city": {
+        "type": "string",
+        "length": 30
+    },
+    "other_address_code": {
+        "type": "string",
+        "length": 30
+    },
+    "other_address_country": {
+        "type": "string",
+        "length": 30
+    },
+    "other_address_state": {
+        "type": "string",
+        "length": 30
+    },
+    "other_address_street": {
+        "type": "string",
+        "length": 250
+    },
+    "other_address_pobox": {
+        "type": "string",
+        "length": 30
+    },
+    "extra_data": {
+        "type": "json"
+    },
+    "social_info": {
+        "type": "json"
+    }
+}

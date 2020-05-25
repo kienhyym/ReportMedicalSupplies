@@ -1,0 +1,54 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "tenant_id": {
+        "type": "string",
+        "required": true
+    },
+    "pricelist_id": {
+        "type": "string"
+    },
+    "unit_id": {
+        "type": "string"
+    },
+    "unit_no": {
+        "type": "string"
+    },
+    "item_id": {
+        "type": "string"
+    },
+    "item_name": {
+        "type": "string"
+    },
+    "item_no": {
+        "type": "string"
+    },
+    "list_price": {
+        "type": "number",
+        "default": 0
+    }
+}

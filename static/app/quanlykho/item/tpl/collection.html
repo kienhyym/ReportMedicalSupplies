@@ -1,0 +1,15 @@
+<div class="card">
+    <div class="toolbar toolbar-app" block-bind="toolbar" style="margin: 15px"></div>
+    <div id="filter" class="col-md-12"></div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <h3 class="card-title">Trang thiết bị và vật tư</h3>
+            <div style="position: relative;">
+                <button class="btn btn-info"><i class="fa fa-upload" aria-hidden="true"></i></button>
+                <input type="file" id="chonfile" style="width: 45px;position: absolute;top: 0px;left: 0px;height: 33px;opacity: 0;">
+            </div>
+        </div>
+        <div id="grid_search"></div>
+        <div id="grid" data-bind='collection:$collection'></div>
+    </div>
+</div>

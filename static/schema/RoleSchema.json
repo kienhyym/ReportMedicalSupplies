@@ -1,12 +1,12 @@
 {
     "created_at": {
-        "type": ""
+        "type": "number"
     },
     "created_by": {
         "type": "string"
     },
     "updated_at": {
-        "type": ""
+        "type": "number"
     },
     "updated_by": {
         "type": "string"
@@ -19,17 +19,22 @@
         "type": "string"
     },
     "deleted_at": {
-        "type": ""
+        "type": "number"
     },
     "id": {
         "type": "string",
         "primary": true
+    },
+    "code": {
+        "type": "string",
+        "length": 80
     },
     "name": {
         "type": "string",
         "length": 80
     },
     "description": {
-        "type": "string"
+        "type": "string",
+        "length": 255
     }
 }

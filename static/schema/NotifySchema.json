@@ -1,0 +1,47 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "title": {
+        "type": "string"
+    },
+    "content": {
+        "type": "string"
+    },
+    "type": {
+        "type": "string",
+        "length": 20
+    },
+    "url": {
+        "type": "string"
+    },
+    "action": {
+        "type": "json"
+    },
+    "notify_condition": {
+        "type": "json"
+    }
+}

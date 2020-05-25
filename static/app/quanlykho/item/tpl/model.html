@@ -1,0 +1,153 @@
+<div block-bind="content">
+    <div class="page-header row no-gutters py-2">
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card  card-small mb-4" style="position: relative;">
+                <div class="card-header  border-bottom">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h6 class="m-0 pt-2">Thông tin sản phẩm:</h6>
+                        </div>
+                        <div class="col-md-5 text-right">
+                            <div block-bind="toolbar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body row">
+                    <!-- <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Chọn sản phẩm</label>
+                            <input id="district" type="text" data-bind="dict:medicalequipment" />
+                        </div>
+                    </div> -->
+                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Loại sản phẩm</label>
+                            <input type="text" class="form-control" data-bind="value:item_type">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Đơn vị tính</label>
+                            <div class="unit">
+                                <select class="selectpicker border rounded " data-live-search="true" data-width="100%">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Mã sản phẩm</label>
+                            <input type="text" class="form-control" data-bind="value:item_no">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Tên sản phẩm</label>
+                            <input type="text" class="form-control" data-bind="value:item_name">
+                        </div>
+                    </div>
+                    
+                    
+<!-- 
+                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Giá mua</label>
+                            <input type="text" class="form-control" data-bind="value:purchase_cost">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Giá bán</label>
+                            <input type="text" class="form-control" data-bind="value:list_price">
+                        </div>
+                    </div> -->
+
+                   
+                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="">Hình ảnh</label>
+                            <input type="text" class="form-control" data-bind="value:image">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <a href="#" class="thongtinthem">Thông tin thêm</a>
+                    </div>
+                    <div class="onoff col-12">
+                        <div class="col-12">
+                            <label>Số lượng thiết bị</label>
+                            <table class="table table-bordered text-center ">
+                                <tr>
+                                    <th class="p-2 ">Serial</th>
+                                    <th class="p-2 ">Mã QLTB</th>
+                                    <th class="p-2 ">Trạng thái</th>
+                                    <th class="p-2 ">Xem chi tiết</th>
+                                </tr>
+                                <tbody id="danhsachthietbi"></tbody>
+                                <tr>
+                                    <td colspan="4 " class="p-0 "><button class="btn btn-light btn-sm w-100 btn-them p-2 ">Thêm thiết bị</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-12 ">
+                            <label>Dụng cụ chuẩn bị</label>
+                            <div class="dungCuChuanBi row ">
+                                <div class="col-md-2 ">
+                                    <div class="themDungCu text-center " style="border: 1px dashed black;width: 90px; height: 90px;line-height: 90px;margin-left: auto; margin-right: auto; ">
+                                        + Chọn
+                                    </div>
+                                    <label class="text-center " style="opacity: 0; ">&nbsp;</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 ">
+                            <label>Quy trình kiểm tra thiết bị</label>
+                            <div id="equipmentinspectionprocedures"></div>
+                            <div class="input-group ">
+                                <input type="text" class="form-control" placeholder="Nhập cách thực hiện " id="noidung">
+                                <div class="input-group-append">
+                                    <button style="position: relative; " class="btn btn-outline-secondary" type="button"><i
+										class="fa fa-camera" aria-hidden="true "></i>
+									<div style="position: absolute;top: 0px;left: 0px;width: 100%; ">
+											<input type="file" class="w-100 pt-3 upload_files" id="upload_files"
+												lang="vi " style="opacity: 0; ">
+									</div>
+									<div class="row"
+										style="position: absolute;top: 2px;left: -18px;width:30px; height: 30px; ">
+										<img id="hinhanhnho" style="border-radius: 6px;width:30px; height: 30px; ">
+									</div>
+								</button>
+                                    <button id="btn_add" class="btn btn-outline-secondary" type="button"><i
+										class="fa fa-arrow-right" aria-hidden="true "></i>
+								</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timKiemDungCu bg-white border border-dark rounded " style="position: absolute;top:300px;z-index: 1;display: none;margin-left: auto;margin-right: auto;left: 0;right: 0;width: 90%; ">
+                    <div class="input-group bg-light ">
+                        <label class="col-md-2 col-11 m-2 p-0 ">Danh sách dụng cụ</label>
+                        <input type="text " class="border-0 col-md-9 col-11 bg-light timKiemDungCuChuanBi" placeholder="Tìm kiếm ... " aria-label="Tìm kiếm dụng cụ ... " style="outline: none;font-size: 12px ">
+                        <label style="font-size: 20px;position: absolute;top: 2px;right: 27px;z-index: 2; " id="dongChonDungCu">&times;</label>
+                    </div>
+                    <div class="row col-md-12 danhSachDungCuDaChon">
+                        <div style="opacity: 0; ">
+                            <button class="btn btn-outline-secondary p-0 pt-1 pb-1 mt-1 mb-1 " style="font-size: 9px;width: 1px; ">
+                            <i class="fa fa-times text-danger" aria-hidden="true "></i>
+                        </button>
+                        </div>
+                    </div>
+
+                    <div class="timKiemDungCu danhSachDungCu w-100 m-0 row " style="overflow: auto;height: 300px;display: none; ">
+
+                    </div>
+                    <div class="d-flex justify-content-end "><button class="btn btn-success m-1" id="chonDanhDachNay">Chọn</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

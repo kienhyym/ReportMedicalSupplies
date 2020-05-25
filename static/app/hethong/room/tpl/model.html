@@ -1,0 +1,70 @@
+<div block-bind="content">
+	<!-- Page Header -->
+	<div class="page-header row no-gutters py-2">
+
+	</div>
+	<!-- End Page Header -->
+	<div class="row">
+		<div class="col-lg-8 col-md-12">
+			<div class="card  card-small mb-4">
+				<div class="card-header  border-bottom">
+					<div class="row">
+						<div class="col-md-7">
+							<h6 class="m-0 pt-2">Thông tin phòng</h6>
+						</div>
+						<div class="col-md-5 text-right">
+							<div block-bind="toolbar"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-body">
+					<div class="needs-validation" novalidate="">
+						<div class="row mb-3">
+
+							<div class="col-md-6 ">
+								<label>Mã</label>
+								<input type="text" class="form-control" id="code" data-bind="value:code"
+									placeholder="Nhập mã " required="" autocomplete="off"">
+								<div class=" invalid-feedback">
+								Vui lòng nhập mã.
+							</div>
+						</div>
+						<div class="col-md-6">
+							<label for="name">Phòng<span class="text-muted"></span></label>
+							<input type="text" class="form-control" id="name" data-bind="value:name"
+								placeholder="nhập tên phòng" autocomplete="off">
+							<div class="invalid-feedback">
+								Vui lòng nhập tên tên phòng
+							</div>
+						</div>
+
+
+					</div>
+
+
+					<div class="row mb-3">
+
+						<div class="col-md-6 ">
+							<label>Thông tin chi tiết</label>
+							<textarea rows="3" type="text" class="form-control" id="information" data-bind="value:information"
+								placeholder="Nhập thông tin " required="" autocomplete="off"></textarea>
+							<div class="invalid-feedback">
+								Vui lòng nhập thông tin
+							</div>
+						</div>
+						<div class="col-md-6">
+							<label>Khoa</label>
+							<input type="text" data-bind="dict:department" placeholder="..." required="">
+							<div class="invalid-feedback">
+								Vui lòng chọn khoa
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

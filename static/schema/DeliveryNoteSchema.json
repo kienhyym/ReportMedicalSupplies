@@ -1,0 +1,142 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "purchaseorder_no": {
+        "type": "string"
+    },
+    "purchaseorder_id": {
+        "type": "string"
+    },
+    "deliverynote_no": {
+        "type": "string"
+    },
+    "tenant_id": {
+        "type": "string"
+    },
+    "receipt_no": {
+        "type": "string"
+    },
+    "title": {
+        "type": "string",
+        "length": 255
+    },
+    "organization_name": {
+        "type": "string"
+    },
+    "organization_id": {
+        "type": "string"
+    },
+    "workstation_name": {
+        "type": "string"
+    },
+    "workstation_id": {
+        "type": "string"
+    },
+    "proponent": {
+        "type": "string"
+    },
+    "proponent_phone": {
+        "type": "string"
+    },
+    "contact_name": {
+        "type": "string"
+    },
+    "contact_id": {
+        "type": "string"
+    },
+    "warehouse_name": {
+        "type": "string"
+    },
+    "warehouse_id": {
+        "type": "string"
+    },
+    "address": {
+        "type": "string"
+    },
+    "taxtype": {
+        "type": "string",
+        "length": 25,
+        "default": "group"
+    },
+    "tax_percent": {
+        "type": "number",
+        "default": 0
+    },
+    "tax_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "item_discount": {
+        "type": "number",
+        "default": 0
+    },
+    "net_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "amount": {
+        "type": "number",
+        "default": 0
+    },
+    "discount_percent": {
+        "type": "number",
+        "default": 0
+    },
+    "discount_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "currency_id": {
+        "type": "string"
+    },
+    "currency_name": {
+        "type": "string"
+    },
+    "conversion_rate": {
+        "type": "number"
+    },
+    "terms_conditions": {
+        "type": "string"
+    },
+    "description": {
+        "type": "string"
+    },
+    "payment_status": {
+        "type": "string",
+        "length": 20,
+        "default": "created"
+    },
+    "note": {
+        "type": "string"
+    },
+    "custom_fields": {
+        "type": "json"
+    },
+    "details": {
+        "type": "list"
+    }
+}

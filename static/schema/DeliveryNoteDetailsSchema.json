@@ -1,0 +1,96 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "deliverynote_id": {
+        "type": "string"
+    },
+    "item_exid": {
+        "type": "string",
+        "length": 100
+    },
+    "item_id": {
+        "type": "string"
+    },
+    "item_name": {
+        "type": "string",
+        "required": true,
+        "length": 150
+    },
+    "item_no": {
+        "type": "string",
+        "required": true,
+        "length": 40
+    },
+    "item_type": {
+        "type": "string",
+        "default": "material"
+    },
+    "item_image": {
+        "type": "string",
+        "default": "static/images/default-dist.jpeg"
+    },
+    "user_id": {
+        "type": "string"
+    },
+    "tenant_id": {
+        "type": "string"
+    },
+    "unit_id": {
+        "type": "string"
+    },
+    "unit_code": {
+        "type": "string"
+    },
+    "lot_number": {
+        "type": "number"
+    },
+    "quantity": {
+        "type": "number",
+        "default": 0
+    },
+    "list_price": {
+        "type": "number",
+        "default": 0
+    },
+    "net_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "amount": {
+        "type": "number",
+        "default": 0
+    },
+    "description": {
+        "type": "string"
+    },
+    "status": {
+        "type": "string"
+    },
+    "custom_fields": {
+        "type": "json"
+    }
+}

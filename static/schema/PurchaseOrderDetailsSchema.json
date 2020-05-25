@@ -1,0 +1,115 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "purchaseorder_id": {
+        "type": "string"
+    },
+    "item_exid": {
+        "type": "string"
+    },
+    "item_id": {
+        "type": "string"
+    },
+    "item_name": {
+        "type": "string",
+        "length": 150
+    },
+    "item_no": {
+        "type": "string",
+        "length": 40
+    },
+    "item_image": {
+        "type": "string"
+    },
+    "user_id": {
+        "type": "string"
+    },
+    "tenant_id": {
+        "type": "string"
+    },
+    "warehouse_id": {
+        "type": "string"
+    },
+    "warehouse_name": {
+        "type": "string"
+    },
+    "payment_status": {
+        "type": "string"
+    },
+    "unit_id": {
+        "type": "string"
+    },
+    "unit_code": {
+        "type": "string"
+    },
+    "purchase_cost": {
+        "type": "number",
+        "default": 0
+    },
+    "lot_number": {
+        "type": "number"
+    },
+    "quantity": {
+        "type": "number",
+        "default": 0
+    },
+    "list_price": {
+        "type": "number",
+        "default": 0
+    },
+    "item_type": {
+        "type": "string",
+        "default": "material"
+    },
+    "discount_percent": {
+        "type": "number",
+        "default": 0
+    },
+    "discount_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "net_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "amount": {
+        "type": "number",
+        "default": 0
+    },
+    "tax_percent": {
+        "type": "number",
+        "default": 0
+    },
+    "tax_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "description": {
+        "type": "string"
+    }
+}

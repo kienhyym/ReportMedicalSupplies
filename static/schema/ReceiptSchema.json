@@ -1,0 +1,56 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "receipt_no": {
+        "type": "string"
+    },
+    "deliverynote_id": {
+        "type": "string"
+    },
+    "deliverynote_no": {
+        "type": "string"
+    },
+    "user_id": {
+        "type": "string"
+    },
+    "tenant_id": {
+        "type": "string"
+    },
+    "receipt_address": {
+        "type": "string"
+    },
+    "receipt": {
+        "type": "string"
+    },
+    "amount": {
+        "type": "number",
+        "default": 0
+    },
+    "description": {
+        "type": "string"
+    }
+}
