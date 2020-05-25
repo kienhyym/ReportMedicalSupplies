@@ -153,10 +153,8 @@ def respone_user(user,prepare_role=None):
     roles = []
     if isinstance(user,dict):
         roles = user["roles"]
-        print("dasfghj",type(roles))
     else:
         roles = user.roles
-        print("asdfghjk",type(roles))
     if user is not None:
         donvi_id = result['donvi_id']
         donvi = db.session.query(DonVi).filter(DonVi.id == donvi_id).first()
@@ -169,8 +167,7 @@ def respone_user(user,prepare_role=None):
         madonvi_bmte = result['madonvi_bmte']
         token = generate_user_token(madonvi_bmte, uid_canbo)
         result["token"] = token
-        result['id'] = donvi_id
-        result['uid_canbo'] = uid_canbo
+        result['id'] = id
         result["hoten"] = result["fullname"]
         result["donvi_ten"] = donvi.ten
         result["roles"] = []
@@ -180,36 +177,17 @@ def respone_user(user,prepare_role=None):
                     result['roles'].append('canbo')
                 if "admin" == role:
                     result['roles'].append("admin")
-                # if "editor" == role:
-                #     result['roles'].append('editor')
-                # if "manager" == role:
-                #     result['roles'].append("manager")
             elif isinstance(role, dict):
                 if "canbo" not in result['roles']:
                     result['roles'].append('canbo')
                 if "admin" == role["name"]:
                     result['roles'].append("admin")
-                # if "editor" == role["name"]:
-                #     result['roles'].append("editor")
-                # if "manager" == role["name"]:
-                #     result['roles'].append("manager")
             else:
                 if "canbo" not in result['roles']:
                     result['roles'].append('canbo')
                 if "admin" == role.name:
                     result['roles'].append("admin")
-                # if "admin_donvi" == role.name:
-                #     result['roles'].append("admin_donvi")
-                # if "editor" == role.name:
-                #     result['roles'].append("editor")
-                # if "manager" == role.name:
-                #     result['roles'].append("manager")
-        
         version = {}
-        version['url_apple_store'] = app.config.get('URL_APPLE_STORE', 'https://itunes.apple.com/us/app/somevabe/id1258218759')
-        version['url_google_store'] = app.config.get('URL_GOOGLE_STORE', 'https://play.google.com/store/apps/details?id=com.somevabe.mobile')
-        version['apple_version'] = app.config.get('APPLE_VERSION', '1.0')
-        version['google_version'] = app.config.get('GOOGLE_VERSION', '1.0')
         result['version'] = version
         if "password" in result:
             del result["password"] 
