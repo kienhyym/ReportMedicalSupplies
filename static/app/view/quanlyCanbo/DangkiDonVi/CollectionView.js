@@ -6,7 +6,7 @@ define(function (require) {
 
 	var template = require('text!app/view/quanlyCanbo/DangkiDonVi/tpl/collection.html'),
 		schema = require('json!app/view/quanlyCanbo/DangkiDonVi/SchemaDonviDangki.json');
-	var CustomFilterView      = require('app/bases/CustomFilterView');
+	var CustomFilterView      = require('app/base/view/CustomFilterView');
 
 
 	return Gonrin.CollectionView.extend({
@@ -72,7 +72,7 @@ define(function (require) {
 				}
 			},
 			onRendered: function (e) {
-		    	gonrinApp().responsive_table();
+		    	//gonrinApp().responsive_table();
 			}
 		},
 		render: function () {

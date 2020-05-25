@@ -4,7 +4,7 @@ define(function (require) {
         _                   = require('underscore'),
         Gonrin				= require('gonrin');
     
-    var template 			= require('text!tpl/DanhMuc/DanToc/collection.html'),
+    var template 			= require('text!app/view/DanhMuc/DanToc/tpl/collection.html'),
     	schema 				= require('json!app/view/DanhMuc/DanToc/Schema.json');
     
     return Gonrin.CollectionView.extend({
@@ -33,7 +33,7 @@ define(function (require) {
         	noResultsClass:"alert alert-default no-records-found",
         	datatableClass:"table table-mobile",
 		    onRendered: function (e) {
-		    	gonrinApp().responsive_table();
+		    	// //gonrinApp().responsive_table();
 			}
     	},
 	    render:function(){

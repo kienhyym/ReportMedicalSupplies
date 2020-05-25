@@ -40,7 +40,7 @@ define(function (require) {
 	        	noResultsClass:"alert alert-default no-records-found",
 	        	datatableClass:"table table-mobile",
 		    	onRendered: function (e) {
-			    	gonrinApp().responsive_table();
+			    	//gonrinApp().responsive_table();
 				}
     	},
 	     render:function(){

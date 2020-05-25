@@ -4,13 +4,13 @@ define(function (require) {
         _                   = require('underscore'),
         Gonrin				= require('gonrin');
     
-    var template 			= require('text!tpl/DanhMuc/TuyenDonVi/collection.html'),
+    var template 			= require('text!app/view/DanhMuc/TuyenDonVi/tpl/collection.html'),
     	schema 				= require('json!app/view/DanhMuc/TuyenDonVi/Schema.json');
     
     return Gonrin.CollectionView.extend({
     	template : template,
     	modelSchema	: schema,
-    	urlPrefix: "/canbo/api/v1/",
+    	urlPrefix: "/api/v1/",
     	collectionName: "tuyendonvi",
     	uiControl:{
     		fields: [

@@ -7,7 +7,7 @@ define(function(require) {
     var template = require('text!app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/tpl/collection.html'),
         schema = require('json!app/view/quanlyCanbo/DonViYTe/DonViYTeSchema.json'),
         TinhThanhSelectView = require("app/view/DanhMuc/TinhThanh/SelectView");
-    var CustomFilterView = require('app/bases/CustomFilterView');
+    var CustomFilterView = require('app/base/view/CustomFilterView');
     return Gonrin.CollectionView.extend({
         template: template,
         modelSchema: schema,
@@ -67,7 +67,7 @@ define(function(require) {
             },
             datatableClass: "table table-mobile",
             onRendered: function(e) {
-                    gonrinApp().responsive_table();
+                    //gonrinApp().responsive_table();
                 }
                 // onRendered: function (e) {
                 // 	var self = this;
