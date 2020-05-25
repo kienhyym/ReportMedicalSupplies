@@ -226,33 +226,15 @@ def add_role():
         db.session.add(role)
         db.session.commit()
 
-    # role_citizen = db.session.query(Role).filter(Role.name == 'nguoidan').first()
-    # if role_citizen is None:
-    #     role = Role(name='nguoidan',description='Người dân')
-    #     db.session.add(role)
-    #     db.session.commit()
-
-    role_canbotyt = db.session.query(Role).filter(Role.name == 'canbo_tyt').first()
-    if role_canbotyt is None:
-        role = Role(name = 'canbo_tyt',description='Cán bộ tại trạm y tế')
+    role_admin_donvi = db.session.query(Role).filter(Role.name == 'admin_donvi').first()
+    if role_admin_donvi is None:
+        role = Role(name='admin_donvi',description='Quản lý đơn vị')
         db.session.add(role)
         db.session.commit()
 
-    role_canbo_benhvien = db.session.query(Role).filter(Role.name == 'canbo_benhvien').first()
-    if role_canbo_benhvien is None:
-        role = Role(name = 'canbo_benhvien',description = "Cán bộ tại bệnh viện")
-        db.session.add(role)
-        db.session.commit()
-
-    role_admin_tyt = db.session.query(Role).filter(Role.name == 'admin_tyt').first()
-    if role_admin_tyt is None:
-        role = Role(name = 'admin_tyt',description='Cán bộ tại trạm y tế')
-        db.session.add(role)
-        db.session.commit()
-
-    role_admin_benhvien = db.session.query(Role).filter(Role.name == 'admin_benhvien').first()
-    if role_admin_benhvien is None:
-        role = Role(name = 'admin_benhvien',description = "Cán bộ tại bệnh viện")
+    role_canbo = db.session.query(Role).filter(Role.name == 'canbo').first()
+    if role_canbo is None:
+        role = Role(name='canbo',description='Cán bộ trực thuộc đơn vị')
         db.session.add(role)
         db.session.commit()
 
