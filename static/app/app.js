@@ -190,6 +190,9 @@ require(['jquery',
 			hasRole: function(role){
 				return (gonrinApp().currentUser != null && gonrinApp().currentUser.roles!=null) && gonrinApp().currentUser.roles.indexOf(role)>=0;
 			},
+			hasTypeDonvi: function(type_donvi){
+				return (gonrinApp().currentUser != null && gonrinApp().currentUser.type_donvi!=null) && gonrinApp().currentUser.type_donvi.indexOf(type_donvi)>=0;
+			},
 			convert_khongdau: function (strdata) {
 				var kituA=["á","à","ạ","ã","ả","â","ấ","ầ","ậ","ẫ","ă","ằ","ắ","ẳ"],
 					kituE=["é","è","ẹ","ẻ","ẽ","ê","ế","ề","ệ","ễ","ể"],

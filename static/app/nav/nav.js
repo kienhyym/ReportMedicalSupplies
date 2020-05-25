@@ -143,18 +143,36 @@ define(function(require) {
                 return this.userHasRole("admin");
             }
         },
-
         {
-            "text":"Đơn vị sản xuất",
-            "type":"view",
-            "collectionName":"donvi",
-            "route":"donvicungung/collection",
-            "$ref": "app/donvicungung/view/CollectionView",
+            "text":"Quản lý đơn vị sản xuất",
+            "icon":"fa fa-user",
+            "type":"category",
             "visible": function(){
-                return this.userHasRole("admin");
-            }
+                return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
+            },
+            "entries":[
+                {
+                    "text":"Đơn vị sản xuất",
+                    "type":"view",
+                    "collectionName":"donvi",
+                    "route":"donvicungung/collection",
+                    "$ref": "app/donvicungung/view/CollectionView",
+                    "visible": function(){
+                        return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
+                    }
+                },
+                // {
+                //     "text":"",
+                //     "type":"view",
+                //     "collectionName":"donvi",
+                //     "route":"donvicungung/collection",
+                //     "$ref": "app/donvicungung/view/CollectionView",
+                //     "visible": function(){
+                //         return this.userHasRole("admin");
+                //     }
+                // },
+            ]
         },
-
         {
             "text": "Báo cáo",
             "type": "view",

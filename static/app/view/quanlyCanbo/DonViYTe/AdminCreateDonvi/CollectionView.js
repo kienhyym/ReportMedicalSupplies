@@ -83,10 +83,16 @@ define(function (require) {
     		filter.render();
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-    			var filters = {"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }};
-    			self.uiControl.filters = filters;
+    			var filters = { "$and": [
+					{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
+					{"type_donvi": {"$eq": "donvinhanuoc" }}
+				]};
+				self.uiControl.filters = filters;
 			}
-			var filters_donvidangki = {"created_by": {"$eq":created_by  }};
+			var filters_donvidangki = { "$and": [
+				{"created_by": {"$eq":created_by  }},
+				{"type_donvi": {"$eq": "donvinhanuoc"  }}
+			]};
 			self.uiControl.filters = filters_donvidangki;
     		self.applyBindings(); 		
     		filter.on('filterChanged', function(evt) {
@@ -97,7 +103,8 @@ define(function (require) {
 						
 						var filters = { "$and": [
 							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							{"created_by": {"$eq":created_by  }}
+							{"created_by": {"$eq":created_by  }},
+							{"type_donvi": {"$eq": "donvinhanuoc"  }}
 						]};
 						$col.data('gonrin').filter(filters);
 						

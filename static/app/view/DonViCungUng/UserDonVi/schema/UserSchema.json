@@ -1,0 +1,64 @@
+{
+    "created_at": {
+        "type": "string"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "string"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": ""
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "name": {
+        "type": "string"
+    },
+    "phone": {
+        "type": "string",
+        "length": 20
+    },
+    "email": {
+        "type": "string"
+    },
+    "password": {
+        "type": "string"
+    },
+    "confirm_password": {
+        "type": "string",
+        "length": null
+    },
+    "salt": {
+        "type": "string"
+    },
+    "active": {
+        "type": "boolean",
+        "default": true
+    },
+    "donvi": {
+        "type": "dict"
+    },
+    "roles": {
+        "type": "list"
+    },
+    "unsigned_name": {
+        "type": "string"
+    },
+    "accountName": {
+        "type": "string"
+    }
+}

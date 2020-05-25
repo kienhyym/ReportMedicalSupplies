@@ -4,8 +4,8 @@ define(function (require) {
         _                   = require('underscore'),
         Gonrin				= require('gonrin');
     
-    var template 			= require('text!app/view/quanlyCanbo/DonViYTe/tpl/collection.html'),
-    	schema 				= require('json!app/view/quanlyCanbo/DonViYTe/DonViYTeSchema.json');
+    var template 			= require('text!app/view/DonViCungUng/tpl/collection.html'),
+    	schema 				= require('json!app/view/DonViCungUng/DonViYTeSchema.json');
 	var CustomFilterView      = require('app/base/view/CustomFilterView');
     return Gonrin.CollectionView.extend({
     	template : template,
@@ -25,7 +25,7 @@ define(function (require) {
   		    	    	label: "TRANSLATE:CREATE",
   		    	    	command: function(){
   		    	    		var self = this;
-  		    	    		self.getApp().getRouter().navigate("canbo/DonViYTe/create");
+  		    	    		self.getApp().getRouter().navigate("donvicungung/model/create");
   		    	    	}
   		    	    },
       	    	]
@@ -55,10 +55,10 @@ define(function (require) {
 	            	 foreignValueField: "id",
 					 foreignTextField: "ten",
 				},
-				// {
-				// 	field: "madonvi_bmte", 
-				// 	label: "Mã đơn vị"
-			   	// },
+				{
+					field: "code", 
+					label: "Mã đơn vị"
+			   	},
 				{ 
 					field: "active", 
 					label: "Trạng thái",
@@ -78,7 +78,7 @@ define(function (require) {
 	            },
 		    onRowClick: function(event){
 	    		if(event.rowId){
-	    			this.getApp().getRouter().navigate("canbo/donvi/model?id="+ event.rowId);
+	    			this.getApp().getRouter().navigate("donvicungung/model?id="+ event.rowId);
 
 	        	}
 			},
@@ -100,19 +100,20 @@ define(function (require) {
     			el: self.$el.find("#grid_search"),
     			sessionKey: self.collectionName +"_filter"
 			});
-			var captren_id = self.getApp().currentUser.organization_id;
+			var captren_id = self.getApp().currentUser.id;
     		filter.render();
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-    			var filters = { "$and": [
+				// var filters = {"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }};
+				var filters = { "$and": [
 					{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-					{"type_donvi": {"$eq": "donvinhanuoc"  }}
-				]};;
+					{"type_donvi": {"$eq": "donvicungung"  }}
+				]};
     			self.uiControl.filters = filters;
 			}
 			var filters_donvidangki = { "$and": [
-				{"parent_id": {"$eq":captren_id  }},
-				{"type_donvi": {"$eq": "donvinhanuoc"  }}
+				// {"createe_by": {"$eq":captren_id  }},
+				{"type_donvi": {"$eq": "donvicungung"  }}
 			]};
 			self.uiControl.filters = filters_donvidangki;
     		self.applyBindings(); 		
@@ -124,8 +125,8 @@ define(function (require) {
 						
 						var filters = { "$and": [
 							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							{"parent_id": {"$eq":captren_id  }},
-							{"type_donvi": {"$eq": "donvinhanuoc"  }}
+							// {"parent_id": {"$eq":captren_id  }},
+							{"type_donvi": {"$eq": "donvicungung"  }}
 						]};
 						$col.data('gonrin').filter(filters);
 						

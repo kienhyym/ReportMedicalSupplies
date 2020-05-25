@@ -212,8 +212,8 @@ def donvi_predelete(instance_id=None):
 def donvi_prepput_children(request=None, instance_id=None, data=None, **kw):
     if 'children' in data :
         del data['children']
-    if 'captren' in data:
-        del data['captren']
+    if 'parent' in data:
+        del data['parent']
     # if 
 
 def donvi_prepput(instance_id=None, data=None):

@@ -139,14 +139,18 @@ define(function(require) {
         {
             "collectionName": "donvi",
             "route": "donvicungung/collection",
-            "$ref": "app/donvicungung/view/CollectionView"
+            "$ref": "app/view/DonViCungUng/CollectionView"
         },
         {
             "collectionName": "donvi",
             "route": "donvicungung/model(/:id)",
-            "$ref": "app/donvicungung/view/ModelView"
+            "$ref": "app/view/DonViCungUng/ModelView"
         },
-
+        {
+            "collectionName": "donvi",
+            "route": "donvicungung/model/create",
+            "$ref": "app/view/DonViCungUng/ModelViewCreateDonvi"
+        },
 
 	    {
             "collectionName":"donvidangki",
