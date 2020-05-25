@@ -20,7 +20,7 @@ from application.controllers.helpers.helper_common import *
 from sqlalchemy import or_, and_, desc, asc
 import uuid
 from application.database.model import default_uuid
-from application.models.models import Medicine, Prescription, Ticket
+# from application.models.models import Medicine, Prescription, Ticket
 from application.models.model_file import FileInfo
 from application.controllers.helpers.helper_notify import send_notify_single
 from sqlalchemy.orm.attributes import flag_modified

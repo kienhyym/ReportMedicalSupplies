@@ -1,3 +1,4 @@
+aiofiles
 alembic
 click
 httptools
@@ -8,6 +9,8 @@ manage.py
 MarkupSafe
 mimeparse
 python-dateutil
+python-editor
+PyYAML
 sanic
 six
 SQLAlchemy
@@ -16,15 +19,18 @@ uvloop
 websockets
 jinja2
 requests
-aiohttp
 psycopg2-binary
-sanic_cors
-ujson
-aiohttp
 aiosmtplib
+apscheduler
+Pillow
+sanic_cors
 redis
-PyCrypto
+aiohttp
+Crypto
 bcrypt
+firebase-admin
+xlrd
+
 git+https://github.com/gonrin/gatco.git
 git+https://github.com/gonrin/gatco_auth.git
 git+https://github.com/gonrin/gatco_sqlalchemy.git

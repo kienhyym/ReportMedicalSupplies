@@ -15,7 +15,7 @@ from application.models.model_danhmuc import TuyenDonVi
 from application.controllers.helpers.helper_notify import send_notify_single
 
 
-from application.models.models import User, Hospital, Organization, Patient, Ticket, Role
+from application.models.models import User, Organization, Role
 from application.extensions import auth
 import xlrd
 from application.controllers.upload import *
