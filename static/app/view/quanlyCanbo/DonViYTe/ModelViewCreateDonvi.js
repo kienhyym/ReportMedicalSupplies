@@ -15,7 +15,7 @@ define(function (require) {
 		template: template,
 		modelSchema: schema,
 		urlPrefix: "/api/v1/",
-		collectionName: "admin/donvi/create",
+		collectionName: "donvi/create",
 		tools: [
 			{
 				name: "defaultgr",
@@ -33,14 +33,14 @@ define(function (require) {
 						},
 						command: function () {
 							var self = this;
-							var donvi_ten = self.model.get("donvi_ten"),
-								fullname = self.model.get("fullname"),
+							var donvi_ten = self.model.get("donvi_name"),
+								fullname = self.model.get("name"),
 								phone = self.model.get("phone"),
 								email = self.model.get("email"),
 								donvi_email = self.model.get("donvi_email"),
 								pass = self.model.get("password"),
 								cfpass = self.model.get("cfpassword"),
-								donvi_tuyendonvi = self.model.get("donvi_tuyendonvi");
+								tuyendonvi = self.model.get("tuyendonvi");
 							if (fullname == null || fullname == "" || fullname == undefined) {
 								self.getApp().notify({ message: "Tên người dùng không được để trống!" }, { type: "danger" });
 								return
@@ -73,7 +73,7 @@ define(function (require) {
 								self.getApp().notify({ message: "Tên đơn vị không được để trống!" }, { type: "danger" });
 								return
 							}
-							if (donvi_tuyendonvi == null || donvi_tuyendonvi == undefined) {
+							if (tuyendonvi == null || tuyendonvi == undefined) {
 								self.getApp().notify({ message: "Chưa chọn tuyến đơn vị!" }, { type: "danger" });
 								return
 							}
@@ -122,17 +122,17 @@ define(function (require) {
 					dataSource: XaPhuongSelectView
 				},
 				{
-					field: "donvi_tuyendonvi",
+					field: "tuyendonvi",
 					uicontrol: "ref",
 					foreignRemoteField: "id",
-					foreignField: "donvi_tuyendonvi_id",
+					foreignField: "tuyendonvi_id",
 					dataSource: TuyenDonViSelectView
 				},
 				{
-					field: "captren",
+					field: "parent",
 					uicontrol: "ref",
 					foreignRemoteField: "id",
-					foreignField: "captren_id",
+					foreignField: "parent_id",
 					dataSource: DonviSelectView
 				},
 			]
@@ -148,7 +148,7 @@ define(function (require) {
 					contentType: "application/json",
 					success: function (obj) {
 						self.select_tuyendonvi(obj);
-						self.model.set("captren", obj);
+						self.model.set("parent", obj);
 						self.$el.find("#donvicaptren").prop("disabled", true);
 					},
 					error: function (xhr, status, error) {
@@ -189,7 +189,7 @@ define(function (require) {
 		},
 		select_tuyendonvi: function (obj) {
 			var self = this;
-			if (obj.tuyendonvi_id == "10") {
+			if (obj.tuyendonvi_id == "05") {
 				self.getApp().notify("Bạn không có quyền tạo đơn vị!");
 				self.$el.find(".taodonvi").hide();
 				self.getApp().getRouter().navigate('canbo/donvi/collection');
@@ -205,48 +205,40 @@ define(function (require) {
 				self.model.set({ "xaphuong": null });
 			});
 			self.model.on("change", function () {
-				var donvi_tuyendonvi_id = obj.tuyendonvi_id;
-				if (donvi_tuyendonvi_id == "01") {
+				var tuyendonvi_id = obj.tuyendonvi_id;
+				if (tuyendonvi_id == "01") {
 					var filters = {
 						"$or": [
 							{ "id": { "$eq": "02" } },
-							{ "id": { "$eq": "03" } },
-							{ "id": { "$eq": "04" } },
-							{ "id": { "$eq": "05" } },
-							{ "id": { "$eq": "06" } },
 						]
 					};
-					self.getFieldElement("donvi_tuyendonvi").data("gonrin").setFilters(filters);
+					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
 				}
-				else if (donvi_tuyendonvi_id == "02" || donvi_tuyendonvi_id == "03") {
+				else if (tuyendonvi_id == "03") {
 					var filters = {
 						"$or": [
-							{ "id": { "$eq": "04" } },
-							{ "id": { "$eq": "05" } },
-							{ "id": { "$eq": "06" } },
+							{ "id": { "$eq": "02" } },
 						]
 					};
-					self.getFieldElement("donvi_tuyendonvi").data("gonrin").setFilters(filters);
+					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
 				}
-				else if (donvi_tuyendonvi_id == "04" || donvi_tuyendonvi_id == "05" || donvi_tuyendonvi_id == "06") {
+				else if (tuyendonvi_id == "04") {
 					self.model.set("tinhthanh", obj.tinhthanh);
 					self.$el.find("#matinhthanh").prop("disabled", false);
 					var filters = {
 						"$or": [
-							{ "id": { "$eq": "07" } },
-							{ "id": { "$eq": "08" } },
-							{ "id": { "$eq": "09" } },
+							{ "id": { "$eq": "05" } },
 						]
 					};
-					self.getFieldElement("donvi_tuyendonvi").data("gonrin").setFilters(filters);
-				} else if (donvi_tuyendonvi_id == "07" || donvi_tuyendonvi_id == "08" || donvi_tuyendonvi_id == "09") {
+					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
+				} else if (tuyendonvi_id == "07" || tuyendonvi_id == "08" || tuyendonvi_id == "09") {
 					self.model.set({ "tinhthanh": obj.tinhthanh, "quanhuyen": obj.quanhuyen });
 					var filters = {
 						"$or": [
 							{ "id": { "$eq": "10" } },
 						]
 					};
-					self.getFieldElement("donvi_tuyendonvi").data("gonrin").setFilters(filters);
+					self.getFieldElement("tuyendonvi").data("gonrin").setFilters(filters);
 					self.$el.find("#matinhthanh").prop("disabled", false);
 					self.$el.find("#maquanhuyen").prop("disabled", false);
 				}
@@ -263,7 +255,7 @@ define(function (require) {
 		},
 		valiedate_tuyendonvi: function () {
 			var self = this;
-			var tuyendonvi_id = self.model.get("donvi_tuyendonvi_id"),
+			var tuyendonvi_id = self.model.get("tuyendonvi_id"),
 				tinhthanh = self.model.get("tinhthanh"),
 				quanhuyen = self.model.get("quanhuyen"),
 				xaphuong = self.model.get("xaphuong");

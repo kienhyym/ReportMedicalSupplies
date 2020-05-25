@@ -58,7 +58,7 @@
     "unsigned_name": {
         "type": "string"
     },
-    "acountName": {
+    "accountName": {
         "type": "string"
     }
 }
