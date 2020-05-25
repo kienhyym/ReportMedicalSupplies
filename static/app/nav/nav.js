@@ -119,6 +119,16 @@ define(function(require) {
                 return this.userHasRole("admin");
             }
         },
+        {
+            "text": "Báo cáo",
+            "type": "view",
+            "collectionName": "report_organization",
+            "route": "baocaodonvi/collection",
+            "$ref": "app/baocaodonvi/view/CollectionView",
+            "visible": function() {
+                return this.userHasRole("admin");
+            }
+        },
     ];
 
 });

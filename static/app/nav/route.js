@@ -124,6 +124,17 @@ define(function(require) {
             "route": "vattuyte/model(/:id)",
             "$ref": "app/vattuyte/view/ModelView"
         },
+
+        {
+            "collectionName": "report_organization",
+            "route": "baocaodonvi/collection",
+            "$ref": "app/baocaodonvi/view/CollectionView"
+        },
+        {
+            "collectionName": "report_organization",
+            "route": "baocaodonvi/model(/:id)",
+            "$ref": "app/baocaodonvi/view/ModelView"
+        },
     ];
 
 });

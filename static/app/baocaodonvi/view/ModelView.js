@@ -4,14 +4,14 @@ define(function (require) {
 		_ = require('underscore'),
 		Gonrin = require('gonrin');
 
-	var template = require('text!app/vattuyte/tpl/model.html'),
-		schema = require('json!schema/MedicalSuppliesSchema.json');
+	var template = require('text!app/baocaodonvi/tpl/model.html'),
+		schema = require('json!schema/ReportOrganizationSchema.json');
 
 	return Gonrin.ModelView.extend({
 		template: template,
 		modelSchema: schema,
 		urlPrefix: "/api/v1/",
-		collectionName: "medical_supplies",
+		collectionName: "report_organization",
 		bindings: "data-bind",
 		tools: [
 			{

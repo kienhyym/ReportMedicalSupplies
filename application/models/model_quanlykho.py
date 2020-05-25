@@ -24,6 +24,8 @@ class MedicalSupplies(CommonModel):
 class ReportOrganization(CommonModel):
     __tablename__ = 'report_organization'
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=default_uuid)
+    code = db.Column(String())
+    period = db.Column(String())
     medical_supplies_id = db.Column(UUID(as_uuid=True), ForeignKey('medical_supplies.id'), nullable=True)
     medical_supplies = relationship('MedicalSupplies')
 

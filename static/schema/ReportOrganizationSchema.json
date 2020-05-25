@@ -25,6 +25,12 @@
         "type": "string",
         "primary": true
     },
+    "code": {
+        "type": "string"
+    },
+    "period": {
+        "type": "string"
+    },
     "medical_supplies_id": {
         "type": "string"
     },

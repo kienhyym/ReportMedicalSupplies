@@ -4,8 +4,8 @@ define(function(require) {
         _ = require('underscore'),
         Gonrin = require('gonrin');
 
-        var template = require('text!app/vattuyte/tpl/collection.html'),
-        schema = require('json!schema/MedicalSuppliesSchema.json');
+        var template = require('text!app/baocaodonvi/tpl/collection.html'),
+        schema = require('json!schema/ReportOrganizationSchema.json');
 
     var CustomFilterView = require('app/base/view/CustomFilterView');
 
@@ -14,7 +14,7 @@ define(function(require) {
         template: template,
         modelSchema: schema,
         urlPrefix: "/api/v1/",
-        collectionName: "medical_supplies",
+        collectionName: "report_organization",
         tools: [{
             name: "defaultgr",
             type: "group",
@@ -36,7 +36,7 @@ define(function(require) {
                     label: "TRANSLATE:Tạo mới",
                     command: function() {
                         var self = this;
-                        self.getApp().getRouter().navigate("/vattuyte/model");
+                        self.getApp().getRouter().navigate("/baocaodonvi/model");
                     }
                 },
                 // {
@@ -54,7 +54,7 @@ define(function(require) {
         }],
         uiControl: {
             orderBy: [{
-                    field: "name",
+                    field: "code",
                     direction: "asc"
                 },
                 {
@@ -63,7 +63,7 @@ define(function(require) {
                 }
             ],
             fields: [{
-                    field: "name",
+                    field: "code",
                     label: "Tên",
                     // width: "30px",
                     // template: function(rowData) {
@@ -98,7 +98,7 @@ define(function(require) {
 
             if (!filter.isEmptyFilter()) {
                 var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-                var filters = { "name": { "$likeI": text } };
+                var filters = { "code": { "$likeI": text } };
                 self.uiControl.filters = filters;
             }
             self.applyBindings();
@@ -108,7 +108,7 @@ define(function(require) {
                 var text = !!evt.data.text ? evt.data.text.trim() : "";
                 if ($col) {
                     if (text !== null) {
-                        var filters = { "name": { "$likeI": text } };
+                        var filters = { "code": { "$likeI": text } };
                         $col.data('gonrin').filter(filters);
                     } else {
                         self.uiControl.filters = null;
