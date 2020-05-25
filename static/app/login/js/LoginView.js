@@ -32,7 +32,7 @@ define(function (require) {
             var username = this.$('[name=username]').val().toLowerCase().trim();
             var password = this.$('[name=password]').val().trim();
             var data = JSON.stringify({
-                username: username,
+                data: username,
                 password: password
             });
             var self = this;

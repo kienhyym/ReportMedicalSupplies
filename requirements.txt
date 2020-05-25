@@ -11,7 +11,7 @@ mimeparse
 python-dateutil
 python-editor
 PyYAML
-sanic
+sanic==19.12.2
 six
 SQLAlchemy
 ujson

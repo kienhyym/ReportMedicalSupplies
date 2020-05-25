@@ -29,7 +29,6 @@ def deny_func(request=None, **kw):
 
 @app.route('/')
 async def index(request):
-#     return jinja.render('admin/index.html', request)
     return jinja.render('index.html', request)
 
 @app.route('/landingpage')

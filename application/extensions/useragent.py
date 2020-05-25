@@ -258,3 +258,4 @@ class GatcoUserAgent:
         @app.middleware('request')
         async def add_useragent(request):
             request['user_agent'] = UserAgent(request.headers, default_locale)
+        
