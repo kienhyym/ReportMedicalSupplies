@@ -4,9 +4,9 @@ define(function (require) {
         _                   = require('underscore'),
         Gonrin				= require('gonrin');
     
-    var template 			= require('text!tpl/DanhMuc/QuocGia/collection.html'),
+    var template 			= require('text!app/view/DanhMuc/QuocGia/tpl/collection.html'),
     	schema 				= require('json!app/view/DanhMuc/QuocGia/Schema.json');
-    var CustomFilterView      = require('app/bases/CustomFilterView');
+    var CustomFilterView      = require('app/base/view/CustomFilterView');
 
     return Gonrin.CollectionDialogView.extend({
     	template : template,

@@ -77,7 +77,7 @@ define(function (require) {
 							}
 							// self.model.set("active",1);
 							self.model.set("ten",ten.toUpperCase());
-							self.model.set("tenkhongdau",gonrinApp().convert_khongdau(ten));
+							self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 							var url = self.getApp().serviceURL + "/api/v1/admin/donvi/update";
 							
 							$.ajax({
@@ -135,8 +135,8 @@ define(function (require) {
 						},
 						command: function () {
 							var self = this;
-							var uid = self.getApp().currentUser.uid_canbo;
-							var url = self.getApp().serviceURL + "/canbo/api/v1/user/"+uid;
+							var uid = self.getApp().currentUser.id;
+							var url = self.getApp().serviceURL + "/api/v1/user/"+uid;
 							$.ajax({
 								url: url,
 								method: "GET",
@@ -225,10 +225,11 @@ define(function (require) {
 				self.$el.find("input").prop('disabled', true);
 			}
 			if (curUser && !donvi_id) {
-				donvi_id = curUser.donvi_id;
+				donvi_id = curUser.organization_id;
 			}
+			console.log("donvi_id", donvi_id);
 			if (donvi_id) {
-				var url = self.getApp().serviceURL + "/canbo/api/v1/donvi/"+donvi_id;
+				var url = self.getApp().serviceURL + "/api/v1/donvi/"+donvi_id;
 				$.ajax({
 					url: url,
 					method: "GET",
@@ -303,7 +304,7 @@ define(function (require) {
 
 					var ten = self.model.get("ten");
 					self.model.set("ten",ten.toUpperCase());
-					self.model.set("tenkhongdau",gonrinApp().convert_khongdau(ten));
+					self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 					self.model.save(null, {
 						success: function (model, respose, options) {
 							self.getApp().notify("Mở tài khoản đơn vị thành công!");
@@ -338,7 +339,7 @@ define(function (require) {
 
 					var ten = self.model.get("ten");
 					self.model.set("ten",ten.toUpperCase());
-					self.model.set("tenkhongdau",gonrinApp().convert_khongdau(ten));
+					self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 					self.model.save(null,{
 						success: function (model, respose, options) {
 							self.getApp().notify("Khóa đơn vị thành công!");
@@ -371,13 +372,17 @@ define(function (require) {
 				self.$el.find(".users").hide();
 			} else {
 				$("#grid").html("");
-				var url_donvi = self.getApp().serviceURL + '/canbo/api/v1/user';
 				var madonvi = self.model.get("id");
+				var query = {
+					"filters": { "organization_id": { "$eq": madonvi }}
+					// "order_by": [{ "field": "updated_at", "direction": "desc" }]
+				};
+				var url_donvi = self.getApp().serviceURL + '/api/v1/user?results_per_page=1000&max_results_per_page=10000' + (query ? "&q=" + JSON.stringify(query) : "");
+				console.log("sdaf", url_donvi);
 				$.ajax({
 					url: url_donvi,
 					method: "GET",
-		    		data: {"q": JSON.stringify({"filters": {"donvi_id":{"$eq":madonvi}},"page":1}),"results_per_page":2000},
-					contentType: "application/json",
+		    		contentType: "application/json",
 					success: function (data) {
 						$("#grid").grid({
 		                	showSortingIndicator: true,
@@ -391,10 +396,10 @@ define(function (require) {
 		                	refresh:true,
 		                	orderByMode: "client",
 		                	fields: [
-								{field: "fullname", label: "Họ và tên", sortable: {order:"asc"}},
-								{field: "phone_national_number", label: "Số điện thoại"},
+								{field: "name", label: "Họ và tên", sortable: {order:"asc"}},
+								{field: "phone", label: "Số điện thoại"},
 								{field: "email", label: "Email"},
-								{field: "id", label: "Mã cán bộ"},
+								{field: "code", label: "Mã cán bộ"},
 								{
 									field: "roles",
 									label: "Vai trò",
@@ -471,29 +476,3 @@ define(function (require) {
 
 
 });
-// var url = self.getApp().serviceURL + "/api/v1/admin/donvi/update";
-// 							$.ajax({
-// 								url: url,
-// 								method: "POST",
-// 								data:JSON.stringify(self.model.toJSON()),
-// 								contentType: "application/json",
-// 								success: function (data) {
-// 									self.model.save(null,{
-// 										success: function (model, respose, options) {
-// 											self.getApp().notify("Lưu dữ liệu thành công!");
-// 											self.getApp().getRouter().refresh();
-// 										},
-// 										error: function (xhr, status, error) {
-// 											self.getApp().hideloading();
-// 												try {
-// 												if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED"){
-// 													self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
-// 												} else {
-// 													self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
-// 												}
-// 											}
-// 											catch (err) {
-// 												self.getApp().notify({ message: "Lưu dữ liệu không thành công"}, { type: "danger", delay: 1000 });
-// 											}
-// 										}
-// 									});

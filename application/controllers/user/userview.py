@@ -442,44 +442,29 @@ async def change_profile_user(data, Model, **kw):
     user.accountName = param["accountName"]
     roles_dict = []
 
-    role_canbo_tyt  = db.session.query(Role).filter(Role.name == "canbo_tyt").first()
-    role_admin_tyt = db.session.query(Role).filter(Role.name=="admin_tyt").first()
-    role_canbo_benhvien = db.session.query(Role).filter(Role.name == "canbo_benhvien").first()
-    role_admin_benhvien = db.session.query(Role).filter(Role.name == "admin_benhvien").first()
+    role_admin_donvi = db.session.query(Role).filter(Role.name == "admin_donvi").first()
+    role_canbo = db.session.query(Role).filter(Role.name=="canbo").first()
     role_admin = db.session.query(Role).filter(Role.name == "admin").first()
-    role_nguoidan = db.session.query(Role).filter(Role.name == "nguoidan").first()
 
-    if role_canbo_tyt is None or role_admin_tyt is None or role_canbo_benhvien is None or role_admin_benhvien is None or role_admin is None or role_nguoidan is None:
+    if role_admin_donvi is None or role_canbo is None or role_admin is None:
         print("quanlycanbo.change_profile.role_user>>> role không tồn tại")
         return json({"error_code":"ERROR_PARAM","error_message":"Tham số không hợp lệ"},status=520)
     user.roles = []
     for role_user in param["roles"]:
         if isinstance(role_user, str):
-            if (role_user == role_canbo_tyt.name):
-                roles_dict.append(role_canbo_tyt)
-            if (role_user == role_admin_tyt.name):
-                roles_dict.append(role_admin_tyt)
-            if (role_user == role_canbo_benhvien.name):
-                roles_dict.append(role_canbo_benhvien)
-            if (role_user == role_admin_benhvien.name):
-                roles_dict.append(role_admin_benhvien)
+            if (role_user == role_admin_donvi.name):
+                roles_dict.append(role_admin_donvi)
+            if (role_user == role_canbo.name):
+                roles_dict.append(role_canbo)
             if (role_user == role_admin.name):
                 roles_dict.append(role_admin)
-            if (role_user == role_nguoidan.name):
-                roles_dict.append(role_nguoidan)
         else:
-            if (role_user["name"] == role_canbo_tyt.name):
-                roles_dict.append(role_canbo_tyt)
-            if (role_user["name"] == role_admin_tyt.name):
-                roles_dict.append(role_admin_tyt)
-            if (role_user["name"] == role_canbo_benhvien.name):
-                roles_dict.append(role_canbo_benhvien)
-            if (role_user["name"] == role_admin_benhvien.name):
-                roles_dict.append(role_admin_benhvien)
+            if (role_user["name"] == role_admin_donvi.name):
+                roles_dict.append(role_admin_donvi)
+            if (role_user["name"] == role_canbo.name):
+                roles_dict.append(role_canbo)
             if (role_user["name"] == role_admin.name):
                 roles_dict.append(role_admin)
-            if (role_user["name"] == role_nguoidan.name):
-                roles_dict.append(role_nguoidan)
     user.roles = roles_dict
     if("password" in param and param["password"] is not None and param["password"] !=""):
         newpassword = auth.encrypt_password(str(param['password']), str(user.salt))
@@ -513,45 +498,30 @@ async def preprocess_create_user(data, Model, **kw):
     user.organization_id = param["organization_id"]
     user.accountName = param["accountName"]
     roles_dict = []
-
-    role_canbo_tyt  = db.session.query(Role).filter(Role.name == "canbo_tyt").first()
-    role_admin_tyt = db.session.query(Role).filter(Role.name=="admin_tyt").first()
-    role_canbo_benhvien = db.session.query(Role).filter(Role.name == "canbo_benhvien").first()
-    role_admin_benhvien = db.session.query(Role).filter(Role.name == "admin_benhvien").first()
+    role_admin_donvi = db.session.query(Role).filter(Role.name == "admin_donvi").first()
+    role_canbo = db.session.query(Role).filter(Role.name=="canbo").first()
     role_admin = db.session.query(Role).filter(Role.name == "admin").first()
-    role_nguoidan = db.session.query(Role).filter(Role.name == "nguoidan").first()
 
-    if role_canbo_tyt is None or role_admin_tyt is None or role_canbo_benhvien is None or role_admin_benhvien is None or role_admin is None or role_nguoidan is None:
+    if role_admin_donvi is None or role_canbo is None or role_admin is None:
         print("quanlycanbo.change_profile.role_user>>> role không tồn tại")
         return json({"error_code":"ERROR_PARAM","error_message":"Tham số không hợp lệ"},status=520)
     user.roles = []
     for role_user in param["roles"]:
         if isinstance(role_user, str):
-            if (role_user == role_canbo_tyt.name):
-                roles_dict.append(role_canbo_tyt)
-            if (role_user == role_admin_tyt.name):
-                roles_dict.append(role_admin_tyt)
-            if (role_user == role_canbo_benhvien.name):
-                roles_dict.append(role_canbo_benhvien)
-            if (role_user == role_admin_benhvien.name):
-                roles_dict.append(role_admin_benhvien)
+            if (role_user == role_admin_donvi.name):
+                roles_dict.append(role_admin_donvi)
+            if (role_user == role_canbo.name):
+                roles_dict.append(role_canbo)
             if (role_user == role_admin.name):
                 roles_dict.append(role_admin)
-            if (role_user == role_nguoidan.name):
-                roles_dict.append(role_nguoidan)
         else:
-            if (role_user["name"] == role_canbo_tyt.name):
-                roles_dict.append(role_canbo_tyt)
-            if (role_user["name"] == role_admin_tyt.name):
-                roles_dict.append(role_admin_tyt)
-            if (role_user["name"] == role_canbo_benhvien.name):
-                roles_dict.append(role_canbo_benhvien)
-            if (role_user["name"] == role_admin_benhvien.name):
-                roles_dict.append(role_admin_benhvien)
+            if (role_user["name"] == role_admin_donvi.name):
+                roles_dict.append(role_admin_donvi)
+            if (role_user["name"] == role_canbo.name):
+                roles_dict.append(role_canbo)
             if (role_user["name"] == role_admin.name):
                 roles_dict.append(role_admin)
-            if (role_user["name"] == role_nguoidan.name):
-                roles_dict.append(role_nguoidan)
+
 
     user.roles = roles_dict
     salt = generator_salt()

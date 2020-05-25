@@ -41,10 +41,10 @@ define(function (require) {
 				{ field: "id", direction: "asc" }
 			],
 			fields: [
-				{ field: "id", label: "ID"},
-				{ field: "fullname", label: "Tên"},
+				{ field: "accountName", label: "ID"},
+				{ field: "name", label: "Tên"},
 				{ field: "email", label: "Email"},
-				{ field: "phone_national_number", label: "Số điện thoại"},
+				{ field: "phone", label: "Số điện thoại"},
 				{ 
 					field: "active", 
 					label: "Trạng thái",
@@ -81,15 +81,15 @@ define(function (require) {
 			});
 			var donvi_id = "";
 			if (self.getApp().currentUser) {
-				donvi_id = self.getApp().currentUser.donvi_id;
+				donvi_id = self.getApp().currentUser.organization_id;
 			}
     		filter.render();
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-    			var filters = {"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }};
+    			var filters = {"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }};
     			self.uiControl.filters = filters;
 			}
-			var filters_donvidangki = {"donvi_id": {"$eq":donvi_id  }};
+			var filters_donvidangki = {"organization_id": {"$eq":donvi_id  }};
 			self.uiControl.filters = filters_donvidangki;
     		self.applyBindings(); 		
     		filter.on('filterChanged', function(evt) {
@@ -99,8 +99,8 @@ define(function (require) {
 					if (text !== null){
 						
 						var filters = { "$and": [
-							{"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							{"donvi_id": {"$eq":donvi_id  }}
+							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
+							{"organization_id": {"$eq":donvi_id  }}
 						]};
 						$col.data('gonrin').filter(filters);
 						

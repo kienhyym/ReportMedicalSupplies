@@ -18,16 +18,16 @@
         <div class="col-md-6 col-sm-12 col-12 border-right">
             <div class="form-group required">
               <label>Họ và tên</label>
-              <input  type="text" data-bind="value:fullname" placeholder="Nhập số họ tên người dùng" class="form-control text-uppercase">
+              <input  type="text" data-bind="value:name" placeholder="Nhập số họ tên người dùng" class="form-control text-uppercase">
           </div>
             <div class="form-group required">
                 <label>Số điện thoại</label>
                 <input  type="text" data-bind="value:phone" placeholder="Nhập số điện thoại người dùng" class="form-control">
             </div>
-            <div class="form-group ">
+            <!-- <div class="form-group ">
                 <label>Mã công dân</label>
                 <input  type="text" data-bind="value:macongdan" placeholder="Nhập mã công dân" class="form-control">
-            </div>
+            </div> -->
         </div>
         <div class="col-md-6 col-sm-12 col-12">
             <div class="form-group required">
@@ -47,15 +47,15 @@
         <div class="col-md-6 col-sm-12 col-12 border-right">
             <div class="form-group required">
               <label>Tên Đơn Vị</label>
-              <input type="text" data-bind="value:donvi_ten" placeholder="Nhập tên đơn vị" class="form-control text-uppercase">
+              <input type="text" data-bind="value:donvi_name" placeholder="Nhập tên đơn vị" class="form-control text-uppercase">
             </div>
             <div class="form-group required">
               <label>Tuyến đơn vị</label>
-              <input type="text" data-bind="dict:donvi_tuyendonvi" placeholder="" class="form-control">
+              <input type="text" data-bind="dict:tuyendonvi" placeholder="" class="form-control">
             </div>
             <div class="form-group">
               <label>Số điện thoại</label>
-              <input  type="text" data-bind="value:donvi_sodienthoai" placeholder="Nhập số điện thoại" class="form-control">
+              <input  type="text" data-bind="value:donvi_phone" placeholder="Nhập số điện thoại" class="form-control">
             </div>
             <div class="form-group">
               <label>Email</label>
@@ -78,7 +78,7 @@
             </div>
             <div class="form-group">
               <label>Đơn vị cấp trên</label>
-              <input id="donvicaptren" type="text" data-bind="dict:captren" placeholder="" class="form-control">
+              <input id="donvicaptren" type="text" data-bind="dict:parent" placeholder="" class="form-control">
             </div>
         </div>
         <div class="col-md-6 col-sm-12 col-12 border-right">

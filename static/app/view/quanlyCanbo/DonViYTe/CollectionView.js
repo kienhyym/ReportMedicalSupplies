@@ -100,14 +100,14 @@ define(function (require) {
     			el: self.$el.find("#grid_search"),
     			sessionKey: self.collectionName +"_filter"
 			});
-			var captren_id = self.getApp().currentUser.donvi_id;
+			var captren_id = self.getApp().currentUser.organization_id;
     		filter.render();
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-    			var filters = {"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }};
+    			var filters = {"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }};
     			self.uiControl.filters = filters;
 			}
-			var filters_donvidangki = {"captren_id": {"$eq":captren_id  }};
+			var filters_donvidangki = {"parent_id": {"$eq":captren_id  }};
 			self.uiControl.filters = filters_donvidangki;
     		self.applyBindings(); 		
     		filter.on('filterChanged', function(evt) {
@@ -117,8 +117,8 @@ define(function (require) {
 					if (text !== null){
 						
 						var filters = { "$and": [
-							{"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							{"captren_id": {"$eq":captren_id  }}
+							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
+							{"parent_id": {"$eq":captren_id  }}
 						]};
 						$col.data('gonrin').filter(filters);
 						

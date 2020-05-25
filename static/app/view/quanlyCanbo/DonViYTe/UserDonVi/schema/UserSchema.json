@@ -25,24 +25,12 @@
         "type": "string",
         "primary": true
     },
-    "fullname": {
+    "name": {
         "type": "string"
     },
-    "phone_number": {
+    "phone": {
         "type": "string",
         "length": 20
-    },
-    "phone_country_prefix": {
-        "type": "string",
-        "length": 10
-    },
-    "phone_national_number": {
-        "type": "string",
-        "length": 15
-    },
-    "id_card": {
-        "type": "string",
-        "length": 50
     },
     "email": {
         "type": "string"
@@ -61,90 +49,16 @@
         "type": "boolean",
         "default": true
     },
-    "macanboyte": {
-        "type": "string"
-    },
-    "ngaysinh": {
-        "type": "number"
-    },
-    "gioitinh": {
-        "type": "string"
-    },
-    "dantoc_id": {
-        "type": "string",
-        "length": 255
-    },
-    "matrinhdochuyenmon": {
-        "type": "string"
-    },
-    "tentrinhdochuyenmon": {
-        "type": "string"
-    },
-    "machucvu": {
-        "type": "string"
-    },
-    "tenchucvu": {
-        "type": "string"
-    },
-    "diachi": {
-        "type": "string"
-    },
-    "xaphuong_id": {
-        "type": "string",
-        "length": 255
-    },
-    "quanhuyen_id": {
-        "type": "string",
-        "length": 255
-    },
-    "tinhthanh_id": {
-        "type": "string",
-        "length": 255
-    },
-    "quocgia_id": {
-        "type": "string",
-        "length": 255
-    },
-    "noicongtac": {
-        "type": "string"
-    },
-    "sochungchi": {
-        "type": "string"
-    },
-    "thoihanchungchi": {
-        "type": "number"
-    },
-    "ghichu": {
-        "type": "string"
-    },
-    "madonvi_bmte": {
-        "type": "string"
-    },
-    "donvi_id": {
-        "type": "string"
-    },
-    "dantoc": {
-        "type": "dict"
-    },
-    "xaphuong": {
-        "type": "dict"
-    },
-    "quanhuyen": {
-        "type": "dict"
-    },
-    "tinhthanh": {
-        "type": "dict"
-    },
-    "quocgia": {
-        "type": "dict"
-    },
     "donvi": {
         "type": "dict"
     },
     "roles": {
         "type": "list"
     },
-    "tenkhongdau": {
+    "unsigned_name": {
+        "type": "string"
+    },
+    "acountName": {
         "type": "string"
     }
 }

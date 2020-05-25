@@ -29,16 +29,16 @@
         "type": "string",
         "length": 255
     },
-    "ten": {
+    "name": {
         "type": "string",
         "required": true,
         "length": 255
     },
-    "sodienthoai": {
+    "phone": {
         "type": "string",
         "length": 63
     },
-    "diachi": {
+    "address": {
         "type": "string",
         "length": 255
     },
@@ -76,18 +76,15 @@
     "appkey": {
         "type": "string"
     },
-    "captren_id": {
+    "parent_id": {
         "type": "string"
     },
-    "tenkhongdau": {
+    "unsigned_name": {
         "type": "string"
     },
     "active": {
         "type": "boolean",
         "default": false
-    },
-    "madonvi_bmte": {
-        "type": "string"
     },
     "xaphuong": {
         "type": "dict"
@@ -110,7 +107,7 @@
     "children": {
         "type": "list"
     },
-    "captren": {
+    "parent": {
         "type": "dict"
     }
 }

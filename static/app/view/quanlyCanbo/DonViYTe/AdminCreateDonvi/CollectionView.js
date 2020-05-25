@@ -14,7 +14,7 @@ define(function (require) {
 		collectionName: "donvi",
     	uiControl:{
     		fields: [
-		     	{ field: "ten", label: "Tên đơn vị"},
+		     	{ field: "name", label: "Tên đơn vị"},
 	           	{
 	            	 field: "tinhthanh_id", 
 	            	 label: "Tỉnh thành",
@@ -37,7 +37,7 @@ define(function (require) {
 					 foreignTextField: "ten",
 				},
 				{
-					field: "madonvi_bmte", 
+					field: "code", 
 					label: "Mã đơn vị"
 			   	},
 				{ 
@@ -83,7 +83,7 @@ define(function (require) {
     		filter.render();
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-    			var filters = {"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }};
+    			var filters = {"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }};
     			self.uiControl.filters = filters;
 			}
 			var filters_donvidangki = {"created_by": {"$eq":created_by  }};
@@ -96,7 +96,7 @@ define(function (require) {
 					if (text !== null){
 						
 						var filters = { "$and": [
-							{"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }},
+							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
 							{"created_by": {"$eq":created_by  }}
 						]};
 						$col.data('gonrin').filter(filters);

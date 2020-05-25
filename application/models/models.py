@@ -90,12 +90,15 @@ class Organization(CommonModel):
     quanhuyen = relationship('QuanHuyen')  
     xaphuong_id = db.Column(String, ForeignKey('xaphuong.id'), nullable=True)
     xaphuong = relationship('XaPhuong')    
-    level = db.Column(SmallInteger, nullable=False) # Trạm y tế, bệnh viện ...
+    level = db.Column(SmallInteger, nullable=True) # Trạm y tế, bệnh viện ...
     parent_name = db.Column(String(255))
     parent_id = db.Column(String, ForeignKey('organization.id'), nullable=True)
     users = relationship('User', viewonly=True)
     active = db.Column(SmallInteger(), default=0) 
     type_donvi = db.Column(String(255)) # donvicungung / donvinhanuoc
+
+    tuyendonvi_id = db.Column(String(255), ForeignKey('tuyendonvi.id'), nullable=True)
+    tuyendonvi = relationship('TuyenDonVi')
     children = relationship("Organization",
         # cascade deletions
         cascade="all, delete-orphan",

@@ -6,17 +6,9 @@ define(function (require) {
     
     var template 			= require('text!app/view/quanlyCanbo/DonViYTe/UserDonVi/tpl/model.html'),
     	schema 				= require('json!app/view/quanlyCanbo/DonViYTe/UserDonVi/schema/UserSchema.json');
-	var TinhThanhSelectView 	= require("app/view/DanhMuc/TinhThanh/SelectView");
-	var QuanHuyenSelectView 	= require("app/view/DanhMuc/QuanHuyen/SelectView");
-	var XaPhuongSelectView 	= require("app/view/DanhMuc/XaPhuong/SelectView");
-	var TuyenDonViSelectView = require("app/view/DanhMuc/TuyenDonVi/SelectView");
-	var DonviSelectView = require("app/view/quanlyCanbo/DangkiDonVi/DonviCaptrenSelectView");
 	var RoleSelectView = require('app/view/HeThong/RoleQLCB/SelectView');
 	var DanTocSelectView 	= require("app/view/DanhMuc/DanToc/SelectView");
-	// var TrinhdohocvanSelectView 	= require("app/view/quanlyCanbo/DanhMuc/TrinhDoHocVan/SelectView");
-	var QuocGiaSelectView 	= require("app/view/DanhMuc/QuocGia/SelectView");
-    // var check_role_canbo  = (gonrinApp().hasRole('admin_canbo') ===false && gonrinApp().hasRole('admin')=== false);
-
+	
     return Gonrin.ModelView.extend({
     	template : template,
     	modelSchema	: schema,
@@ -32,32 +24,6 @@ define(function (require) {
 						selectionMode: "multiple",
 						dataSource: RoleSelectView
 					},
-					// {
-	   				// 	field:"ngaysinh",
-					// 	   uicontrol:"datetimepicker",
-					// 	   format:"DD/MM/YYYY",
-	   				// 	textFormat:"DD/MM/YYYY",
-	   				// 	extraFormats:["DDMMYYYY"],
-	   				// 	parseInputDate: function(val){
-	   				// 		return gonrinApp().parseDate(val);
-	                // 	},
-	                // 	parseOutputDate: function(date){
-	                // 		return date.unix();
-	                // 	}
-	   				// },
-	   				// {
-	   				// 	field:"thoihanchungchi",
-					// 	   uicontrol:"datetimepicker",
-					// 	   format:"DD/MM/YYYY",
-	   				// 	textFormat:"DD/MM/YYYY",
-	   				// 	extraFormats:["DDMMYYYY"],
-	   				// 	parseInputDate: function(val){
-	   				// 		return gonrinApp().parseDate(val);
-	                // 	},
-	                // 	parseOutputDate: function(date){
-	                // 		return date.unix();
-	                // 	}
-	   				// },
 					{
 	    				field:"dantoc",
 	    				uicontrol:"ref",
@@ -65,49 +31,6 @@ define(function (require) {
 	    				foreignRemoteField: "id",
 	    				foreignField: "dantoc_id",
 	    				dataSource: DanTocSelectView
-	    			},
-	    			{
-	   					field:"gioitinh",
-	   					uicontrol:"combobox",
-	   					textField: "text",
-	                    valueField: "value",
-	                    cssClass:"form-control",
-	   					dataSource: [
-	                        { value: '1', text: "Nam" },
-	                        { value: '0', text: "Nữ" },
-	                    ],
-	   				},
-	    			{
-	    				field:"quocgia",
-	    				uicontrol:"ref",
-	    				textField: "ten",
-	    				foreignRemoteField: "id",
-	    				foreignField: "quocgia_id",
-	    				dataSource: QuocGiaSelectView
-	    			},
-	        		{
-	    				field:"tinhthanh",
-	    				uicontrol:"ref",
-	    				textField: "ten",
-	    				foreignRemoteField: "id",
-	    				foreignField: "tinhthanh_id",
-	    				dataSource: TinhThanhSelectView
-	    			},
-	    			{
-	    				field:"quanhuyen",
-	    				uicontrol:"ref",
-	    				textField: "ten",
-	    				foreignRemoteField: "id",
-	    				foreignField: "quanhuyen_id",
-	    				dataSource: QuanHuyenSelectView
-	    			},
-	    			{
-	    				field:"xaphuong",
-	    				uicontrol:"ref",
-	    				textField: "ten",
-	    				foreignRemoteField: "id",
-	    				foreignField: "xaphuong_id",
-	    				dataSource: XaPhuongSelectView
 	    			}
 	        	]
 	    	},
@@ -147,12 +70,12 @@ define(function (require) {
  				    				self.model.set("id",viewData.id);
 								}
 								var curUser = self.getApp().currentUser;
-								if (curUser) {
-									self.model.set("madonvi_bmte",curUser.madonvi_bmte);
-								}
-								var ten = self.model.get("fullname");
-								self.model.set("fullname",ten.toUpperCase());
-								self.model.set("tenkhongdau",gonrinApp().convert_khongdau(ten));
+								// if (curUser) {
+								// 	self.model.set("madonvi_bmte",curUser.madonvi_bmte);
+								// }
+								var ten = self.model.get("name");
+								self.model.set("name",ten.toUpperCase());
+								self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 								
 								var email = self.model.get("email");
 								if(!!email) {
@@ -241,9 +164,6 @@ define(function (require) {
 			var curUser = self.getApp().currentUser;
 			self.button_khoa_mo_taikhoan();
 			if (curUser) {
-				
-
-
 				self.applyBindings();
 				
 				var dataview = self.viewData.data;
@@ -255,7 +175,7 @@ define(function (require) {
 				if(dataview !== undefined && dataview !== null) {
 					self.model.set(dataview);
 					var active = self.model.get("active");
-					if (dataview.id === curUser.uid_canbo) {
+					if (dataview.id === curUser.id) {
 						self.$el.find(".button_xoa").hide();
 						self.$el.find(".button_khoa").hide();
 						self.$el.find(".roless").hide();
@@ -264,35 +184,14 @@ define(function (require) {
 						}
 					}
 				} else {
-					self.model.set("madonvi_bmte", curUser.madonvi_bmte);
-					self.model.set("donvi_id", curUser.id);
+					self.model.on("change", function () {
+						var filterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
+						self.getFieldElement("roles").data("gonrin").setFilters(filterobj);
+					});
+					self.model.set("organization_id", curUser.organization_id);
+
 					self.$el.find(".button_xoa").hide();
 					
-				}
-				gonrinApp().process_datetime(self, "date","ngaysinh","ngaysinh",self.model.get("ngaysinh"),null, null);
-				gonrinApp().process_datetime(self, "date","thoihanchungchi","thoihanchungchi",self.model.get("thoihanchungchi"),null, null);
-
-				self.model.on("change:tinhthanh", function() {
-					var filterobj = {"tinhthanh_id": {"$eq": self.model.get("tinhthanh_id")}};
-					self.model.set({"quanhuyen":null,"xaphuong":null});
-					self.getFieldElement("quanhuyen").data("gonrin").setFilters(filterobj);
-					
-				});
-				self.model.on("change:quanhuyen", function() {
-					var filterobj = {"quanhuyen_id": {"$eq": self.model.get("quanhuyen_id")}};
-					self.model.set("xaphuong",null);
-					self.getFieldElement("xaphuong").data("gonrin").setFilters(filterobj);
-					
-				});
-				
-				var tuyendonvi_id = curUser.tuyendonvi_id;
-				if (!tuyendonvi_id || tuyendonvi_id === "" || tuyendonvi_id == null  || tuyendonvi_id !== "01") {
-						var filters = { "$or": [
-						{"name": {"$eq": "canbo" }},
-						{"name": {"$eq": "admin_donvi" }},
-					]};
-					self.getFieldElement("roles").data("gonrin").setFilters(filters);
-				
 				}
 				return this;
 			}
@@ -302,8 +201,8 @@ define(function (require) {
     		var id = self.model.get("id");
     		var password =self.model.get("password");
 			
-    		var hoten = self.model.get("fullname");
-			var phone_number = self.model.get("phone_national_number");
+    		var hoten = self.model.get("name");
+			var phone_number = self.model.get("phone");
 			var macongdan = self.model.get("id_card");
     		if (hoten === null || hoten ===""){
     			self.getApp().notify("Vui lòng nhập họ và tên cán bộ");
@@ -313,7 +212,7 @@ define(function (require) {
     			self.getApp().notify("Vui lòng nhập số điện thoại cán bộ");
     			return false;
     		}else{
-    			self.model.set("phone_number",phone_number);
+    			self.model.set("phone",phone_number);
 			}
 			var confirm_pass = self.model.get("confirm_password");
     		if(id === null || id ===""){
@@ -324,10 +223,6 @@ define(function (require) {
     		}
     		if(password!==null && password!="" && password !==confirm_pass){
 				self.getApp().notify("Mật khẩu không khớp!");
-				return false;
-			}
-			if(macongdan == null || macongdan =="" || macongdan == undefined){
-				self.getApp().notify("Vui lòng nhập mã công dân!");
 				return false;
 			}
     		return true;
