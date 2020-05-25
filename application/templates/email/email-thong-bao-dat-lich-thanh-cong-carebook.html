@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="format-detection" content="telephone=no" />
+<title>FPT CaresBook</title>
+<style type="text/css">
+/* RESET STYLES */
+html {
+	background-color: #FFFFFF;
+	margin: 0;
+	padding: 0;
+}
+body, #bodyTable, #bodyCell {
+	height: 100% !important;
+	margin: 0;
+	padding: 0;
+	width: 100% !important;
+	font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+table {
+	border-collapse: collapse;
+}
+table[id=bodyTable] {
+	width: 100%!important;
+	margin: auto;
+	max-width: 500px!important;
+	color: #7A7A7A;
+	font-weight: normal;
+}
+img, a img {
+	border: 0;
+	outline: none;
+	text-decoration: none;
+	height: auto;
+	line-height: 100%;
+}
+a {
+	text-decoration: none !important;
+}
+h1, h2, h3, h4, h5, h6 {
+	color: #5F5F5F;
+	font-weight: normal;
+	font-family: Helvetica;
+	font-size: 20px;
+	line-height: 125%;
+	text-align: Left;
+	letter-spacing: normal;
+	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+.ReadMsgBody {
+	width: 100%;
+}
+.ExternalClass {
+	width: 100%;
+}
+.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+	line-height: 100%;
+}
+table, td {
+	mso-table-lspace: 0pt;
+	mso-table-rspace: 0pt;
+}
+#outlook a {
+	padding: 0;
+}
+img {
+	-ms-interpolation-mode: bicubic;
+	display: block;
+	outline: none;
+	text-decoration: none;
+}
+body, table, td, p, a, li, blockquote {
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	font-weight: normal!important;
+}
+.ExternalClass td[class="ecxflexibleContainerBox"] h3 {
+	padding-top: 10px !important;
+}
+.flexibleImage {
+	height: auto;
+}
+.linkRemoveBorder {
+	border-bottom: 0 !important;
+}
+table[class=flexibleContainerCellDivider] {
+	padding-bottom: 0 !important;
+	padding-top: 0 !important;
+}
+body, #bodyTable {
+	background-color: #FFFFFF;
+}
+#emailBody {
+	background-color: #FFFFFF;
+}
+.nestedContainer {
+	background-color: #F8F8F8;
+	border: 1px solid #CCCCCC;
+}
+.emailButton {
+	background-color: #205478;
+	border-collapse: separate;
+}
+.buttonContent {
+	color: #FFFFFF;
+	font-family: Helvetica;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 100%;
+	padding: 15px;
+	text-align: center;
+}
+.buttonContent a {
+	color: #FFFFFF;
+	display: block;
+	text-decoration: none!important;
+	border: 0!important;
+}
+.emailCalendar {
+	background-color: #FFFFFF;
+	border: 1px solid #CCCCCC;
+}
+.emailCalendarMonth {
+	background-color: #205478;
+	color: #FFFFFF;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+.emailCalendarDay {
+	color: #205478;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 60px;
+	font-weight: bold;
+	line-height: 100%;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+}
+.imageContentText {
+	margin-top: 10px;
+	line-height: 0;
+}
+.imageContentText a {
+	line-height: 0;
+}
+#invisibleIntroduction {
+	display: none !important;
+}
+span[class=ios-color-hack] a {
+	color: #275100!important;
+	text-decoration: none!important;
+}
+span[class=ios-color-hack2] a {
+	color: #205478!important;
+	text-decoration: none!important;
+}
+span[class=ios-color-hack3] a {
+	color: #8B8B8B!important;
+	text-decoration: none!important;
+}
+.a[href^="tel"], a[href^="sms"] {
+	text-decoration: none!important;
+	color: #606060!important;
+	pointer-events: none!important;
+	cursor: default!important;
+}
+.mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+	text-decoration: none!important;
+	color: #606060!important;
+	pointer-events: auto!important;
+	cursor: default!important;
+}
+
+/* MOBILE STYLES */
+@media only screen and (max-width: 760px) {
+body {
+	width: 100% !important;
+	min-width: 100% !important;
+}
+table[id="emailHeader"], table[id="emailBody"], table[id="emailFooter"], table[class="flexibleContainer"], td[class="flexibleContainerCell"] {
+	width: 100% !important;
+}
+td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {
+	display: block;
+	width: 100%;
+	text-align: left;
+}
+td[class="imageContent"] img {
+	height: auto !important;
+	width: 100% !important;
+	max-width: 100% !important;
+}
+img[class="flexibleImage"] {
+	height: auto !important;
+	width: 100% !important;
+	max-width: 100% !important;
+}
+img[class="flexibleImageSmall"] {
+	height: auto !important;
+	width: auto !important;
+}
+table[class="flexibleContainerBoxNext"] {
+	padding-top: 0 !important;
+}
+table[class="emailButton"] {
+	width: 100% !important;
+}
+td[class="buttonContent"] {
+	padding: 0 !important;
+}
+td[class="buttonContent"] a {
+	padding: 15px !important;
+}
+}
+</style>
+</head>
+<body bgcolor="#FFFFFF" leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+<center style="background-color:#FFFFFF; padding-top: 0; padding-bottom: 0;">
+  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;">
+    <tr>
+      <td align="center" valign="top" id="bodyCell"><table bgcolor="#FFFFFF" style="border: 1px solid #e2e2e2;" cellpadding="0" cellspacing="0" width="760" id="emailBody">
+          <tr>
+            <td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="color:#FFFFFF;" bgcolor="#3498db">
+                <tr>
+                  <td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="760" class="flexibleContainer">
+                      <tr>
+                        <td align="center" valign="top" width="760" style="border-bottom: 5px solid #0099d6; background: #1ec6ff; padding-top: 15px; padding-bottom: 15px;" class="flexibleContainerCell"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                              <td align="left" valign="top" class="textContent"><img src="http://cdn.yte360.com/public/images/mail-service/logo-cb.png" width="218" class="flexibleImageSmall" style="max-width:90%; padding-left: 15px;" alt="" title="" /></td>
+                              <td align="right" valign="top" class="textContent"><img src="http://cdn.yte360.com/public/images/mail-service/logo-hc.png" width="218" class="flexibleImageSmall" style="max-width:90%; padding-right: 5px;" alt="" title="" /></td>
+                            </tr>
+                          </table></td>
+                      </tr>
+                    </table></td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr>
+            <td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f6fdff">
+                <tr>
+                  <td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="760" class="flexibleContainer">
+                      <tr>
+                        <td align="center" valign="top" width="760" class="flexibleContainerCell"><table border="0" cellpadding="15" cellspacing="0" width="100%">
+                            <tr>
+                              <td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                  <tr>
+                                    <td valign="top" class="textContent"><div mc:edit="body" style="text-align:left; font-family:Helvetica,Arial,sans-serif; font-size:15px; margin-bottom:0; color:#5F5F5F; line-height:135%;">
+                                        <h2 style="text-align: center; font-family:Helvetica,Arial,sans-serif; font-weight: 700; padding-top: 15px; padding-bottom: 15px; font-size:20px; color: #0ca7dc;">Thông báo đặt lịch thành công</h2>
+                                        <p style="text-align:left; font-family:Helvetica,Arial,sans-serif; font-size:15px; margin-bottom:0; color:#000000; line-height:135%; padding-bottom: 50px;"> Xin chào <span style="color: #0ca7dc; font-weight: 700; font-size: 17px;">$userName$</span> <br>
+                                          <br>
+                                          <br>
+                                          Cảm ơn bạn đã đặt lịch khám tại <b>$clinicName$</b> vào lúc <b style="color: #0ca7dc;">$bookingTime$</b> tại <b>$clinicAddress$</b>.<br>
+                                          Nhân viên phòng khám sẽ liên hệ với bạn trong thời gian sớm nhất. <br>
+                                          <br>
+                                          Mọi thắc mắc và thay đổi về đặt lịch xin liên hệ phòng khám:<br>
+                                          Email: <a href="#" style="color: #000;"><b>$clinicEmail$</b></a> - Điện thoại: <b>$clinicPhone$</b> <br>
+                                          <br>
+                                          Hoặc nếu có bất kỳ khó khăn hay thắc mắc gì trong quá trình sử dụng, vui lòng liên hệ với chúng tôi theo thông tin dưới đây:<br>
+                                          Hotline: <b>1900-63-64-56</b><br>
+                                          Email: <a href="#" style="color: #000;"><b>hotro@yte360.com</b></a><br>
+                                          <br>
+                                          <br>
+                                          Thân trọng!<br>
+                                          <span style="color: #0ca7dc; font-weight: 700;">Đội ngũ Yte360</span> <br>
+                                          <br>
+                                          <br>
+                                          <span style="color: #1569b2;"><i>Lưu ý: đây là mail tự động gửi từ hệ thống, vui lòng không trả lời.</i></span> </p>
+                                      </div></td>
+                                  </tr>
+                                </table></td>
+                            </tr>
+                          </table></td>
+                      </tr>
+                    </table></td>
+                </tr>
+              </table></td>
+          </tr>
+					<tr>
+						<td align="center" valign="top">
+							<table border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tr>
+									<td align="center" valign="top">
+										<table border="0" cellpadding="0" cellspacing="0" width="760" class="flexibleContainer">
+											<tr>
+												<td style="padding-bottom:0;" valign="top" width="760" class="flexibleContainerCell">
+													<table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 5px solid #0099d6; background: #1ec6ff;">
+														<tr>
+															<td align="left" valign="top" class="flexibleContainerBox" style="vertical-align: middle;">
+																<table border="0" cellpadding="15" cellspacing="0" width="100%" style="max-width:260px;">
+																	<tr>
+																		<td align="left" class="textContent">
+																			<table border="0" cellpadding="15" cellspacing="0" width="100%" style="max-width:260px;">
+																				<tr>
+																					<td colspan="3" style="padding: 0; margin: 0;">
+																						<div style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:5px;color:#FFFFFF;line-height:135%;">Link
+																							tải về:</div>
+																					</td>
+																				</tr>
+																				<tr>
+																					<td style="padding: 0; margin: 0;"><a href="https://yte360.com/download/caresbook/web" style="margin-right: 5px; display: inline-block;"><img
+																							 src="http://cdn.yte360.com/public/images/mail-service/ico-web.png" width="34" alt="" title="" /></a></td>
+																					<td style="padding: 0; margin: 0;"><a href="https://yte360.com/download/caresbook/ios" style="margin-right: 5px; display: inline-block;"><img
+																							 src="http://cdn.yte360.com/public/images/mail-service/ico-ios.png" width="34" alt="" title="" /></a></td>
+																					<td style="padding: 0; margin: 0;"><a href="https://yte360.com/download/caresbook/android"><img 
+																							 src="http://cdn.yte360.com/public/images/mail-service/ico-android.png" width="34" alt="" title="" /></a></td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+															<td align="right" valign="middle" class="flexibleContainerBox">
+																<table class="flexibleContainerBoxNext" border="0" cellpadding="15" cellspacing="0" width="100%" style="max-width:500px;">
+																	<tr>
+																		<td align="right" class="textContent">
+																			<div style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:0;color:#FFFFFF;line-height:135%; text-align: right;"><span
+																				 style="display: inline-block;"><a href="https://yte360.com/about-us" style="color: #FFFFFF;">Về chúng tôi</a>&nbsp;|&nbsp;</span><span
+																				 style="display: inline-block;"><a href="https://yte360.com/dieu-khoan-su-dung-caresbook" style="color: #FFFFFF;">Điểu khoản sử dụng</a>&nbsp;|&nbsp;</span><span
+																				 style="display: inline-block;"><a href="https://yte360.com/chinh-sach-bao-mat-caresbook" style="color: #FFFFFF;">Chính sách bảo mật</a></span></div>
+																			<img src="http://cdn.yte360.com/public/images/mail-service/logo.png" width="125" class="flexibleImageSmall"
+																			 style="max-width:100%;" alt="FPT" title="FPT" />
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+        </table></td>
+    </tr>
+  </table>
+</center>
+</body>
+</html>

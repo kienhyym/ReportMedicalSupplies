@@ -18,40 +18,104 @@
 		<link rel="stylesheet" href="{{static_url}}/css/style.css">
 		<link rel="stylesheet" href="{{static_url}}/css/themes/light.css">
 		<link rel="stylesheet" href="{{static_url}}/css/style_pink.css">
+		<link rel="stylesheet" href="{{static_url}}/css/shards-dashboards.1.1.0.css">
 		<title>Sổ Mẹ và Bé</title>
+
+		<style>
+			.loiich_so {
+				margin-top: 25px;
+				color: #3D5170;
+			}
+			.loiich_so p,.title {
+				font-size: 15px;
+			}
+			.title {
+				line-height: 24px;
+			}
+			ul {
+  				list-style: none;
+				margin-left: -25px;
+				font-size: 13px;
+				/* color: #000; */
+			}
+			ul li:before {
+  				content: '✓ ';
+				font-size: 19px;
+			}
+			.gioithieu_so {
+				padding-bottom: 20px;
+				line-height: 22px;
+				font-size: 15px;
+			}
+			#logo {
+				padding-bottom: 10px;
+			}
+		</style>
 	</head>
 	<body class="page-header-fixed">
-	
-	<div class="page-header-wrapper">
+	<div class="card">
+		<div class="card-header">
+			<div class="page-logo">
+				<div id="logo" href="javascript:void(0);" class="text-center">
+					<img src="{{static_url}}/images/logo-boyte.png" height="50px" alt="logo" class="logo-default" />
+				</div>
+				<!-- <div class="menu-toggler sidebar-toggler hide"> -->
+				<div class="content-area">
+					<section class="content">
+						<div class="row">
+							<div class="col-md-12">
+								<h4 class="text-center title">Mã sổ chưa được đồng bộ với sổ  phiên bản điện tử.
+								Vui lòng tạo sổ BMTE phiên bản điện tử và đồng bộ để sử dụng thống nhất tại các cơ sở y tế.</h4>
+							</div>
+							<div class="col-md-10 col-md-offset-1 text-center">
+								<a class="btn btn-primary" style="font-size:22px;" href="{{href_taosomoi}}">Tạo sổ BMTE mới</a>
+							</div>
+						</div>
+				
+				
+					</section>
+				</div>
+				<!-- </div> -->
+			</div>
+		</div>
+		<div class="card-body" style="padding-top: 0px;">
+			<div class="loiich_so">
+				<div class="gioithieu_so">&nbsp;&nbsp;&nbsp;&nbsp; Sổ theo dõi sức khỏe Bà mẹ và Trẻ em giúp bố mẹ và gia đình biết cách theo dõi,
+					chăm sóc sức khỏe của mẹ trong thời kỳ mang thai, sinh đẻ cũng như theo dõi, chăm sóc sức khỏe và sự phát
+					triển của trẻ từ khi sinh ra đến khi trẻ được 6 tuổi.</div>
+		
+				<p>Chức năng chính của Sổ:</p>
+				<ul>
+					<li>Theo dõi quá trình mang thai của Mẹ</li>
+					<li>Theo dõi quá trình phá triển của con từ 0-6 tuổi tại nhà</li>
+					<li>Theo dõi quá trình phát triển của con từ 0-6 tuổi tại cơ sở y tế</li>
+					<li>Lịch sử khám chữa bênh của Con (Liên kết và trả kết quả tự động khi khám chữa bệnh tại cơ sở y tế)</li>
+					<li>Theo dõi lịch và quá trình tiêm chủng của Mẹ và Con</li>
+					<li>Theo dõi quá trình tăng trưởng cân nặng chiều cao của Con</li>
+					<li>Thông tin bài viết hướng dẫn hữu ích để chăm sóc Mẹ và Con theo từng giai đoạn</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="page-header-wrapper">
 	<div class="page-header navbar navbar-fixed-top">
-		<!-- BEGIN HEADER INNER -->
 		<div class="page-header-inner">
-			<!-- BEGIN LOGO -->
 			<div class="page-logo">
 				<a id="logo" href="javascript:void(0);">
 				<img src="{{static_url}}/images/logo.png" height="40px" alt="logo" class="logo-default"/>
 				</a>
 				<div class="menu-toggler sidebar-toggler hide">
-					<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 				</div>
 			</div>
-			<!-- END LOGO -->
-			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
 			<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
 			</a>
-			<!-- END RESPONSIVE MENU TOGGLER -->
-			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
 			</div>
-			<!-- END TOP NAVIGATION MENU -->
 		</div>
-		<!-- END HEADER INNER -->
 	</div>
 </div>
-<!-- END HEADER -->
 <div class="clearfix">
 </div>
-<!-- BEGIN CONTAINER -->
 <div class="page-container page-container-fixed">
 	<div class="page-navbar-wrapper">
 		<div class="page-navbar">
@@ -72,7 +136,22 @@
 						</div>
 					</div>
 					
+
 				</section>
+			</div>
+			<div class="loiich_so">
+				<div class="gioithieu_so">&nbsp;&nbsp;&nbsp;&nbsp; Sổ Bà mẹ và Trẻ em giúp bố mẹ và gia đình biết cách theo dõi, chăm sóc sức khỏe của mẹ trong thời kỳ mang thai, sinh đẻ cũng như theo dõi, chăm sóc sức khỏe và sự phát triển của trẻ từ khi sinh ra đến khi trẻ được 6 tuổi.</div>
+
+				<p>Chức năng chính của sổ Bà mẹ và trẻ em</p>
+				<ul>
+					<li>Theo dõi quá trình mang thai của Mẹ</li>
+					<li>Theo dõi quá trình phá triển của con từ 0-6 tuổi tại nhà</li>
+					<li>Theo dõi quá trình phát triển của con từ 0-6 tuổi tại cơ sở y tế</li>
+					<li>Lịch sử khám chữa bênh của Con (Liên kết và trả kết quả tự động khi khám chữa bệnh tại cơ sở y tế)</li>
+					<li>Theo dõi lịch và quá trình tiêm chủng của Mẹ và Con</li>
+					<li>Theo dõi quá trình tăng trưởng cân nặng chiều cao của Con</li>
+					<li>Thông tin bài viết hướng dẫn hữu ích để chăm sóc Mẹ và Con theo từng giai đoạn</li>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -84,7 +163,7 @@
 	<div class="scroll-to-top">
 		<i class="icon-arrow-up"></i>
 	</div>
-</div>	
+</div>	 -->
 		
 	</body>
 </html>
