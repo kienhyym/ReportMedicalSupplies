@@ -55,10 +55,10 @@ define(function (require) {
 	            	 foreignValueField: "id",
 					 foreignTextField: "ten",
 				},
-				{
-					field: "madonvi_bmte", 
-					label: "Mã đơn vị"
-			   	},
+				// {
+				// 	field: "madonvi_bmte", 
+				// 	label: "Mã đơn vị"
+			   	// },
 				{ 
 					field: "active", 
 					label: "Trạng thái",

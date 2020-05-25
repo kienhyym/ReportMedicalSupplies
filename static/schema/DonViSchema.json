@@ -86,9 +86,6 @@
         "type": "boolean",
         "default": false
     },
-    "madonvi_bmte": {
-        "type": "string"
-    },
     "xaphuong": {
         "type": "dict"
     },
