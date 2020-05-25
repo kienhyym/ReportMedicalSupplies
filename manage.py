@@ -225,11 +225,11 @@ def add_role():
         db.session.add(role)
         db.session.commit()
 
-    role_citizen = db.session.query(Role).filter(Role.name == 'nguoidan').first()
-    if role_citizen is None:
-        role = Role(name='nguoidan',description='Người dân')
-        db.session.add(role)
-        db.session.commit()
+    # role_citizen = db.session.query(Role).filter(Role.name == 'nguoidan').first()
+    # if role_citizen is None:
+    #     role = Role(name='nguoidan',description='Người dân')
+    #     db.session.add(role)
+    #     db.session.commit()
 
     role_canbotyt = db.session.query(Role).filter(Role.name == 'canbo_tyt').first()
     if role_canbotyt is None:

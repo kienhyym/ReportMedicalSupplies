@@ -95,7 +95,7 @@ class Organization(CommonModel):
     parent_id = db.Column(String, ForeignKey('organization.id'), nullable=True)
     users = relationship('User', viewonly=True)
     active = db.Column(SmallInteger(), default=0) 
-    type_donvi = db.Column(String(255))
+    type_donvi = db.Column(String(255)) # donvicungung / donvinhanuoc
     children = relationship("Organization",
         # cascade deletions
         cascade="all, delete-orphan",
