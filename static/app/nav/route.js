@@ -78,6 +78,41 @@ define(function(require) {
             "route": "xaphuong/model",
             "$ref": "app/view/DanhMuc/XaPhuong/ModelView",
         },
+        {
+            "collectionName": "donvi",
+            "route": "admin/DonViYTe/create",
+            "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/ModelView"
+        },
+        {
+            "collectionName": "donvidangki",
+            "route": "admin/donvi/collection",
+            "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/CollectionView"
+        },
+        {
+            "collectionName": "donvi",
+            "route": "canbo/DonViYTe/model",
+            "$ref": "app/view/quanlyCanbo/DonViYTe/ModelView"
+        },
+        {
+            "collectionName": "donvidangki",
+            "route": "canbo/donvi/model",
+            "$ref": "app/view/quanlyCanbo/DonViYTe/ModelView"
+        },
+        {
+            "collectionName": "user",
+            "route": "canbo/user/collection",
+            "$ref": "app/view/quanlyCanbo/DonViYTe/UserDonVi/view/CollectionView"
+        },
+        {
+            "collectionName": "role",
+            "route": "role/collection",
+            "$ref": "app/view/HeThong/Role/CollectionView"
+        },
+        {
+            "collectionName": "role",
+            "route": "role/model(/:id)",
+            "$ref": "app/view/HeThong/Role/ModelView"
+        },
     ];
 
 });
