@@ -109,6 +109,16 @@ define(function(require) {
             },
         ]
         },
+        {
+            "text": "Vật tư y tế",
+            "type": "view",
+            "collectionName": "medical_supplies",
+            "route": "vattuyte/collection",
+            "$ref": "app/vattuyte/view/CollectionView",
+            "visible": function() {
+                return this.userHasRole("admin");
+            }
+        },
     ];
 
 });

@@ -113,6 +113,17 @@ define(function(require) {
             "route": "role/model(/:id)",
             "$ref": "app/view/HeThong/Role/ModelView"
         },
+
+        {
+            "collectionName": "medical_supplies",
+            "route": "vattuyte/collection",
+            "$ref": "app/vattuyte/view/CollectionView"
+        },
+        {
+            "collectionName": "medical_supplies",
+            "route": "vattuyte/model(/:id)",
+            "$ref": "app/vattuyte/view/ModelView"
+        },
     ];
 
 });

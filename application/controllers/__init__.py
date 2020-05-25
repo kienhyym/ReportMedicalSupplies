@@ -15,6 +15,8 @@ def init_controllers(app):
     import application.controllers.donvi_api
     import application.controllers.danhmuc_api
     import application.controllers.notify
+    import application.controllers.quanlykho_api
+
     # import application.controllers.post_api
     # import application.controllers.medicine
     
