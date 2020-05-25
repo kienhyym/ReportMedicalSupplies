@@ -24,6 +24,7 @@ from gatco_restapi import  ProcessingException
 
 from application.controllers.helpers.helper_common import generator_salt, convert_text_khongdau, default_uuid
 from application.models.model_danhmuc import QuocGia, TinhThanh, QuanHuyen, XaPhuong, DanToc
+from application.models.model_quanlykho import *
 import json
 from application.models.models import Role, User, Organization,roles_users
 import xlrd
