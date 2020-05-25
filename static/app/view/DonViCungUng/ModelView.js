@@ -204,6 +204,12 @@ define(function (require) {
 							});
 							self.button_duyet();
 						}
+						// self.$el.find(".create-account-user").unbind("click").bind("click", function() {
+                        //     var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true } });
+                        //     self.$el.find("#content").empty();
+                        //     dialogUserDonViView.render();
+                        //     self.$el.find("#content").append(dialogUserDonViView.el);
+                        // });
 					},
 					error: function (xhr, status, error) {
 						try {
@@ -359,22 +365,14 @@ define(function (require) {
 							page: 1,
 							pageSize: 20
 							},
-// 							onRowClick: function(event){
-// 								if(event.rowId){
-// //		                    		 console.log(event);
-// //		     		        		var path = '/canbo/api/v1/model?id='+ event.rowId;
-// //		     		        		this.getApp().getRouter().navigate(path);
-// 		                 			var dialogUserDonViView = new UserDonViDialogView({"viewData": {"donvi":self.model.toJSON(),"data":event.rowData}});
-// 		                 			dialogUserDonViView.dialog({size: "large"});
-// 		                 			dialogUserDonViView.on("close", function (dataUserDonVi) {
-// 		                 				self.getUserDonVi();
-// 		                 			});
-// //		                 			dialogUserDonViView.on("d-none.bs.modal",function(){
-// //		                 				console.log("chay vao day hay khong?model close");
-// //		            	    			$("html").css({"overflow-y":"auto"});
-// //		            	    		});
-// 		     		        	}
-// 		                    },
+							// onRowClick: function(event) {
+                            //     if (event.rowId) {
+                            //         var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": event.rowData } });
+                            //         self.$el.find("#content").empty(); 
+                            //         dialogUserDonViView.render();
+                            //         self.$el.find("#content").append(dialogUserDonViView.el);
+                            //     }
+                            // },
 		                });
 					},
 					error: function (xhr, status, error) {
