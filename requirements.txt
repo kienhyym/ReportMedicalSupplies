@@ -30,6 +30,8 @@ Crypto
 bcrypt
 firebase-admin
 xlrd
+pandas
+
 
 git+https://github.com/gonrin/gatco.git
 git+https://github.com/gonrin/gatco_auth.git
