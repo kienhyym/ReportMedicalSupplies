@@ -9,7 +9,7 @@ define(function(require) {
             "icon":"fa fa-user",
             "type":"category",
             "visible": function(){
-                return (this.userHasRole("admin")||this.userHasRole("admin_donvi"));
+                return ((this.userHasRole("admin")||this.userHasRole("admin_donvi")) && gonrinApp().hasTypeDonvi("donvinhanuoc"));
             },
             "entries":[
                 {
@@ -155,10 +155,20 @@ define(function(require) {
                     "text":"Đơn vị sản xuất",
                     "type":"view",
                     "collectionName":"donvi",
+                    "route":"donvicungung/model",
+                    "$ref": "app/donvicungung/view/ModelView",
+                    "visible": function(){
+                        return gonrinApp().hasTypeDonvi("donvicungung");
+                    }
+                },
+                {
+                    "text":"Danh sách đơn vị sản xuất",
+                    "type":"view",
+                    "collectionName":"donvi",
                     "route":"donvicungung/collection",
                     "$ref": "app/donvicungung/view/CollectionView",
                     "visible": function(){
-                        return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
+                        return (this.userHasRole("admin"));
                     }
                 },
                 // {

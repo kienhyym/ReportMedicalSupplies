@@ -182,6 +182,7 @@ def response_current_user(user):
     response["accountName"] = user.accountName
     response["Organization"] = to_dict(user.Organization)
     response["token"] = token
+    # response["type_donvi"] = user.type_donvi
     
     roles = []
     if user.roles is not None:

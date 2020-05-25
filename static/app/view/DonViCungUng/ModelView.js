@@ -169,9 +169,6 @@ define(function (require) {
 			var self = this;
 			var donvi_id = this.getApp().getRouter().getParam("id");
 			var curUser = self.getApp().currentUser;
-			if ( !!self.getApp().hasRole('canbo') && self.getApp().hasRole('admin_donvi') == false && self.getApp().hasRole('admin') == false ) {
-				self.$el.find("input").prop('disabled', true);
-			}
 			if (curUser && !donvi_id) {
 				donvi_id = curUser.organization_id;
 			}
@@ -190,20 +187,23 @@ define(function (require) {
 						self.model.set(data);
 						self.getUserDonVi();
 						self.applyBindings();
-						self.$el.find(".madonvi").removeClass("d-none");
-						self.model.on("change:tinhthanh", function() {
-							var tinhthanh_id = self.model.get("tinhthanh_id");
-							var filterobj = {"tinhthanh_id": {"$eq": tinhthanh_id}}; 
-							self.getFieldElement("quanhuyen").data("gonrin").setFilters(filterobj);
-							self.model.set({"quanhuyen":null,"xaphuong":null});
-						});
-						self.model.on("change:quanhuyen", function() {
-							var quanhuyen_id = self.model.get("quanhuyen_id");
-							var filterobj = {"quanhuyen_id": {"$eq": quanhuyen_id}}; 
-							self.getFieldElement("xaphuong").data("gonrin").setFilters(filterobj);
-							self.model.set({"xaphuong":null});
-						});
-						self.button_duyet();
+						if ( !self.getApp().hasRole('admin')) {
+							self.$el.find("input").prop('disabled', true);
+						} else {
+							self.model.on("change:tinhthanh", function() {
+								var tinhthanh_id = self.model.get("tinhthanh_id");
+								var filterobj = {"tinhthanh_id": {"$eq": tinhthanh_id}}; 
+								self.getFieldElement("quanhuyen").data("gonrin").setFilters(filterobj);
+								self.model.set({"quanhuyen":null,"xaphuong":null});
+							});
+							self.model.on("change:quanhuyen", function() {
+								var quanhuyen_id = self.model.get("quanhuyen_id");
+								var filterobj = {"quanhuyen_id": {"$eq": quanhuyen_id}}; 
+								self.getFieldElement("xaphuong").data("gonrin").setFilters(filterobj);
+								self.model.set({"xaphuong":null});
+							});
+							self.button_duyet();
+						}
 					},
 					error: function (xhr, status, error) {
 						try {
@@ -248,17 +248,13 @@ define(function (require) {
 						self.model.set("email",email.toLowerCase());
 					}
 
-					var ten = self.model.get("ten");
-					self.model.set("ten",ten.toUpperCase());
+					var ten = self.model.get("name");
+					self.model.set("name",ten.toUpperCase());
 					self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 					self.model.save(null, {
 						success: function (model, respose, options) {
 							self.getApp().notify("Mở tài khoản đơn vị thành công!");
-							if(gonrinApp().hasRole("admin")) {
-								self.getApp().getRouter().navigate("admin/donvi/collection");
-							} else {
-								self.getApp().getRouter().navigate("canbo/donvi/collection");
-							}
+							self.getApp().getRouter().navigate('donvicungung/collection');
 						},
 						error: function (xhr, status, error) {
 							self.getApp().hideloading();
@@ -283,17 +279,13 @@ define(function (require) {
 						self.model.set("email",email.toLowerCase());
 					}
 
-					var ten = self.model.get("ten");
-					self.model.set("ten",ten.toUpperCase());
+					var ten = self.model.get("name");
+					self.model.set("name",ten.toUpperCase());
 					self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 					self.model.save(null,{
 						success: function (model, respose, options) {
 							self.getApp().notify("Khóa đơn vị thành công!");
-							if(gonrinApp().hasRole("admin")) {
-								self.getApp().getRouter().navigate("admin/donvi/collection");
-							} else {
-								self.getApp().getRouter().navigate("canbo/donvi/collection");
-							}
+							self.getApp().getRouter().navigate('donvicungung/collection');
 						},
 						error: function (xhr, status, error) {
 							self.getApp().hideloading();

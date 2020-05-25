@@ -190,8 +190,11 @@ require(['jquery',
 			hasRole: function(role){
 				return (gonrinApp().currentUser != null && gonrinApp().currentUser.roles!=null) && gonrinApp().currentUser.roles.indexOf(role)>=0;
 			},
-			hasTypeDonvi: function(type_donvi){
-				return (gonrinApp().currentUser != null && gonrinApp().currentUser.type_donvi!=null) && gonrinApp().currentUser.type_donvi.indexOf(type_donvi)>=0;
+			hasTypeDonvi: function(type_donvi) {
+				if (!gonrinApp().hasRole("admin") && !!gonrinApp().currentUser.Organization) {
+					return (gonrinApp().currentUser.Organization != null && gonrinApp().currentUser.Organization.type_donvi!=null) && gonrinApp().currentUser.Organization.type_donvi.indexOf(type_donvi)>=0;
+				}
+				return false;
 			},
 			convert_khongdau: function (strdata) {
 				var kituA=["á","à","ạ","ã","ả","â","ấ","ầ","ậ","ẫ","ă","ằ","ắ","ẳ"],
