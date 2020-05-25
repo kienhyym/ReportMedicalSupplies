@@ -38,7 +38,7 @@
     "url": {
         "type": "string"
     },
-    "action": {
+    "iteminfo": {
         "type": "json"
     },
     "notify_condition": {

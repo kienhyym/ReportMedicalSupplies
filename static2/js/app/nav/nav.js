@@ -6,17 +6,6 @@ define(function(require) {
     return [
 
         {
-            "text": "Lịch kiểm tra",
-            "icon": "fa fa-calendar",
-            "type": "view",
-            // "collectionName": "thietbiduockiemtra",
-            "route": "lichthanhtra",
-            // "$ref": "app/lichthanhtra/view/ModelView",
-            "visible": function() {
-                return true
-            }
-        },
-        {
             "text": "Sổ quản lý thiết bị",
             "icon": "fa fa-book",
             "type": "view",

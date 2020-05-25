@@ -24,15 +24,6 @@ define(function(require) {
 
             ]
         },
-
-        {
-            "text": "Báo cáo thống kê",
-            "icon": "fa fa-file-text-o",
-            "type": "category",
-            "entries": [
-
-            ]
-        },
     ];
 
 });

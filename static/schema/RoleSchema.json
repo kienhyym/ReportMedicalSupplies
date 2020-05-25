@@ -25,10 +25,6 @@
         "type": "string",
         "primary": true
     },
-    "code": {
-        "type": "string",
-        "length": 80
-    },
     "name": {
         "type": "string",
         "length": 80

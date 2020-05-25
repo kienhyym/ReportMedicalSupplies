@@ -4,11 +4,9 @@ define(function(require) {
 
     var $ = require('jquery'),
         Gonrin = require('gonrin');
-    // var Index = require('app/lichthanhtra/view/ModelView');
     var Login = require('app/login/js/LoginView');
     var ChangePasswordView = require('app/login/js/ChangePasswordView');
     var ForgotPasswordView = require('app/login/js/ForgotPasswordView');
-    var LichThanhTraView = require('app/lichthanhtra/view/ModelView');
     var RegisterView = require('app/login/js/RegisterView');
     var navdata = require('app/nav/route');
 
@@ -20,7 +18,6 @@ define(function(require) {
             "forgot": "forgotPassword",
             "changepassword": "changepassword",
             "register": "register",
-            "lichthanhtra": "lichthanhtra",
             "error": "error_page",
             "*path": "defaultRoute"
         },
@@ -74,10 +71,6 @@ define(function(require) {
         register: function() {
             var registerView = new RegisterView({ el: $('.content-contain') });
             registerView.render();
-        },
-        lichthanhtra: function() {
-            var lichThanhTraView = new LichThanhTraView({ el: $('.main-content-container') });
-            lichThanhTraView.render();
         },
         registerAppRoute: function() {
             var self = this;

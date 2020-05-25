@@ -25,55 +25,41 @@
         "type": "string",
         "primary": true
     },
-    "phone_number": {
-        "type": "string",
-        "length": 50
+    "name": {
+        "type": "string"
+    },
+    "unsigned_name": {
+        "type": "string"
     },
     "email": {
         "type": "string",
-        "length": 50
+        "length": 255
     },
-    "name": {
-        "type": "string",
-        "length": 50
+    "phone": {
+        "type": "string"
     },
     "password": {
-        "type": "string"
+        "type": "string",
+        "length": 255
+    },
+    "accountName": {
+        "type": "string",
+        "length": 255
     },
     "salt": {
         "type": "string"
     },
-    "type": {
-        "type": "string"
-    },
     "active": {
-        "type": "boolean",
-        "default": true
+        "type": "number",
+        "default": 0
     },
-    "rank": {
-        "type": "number"
-    },
-    "department_id": {
+    "organization_id": {
         "type": "string"
-    },
-    "room_id": {
-        "type": "string"
-    },
-    "hierarchy": {
-        "type": "string",
-        "length": 50
-    },
-    "area": {
-        "type": "string",
-        "length": 50
     },
     "roles": {
         "type": "list"
     },
-    "department": {
-        "type": "dict"
-    },
-    "room": {
+    "Organization": {
         "type": "dict"
     }
 }

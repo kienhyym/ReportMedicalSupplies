@@ -25,124 +25,75 @@
         "type": "string",
         "primary": true
     },
-    "organization_exid": {
-        "type": "string",
-        "length": 100
-    },
-    "organization_no": {
-        "type": "string",
-        "length": 100
-    },
-    "organization_name": {
+    "code": {
         "type": "string",
         "length": 255
     },
-    "organization_type": {
+    "name": {
         "type": "string",
-        "length": 200
+        "required": true
     },
-    "tenant_id": {
+    "unsigned_name": {
         "type": "string"
-    },
-    "parentid": {
-        "type": "string"
-    },
-    "industry": {
-        "type": "string",
-        "length": 200
-    },
-    "annualrevenue": {
-        "type": "number"
-    },
-    "rating": {
-        "type": "string",
-        "length": 200
-    },
-    "ownership": {
-        "type": "string",
-        "length": 50
-    },
-    "notify_owner": {
-        "type": "string",
-        "length": 3
-    },
-    "siccode": {
-        "type": "string",
-        "length": 50
-    },
-    "ticketsymbol": {
-        "type": "string",
-        "length": 30
     },
     "phone": {
         "type": "string",
-        "length": 30
-    },
-    "phone_other": {
-        "type": "string",
-        "length": 30
-    },
-    "email": {
-        "type": "string",
-        "length": 100
-    },
-    "email_other": {
-        "type": "string",
-        "length": 100
-    },
-    "website": {
-        "type": "string",
-        "length": 100
-    },
-    "fax": {
-        "type": "string",
-        "length": 50
-    },
-    "emailoptout": {
-        "type": "string",
-        "length": 3
-    },
-    "isconvertedfromlead": {
-        "type": "string",
-        "length": 3
-    },
-    "tags": {
-        "type": "string",
-        "length": 1
-    },
-    "director": {
-        "type": "string",
-        "length": 100
+        "length": 63
     },
     "address": {
         "type": "string"
     },
-    "wards_id": {
-        "type": "string"
-    },
-    "district_id": {
-        "type": "string"
-    },
-    "province_id": {
-        "type": "string"
-    },
-    "hierarchy": {
+    "email": {
         "type": "string",
-        "length": 30
+        "length": 255
     },
-    "custom_fields": {
-        "type": "json"
+    "description": {
+        "type": "string"
     },
-    "employees": {
+    "tinhthanh_id": {
+        "type": "string"
+    },
+    "quanhuyen_id": {
+        "type": "string"
+    },
+    "xaphuong_id": {
+        "type": "string"
+    },
+    "level": {
+        "type": "number",
+        "required": true
+    },
+    "parent_name": {
+        "type": "string",
+        "length": 255
+    },
+    "parent_id": {
+        "type": "string"
+    },
+    "active": {
+        "type": "number",
+        "default": 0
+    },
+    "type_donvi": {
+        "type": "string",
+        "length": 255
+    },
+    "tinhthanh": {
+        "type": "dict"
+    },
+    "quanhuyen": {
+        "type": "dict"
+    },
+    "xaphuong": {
+        "type": "dict"
+    },
+    "users": {
         "type": "list"
     },
-    "wards": {
-        "type": "dict"
+    "children": {
+        "type": "list"
     },
-    "district": {
-        "type": "dict"
-    },
-    "province": {
+    "captren": {
         "type": "dict"
     }
 }
