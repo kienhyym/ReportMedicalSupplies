@@ -15,7 +15,7 @@ define(function (require) {
     	template : template,
     	modelSchema	: schema,
     	urlPrefix: "/api/v1/",
-    	collectionName: "admin/donvi/create",
+    	collectionName: "donvi/create",
     	tools : [
  	    	    {
  	    	    	name: "defaultgr",
@@ -43,23 +43,23 @@ define(function (require) {
 							},
  			    	    	command: function(){
 								var self = this;
-								var curUser = self.getApp().currentUser;
-								if (curUser) {
-									self.model.set("created_by",curUser.id);
-								}
-								var donvi_ten = self.model.get("donvi_ten"),
-								 captren_id = self.model.get("captren_id"),
-								 email = self.model.get("email"),
-								 donvi_email = self.model.get("donvi_email"),
-								 fullname = self.model.get("fullname"),
-								 phone = self.model.get("phone"),
-								 pass = self.model.get("password"),
-								 cfpass = self.model.get("cfpassword"),
-								 donvi_tuyendonvi = self.model.get("donvi_tuyendonvi"),
-								 donvi_tuyendonvi_id = self.model.get("donvi_tuyendonvi_id"),
-								 tinhthanh = self.model.get("tinhthanh"),
-								 quanhuyen = self.model.get("quanhuyen"),
-								 xaphuong = self.model.get("xaphuong");
+								// var curUser = self.getApp().currentUser;
+								// if (curUser) {
+								// 	self.model.set("created_by",curUser.id);
+								// }
+								var donvi_ten = self.model.get("donvi_name"),
+									captren_id = self.model.get("parent_id"),
+									email = self.model.get("email"),
+									donvi_email = self.model.get("donvi_email"),
+									fullname = self.model.get("name"),
+									phone = self.model.get("phone"),
+									pass = self.model.get("password"),
+									cfpass = self.model.get("cfpassword"),
+									tuyendonvi = self.model.get("tuyendonvi");
+								//  tuyendonvi_id = self.model.get("tuyendonvi_id"),
+								//  tinhthanh = self.model.get("tinhthanh"),
+								//  quanhuyen = self.model.get("quanhuyen"),
+								//  xaphuong = self.model.get("xaphuong");
 								if (fullname == null || fullname == "" ||fullname == undefined) {
 									self.getApp().notify({ message: "Tên người dùng không được để trống!" }, { type: "danger" });
 									return
@@ -92,7 +92,7 @@ define(function (require) {
 									self.getApp().notify({ message: "Tên đơn vị không được để trống!" }, { type: "danger" });
 									return
 								}
-								if (donvi_tuyendonvi == null || donvi_tuyendonvi == undefined) {
+								if (tuyendonvi == null || tuyendonvi == undefined) {
 									self.getApp().notify({ message: "Chưa chọn tuyến đơn vị!" }, { type: "danger" });
 									return
 								}
@@ -100,18 +100,24 @@ define(function (require) {
 								if (valiedate_tuyendonvi == false) {
 									return
 								}
-								self.model.set("fullname",fullname.toUpperCase());
-								self.model.set("donvi_ten",donvi_ten.toUpperCase());
+								self.model.set("name",fullname.toUpperCase());
+								self.model.set("donvi_name",donvi_ten.toUpperCase());
  			                    self.model.save(null,{
 									success: function (model, respose, options) {
 										self.getApp().notify("Tạo đơn vị thành công!");
 										self.getApp().getRouter().navigate('admin/donvi/collection');
 									},
 									error: function (xhr, status, error) {
-										self.getApp().notify({ message: status.responseJSON.error_message}, { type: "danger", delay: 1000});
-										
-										// self.getApp().hideloading();
-										// self.getApp().notify("Tạo đơn vị không thành công. Vui lòng thử lại");
+										try {
+											if (($.parseJSON(xhr.responseText).error_code) === "SESSION_EXPIRED") {
+												self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
+												self.getApp().getRouter().navigate("login");
+											} else {
+												self.getApp().notify({ message: $.parseJSON(xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+											}
+										} catch (err) {
+											self.getApp().notify({ message: "Có lỗi xảy ra, vui lòng thử lại sau" }, { type: "danger", delay: 1000 });
+										}
 									}
  			                    });
  			    	    	}
@@ -142,17 +148,17 @@ define(function (require) {
 					dataSource:XaPhuongSelectView
 				},
 				{
-					field:"donvi_tuyendonvi",
+					field:"tuyendonvi",
 					uicontrol:"ref",
 					foreignRemoteField:"id",
-					foreignField:"donvi_tuyendonvi_id",
+					foreignField:"tuyendonvi_id",
 					dataSource:TuyenDonViSelectView
 				},
 				{
-					field:"captren",
+					field:"parent",
 					uicontrol:"ref",
 					foreignRemoteField:"id",
-					foreignField:"captren_id",
+					foreignField:"parent_id",
 					dataSource:DonviSelectView
 				},
 			]
@@ -162,7 +168,7 @@ define(function (require) {
 			self.applyBindings();
 			self.validate_password();
 			var curUsr = self.getApp().currentUser;
-			if(!self.model.get("donvi_tuyendonvi_id")) {
+			if(!self.model.get("tuyendonvi_id")) {
 				self.disabled_select_captren(0);
 			}
 			self.model.on("change:tinhthanh", function() {
@@ -177,44 +183,18 @@ define(function (require) {
 			});
 			
 			self.model.on("change", function(){
-				var donvi_tuyendonvi_id = self.model.get("donvi_tuyendonvi_id");
-				if(donvi_tuyendonvi_id) {
-					self.disabled_select_captren(1);
-				}
-				if (donvi_tuyendonvi_id == "01" || donvi_tuyendonvi_id == "02" || donvi_tuyendonvi_id == "03" ) {
-					self.disabled_select_captren(1);
-					var filters = { "$or": [
-						{"tuyendonvi_id": {"$eq": "01" }},
-						{"tuyendonvi_id": {"$eq": "02" }},
-						{"tuyendonvi_id": {"$eq": "03" }},
-					]};
-					self.getFieldElement("captren").data("gonrin").setFilters(filters);
-					
-				}
-				else if (donvi_tuyendonvi_id == "04"|| donvi_tuyendonvi_id == "05" || donvi_tuyendonvi_id == "06"){
+				var tuyendonvi_id = self.model.get("tuyendonvi_id");
+				if (tuyendonvi_id == "02") {
+					var filters = {"tuyendonvi_id": {"$eq": "01" }};
+					self.getFieldElement("parent").data("gonrin").setFilters(filters);
+				} else if (tuyendonvi_id == "03") {
 					var tinhthanh_id = self.model.get("tinhthanh_id");
-					if (!tinhthanh_id) {
+					if (!tinhthanh_id || tinhthanh_id == null ) {
 						self.disabled_select_captren(0);
 					} else {
 						self.disabled_select_captren(1);
 						var filters = { "$or": [
-							{"tuyendonvi_id": {"$eq": "01" }},
-							{"tuyendonvi_id": {"$eq": "02" }},
-							{"tuyendonvi_id": {"$eq": "03" }},
-						]};
-						self.getFieldElement("captren").data("gonrin").setFilters(filters);
-					}
-				} else if (donvi_tuyendonvi_id == "07" || donvi_tuyendonvi_id == "08" || donvi_tuyendonvi_id == "09") {
-					var tinhthanh_id = self.model.get("tinhthanh_id"),
-						quanhuyen_id = self.model.get("quanhuyen_id");
-					if (!tinhthanh_id || tinhthanh_id == null || quanhuyen_id == null || !quanhuyen_id) {
-						self.disabled_select_captren(0);
-					} else {
-						self.disabled_select_captren(1);
-						var filters = { "$or": [
-							{"tuyendonvi_id": {"$eq": "04" }},
-							{"tuyendonvi_id": {"$eq": "05" }},
-							{"tuyendonvi_id": {"$eq": "06" }},
+								{"tuyendonvi_id": {"$eq": "02" }},
 						]};
 						var filterobj = {
 							"$and": [
@@ -223,22 +203,40 @@ define(function (require) {
 										"$eq": self.model.get("tinhthanh_id")
 									}
 								},
+								filters
 							]
 						}
-						self.getFieldElement("captren").data("gonrin").setFilters(filterobj);
+						self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
 					}
-				} else if (donvi_tuyendonvi_id == "10") {
-					var tinhthanh_id = self.model.get("tinhthanh_id"),
-						quanhuyen_id = self.model.get("quanhuyen_id"),
-						xaphuong_id = self.model.get("xaphuong_id");
-					if (!tinhthanh_id || tinhthanh_id == null || quanhuyen_id == null || !quanhuyen_id || !xaphuong_id || xaphuong_id == null) {
+				} else if (tuyendonvi_id == "04") {
+					var tinhthanh_id = self.model.get("tinhthanh_id");
+					if (!tinhthanh_id || tinhthanh_id == null ) {
 						self.disabled_select_captren(0);
 					} else {
 						self.disabled_select_captren(1);
 						var filters = { "$or": [
-							{"tuyendonvi_id": {"$eq": "07" }},
-							{"tuyendonvi_id": {"$eq": "08" }},
-							{"tuyendonvi_id": {"$eq": "09" }},
+							{"tuyendonvi_id": {"$eq": "03" }},
+						]};
+						var filterobj = {
+							"$and": [
+								{
+									"tinhthanh_id": {
+										"$eq": self.model.get("tinhthanh_id")
+									}
+								},
+								filters
+							]
+						}
+						self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
+					}
+				} else if (tuyendonvi_id == "05") {
+					var quanhuyen_id = self.model.get("quanhuyen_id");
+					if (!quanhuyen_id || quanhuyen_id == null ) {
+						self.disabled_select_captren(0);
+					} else {
+						self.disabled_select_captren(1);
+						var filters = { "$or": [
+							{"tuyendonvi_id": {"$eq": "04" }}
 						]};
 						var filterobj = {
 							"$and": [
@@ -250,10 +248,9 @@ define(function (require) {
 								filters
 							]
 						}
-						self.getFieldElement("captren").data("gonrin").setFilters(filterobj);
+						self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
 					}
 				}
-				
 			});
 			
 		},
@@ -286,7 +283,7 @@ define(function (require) {
 		},
 		valiedate_tuyendonvi: function() {
 			var self = this;
-			var tuyendonvi_id = self.model.get("donvi_tuyendonvi_id"),
+			var tuyendonvi_id = self.model.get("tuyendonvi_id"),
 				tinhthanh = self.model.get("tinhthanh"),
 				quanhuyen = self.model.get("quanhuyen"),
 				xaphuong = self.model.get("xaphuong");
@@ -308,16 +305,13 @@ define(function (require) {
 				if (tinhthanh == null || tinhthanh == undefined) {
 					self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" }, { type: "danger" });
 					return false;
-
 				} else if (quanhuyen == null || quanhuyen == undefined) {
 					self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" }, { type: "danger" });
 					return false;
-
 				} else {
 					self.getApp().notify({ message: "Vui lòng chọn  Xã/Phường!" }, { type: "danger" });
 					return false;
 				}
-				
 			};
 			return true;
 		}

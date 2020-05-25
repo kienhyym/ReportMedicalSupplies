@@ -25,7 +25,7 @@
         "type": "string",
         "primary": true
     },
-    "fullname": {
+    "name": {
         "type": "string",
         "length": 255
     },
@@ -49,7 +49,7 @@
         "type": "string",
         "length": 200
     },
-    "donvi_sodienthoai": {
+    "donvi_phone": {
         "type": "string"
     },
     "ma": {
@@ -63,10 +63,10 @@
     "donvi_diachi": {
         "type": "string"
     },
-    "donvi_ten": {
+    "donvi_name": {
         "type": "string"
     },
-    "donvi_tuyendonvi_id": {
+    "tuyendonvi_id": {
         "type": "string"
     },
     "xaphuong_id": {
@@ -81,12 +81,11 @@
     "quocgia_id": {
         "type": "string"
     },
-    "captren_id": {
+    "parent_id": {
         "type": "string"
     },
     "trangthai": {
-        "type": "number",
-        "default":0
+        "type": "number"
     },
     "active": {
         "type": "boolean",
@@ -95,7 +94,7 @@
     "ghichu": {
         "type": "string"
     },
-    "donvi_tuyendonvi": {
+    "tuyendonvi": {
         "type": "dict"
     },
     "xaphuong": {
@@ -110,10 +109,13 @@
     "quocgia": {
         "type": "dict"
     },
-    "captren": {
+    "parent": {
         "type": "dict"
     },
-    "tenkhongdau": {
+    "unsigned_name": {
+        "type": "string"
+    },
+    "donvi_code": {
         "type": "string"
     }
 }

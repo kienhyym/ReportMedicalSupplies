@@ -275,7 +275,7 @@ async def create_account_donvi(request):
     if check_user is not None:
         return json({"error_code": "ERROR_PARAM", "error_message": "Tài khoản người dùng đã tồn tại"}, status=520)
 
-    level = data.get("level",None)
+    # level = data.get("level",None)
 
     organization = Organization()
     organization.id = default_uuid()
@@ -283,19 +283,19 @@ async def create_account_donvi(request):
     organization.name = data.get("donvi_name",None)
     organization.unsigned_name = convert_text_khongdau(organization.name)
     organization.phone = data.get("donvi_phone",None)
-    organization.address = data.get("patient_address",None)
     organization.email = data.get("donvi_email",None)
-    organization.description = data.get("description",None)
     organization.tinhthanh_id = data.get("tinhthanh_id",None)
     organization.quanhuyen_id = data.get("quanhuyen_id",None)
     organization.xaphuong_id = data.get("xaphuong_id",None)
-    organization.level = level
+    organization.tuyendonvi_id = data.get("tuyendonvi_id",None)
     organization.parent_id = data.get("parent_id",None)
     organization.parent_name = data.get("parent_name",None)
     organization.active = 1
-
+    organization.created_by = uid_current
+    organization.type_donvi = data.get("type_donvi","donvinhanuoc")
     db.session.add(organization)
     db.session.flush()
+    print("organization=============", to_dict(organization))
     
     user = User()
     user.id = default_uuid()
@@ -307,14 +307,12 @@ async def create_account_donvi(request):
     user.password = auth.encrypt_password(password, str(salt))
     user.organization_id = organization.id
     user.active = 1
-    if level is not None:
-        role_admin_tyt = db.session.query(Role).filter(Role.name == 'admin_tyt').first()
-        role_admin_benhvien = db.session.query(Role).filter(Role.name == 'admin_benhvien').first()
-        if level == 1:
-            user.roles.append(role_admin_benhvien)
-        elif level == 2:
-            user.roles.append(role_admin_tyt)
+    user.created_by = uid_current
+    # if level is not None:
+    role_admin_donvi = db.session.query(Role).filter(Role.name == 'admin_donvi').first()
+    user.roles.append(role_admin_donvi)
     db.session.add(user)
+    print("user===========================", to_dict(user))
     db.session.commit()
 
     return json({"error_code":"OK","error_message":"successful", "data":to_dict(organization)},status=200)

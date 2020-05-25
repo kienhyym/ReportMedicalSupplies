@@ -5,7 +5,7 @@ define(function (require) {
 		//Gonrin = require('../../EthnicGroup/view/node_modules/gonrin');
         Gonrin = require('gonrin');
 
-	var template = require('text!app/view/tpl/DanhMuc/TuyenDonVi/collection.html'),
+	var template = require('text!app/view/DanhMuc/TuyenDonVi/tpl/collection.html'),
 		schema = require('json!schema/TuyenDonViSchema.json');
 
 	return Gonrin.CollectionDialogView.extend({

@@ -223,6 +223,18 @@ require(['jquery',
 				// }
 				return str2;
 			},
+			showloading:function(content=null){
+	//			$("#loading").removeClass("d-none");
+				$('body .loader').addClass('active');
+				if (content) {
+					$('body .loader').find(".loader-content").html(content);
+				}
+			},
+			hideloading:function(){
+	//			$("#loading").addClass("d-none");
+				$('body .loader').removeClass('active');
+				$('body .loader').find(".loader-content").empty();
+			},
 			saveLog: function (action, object_type, object_no, workstation_id, workstation_name, items, created_at) {
 				var self = this;
 				$.ajax({
