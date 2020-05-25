@@ -1,0 +1,52 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "medical_supplies_id": {
+        "type": "string"
+    },
+    "organization_id": {
+        "type": "string"
+    },
+    "quantity_import": {
+        "type": "number",
+        "default": 1
+    },
+    "quantity_export": {
+        "type": "number",
+        "default": 1
+    },
+    "quantity_original": {
+        "type": "number",
+        "default": 1
+    },
+    "medical_supplies": {
+        "type": "dict"
+    },
+    "Organization": {
+        "type": "dict"
+    }
+}

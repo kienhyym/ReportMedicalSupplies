@@ -5,10 +5,9 @@ from application.models.models import *
 from application.models.model_donvi import *
 from application.models.model_danhmuc import *
 from application.models.model_file import *
-
+from application.models.model_quanlykho import *
 
 def init_controllers(app):
-
     import application.controllers.user.forgot_password
     import application.controllers.user.userview
     import application.controllers.upload
