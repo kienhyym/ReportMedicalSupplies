@@ -1,0 +1,135 @@
+{
+    "created_at": {
+        "type": ""
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": ""
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": ""
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "fullname": {
+        "type": "string"
+    },
+    "phone_number": {
+        "type": "string",
+        "length": 20
+    },
+    "phone_country_prefix": {
+        "type": "string",
+        "length": 10
+    },
+    "phone_national_number": {
+        "type": "string",
+        "length": 15
+    },
+    "id_card": {
+        "type": "string",
+        "length": 50
+    },
+    "email": {
+        "type": "string"
+    },
+    "password": {
+        "type": "string"
+    },
+    "salt": {
+        "type": "string"
+    },
+    "active": {
+        "type": "boolean",
+        "default": true
+    },
+    "macanboyte": {
+        "type": "string"
+    },
+    "ngaysinh": {
+        "type": ""
+    },
+    "gioitinh": {
+        "type": "string"
+    },
+    "dantoc_id": {
+        "type": "string"
+    },
+    "matrinhdochuyenmon": {
+        "type": "string"
+    },
+    "tentrinhdochuyenmon": {
+        "type": "string"
+    },
+    "machucvu": {
+        "type": "string"
+    },
+    "tenchucvu": {
+        "type": "string"
+    },
+    "xaphuong_id": {
+        "type": "string"
+    },
+    "quanhuyen_id": {
+        "type": "string"
+    },
+    "tinhthanh_id": {
+        "type": "string"
+    },
+    "quocgia_id": {
+        "type": "string"
+    },
+    "noicongtac": {
+        "type": "string"
+    },
+    "sochungchi": {
+        "type": "string"
+    },
+    "thoihanchungchi": {
+        "type": ""
+    },
+    "ghichu": {
+        "type": "string"
+    },
+    "madonvi_bmte": {
+        "type": "string"
+    },
+    "donvi_id": {
+        "type": "string"
+    },
+    "dantoc": {
+        "type": "dict"
+    },
+    "xaphuong": {
+        "type": "dict"
+    },
+    "quanhuyen": {
+        "type": "dict"
+    },
+    "tinhthanh": {
+        "type": "dict"
+    },
+    "quocgia": {
+        "type": "dict"
+    },
+    "donvi": {
+        "type": "dict"
+    },
+    "roles": {
+        "type": "list"
+    }
+}

@@ -1,0 +1,46 @@
+{
+	"id":{
+		"type":"string",
+		"primary":true
+	},
+	"hoten":{
+		"type":"string"
+	},
+	"ngaysinh":{
+		"type":"number"
+	},
+	"quocgia_id":{
+		"type":"string"
+	},
+	"quocgia":{
+		"type":"dict"
+	},
+	"tinhthanh_id":{
+		"type":"string"
+	},
+	"tinhthanh":{
+		"type":"dict"
+	},
+	"quanhuyen_id":{
+		"type":"string"
+	},
+	"quanhuyen":{
+		"type":"dict"
+	},
+	"xaphuong_id":{
+		"type":"string"
+	},
+	"xaphuong":{
+		"type":"dict"
+	},
+	"thonxom_id":{
+		"type":"string"
+	},
+	"thonxom":{
+		"type":"dict"
+	},
+	"diachi":{
+		"type":"string"
+	}
+	
+}

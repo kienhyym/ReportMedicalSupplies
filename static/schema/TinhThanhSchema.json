@@ -1,0 +1,50 @@
+{
+    "created_at": {
+        "type": ""
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": ""
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": ""
+    },
+    "id": {
+        "type": "string",
+        "primary": true,
+        "length": 255
+    },
+    "ma": {
+        "type": "string",
+        "length": 255
+    },
+    "ten": {
+        "type": "string",
+        "length": 255
+    },
+    "quocgia_id": {
+        "type": "string",
+        "length": 255
+    },
+    "tenkhongdau": {
+        "type": "string"
+    },
+    "quocgia": {
+        "type": "dict"
+    },
+    "quanhuyen": {
+        "type": "list"
+    }
+}

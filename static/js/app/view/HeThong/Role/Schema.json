@@ -1,0 +1,14 @@
+{
+	"id":{
+		"type": "number",
+		"primary": true
+	},
+	"name":{
+		"type":"string",
+		"required": true
+	},
+	"description":{
+		"type":"string",
+		"required": true
+	}
+}

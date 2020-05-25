@@ -1,0 +1,44 @@
+<html>
+  <head>
+	<title>Wimua Connect</title>
+	<link rel="stylesheet" href="/static/frontend/css/jquery-ui.min.css" />
+	<link rel="stylesheet" href="/static/frontend/css/jquery-ui-slider-pips.css" />
+	<link rel="stylesheet" href="/static/frontend/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/static/frontend/css/flexslider.css" />
+	<link rel="stylesheet" href="/static/frontend/css/magnific-popup.css" />
+	<link rel="stylesheet" href="/static/frontend/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="/static/frontend/css/app.css" />
+	<link rel="stylesheet" href="/static/frontend/css/app1.css" />  
+	<script src="/static/frontend/js/vendor.js"></script>
+	<script src="/static/frontend/js/foundation.js"></script>
+	<script src="/static/frontend/js/jquery-migrate-1.2.1.min.js"></script>
+	<script src="/static/frontend/js/jquery-ui.min.js"></script>
+	<script src="/static/frontend/js/jquery-ui-slider-pips.min.js"></script>
+	<script src="/static/frontend/js/affix.js"></script>
+	<script src="/static/frontend/js/scrollspy.min.js"></script>
+	<script src="/static/frontend/js/jquery.flexslider.js"></script>
+	<script src="/static/frontend/js/jquery.magnific-popup.min.js"></script>
+	<script src="/static/frontend/js/jquery.matchHeight.min.js"></script>
+	<script src="/static/frontend/js/isotope.pkgd.min.js"></script>
+	<script src="/static/frontend/js/wow.js"></script>
+	<script src="/static/frontend/js/jquery.smooth-scroll.min.js"></script>
+	<script src="/static/frontend/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="/static/frontend/js/jquery.ba-bbq.js"></script>
+	<script src="/static/frontend/js/app.js"></script>
+	<script src="/static/frontend/js/docker.js"></script>
+	<link href="/static/frontend/css/common.css" type="text/css" rel="stylesheet"/>
+    {% block title %}{% endblock %}
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+  </head>
+  <body>
+    <div>
+    	{% block navbar %}{% endblock %}
+    	{% include 'base/nav.html' %}  	
+    </div>
+    	<div style=";min-height:330px">
+    		{% block content %}{% endblock %}
+    	</div>
+    {% include 'base/footer.html' %}
+  </body>
+</html>

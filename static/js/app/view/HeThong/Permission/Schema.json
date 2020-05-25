@@ -1,0 +1,25 @@
+{
+	"id":{
+		"type": "number",
+		"primary": true
+	},
+	"role_id":{
+		"type":"number"
+	},
+	"model":{
+		"type":"string",
+		"required": true
+	},
+	"canread":{
+		"type":"boolean"
+	},
+	"cancreate":{
+		"type":"boolean"
+	},
+	"canupdate":{
+		"type":"boolean"
+	},
+	"candelete":{
+		"type":"boolean"
+	}
+}

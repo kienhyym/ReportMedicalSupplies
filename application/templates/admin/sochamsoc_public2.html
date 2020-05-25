@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!--<link rel="shortcut icon" href="./favicon.ico">-->
+		
+		<link rel="stylesheet" href="{{static_url}}/vendor/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{static_url}}/vendor/bootstrap/css/bootstrap-dialog.min.css">
+		<link rel="stylesheet" href="{{static_url}}/vendor/font-awesome/css/font-awesome.css">
+		<link rel="stylesheet" href="{{static_url}}/css/screen.css">
+		<link rel="stylesheet" href="{{static_url}}/css/layout.css">
+		<link rel="stylesheet" href="{{static_url}}/css/style.css">
+		<link rel="stylesheet" href="{{static_url}}/css/themes/light.css">
+		<link rel="stylesheet" href="{{static_url}}/css/style_pink.css">
+		<title>Sổ Mẹ và Bé</title>
+	</head>
+	<body class="page-header-fixed">
+	
+	<div class="page-header-wrapper">
+	<div class="page-header navbar navbar-fixed-top">
+		<!-- BEGIN HEADER INNER -->
+		<div class="page-header-inner">
+			<!-- BEGIN LOGO -->
+			<div class="page-logo">
+				<a id="logo" href="javascript:void(0);">
+				<img src="{{static_url}}/images/logo.png" height="40px" alt="logo" class="logo-default"/>
+				</a>
+				<div class="menu-toggler sidebar-toggler hide">
+					<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+				</div>
+			</div>
+			<!-- END LOGO -->
+			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+			<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+			</a>
+			<!-- END RESPONSIVE MENU TOGGLER -->
+			<!-- BEGIN TOP NAVIGATION MENU -->
+			<div class="top-menu">
+			</div>
+			<!-- END TOP NAVIGATION MENU -->
+		</div>
+		<!-- END HEADER INNER -->
+	</div>
+</div>
+<!-- END HEADER -->
+<div class="clearfix">
+</div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container page-container-fixed">
+	<div class="page-navbar-wrapper">
+		<div class="page-navbar">
+		
+		</div>
+	</div>
+	<div class="page-content-wrapper">
+		<div class="page-content" style="margin:0px">
+			<div class="tools-area" style="margin: 9px 6px 0 6px;"></div>
+			<div class="content-area">
+				<section class="content">
+			<div class="row">
+				<h2 class="title text-center">Thông tin sổ chăm sóc mẹ và bé</h2>
+			</div>
+			
+				<div id="thongtinso" class="row">
+					<h4 class="hidden col-md-10 col-md-offset-1 control-label">Thông tin Số:</h4> 
+							<div class="col-md-10 col-md-offset-1">
+								<div class="form-group margin-top-20">
+									<label>Mã sổ</label> 
+									<input readonly value="{{so['ma']}}" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Nơi cấp</label> <input readonly value="{{so['noicap']}}" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Ngày cấp</label> <input readonly value="{{so['ngaycap']}}" class="form-control">
+								</div>
+							</div>
+					</div>
+					<hr>
+					
+					<div id="thongtinme" class="row">
+						<h4 class="col-md-10 col-md-offset-1 control-label">Thông tin Mẹ:</h4> 
+						<div class="col-md-10 col-md-offset-1">
+							<div class="row margin-top-20">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Mã</label> <input readonly value="{{so['me']['ma']}}" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Họ và tên</label> <input readonly value="{{so['me']['hoten']}}" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Ngày sinh:</label> <input readonly type="text"
+											class="input-sm form-control" value="{{so['me']['ngaysinh']}}">
+									</div>
+									<div class="form-group">
+										<label>Nơi sinh:</label> <input readonly value="{{so['me']['noisinh']}}" class="form-control">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Email:</label>
+										<input readonly value="{{so['me']['email']}}" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Điện thoại</label>
+										<input readonly value="{{so['me']['dienthoai']}}" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Trình độ học vấn:</label>
+										<input readonly value="{{so['me']['trinhdohocvan']}}" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Địa chỉ:</label>
+										<textarea readonly value="{{so['me']['diachi']}}" class="form-control" rows="3"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div id="thongtinbo" class="row">
+						<h4 class="col-md-10 col-md-offset-1 control-label">Thông tin của Bố</h4>
+							<div class="col-md-10 col-md-offset-1">
+								<div class="row margin-top-20">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Họ và tên</label> <input readonly autofocus value="{{so['bo']['hoten']}}"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label>Ngày sinh:</label> <input readonly type="text"
+												class="input-sm form-control" value="{{so['bo']['ngaysinh']}}">
+										</div>
+										<div class="form-group">
+											<label>Dân tộc:</label> <input readonly value="{{so['bo']['tendantoc']}}"
+												class="form-control">
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Nghề nghiệp:</label> <input readonly value="{{so['bo']['tennghenghiep']}}"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label>Trình độ học vấn:</label> <input readonly
+												value="{{so['bo']['trinhdohocvan']}}" class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+		
+					</div>
+					<hr>
+					
+					<div id="thongtincon" class="row" >
+						<h4 class="col-md-10 col-md-offset-1 control-label">Thông tin của Con</h4>
+						<div class="col-md-10 col-md-offset-1">
+							<div class="row margin-top-20">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Mã</label>
+										<input readonly value="{{so['con']['ma']}}" class="form-control" />
+									</div>
+									<div class="form-group">
+										<label>Họ và tên</label>
+										<input readonly value="{{so['con']['hoten']}}" class="form-control" />
+									</div>
+									<div class="form-group">
+										<label>Giới tính:</label>
+										<input readonly value="{{so['con']['gioitinh']}}" class="form-control" />
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Ngày sinh:</label>
+										<input readonly type="text" class="input-sm form-control" id="val_birthday" value="{{so['con']['ngaysinh']}}">
+									</div>
+									<div class="form-group">
+										<label>Nơi sinh:</label>
+										<input readonly value="{{so['con']['noisinh']}}" class="form-control">
+									</div>
+								</div>
+							</div>
+					
+						</div>
+					</div>
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1 text-right">
+						<a href="/#sochamsoc/model?id={{so['id']}}&qr={{so['qrcode_id']}}" >Xem chi tiết</a>
+					</div>
+				</div>
+			
+		</section>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-footer">
+	<div class="page-footer-inner">
+		
+	</div>
+	<div class="scroll-to-top">
+		<i class="icon-arrow-up"></i>
+	</div>
+</div>	
+		
+	</body>
+</html>

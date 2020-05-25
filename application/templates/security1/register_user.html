@@ -1,0 +1,124 @@
+{% extends "base/layout.html" %}
+{% block title %}<title>Đăng ký</title>{% endblock %}
+
+{% block content %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% include "security/_messages.html" %}
+<script>
+		function validateForm() {
+			/*var email = document.forms["register_user_form"]["email"].value;
+		    var password = document.forms["register_user_form"]["password"].value;
+		    var repassword = document.forms["register_user_form"]["password_confirm"].value;
+		    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+		    if (email == null || email == "" || email.trim().length == 0) {
+		    	document.getElementById("email").setAttribute("required", "true");
+		    	document.getElementById("validateemail").innerHTML = "Bạn chưa nhập email";
+		        return false;
+		    }
+		    else if (!filter.test(email))
+		    {
+		    	document.getElementById("validateemail").innerHTML = "Email không đúng định dạng";
+		    	document.getElementById("email").value = ""
+		    	document.getElementById("email").setAttribute("required", "true");
+		    }
+		    else
+		    {
+		    	document.getElementById("validateemail").innerHTML = ""
+		    }
+		    
+		    if (password == null || password == "" || password.trim().length == 0) {
+		    	document.getElementById("password").setAttribute("required", "true");
+		    	document.getElementById("validatepassword").innerHTML = "Bạn chưa nhập Mật khẩu";
+		        return false;
+		    }
+		    else
+		    {
+		    	document.getElementById("validatepassword").innerHTML = ""
+		    }
+		    
+		    if (repassword == null || repassword == "" || repassword.trim().length == 0) {
+		    	document.getElementById("repassword").setAttribute("required", "true");
+		    	document.getElementById("validaterepassword").innerHTML = "Bạn chưa nhập lại mật khẩu";
+		        return false;
+		    }
+		    else if(repassword.trim() != password.trim())
+		    {
+		    	document.getElementById("validaterepassword").innerHTML = "Mật khẩu bạn nhập không khớp";
+		    	document.getElementById("repassword").value = ""
+		    	document.getElementById("repassword").setAttribute("required", "true");
+		 
+		        return false;
+		    }
+		    else 
+		    {
+		    	document.getElementById("validaterepassword").innerHTML = ""
+		    }*/
+		}
+</script>
+<div class="login">
+	<!-- END LOGO -->
+	<!-- BEGIN LOGIN -->
+	<div class="content">
+		
+		<!-- BEGIN REGISTRATION FORM -->
+		<form name="register_user_form" class="register-form" action="{{ url_for_security('register') }}" method="post">
+			{{ register_user_form.hidden_tag() }}
+			<h3>Đăng ký</h3>
+			<div class="form-group">
+				<label class="control-label visible-ie8 visible-ie9">Tên người dùng</label>
+				<input class="form-control placeholder-no-fix" type="text" placeholder="Tên người dùng" name="name"/>
+			</div>
+			<div class="form-group">
+				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+				<label class="control-label visible-ie8 visible-ie9">Email</label>
+				<input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email"/>
+			</div>
+			<div class="form-group">
+				<label class="control-label visible-ie8 visible-ie9">Số điện thoại</label>
+				<input class="form-control placeholder-no-fix" type="text" placeholder="Số điện thoại" name="phone"/>
+			</div>
+			
+			<div class="form-group">
+				<label class="control-label visible-ie8 visible-ie9">Đơn vị</label>
+				<select name="donvi_id" class="form-control">
+					<option value="">Đơn vị</option>
+					{% for item in donvilist %}
+					<option value={{item.id}}>{{item.ten}}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<p class="hint">
+				 Xin điền mật khẩu:
+			</p>
+			<div class="form-group">
+				<label class="control-label visible-ie8 visible-ie9">Mật khẩu</label>
+				<input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Mật khẩu" name="password"/>
+			</div>
+			<div class="form-group">
+				<label class="control-label visible-ie8 visible-ie9">Gõ lại mật khẩu</label>
+				<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Gõ lại mật khẩu" name="password_confirm"/>
+			</div>
+			<!-- <div class="form-group margin-top-20 margin-bottom-20">
+				<label class="check">
+				<input type="checkbox" name="tnc"/> I agree to the <a href="#">
+				Terms of Service </a>
+				& <a href="#">
+				Privacy Policy </a>
+				</label>
+				<div id="register_tnc_error">
+				</div>
+			</div> -->
+			<div class="form-actions">
+				<button type="button" id="register-back-btn" class="btn btn-default">Quay lại</button>
+				<button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Gửi</button>
+			</div>
+		</form>
+		<!-- END REGISTRATION FORM -->
+	</div>
+	<div class="copyright">
+		 2015 © Gonrin Inc.
+	</div>
+</div>
+
+{% endblock %}

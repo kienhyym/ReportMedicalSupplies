@@ -1,0 +1,3 @@
+Click vào liên kết sau để lấy lại mật khẩu:
+
+{{ reset_link }}

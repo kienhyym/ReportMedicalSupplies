@@ -1,0 +1,12 @@
+[
+      {"value":"01","text":"Vụ sức khỏe bà mẹ và trẻ em","ma":"TW"},
+      {"value":"02","text":"Bệnh viện tuyến trung ương","ma":"TW"},
+      {"value":"03","text":"Trung tâm kiểm soát bệnh tật(CDC) tuyến trung ương","ma":"TW"},
+      {"value":"04","text":"Sở Y tế","ma":"captinh"},
+      {"value":"05","text":"Trung tâm y tế dự phòng/CDC tỉnh","ma":"captinh"},
+      {"value":"06","text":"Bệnh viện cấp tỉnh","ma":"captinh"},
+      {"value":"07","text":"Bệnh viện cấp huyện","ma":"caphuyen"},
+      {"value":"08","text":"Trung tâm y tế huyện","ma":"caphuyen"},
+      {"value":"09","text":"Phòng khám đa khoa","ma":"caphuyen"},
+      {"value":"10","text":"Trạm y tế xã","ma":"capxa"}
+]

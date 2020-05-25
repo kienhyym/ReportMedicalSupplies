@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!--<link rel="shortcut icon" href="./favicon.ico">-->
+		<link rel="shortcut icon" href="{{static_url}}/images/favicon/favicon.ico">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{static_url}}/images/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="{{static_url}}/images/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{static_url}}/images/favicon/favicon-16x16.png">
+		
+		<link rel="stylesheet" href="{{static_url}}/vendor/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{static_url}}/vendor/bootstrap/css/bootstrap-dialog.min.css">
+		<link rel="stylesheet" href="{{static_url}}/vendor/font-awesome/css/font-awesome.css">
+		<link rel="stylesheet" href="{{static_url}}/css/screen.css">
+		<link rel="stylesheet" href="{{static_url}}/css/layout.css">
+		<link rel="stylesheet" href="{{static_url}}/css/style.css">
+		<link rel="stylesheet" href="{{static_url}}/css/themes/light.css">
+		<link rel="stylesheet" href="{{static_url}}/css/style_pink.css">
+		
+		<script src="{{static_url}}/js/lib/jquery.js"></script>
+		<script src="{{static_url}}/vendor/bootstrap/js/bootstrap.js"></script>
+		<script src="{{static_url}}/vendor/bootstrap/js/bootstrap-dialog.min.js"></script>
+<!-- 		<script src="{{static_url}}/vendor/qrcodelib.js"></script> -->
+<!--         <script data-main="{{static_url}}/js/app" src="{{static_url}}/js/require.js"></script> -->
+		<title>Sổ Mẹ và Bé</title>
+	</head>
+	<body class="page-header-fixed">
+	
+	<div class="page-header-wrapper">
+	<div class="page-header navbar navbar-fixed-top">
+		<!-- BEGIN HEADER INNER -->
+		<div class="page-header-inner">
+			<!-- BEGIN LOGO -->
+			<div class="page-logo">
+				<a id="logo" href="javascript:void(0);">
+				<img src="{{static_url}}/images/logo.png" height="40px" alt="logo" class="logo-default"/>
+				</a>
+				<div class="menu-toggler sidebar-toggler hide">
+					<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+				</div>
+			</div>
+			<!-- END LOGO -->
+			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+			<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+			</a>
+			<a id="scanqrcode" href="javascript:;"  class="top-menu" style="margin: 9px 5px 0 6px;font-size: 22px;display: inline-block; cursor:  pointer;">
+				<i class="fa fa-qrcode fa-3" aria-hidden="true"></i>
+			</a>
+			<!-- END RESPONSIVE MENU TOGGLER -->
+			<!-- BEGIN TOP NAVIGATION MENU -->
+			<div class="top-menu">
+			</div>
+			<!-- END TOP NAVIGATION MENU -->
+		</div>
+		<!-- END HEADER INNER -->
+	</div>
+</div>
+<!-- END HEADER -->
+<div class="clearfix">
+</div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container page-container-fixed">
+	<div class="page-navbar-wrapper">
+		<div class="page-navbar">
+		
+		</div>
+	</div>
+	<div class="page-content-wrapper">
+		<div class="page-content" style="margin:0px">
+			<div class="tools-area" style="margin: 9px 6px 0 6px;"></div>
+			<div class="content-area">
+				<section class="content">
+					<div class="row">
+						<h3 class="col-lg-12 title text-center">Thông tin sổ chăm sóc mẹ và bé</h3>
+					</div>
+			
+				<div id="thongtinso" class="row">
+					<h4 class="hidden col-md-10 col-md-offset-1 control-label">Thông tin Chung:</h4> 
+							<div class="col-md-10 col-md-offset-1">
+								<div class="form-group margin-top-20">
+									<label>Họ tên Mẹ:</label> 
+									<input readonly value="{{so['me']['hoten']}}" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Họ tên Bố:</label> 
+									<input readonly value="{{so['bo']['hoten']}}"	class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Địa chỉ:</label>
+									<textarea readonly class="form-control" rows="3">{{so['me']['diachi']}}</textarea>
+								</div>
+							</div>
+					</div>
+					<hr>
+					<div id="thongtincon" class="" >
+						<h4 class="col-lg-10 col-md-10 col-md-offset-1 col-sx-12 control-label">Thông tin của Con</h4>
+						<div class="col-md-10 col-md-offset-1">
+							<div class=" margin-top-20">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Họ và tên</label>
+										<input readonly value="{{so['con']['hoten']}}" class="form-control" />
+									</div>
+									<div class="form-group">
+										<label>Giới tính:</label>
+										<input readonly value="{{so['con']['gioitinh']}}" class="form-control" />
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Ngày sinh:</label>
+										<input readonly type="text" class="input-sm form-control" id="val_birthday" value="{{so['con']['ngaysinh']}}">
+									</div>
+									<div class="form-group">
+										<label>Nơi sinh:</label>
+										<input readonly value="{{so['con']['noisinh']}}" class="form-control">
+									</div>
+								</div>
+							</div>
+					
+						</div>
+					</div>
+				<div class="">
+					<div class="col-md-10 col-md-offset-1 col-xs-12 text-right">
+						<a href="/#sochamsoc/model?id={{so['id']}}&qr={{so['qrcode_id']}}" >Xem chi tiết</a>
+					</div>
+				</div>
+			
+		</section>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-footer">
+	<div class="page-footer-inner">
+		
+	</div>
+	<div class="scroll-to-top">
+		<i class="icon-arrow-up"></i>
+	</div>
+</div>	
+		
+	</body>
+	
+</html>
