@@ -409,6 +409,7 @@ def import_data_donvi_and_admin():
 
     print("total_sync====",count)
 
+
 def convert_columexcel_to_string(value):
     # print("value", value)
     if isinstance(value,str):
@@ -417,6 +418,7 @@ def convert_columexcel_to_string(value):
         return str(int(value)).strip()
     if isinstance(value,int):
         return str(value).strip()
+
 
 @manager.command
 def run():

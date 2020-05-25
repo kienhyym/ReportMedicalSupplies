@@ -18,13 +18,15 @@ class Config(object):
     DOMAIN_URL = 'https://drlinks.yte360.com'
     
     BUCKET_NAME = "bacsixa"
-    FS_ROOT= "/home/chinh/Documents/workspace/fpt-distribution-medicine/repo/static/files/uploads/"
+    # FS_ROOT= "/home/chinh/Documents/workspace/fpt-distribution-medicine/repo/static/files/uploads/"
     FS_ROOT_FILE= "/home/chinh/Documents/workspace/fpt-distribution-medicine/repo/static/files/uploads/"
     IMAGE_SERVICE_URL = 'https://drlinks.yte360.com/static/images/uploads'
-    FILE_SERVICE_URL = '/files/uploads'#lay static_url + FILE_SERVICE_URL + file=file_url
+    # FILE_SERVICE_URL = '/files/uploads'#lay static_url + FILE_SERVICE_URL + file=file_url
 
     FS_ROOT_THUOC = "/home/chinh/Documents/workspace/fpt-distribution-medicine/repo/file_thuoc/"
     
+    FS_ROOT= "static/uploads/"
+    FILE_SERVICE_URL = '/static/uploads'
 
     MAIL_SERVER_HOST = 'smtp.gmail.com'
     MAIL_SERVER_PORT = 587

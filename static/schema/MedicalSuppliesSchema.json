@@ -37,10 +37,7 @@
     "unit": {
         "type": "string"
     },
-    "organization_id": {
+    "name_not_tone_mark": {
         "type": "string"
-    },
-    "Organization": {
-        "type": "dict"
     }
 }

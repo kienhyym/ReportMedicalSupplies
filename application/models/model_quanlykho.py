@@ -18,8 +18,7 @@ class MedicalSupplies(CommonModel):
     name = db.Column(String())
     image = db.Column(String())
     unit = db.Column(String())
-    organization_id = db.Column(String, ForeignKey('organization.id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
-    Organization = relationship('Organization')
+    name_not_tone_mark = db.Column(String())
 
 class ReportOrganization(CommonModel):
     __tablename__ = 'report_organization'
@@ -30,7 +29,7 @@ class ReportOrganization(CommonModel):
     medical_supplies = relationship('MedicalSupplies')
 
     organization_id = db.Column(String, ForeignKey('organization.id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
-    Organization = relationship('Organization')
+    organization = relationship('Organization')
     
     quantity_import = db.Column(DECIMAL(25,3), default=1)
     quantity_export = db.Column(DECIMAL(25,3), default=1)
