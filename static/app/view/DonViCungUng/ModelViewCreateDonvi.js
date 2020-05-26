@@ -45,9 +45,9 @@ define(function (require) {
 								return
 							}
 							
-							if(!!donvi_email) {
-								self.model.set("donvi_email",donvi_email.toLowerCase());
-							}
+							// if(!!donvi_email) {
+							// 	self.model.set("donvi_email",donvi_email.toLowerCase());
+							// }
 							if (pass == null || pass == "") {
 								self.getApp().notify({ message: "Mật khẩu không được để trống!" }, { type: "danger" });
 								return

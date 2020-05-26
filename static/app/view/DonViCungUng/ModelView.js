@@ -340,7 +340,7 @@ define(function (require) {
 								{field: "name", label: "Họ và tên", sortable: {order:"asc"}},
 								{field: "phone", label: "Số điện thoại"},
 								{field: "email", label: "Email"},
-								{field: "code", label: "Mã cán bộ"},
+								{field: "accountName", label: "Tài khoản đăng nhập"},
 								{
 									field: "roles",
 									label: "Vai trò",
