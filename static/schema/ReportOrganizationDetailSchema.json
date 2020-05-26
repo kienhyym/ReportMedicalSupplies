@@ -1,0 +1,71 @@
+{
+    "created_at": {
+        "type": "number"
+    },
+    "created_by": {
+        "type": "string"
+    },
+    "updated_at": {
+        "type": "number"
+    },
+    "updated_by": {
+        "type": "string"
+    },
+    "deleted": {
+        "type": "boolean",
+        "default": false
+    },
+    "deleted_by": {
+        "type": "string"
+    },
+    "deleted_at": {
+        "type": "number"
+    },
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "code": {
+        "type": "string"
+    },
+    "period": {
+        "type": "string"
+    },
+    "date": {
+        "type": "number"
+    },
+    "report_organization_id": {
+        "type": "string"
+    },
+    "organization_id": {
+        "type": "string"
+    },
+    "medical_supplies_id": {
+        "type": "string"
+    },
+    "quantity_import": {
+        "type": "number",
+        "default": 0
+    },
+    "quantity_export": {
+        "type": "number",
+        "default": 0
+    },
+    "quantity_original": {
+        "type": "number",
+        "default": 0
+    },
+    "estimates_net_amount": {
+        "type": "number",
+        "default": 0
+    },
+    "report_organization": {
+        "type": "dict"
+    },
+    "organization": {
+        "type": "dict"
+    },
+    "medical_supplies": {
+        "type": "dict"
+    }
+}
