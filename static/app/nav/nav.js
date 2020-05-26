@@ -190,9 +190,9 @@ define(function(require) {
             "collectionName": "report_organization",
             "route": "baocaodonvi/collection",
             "$ref": "app/baocaodonvi/view/CollectionView",
-            "visible": function() {
-                return this.userHasRole("admin");
-            }
+            // "visible": function() {
+            //     return this.userHasRole("admin");
+            // }
         },
     ];
 

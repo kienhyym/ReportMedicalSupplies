@@ -205,7 +205,7 @@ define(function (require) {
 							self.button_duyet();
 						}
 						self.$el.find(".create-account-user").unbind("click").bind("click", function() {
-                            var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true } });
+                            var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true, "organization_id": self.model.get("id") } });
                             self.$el.find("#content").empty();
                             dialogUserDonViView.render();
                             self.$el.find("#content").append(dialogUserDonViView.el);

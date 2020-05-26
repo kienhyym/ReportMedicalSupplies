@@ -167,7 +167,10 @@ define(function (require) {
 			self.button_khoa_mo_taikhoan();
 			if (curUser) {
 				self.applyBindings();
-				
+				self.model.on("change", function () {
+					var filterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
+					self.getFieldElement("roles").data("gonrin").setFilters(filterobj);
+				});
 				var dataview = self.viewData.data;
 				if (gonrinApp().hasRole('admin_donvi') ===true || gonrinApp().hasRole('admin')=== true){
 					self.$el.find(".roless").show();
@@ -186,13 +189,11 @@ define(function (require) {
 						}
 					}
 				} else {
-					self.model.on("change", function () {
-						var filterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
-						self.getFieldElement("roles").data("gonrin").setFilters(filterobj);
-					});
-					self.model.set("organization_id", curUser.organization_id);
-
-					self.$el.find(".button_xoa").hide();
+					if(self.viewData.organization_id !== null && gonrinApp().hasRole('admin')) {
+						self.model.set("organization_id", self.viewData.organization_id);
+					} else {
+						self.model.set("organization_id", curUser.organization_id);
+					}
 					
 				}
 				return this;

@@ -184,11 +184,15 @@ define(function (require) {
 						}
 					}
 				} else {
+					if(self.viewData.organization_id !== null && gonrinApp().hasRole('admin')) {
+						self.model.set("organization_id", self.viewData.organization_id);
+					} else {
+						self.model.set("organization_id", curUser.organization_id);
+					}
 					// self.model.on("change", function () {
-					// 	var filterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
+					// 	var fconsilterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
 					// 	self.getFieldElement("roles").data("gonrin").setFilters(filterobj);
 					// });
-					self.model.set("organization_id", curUser.organization_id);
 
 					self.$el.find(".button_xoa").hide();
 					

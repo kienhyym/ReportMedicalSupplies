@@ -197,7 +197,6 @@ define(function (require) {
 			if (curUser && !donvi_id) {
 				donvi_id = curUser.organization_id;
 			}
-			console.log("donvi_id", donvi_id);
 			if (donvi_id) {
 				var url = self.getApp().serviceURL + "/api/v1/donvi/"+donvi_id;
 				$.ajax({
@@ -232,7 +231,7 @@ define(function (require) {
 						self.button_duyet();
 						self.getUserDonVi();
 						self.$el.find(".create-account-user").unbind("click").bind("click", function() {
-                            var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true } });
+                            var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true , "organization_id": self.model.get("id")} });
                             self.$el.find("#content").empty();
                             dialogUserDonViView.render();
                             self.$el.find("#content").append(dialogUserDonViView.el);
@@ -357,7 +356,6 @@ define(function (require) {
 					// "order_by": [{ "field": "updated_at", "direction": "desc" }]
 				};
 				var url_donvi = self.getApp().serviceURL + '/api/v1/user?results_per_page=1000&max_results_per_page=10000' + (query ? "&q=" + JSON.stringify(query) : "");
-				console.log("sdaf", url_donvi);
 				$.ajax({
 					url: url_donvi,
 					method: "GET",
