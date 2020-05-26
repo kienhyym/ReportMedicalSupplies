@@ -9,7 +9,7 @@ define(function(require) {
             "icon":"fa fa-user",
             "type":"category",
             "visible": function(){
-                return ((this.userHasRole("admin")||this.userHasRole("admin_donvi")) && gonrinApp().hasTypeDonvi("donvinhanuoc"));
+                return (this.userHasRole("admin")||(this.userHasRole("admin_donvi") && gonrinApp().hasTypeDonvi("donvinhanuoc")));
             },
             "entries":[
                 {
