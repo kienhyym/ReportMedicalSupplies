@@ -2,7 +2,8 @@
 from application.extensions import apimanager
 from gatco_restapi.helpers import to_dict
 from application.server import app
-from sqlalchemy import or_
+from sqlalchemy import or_, and_, func
+
 from gatco.response import json
 from datetime import datetime
 import ujson
@@ -30,12 +31,18 @@ async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw)
             medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == _['medical_supplies_id']).first()
             _['medical_supplies_name']= to_dict(medicalSupplies)['name']
             _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == result["organization_id"],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'],ReportOrganizationDetail.date < _['date'])).all()
+            if len(reportOrganizationDetail)>0:
+                _['begin_net_amount']= reportOrganizationDetail[0][0]
+            else:
+                _['begin_net_amount']= 0
 
 
 async def check_medical_supplies_name(request=None, data=None, Model=None, **kw):
         for _ in data['details']:
             del _['medical_supplies_name']
             del _['medical_supplies_unit']
+            del _['begin_net_amount']
 
 
 apimanager.create_api(MedicalSupplies,
@@ -156,7 +163,8 @@ async def create_itembalances(request):
         new_item.medical_supplies_id = _['medical_supplies_id']
         new_item.quantity_export = _['quantity_export']
         new_item.quantity_import = _['quantity_import']
-
+        new_item.estimates_net_amount = _['estimates_net_amount']
+        new_item.date = _['date']
         db.session.add(new_item)
         db.session.commit()
     return json({"message":"create success"})
@@ -169,6 +177,8 @@ async def update_itembalances(request):
         old_item.organization_id = _['organization_id']
         old_item.quantity_export = _['quantity_export']
         old_item.quantity_import = _['quantity_import']
+        old_item.estimates_net_amount = _['estimates_net_amount']
+        old_item.date = _['date']
         db.session.commit()
     return json({"message": "Update Success"})
 

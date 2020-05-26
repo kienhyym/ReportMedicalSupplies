@@ -25,6 +25,7 @@ class ReportOrganization(CommonModel):
     id = db.Column(String(), primary_key=True, default=default_uuid)
     code = db.Column(String())
     period = db.Column(String())
+    date = db.Column(BigInteger())
 
     organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
     organization = relationship('Organization')
@@ -35,6 +36,7 @@ class ReportOrganizationDetail(CommonModel):
     id = db.Column(String(), primary_key=True, default=default_uuid)
     code = db.Column(String())
     period = db.Column(String())
+    date = db.Column(BigInteger())
 
     report_organization_id = db.Column(String(), ForeignKey('report_organization.id'), nullable=True)
     report_organization = relationship('ReportOrganization')
@@ -48,3 +50,4 @@ class ReportOrganizationDetail(CommonModel):
     quantity_import = db.Column(DECIMAL(25,3), default=0)
     quantity_export = db.Column(DECIMAL(25,3), default=0)
     quantity_original = db.Column(DECIMAL(25,3), default=0)
+    estimates_net_amount = db.Column(DECIMAL(25,3), default=0)

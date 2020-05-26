@@ -31,6 +31,9 @@
     "period": {
         "type": "string"
     },
+    "date": {
+        "type": "number"
+    },
     "organization_id": {
         "type": "string"
     },

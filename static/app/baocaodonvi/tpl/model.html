@@ -16,10 +16,16 @@
                     </div>
                 </div>
                 <div class="card-body row">
-                   <div class="col-md-12 col-lg-12 col-sm-12 col-12">
+                    <div class="col-md-6 col-lg-6 col-sm-12 col-12">
                         <div class="form-group">
                             <label for="">Chọn đơn vị doanh nghiệp</label>
                             <input type="text" data-bind="dict:organization" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label for="">Thời gian</label>
+                            <input type="text" data-bind="value:date" />
                         </div>
                     </div>
                     <!-- <div class="col-md-6 col-lg-6 col-sm-8 col-12">
@@ -43,31 +49,39 @@
                     </div> -->
 
                     <div class="col-12 out-click" style="overflow-x: scroll;height: 500px;" >
-                        <div style="width: 1000px;height: 50px;box-sizing: border-box;">
-                            <div style="width: 45px;display: inline-block;text-align: center;padding: 5px;">STT</div>
-                            <div style="width: 290px;display: inline-block;text-align: center;padding: 5px;">Vật tư y tế </div>
-                            <div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">Đơn vị
+                        <div style="width: 1000px;height: 35px;box-sizing: border-box;">
+                            <div style="width: 28px;display: inline-block;text-align: center;padding: 1px;">TT</div>
+                            <div style="width: 248px;display: inline-block;text-align: center;padding: 1px;">Vật tư y tế </div>
+                            <div style="width: 148px;display: inline-block;text-align: center;padding: 1px;">Đơn vị tính
                             </div>
-                            <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">Nhập vào
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Tồn đầu kỳ
                             </div>
-                            <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">Sử dụng
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Nhập vào
                             </div>
-                            <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">tồn kho
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Sử dụng
                             </div>
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Tồn cuối kỳ
+                            </div>
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Dự kiến nhập
+                            </div>
+                            
                         </div>
 
-                        <div style="width: 1000px;height: 50px;" id="list-item">
-                            <div style="width: 45px;display: inline-block;text-align: center;padding: 5px;"><input class="form-control text-center stt" value="+"></div>
-                            <div style="width: 290px;display: inline-block;padding: 5px;position: relative;">
+                        <div style="width: 1000px;height: 35px;" id="list-item">
+                            <div style="width: 28px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center stt pl-0 pr-0" value="+"></div>
+                            <div style="width: 248px;display: inline-block;padding: 1px;position: relative;">
                                 <input type="text" class="form-control search-item" placeholder="Nhập tên mặt hàng để tìm kiếm">
                                 <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
                                     <div class="dropdown-menu dropdown-menu-item" style="height: 110px;overflow-x: hidden;width:280px;"></div>
                                 </div>
                             </div>
-                            <div style="width: 190px;display: inline-block;text-align: center;padding: 5px;"><input class="form-control text-center"></div>
-                            <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;"><input class="form-control text-center"></div>
-                            <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;"><input type="number" class="form-control text-center"></div>
-                            <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;"><input class="form-control text-center"></div>
+                            <div style="width: 148px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
+                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
+
                         </div>
                     </div>
 

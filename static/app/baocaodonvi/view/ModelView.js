@@ -106,6 +106,18 @@ define(function (require) {
 					foreignField: "organization_id",
 					dataSource: OrganizationView
 				},
+				{
+					field: "date",
+					uicontrol: "datetimepicker",
+					textFormat: "DD/MM/YYYY",
+					extraFormats: ["DDMMYYYY"],
+					parseInputDate: function (val) {
+						return moment.unix(val)
+					},
+					parseOutputDate: function (date) {
+						return date.unix()
+					}
+				},
 			]
 		},
 		render: function () {
@@ -148,30 +160,37 @@ define(function (require) {
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
+
 				var itemID = dropdownItemClick.attr('item-id')
 				self.$el.find('#list-item').before(`
                 <div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new" 
                 item-id = "${dropdownItemClick.attr('item-id')}"
                 >
-                    <div style="width: 45px; display: inline-block;text-align: center;padding: 5px;">
+                    <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="STT" class="form-control text-center p-1" value="${stt}" style="font-size:14px">
                     </div>
-                    <div style="width: 290px;display: inline-block;padding: 5px;">
+                    <div style="width: 248px;display: inline-block;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="NAME" class="form-control p-1" value="${dropdownItemClick.attr('title')}" readonly style="font-size:14px">
 					</div>
-					<div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
-                        <input selected-item-id = "${itemID}"  class="form-control text-center p-1" value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
+					<div style="width: 148px;display: inline-block;text-align: center;padding: 1px;">
+                        <input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
+					</div>
+					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                        <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT" type="number"  readonly begin_net_amount="0" class="form-control text-center p-1" value="0" style="font-size:14px">
                     </div>
-                    <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
-                        <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" value="0" style="font-size:14px">
+                    <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                        <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT" type="number" quantity_import="0" class="form-control text-center p-1" value="0" style="font-size:14px">
                     </div>
-                    <div style="width: 140px; display: inline-block; text-align:center;padding: 5px;">
-                        <input selected-item-id = "${itemID}" col-type="QUANTITY_EXPORT" type="number" class="form-control text-center p-1" value = "0" style="font-size:14px">
+                    <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
+                        <input selected-item-id = "${itemID}" col-type="QUANTITY_EXPORT" type="number" quantity_export="0" class="form-control text-center p-1" value = "0" style="font-size:14px">
                     </div>
-                    <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
-                        <input selected-item-id = "${itemID}" col-type="NET_AMOUNT" type="number" class="form-control text-center p-1" readonly style="font-size:14px">
+                    <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                        <input selected-item-id = "${itemID}" col-type="END_NET_AMOUNT" type="number" end_net_amount = "0" value="0" class="form-control text-center p-1" readonly style="font-size:14px">
+					</div>
+					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                        <input selected-item-id = "${itemID}" col-type="ESTIMATES_NET_AMOUNT" type="number" estimates_net_amount="0" value="0" class="form-control text-center p-1"  style="font-size:14px">
                     </div>
-                    <div style="width: 30px;display: inline-block;text-align: center;padding: 5px;">
+                    <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
                             <i selected-item-id = "${itemID}" class="fa fa-trash" style="font-size: 17px"></i>
                         </div>
                 </div>
@@ -189,29 +208,77 @@ define(function (require) {
 			var self = this;
 			self.$el.find('selected-item')
 			//Out Click QUANTITY_IMPORT
+			self.$el.find('[col-type="QUANTITY_IMPORT"]').unbind('click').bind('click',function () {
+				var pointerOutQuantityImport = $(this);
+				pointerOutQuantityImport.val(pointerOutQuantityImport.attr("quantity_import"))
+			})
 			self.$el.find('[col-type="QUANTITY_IMPORT"]').focusout(function () {
 				var pointerOutQuantityImport = $(this);
-				var pointerOutQuantityValueImport = pointerOutQuantityImport.val();
-				if (pointerOutQuantityValueImport == null || pointerOutQuantityValueImport == '') {
-					pointerOutQuantityImport.val(0)
+				var pointerOutQuantityImportValue = pointerOutQuantityImport.val();
+				var pointerOutQuantityImportValueString = new Number(pointerOutQuantityImportValue).toLocaleString("da-DK");
+
+				if (pointerOutQuantityImportValue == null || pointerOutQuantityImportValue == '') {
+					pointerOutQuantityImport.val(0);
+				}
+				else{
+					pointerOutQuantityImport.attr("quantity_import",pointerOutQuantityImportValue)
+					pointerOutQuantityImport.val(pointerOutQuantityImportValueString)
 				}
 
 				var selectedItemId = pointerOutQuantityImport.attr('selected-item-id');
-				var pointerOutQuantityExport = self.$el.find('[col-type="QUANTITY_EXPORT"][selected-item-id = ' + selectedItemId + ']').val();
-				var resultNetAmount = pointerOutQuantityImport.val() - pointerOutQuantityExport;
-				self.$el.find('[col-type="NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmount);
+				var pointerOutQuantityBeginNetAmount = self.$el.find('[col-type="BEGIN_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').attr('begin_net_amount');
+
+				var pointerOutQuantityExport = self.$el.find('[col-type="QUANTITY_EXPORT"][selected-item-id = ' + selectedItemId + ']').attr('quantity_export');
+
+				var resultNetAmount = Number(pointerOutQuantityBeginNetAmount) + Number(pointerOutQuantityImport.attr('quantity_import')) - Number(pointerOutQuantityExport);
+				var resultNetAmountString = new Number(resultNetAmount).toLocaleString("da-DK");
+
+				self.$el.find('[col-type="END_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmountString);
 			});
 			//Out Click QUANTITY_EXPORT
+			self.$el.find('[col-type="QUANTITY_EXPORT"]').unbind('click').bind('click',function () {
+				var pointerOutQuantityExport = $(this);
+				pointerOutQuantityExport.val(pointerOutQuantityExport.attr("quantity_export"))
+			})
 			self.$el.find('[col-type="QUANTITY_EXPORT"]').focusout(function () {
 				var pointerOutQuantityExport = $(this);
-				var pointerOutQuantityValueExport = pointerOutQuantityExport.val();
-				if (pointerOutQuantityValueExport == null || pointerOutQuantityValueExport == '') {
-					pointerOutQuantityExport.val(0)
+				var pointerOutQuantityExportValue = pointerOutQuantityExport.val();
+				var pointerOutQuantityExportValueString = new Number(pointerOutQuantityExportValue).toLocaleString("da-DK");
+
+				if (pointerOutQuantityExportValue == null || pointerOutQuantityExportValue == '') {
+					pointerOutQuantityExport.val(0);
 				}
+				else{
+					pointerOutQuantityExport.attr("quantity_export",pointerOutQuantityExportValue)
+					pointerOutQuantityExport.val(pointerOutQuantityExportValueString)
+				}
+
 				var selectedItemId = pointerOutQuantityExport.attr('selected-item-id');
-				var pointerOutQuantityImport = self.$el.find('[col-type="QUANTITY_IMPORT"][selected-item-id = ' + selectedItemId + ']').val();
-				var resultNetAmount = pointerOutQuantityImport - pointerOutQuantityExport.val();
-				self.$el.find('[col-type="NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmount);
+				var pointerOutQuantityBeginNetAmount = self.$el.find('[col-type="BEGIN_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').attr('begin_net_amount');
+				var pointerOutQuantityImport = self.$el.find('[col-type="QUANTITY_IMPORT"][selected-item-id = ' + selectedItemId + ']').attr('quantity_import');
+				var resultNetAmount = Number(pointerOutQuantityBeginNetAmount)+Number(pointerOutQuantityImport)-Number(pointerOutQuantityExport.attr('quantity_export'))
+
+				var resultNetAmountString = new Number(resultNetAmount).toLocaleString("da-DK");
+				self.$el.find('[col-type="END_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmountString);
+			});
+
+			//Out Click QUANTITY_EXPORT
+			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').unbind('click').bind('click',function () {
+				var pointerOutEstimatesNetAmount = $(this);
+				pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmount.attr("estimates_net_amount"))
+			})
+			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').focusout(function () {
+				var pointerOutEstimatesNetAmount = $(this);
+				var pointerOutEstimatesNetAmountValue = pointerOutEstimatesNetAmount.val();
+				var pointerOutEstimatesNetAmountValueString = new Number(pointerOutEstimatesNetAmountValue).toLocaleString("da-DK");
+
+				if (pointerOutEstimatesNetAmountValue == null || pointerOutEstimatesNetAmountValue == '') {
+					pointerOutEstimatesNetAmount.val(0);
+				}
+				else{
+					pointerOutEstimatesNetAmount.attr("estimates_net_amount",pointerOutEstimatesNetAmountValue)
+					pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmountValueString)
+				}
 			});
 		},
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
@@ -265,27 +332,39 @@ define(function (require) {
 				self.model.get('details').forEach(function (item, index) {
 					var quantityImportToLocaleString = new Number(item.quantity_import).toLocaleString("da-DK");
 					var quantityExportToLocaleString = new Number(item.quantity_export).toLocaleString("da-DK");
+					var beginNetAmountToLocaleString = new Number(item.begin_net_amount).toLocaleString("da-DK");
+					var estimatesNetAmountToLocaleString = new Number(item.estimates_net_amount).toLocaleString("da-DK");
+					var endNetAmountToLocaleString = new Number(item.begin_net_amount + item.quantity_import - item.quantity_export).toLocaleString("da-DK");
+
+					var netAmountToLocaleString = new Number(item.quantity_import - item.quantity_export).toLocaleString("da-DK");
+
 					self.$el.find('#list-item').before(`
                     <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old" >
-                        <div style="width: 45px; display: inline-block;text-align: center;padding: 5px;">
+                        <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="STT" class="form-control text-center p-1" value="${index + 1}" style="font-size:14px">
                         </div>
-                        <div style="width: 290px;display: inline-block;padding: 5px;">
+                        <div style="width: 248px;display: inline-block;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="NAME" class="form-control p-1" value="${item.medical_supplies_name}" readonly style="font-size:14px">
 						</div>
-						<div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
-							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" style="font-size:14px">
+						<div style="width: 148px;display: inline-block;text-align: center;padding: 1px;">
+							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" readonly value="${item.medical_supplies_unit}" style="font-size:14px">
 						</div>
-                        <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
-                            <input selected-item-id = "${item.id}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" value="${quantityImportToLocaleString}" style="font-size:14px">
+						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="BEGIN_NET_AMOUNT" class="form-control text-center p-1" begin_net_amount="${item.begin_net_amount}" value="${beginNetAmountToLocaleString}" readonly style="font-size:14px">
                         </div>
-                        <div style="width: 140px; display: inline-block; text-align:center;padding: 5px;">
-                            <input selected-item-id = "${item.id}" col-type="QUANTITY_EXPORT" type="number" class="form-control text-center p-1" value = "${quantityExportToLocaleString}" style="font-size:14px">
+                        <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" quantity_import="${item.quantity_import}" value="${quantityImportToLocaleString}" style="font-size:14px">
                         </div>
-                        <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
-                            <input selected-item-id = "${item.id}" col-type="NET_AMOUNT" class="form-control text-center p-1" value="${quantityImportToLocaleString - quantityExportToLocaleString}" readonly style="font-size:14px">
+                        <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="QUANTITY_EXPORT" type="number" class="form-control text-center p-1" quantity_export="${item.quantity_export}" value = "${quantityExportToLocaleString}" style="font-size:14px">
                         </div>
-                        <div style="width: 30px;display: inline-block;text-align: center;padding: 5px;">
+                        <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="END_NET_AMOUNT" class="form-control text-center p-1" value="${endNetAmountToLocaleString}" end_net_amount="${item.begin_net_amount + item.quantity_import - item.quantity_export}" readonly style="font-size:14px">
+						</div>
+						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="ESTIMATES_NET_AMOUNT" class="form-control text-center p-1" estimates_net_amount = "0" value="${estimatesNetAmountToLocaleString}"  style="font-size:14px">
+						</div>
+                        <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
                             <i selected-item-id = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
                         </div>
                     </div>
@@ -305,8 +384,10 @@ define(function (require) {
 					"report_organization_id": report_organization_id,
 					"organization_id": self.model.get('organization_id'),
 					"medical_supplies_id": $(item).attr('item-id'),
-					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').val(),
-					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').val(),
+					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').attr('quantity_export'),
+					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').attr('quantity_import'),
+					"estimates_net_amount": $(item).find('[col-type="ESTIMATES_NET_AMOUNT"]').attr('estimates_net_amount'),
+					"date": self.model.get('date')
 				}
 				arr.push(obj)
 			})
@@ -329,8 +410,10 @@ define(function (require) {
 				var obj = {
 					"id": $(item).attr('selected-item-id'),
 					"organization_id": self.model.get('organization_id'),
-					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').val(),
-					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').val(),
+					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').attr('quantity_export'),
+					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').attr('quantity_import'),
+					"estimates_net_amount": $(item).find('[col-type="ESTIMATES_NET_AMOUNT"]').attr('estimates_net_amount'),
+					"date": self.model.get('date')
 				}
 				arr.push(obj)
 			})
