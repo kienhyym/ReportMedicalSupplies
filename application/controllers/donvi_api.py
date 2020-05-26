@@ -379,4 +379,4 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
         
         
     # print("fileInfo_thuoc", to_dict(fileInfo))
-    # return json(to_dict(fileInfo), status=200)
+    return json(to_dict(fileInfo), status=200)
