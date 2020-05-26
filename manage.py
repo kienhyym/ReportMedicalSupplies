@@ -137,8 +137,11 @@ def init_danhmuc():
     print("add danh muc dan toc=============")
     add_danhmuc_dantoc()
 
-    # print("add role==========")
-    # add_role()
+    print("add role==========")
+    add_role()
+
+    print("add_tuyendonvi==========")
+    add_tuyendonvi()
 
     # print("migrate ten khong dau======")
     # migrate_tenkhongdau()

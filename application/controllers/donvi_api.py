@@ -375,8 +375,8 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
     sheet = wb.sheet_by_index(0) 
     sheet.cell_value(0, 0) 
     count =0
-    for i in range(sheet.nrows):
+    # for i in range(sheet.nrows):
         
         
-    print("fileInfo_thuoc", to_dict(fileInfo))
-    return json(to_dict(fileInfo), status=200)
+    # print("fileInfo_thuoc", to_dict(fileInfo))
+    # return json(to_dict(fileInfo), status=200)
