@@ -33,25 +33,16 @@ define(function (require) {
 							var self = this;
 							var donvi_ten = self.model.get("donvi_name"),
 								fullname = self.model.get("name"),
-								phone = self.model.get("phone"),
-								email = self.model.get("email"),
-								donvi_email = self.model.get("donvi_email"),
 								pass = self.model.get("password"),
 								cfpass = self.model.get("cfpassword"),
-								tuyendonvi = self.model.get("tuyendonvi");
+								accountName = self.model.get("accountName");
 							if (fullname == null || fullname == "" || fullname == undefined) {
 								self.getApp().notify({ message: "Tên người dùng không được để trống!" }, { type: "danger" });
 								return
 							}
-							// if (phone == null || phone == "") {
-							// 	self.getApp().notify({ message: "Số điện thoại người dùng không được để trống!" }, { type: "danger" });
-							// 	return
-							// }
-							if (email == null || email == "") {
-								self.getApp().notify({ message: "Email người dùng không được để trống!" }, { type: "danger" });
+							if (accountName == null || accountName == "") {
+								self.getApp().notify({ message: "Tài khoản người dùng được để trống!" }, { type: "danger" });
 								return
-							} else {
-								self.model.set("email",email.toLowerCase());
 							}
 							
 							if(!!donvi_email) {

@@ -77,10 +77,11 @@ define(function (require) {
 								self.model.set("name",ten.toUpperCase());
 								self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 								
-								var email = self.model.get("email");
-								if (email == null || email == undefined || email == "") {
-									self.getApp().notify({ message: "Vui lòng nhập email."}, { type: "danger", delay: 1000 });
-								} else {
+								var accountName = self.model.get("accountName");
+								if (accountName == null || accountName == undefined || accountName == "") {
+									self.getApp().notify({ message: "Tài khoản đăng nhập không được để trống.", delay: 1000 });
+								} 
+								if (!!email) {
 									self.model.set("email",email.toLowerCase());
 								}
   				            	self.getApp().showloading();

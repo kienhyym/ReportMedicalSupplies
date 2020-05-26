@@ -6,7 +6,27 @@
         <div class="d-flex justify-content-between">
             <h3 class="card-title">Danh sách đơn vị Y Tế</h3>
         </div>
-        <div id="grid_search"></div>
+        <div class="row">
+            <div class="form-group col-3">
+              <label>Chọn tỉnh thành</label>
+              <input id ="Tinhthanh" type="text"class="form-control">
+            </div>
+            <div class="form-group col-3">
+                <label>Chọn quận huyện</label>
+                <input id ="Quanhuyen" type="text"class="form-control">
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary button-filter" style="margin-top: 28px;">Tìm kiếm</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10">
+                <div id="grid_search"></div>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary button-clear">Xóa bộ lọc</button>
+            </div>
+        </div>
         <div id="grid" data-bind='collection:$collection'></div>
     </div>
 </div>

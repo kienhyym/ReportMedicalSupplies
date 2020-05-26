@@ -66,10 +66,7 @@ define(function (require) {
 								self.getApp().notify("Tên đơn vị không được để trống.Vui lòng nhập tên đơn vị!");
 								return false;
 							}
-							if(!sodienthoai || sodienthoai == null || sodienthoai == "") {
-								self.getApp().notify("Số điện thoại không được để trống.Vui lòng nhập số điện thoại!");
-								return false;
-							}
+							
 							self.model.set("name",ten.toUpperCase());
 							self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 							self.model.save(null, {

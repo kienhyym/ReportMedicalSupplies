@@ -96,6 +96,17 @@ define(function (require) {
     	},
 	    render: function () {
 			var self = this;
+			self.$el.find("#Tinhthanh").ref({
+                textField: "ten",
+                valueField: "id",
+                dataSource: TinhThanhSelectView,
+			});
+			self.$el.find("#Quanhuyen").ref({
+                textField: "ten",
+                valueField: "id",
+                dataSource: QuanHuyenSelectView,
+			});
+
 			var filter = new CustomFilterView({
     			el: self.$el.find("#grid_search"),
     			sessionKey: self.collectionName +"_filter"
@@ -120,19 +131,82 @@ define(function (require) {
     			var $col = self.getCollectionElement();
     			var text = !!evt.data.text ? evt.data.text.trim() : "";
 				if ($col) {
-					if (text !== null){
-						
-						var filters = { "$and": [
-							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							{"parent_id": {"$eq":captren_id  }},
-							{"type_donvi": {"$eq": "donvinhanuoc"  }}
-						]};
+					if (text !== null) {
+						var tinhthanh_id = self.$el.find("#Tinhthanh").data("gonrin").getValue(),
+							quanhuyen_id = self.$el.find("#Quanhuyen").data("gonrin").getValue();
+						var filters;
+						if (quanhuyen_id !== null && quanhuyen_id !== undefined && quanhuyen_id !== "") {
+							filters = {
+								"$and": [
+									{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+									{ "quanhuyen_id": { "$eq": quanhuyen_id } },
+									{"type_donvi": {"$eq": "donvinhanuoc"  }},
+									{"parent_id": {"$eq":captren_id  }},
+								]
+							};
+						} else if (tinhthanh_id !== null && tinhthanh_id !== undefined && tinhthanh_id !== "") {
+							filters = {
+								"$and": [
+									{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+									{ "tinhthanh_id": { "$eq": tinhthanh_id } },
+									{"type_donvi": {"$eq": "donvinhanuoc"  }},
+									{"parent_id": {"$eq":captren_id  }},
+								]
+							};
+						} else {
+							filters = {
+								"$and": [
+									{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+									{"type_donvi": {"$eq": "donvinhanuoc"  }},
+									{"parent_id": {"$eq":captren_id  }},
+								]
+							};
+						}
+						var $col = self.getCollectionElement();
 						$col.data('gonrin').filter(filters);
 						
-					}
+					};
 				}
 				self.applyBindings();
 			});
+
+			//filter tinh thanh quan huyen
+			self.$el.find(".button-filter").unbind("click").bind("click", function () {
+				var tinhthanh_id = self.$el.find("#Tinhthanh").data("gonrin").getValue(),
+					quanhuyen_id = self.$el.find("#Quanhuyen").data("gonrin").getValue(),
+					text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
+				var filters;
+				if (quanhuyen_id !== null && quanhuyen_id !== undefined && quanhuyen_id !== "") {
+					filters = {
+						"$and": [
+							{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+							{ "quanhuyen_id": { "$eq": quanhuyen_id } },
+							{"type_donvi": {"$eq": "donvinhanuoc"  }},
+							{"parent_id": {"$eq":captren_id  }},
+						]
+					};
+				} else if (tinhthanh_id !== null && tinhthanh_id !== undefined && tinhthanh_id !== "") {
+					filters = {
+						"$and": [
+							{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+							{ "tinhthanh_id": { "$eq": tinhthanh_id } },
+							{"type_donvi": {"$eq": "donvinhanuoc"  }},
+							{"parent_id": {"$eq":captren_id  }},
+						]
+					};
+				} else {
+					filters = {
+						"$and": [
+							{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+							{"type_donvi": {"$eq": "donvinhanuoc"  }},
+							{"parent_id": {"$eq":captren_id  }},
+						]
+					};
+				}
+				var $col = self.getCollectionElement();
+                $col.data('gonrin').filter(filters);
+			});
+
 			self.$el.find("table").addClass("table-hover");
 			self.$el.find("table").removeClass("table-striped");
 			return this;
