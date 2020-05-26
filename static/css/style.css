@@ -628,3 +628,6 @@ nav.bg-primary .navbar-brand {
 /* .main-sidebar .nav .nav-item .nav-link {
   padding: .9375rem 1.250rem !important;
 } */
+.nav-link.pl-2.navMenu {
+  padding-left: 28px !important;
+}

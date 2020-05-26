@@ -75,7 +75,7 @@ define(function (require) {
 					}
 
 					if (entry_type === "view" && entry_text !== undefined) {
-						_html = _html + '<a class="nav-link pl-2" href="javascript:;">';
+						_html = _html + '<a class="nav-link pl-2 navMenu" href="javascript:;">';
 						if (entry_icon) {
 							_html = _html + '<i class="' + entry_icon + '"></i>'; //change icon
 						}
