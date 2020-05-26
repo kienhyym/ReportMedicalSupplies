@@ -95,12 +95,31 @@ define(function(require) {
                 sessionKey: this.collectionName + "_filter"
             });
             filter.render();
+            var currentUser = gonrinApp().currentUser;
 
             if (!filter.isEmptyFilter()) {
+                var filters;
                 var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-                var filters = { "code": { "$likeI": text } };
+                if(gonrinApp().hasRole("admin")) {
+                    filters = {"$and": [
+                        { "code": { "$likeI": text } },
+                    ]};
+                } else {
+                    filters = {"$and": [
+                        { "code": { "$likeI": text } },
+                        { "organization_id": {"$eq": currentUser.organization_id}}
+                    ]};
+                }
                 self.uiControl.filters = filters;
             }
+            var filterobj;
+            if(gonrinApp().hasRole("admin")) {
+            } else {
+                filterobj = {"$and": [
+                    { "organization_id": {"$eq": currentUser.organization_id}}
+                ]};
+            }
+            self.uiControl.filters = filterobj;
             self.applyBindings();
 
             filter.on('filterChanged', function(evt) {
