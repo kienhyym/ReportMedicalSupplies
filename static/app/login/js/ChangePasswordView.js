@@ -23,6 +23,9 @@ define(function (require) {
 		},
 		changepasswordEvent: function (id) {
 			var self = this;
+			self.$el.find("#btn-back").unbind("click").bind("click", function () {
+				Backbone.history.history.back();
+			});
 			self.$el.find("#btn-changepassword").unbind("click").bind("click", function () {
 				if (self.$el.find("#txtpass").val() === undefined || self.$el.find("#txtpass").val() === "") {
 					self.getApp().notify("mật khẩu cũ không được bỏ trống");
