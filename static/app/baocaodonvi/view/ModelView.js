@@ -131,7 +131,6 @@ define(function (require) {
 						self.loadItemDropdown();
 						self.showDetail();
 						self.listItemsOldRemove();
-
 					},
 					error: function (xhr, status, error) {
 						try {
@@ -150,6 +149,9 @@ define(function (require) {
 			} else {
 				self.applyBindings();
 				self.loadItemDropdown();
+				var currentUser = gonrinApp().currentUser;
+				self.model.set("organization", currentUser.Organization);
+				// self.$el.find("#organization").prop("")
 
 			}
 
