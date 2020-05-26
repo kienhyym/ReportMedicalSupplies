@@ -150,7 +150,7 @@ define(function (require) {
 				var dropdownItemClick = $(this);
 				var itemID = dropdownItemClick.attr('item-id')
 				self.$el.find('#list-item').before(`
-                <div style="width: 955px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new" 
+                <div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new" 
                 item-id = "${dropdownItemClick.attr('item-id')}"
                 >
                     <div style="width: 45px; display: inline-block;text-align: center;padding: 5px;">
@@ -158,14 +158,17 @@ define(function (require) {
                     </div>
                     <div style="width: 290px;display: inline-block;padding: 5px;">
                         <input selected-item-id = "${itemID}" col-type="NAME" class="form-control p-1" value="${dropdownItemClick.attr('title')}" readonly style="font-size:14px">
+					</div>
+					<div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
+                        <input selected-item-id = "${itemID}"  class="form-control text-center p-1" value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
                     </div>
-                    <div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
+                    <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
                         <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" value="0" style="font-size:14px">
                     </div>
-                    <div style="width: 190px; display: inline-block; text-align:center;padding: 5px;">
+                    <div style="width: 140px; display: inline-block; text-align:center;padding: 5px;">
                         <input selected-item-id = "${itemID}" col-type="QUANTITY_EXPORT" type="number" class="form-control text-center p-1" value = "0" style="font-size:14px">
                     </div>
-                    <div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
+                    <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
                         <input selected-item-id = "${itemID}" col-type="NET_AMOUNT" type="number" class="form-control text-center p-1" readonly style="font-size:14px">
                     </div>
                     <div style="width: 30px;display: inline-block;text-align: center;padding: 5px;">
@@ -226,7 +229,8 @@ define(function (require) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
                             item-id = "${item.id}" 
-                            title="${item.name}"
+							title="${item.name}"
+							unit="${item.unit}"
                             class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">${item.name}</button>
                             `)
 						})
@@ -262,20 +266,23 @@ define(function (require) {
 					var quantityImportToLocaleString = new Number(item.quantity_import).toLocaleString("da-DK");
 					var quantityExportToLocaleString = new Number(item.quantity_export).toLocaleString("da-DK");
 					self.$el.find('#list-item').before(`
-                    <div style="width: 955px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old" >
+                    <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old" >
                         <div style="width: 45px; display: inline-block;text-align: center;padding: 5px;">
                             <input selected-item-id = "${item.id}" col-type="STT" class="form-control text-center p-1" value="${index + 1}" style="font-size:14px">
                         </div>
                         <div style="width: 290px;display: inline-block;padding: 5px;">
-                            <input selected-item-id = "${item.id}" col-type="NAME" class="form-control p-1" value="${item.name}" readonly style="font-size:14px">
-                        </div>
-                        <div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
+                            <input selected-item-id = "${item.id}" col-type="NAME" class="form-control p-1" value="${item.medical_supplies_name}" readonly style="font-size:14px">
+						</div>
+						<div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
+							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" style="font-size:14px">
+						</div>
+                        <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
                             <input selected-item-id = "${item.id}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" value="${quantityImportToLocaleString}" style="font-size:14px">
                         </div>
-                        <div style="width: 190px; display: inline-block; text-align:center;padding: 5px;">
+                        <div style="width: 140px; display: inline-block; text-align:center;padding: 5px;">
                             <input selected-item-id = "${item.id}" col-type="QUANTITY_EXPORT" type="number" class="form-control text-center p-1" value = "${quantityExportToLocaleString}" style="font-size:14px">
                         </div>
-                        <div style="width: 190px;display: inline-block;text-align: center;padding: 5px;">
+                        <div style="width: 140px;display: inline-block;text-align: center;padding: 5px;">
                             <input selected-item-id = "${item.id}" col-type="NET_AMOUNT" class="form-control text-center p-1" value="${quantityImportToLocaleString - quantityExportToLocaleString}" readonly style="font-size:14px">
                         </div>
                         <div style="width: 30px;display: inline-block;text-align: center;padding: 5px;">

@@ -22,6 +22,21 @@ from application.database import db
 import pandas
 
 
+async def check_dict_like(request=None, data=None, Model=None, **kw):
+        del data['organization']
+
+async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw):
+        for _ in result['details']:
+            medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == _['medical_supplies_id']).first()
+            _['medical_supplies_name']= to_dict(medicalSupplies)['name']
+            _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
+
+
+async def check_medical_supplies_name(request=None, data=None, Model=None, **kw):
+        for _ in data['details']:
+            del _['medical_supplies_name']
+            del _['medical_supplies_unit']
+
 
 apimanager.create_api(MedicalSupplies,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
@@ -30,20 +45,20 @@ apimanager.create_api(MedicalSupplies,
     postprocess=dict(POST=[],PUT_SINGLE=[]),
     collection_name='medical_supplies')
 
-async def check_dict_like(request=None, data=None, Model=None, **kw):
-        del data['organization']
-
-async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw):
-        for _ in result['details']:
-            print ('________________________-',_['id'])
-
 
 apimanager.create_api(ReportOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name]),
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
     collection_name='report_organization')
+
+apimanager.create_api(ReportOrganizationDetail,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    collection_name='report_organization_detail')
 
 @app.route('/api/v1/link_file_upload', methods=['POST'])
 async def link_file_upload(request):
