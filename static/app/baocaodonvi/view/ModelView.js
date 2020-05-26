@@ -6,7 +6,7 @@ define(function (require) {
 
 	var template = require('text!app/baocaodonvi/tpl/model.html'),
 		schema = require('json!schema/ReportOrganizationSchema.json');
-	var OrganizationView = require('app/danhmuc/medicalequipment/js/SelectView');
+	var OrganizationView = require('app/donvicungung/view/SelectView');
 
 	return Gonrin.ModelView.extend({
 		template: template,
@@ -101,7 +101,7 @@ define(function (require) {
                     textField: "name",
                     foreignRemoteField: "id",
                     foreignField: "organization_id",
-                    dataSource: MedicalEquipmentView
+                    dataSource: OrganizationView
                 },
 			]
 		},

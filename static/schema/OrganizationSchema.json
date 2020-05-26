@@ -60,8 +60,7 @@
         "type": "string"
     },
     "level": {
-        "type": "number",
-        "required": true
+        "type": "number"
     },
     "parent_name": {
         "type": "string",
@@ -78,6 +77,10 @@
         "type": "string",
         "length": 255
     },
+    "tuyendonvi_id": {
+        "type": "string",
+        "length": 255
+    },
     "tinhthanh": {
         "type": "dict"
     },
@@ -90,10 +93,13 @@
     "users": {
         "type": "list"
     },
+    "tuyendonvi": {
+        "type": "dict"
+    },
     "children": {
         "type": "list"
     },
-    "captren": {
+    "parent": {
         "type": "dict"
     }
 }

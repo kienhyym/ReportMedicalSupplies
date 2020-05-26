@@ -13,7 +13,7 @@ def default_uuid():
     
 class MedicalSupplies(CommonModel):
     __tablename__ = 'medical_supplies'
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=default_uuid)
+    id = db.Column(String(), primary_key=True, default=default_uuid)
     code = db.Column(String())
     name = db.Column(String())
     image = db.Column(String())
@@ -22,15 +22,25 @@ class MedicalSupplies(CommonModel):
 
 class ReportOrganization(CommonModel):
     __tablename__ = 'report_organization'
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=default_uuid)
+    id = db.Column(String(), primary_key=True, default=default_uuid)
     code = db.Column(String())
     period = db.Column(String())
-    medical_supplies_id = db.Column(UUID(as_uuid=True), ForeignKey('medical_supplies.id'), nullable=True)
+
+    organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
+    organization = relationship('Organization')
+
+class ReportOrganizationDetail(CommonModel):
+    __tablename__ = 'report_organization_detail'
+    id = db.Column(String(), primary_key=True, default=default_uuid)
+    code = db.Column(String())
+    period = db.Column(String())
+
+    report_organization_id = db.Column(String(), ForeignKey('report_organization.id'), nullable=True)
+    report_organization = relationship('ReportOrganization')
+    
+    medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
     medical_supplies = relationship('MedicalSupplies')
 
-    organization_id = db.Column(String, ForeignKey('organization.id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
-    organization = relationship('Organization')
-    
-    quantity_import = db.Column(DECIMAL(25,3), default=1)
-    quantity_export = db.Column(DECIMAL(25,3), default=1)
-    quantity_original = db.Column(DECIMAL(25,3), default=1)
+    quantity_import = db.Column(DECIMAL(25,3), default=0)
+    quantity_export = db.Column(DECIMAL(25,3), default=0)
+    quantity_original = db.Column(DECIMAL(25,3), default=0)
