@@ -232,12 +232,6 @@ def donvi_prepput(instance_id=None, data=None):
                 return json({"error_message":u'Cấp trên không đúng'},
                                       status=520)
             
-# apimanager.create_api(DonVi,
-#     methods=['GET', 'POST', 'DELETE', 'PUT'],
-#     url_prefix='/api/v1',
-#     preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_admin], POST=[validate_admin], PUT_SINGLE=[validate_admin, donvi_prepput_children], DELETE_SINGLE=[validate_admin]),
-#     collection_name='donvi',
-#     exclude_columns= ["children"])
 async def postprocess_ticket(request=None, Model=None, result=None, **kw):
     if "num_results" in result and (result["num_results"] > 0):
         i = 0
@@ -275,8 +269,6 @@ async def create_account_donvi(request):
     if check_user is not None:
         return json({"error_code": "ERROR_PARAM", "error_message": "Tài khoản người dùng đã tồn tại"}, status=520)
 
-    # level = data.get("level",None)
-
     organization = Organization()
     organization.id = default_uuid()
     organization.code = data.get("donvi_code",None)
@@ -295,7 +287,7 @@ async def create_account_donvi(request):
     organization.type_donvi = data.get("type_donvi","donvinhanuoc")
     db.session.add(organization)
     db.session.flush()
-    print("organization=============", to_dict(organization))
+    # print("organization=============", to_dict(organization))
     
     user = User()
     user.id = default_uuid()
@@ -311,8 +303,80 @@ async def create_account_donvi(request):
     role_admin_donvi = db.session.query(Role).filter(Role.name == 'admin_donvi').first()
     user.roles.append(role_admin_donvi)
     db.session.add(user)
-    print("user===========================", to_dict(user))
+    # print("user===========================", to_dict(user))
     db.session.commit()
 
     return json({"error_code":"OK","error_message":"successful", "data":to_dict(organization)},status=200)
 
+@app.route('/api/v1/donvi/import', methods=['POST'])
+async def import_excel_medicine(request):
+    # data = request.json
+    uid_current = current_uid(request)
+    if uid_current is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+    
+    fileId = request.headers.get("fileId",None)
+    file_data = request.files.get('file', None)
+    attrs = request.form.get('attrs',None)
+    if file_data :
+        response = await write_file_excel_donvinhanuoc(file_data,fileId, attrs,uid_current)
+        print("respone",response)
+        return response
+
+    return json({"error_code": "UPLOAD_ERROR", "error_message": "Không thể tải file lên hệ thống"}, status=520)
+
+async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
+    fsroot = app.config['FS_ROOT_DONVI']
+    if not os.path.exists(fsroot):
+        os.makedirs(fsroot)
+    file_name = os.path.splitext(file.name)[0]
+    extname = os.path.splitext(file.name)[1]
+        
+    BLOCKSIZE = 65536
+    sha256 = hashlib.sha256()
+    file_data = file.body
+    data_length = len(file_data)
+    if(data_length<=0):
+        return json({"error_code": "Error","error_message": "File không hợp lệ"}, status=520)
+    elif (data_length<BLOCKSIZE):
+        BLOCKSIZE = data_length
+    sha256.update(file_data)
+
+    str_sha256 = sha256.hexdigest()   
+    check_exist = db.session.query(FileInfo).filter(FileInfo.sha256 == str_sha256).first()
+    if check_exist is not None:
+        print("ERROR2====", to_dict(check_exist))
+        return json(to_dict(check_exist))
+    print("root file thuoc", fsroot + str_sha256 + extname)
+    async with aiofiles.open(fsroot + str_sha256 + extname, 'wb+') as f:
+        await f.write(file.body)
+    f.close()
+
+    if fileId is None:
+        fileId = str(uuid.uuid4())
+    fileInfo = FileInfo()
+    fileInfo.id = fileId
+    fileInfo.sha256 = str_sha256
+    fileInfo.user_id = uid_current
+    fileInfo.name = file_name
+    fileInfo.extname = extname
+    fileInfo.link = "/" + str(str_sha256) + str(extname)
+    fileInfo.attrs = attrs
+    fileInfo.size = data_length
+    fileInfo.kind = "filedonvi"
+    db.session.add(fileInfo)
+    db.session.commit()
+
+    #load and save to model Medicine
+
+    url_file_thuoc = fsroot + str_sha256 + extname
+
+    wb = xlrd.open_workbook(url_file_thuoc) 
+    sheet = wb.sheet_by_index(0) 
+    sheet.cell_value(0, 0) 
+    count =0
+    for i in range(sheet.nrows):
+        
+        
+    print("fileInfo_thuoc", to_dict(fileInfo))
+    return json(to_dict(fileInfo), status=200)

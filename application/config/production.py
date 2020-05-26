@@ -18,12 +18,12 @@ class Config(object):
     
     
     BUCKET_NAME = "bacsixa"
-    FS_ROOT= "/opt/deploys/bacsixa/repo/static/files/uploads/"
-    FS_ROOT_FILE= "/opt/deploys/bacsixa/repo/static/files/uploads/"
+    FS_ROOT= "/opt/deploys/baocaovattuyte/repo/static/files/uploads/"
+    FS_ROOT_FILE= "/opt/deploys/baocaovattuyte/repo/static/files/uploads/"
     IMAGE_SERVICE_URL = 'https://bacsixa.vn/static/images/uploads'
     FILE_SERVICE_URL = '/files/uploads'#lay static_url + FILE_SERVICE_URL + file=file_url
 
-    
+    FS_ROOT_DONVI = "/opt/deploys/baocaovattuyte/repo/file_donvi/"
 
     MAIL_SERVER_HOST = 'smtp.gmail.com'
     MAIL_SERVER_PORT = 587
