@@ -115,9 +115,65 @@ define(function (require) {
 			self.$el.find("table").addClass("table-hover");
 			self.$el.find("table").removeClass("table-striped");
 			self.applyBindings();
+			self.$el.find(".toolbar").append('<button type="text" class="btn btn-info btn-sm import-excel">Import excel</button>');
+			self.$el.find(".import-excel").unbind("click").bind("click", function () {
+				self.$el.find("#upload_files").click();
+			})
+			self.$el.find("#upload_files").on("change", function(e) {
+                self.importExcelDonVi();
+            });
 			return this;
 		},
-    	
+    	importExcelDonVi: function () {
+			var self = this;
+			var file = self.$el.find("#upload_files")[0].files[0];
+            self.getApp().showloading();
+            if (!!file ) {
+                self.function_upload_file(file);
+            } else {
+                self.getApp().hideloading();
+                self.getApp().notify("Vui lòng chọn đúng định dạng tệp");
+                return;
+            }
+		},
+		function_upload_file: function(result) {
+            var self = this;
+            var http = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append('file', result, result.name);
+            http.open('POST', gonrinApp().serviceURL + '/api/v1/donvi/import');
+            var current_so = !!gonrinApp().data("current_so") ? gonrinApp().data("current_so").id : null;
+            var token = !!gonrinApp().currentUser ? gonrinApp().currentUser.token : null;
+            http.setRequestHeader("X-SO-CURRENT", current_so);
+            http.setRequestHeader("X-USER-TOKEN", token);
+
+            http.upload.addEventListener('progress', function(evt) {
+                if (evt.lengthComputable) {
+                    var percent = evt.loaded / evt.total;
+                    percent = parseInt(percent * 100);
+
+                }
+            }, false);
+            http.addEventListener('error', function() {
+                self.getApp().hideloading();
+                self.getApp().notify("Không tải được file lên hệ thống");
+            }, false);
+            http.onreadystatechange = function() {
+                self.getApp().hideloading();
+                if (http.status === 200) {
+                    if (http.readyState === 4) {
+
+                        var data_file = JSON.parse(http.responseText),
+                            link, p, t;
+						gonrinApp().notify("Tải dữ liệu thành công.");
+						gonrinApp().getRouter().refresh();
+                    }
+                } else {
+                    self.getApp().notify("Không thể file ảnh lên hệ thống");
+                }
+            };
+            http.send(fd);
+        },
     });
 
 });
