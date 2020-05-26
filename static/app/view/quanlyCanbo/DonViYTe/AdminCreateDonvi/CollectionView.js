@@ -6,7 +6,9 @@ define(function (require) {
     
     var template 			= require('text!app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/tpl/collection.html'),
     	schema 				= require('json!app/view/quanlyCanbo/DonViYTe/DonViYTeSchema.json');
-	var CustomFilterView      = require('app/base/view/CustomFilterView');
+	var CustomFilterView      = require('app/base/view/CustomFilterView'),
+		TinhThanhSelectView 	= require("app/view/DanhMuc/TinhThanh/SelectView"),
+		QuanHuyenSelectView 	= require("app/view/DanhMuc/QuanHuyen/SelectView");
     return Gonrin.CollectionView.extend({
     	template : template,
     	modelSchema	: schema,
@@ -87,12 +89,56 @@ define(function (require) {
     	},
 	    render: function () {
 			var self = this;
+			self.$el.find("#Tinhthanh").ref({
+                textField: "ten",
+                valueField: "id",
+                dataSource: TinhThanhSelectView,
+			});
+			self.$el.find("#Quanhuyen").ref({
+                textField: "ten",
+                valueField: "id",
+                dataSource: QuanHuyenSelectView,
+			});
+
 			var filter = new CustomFilterView({
     			el: self.$el.find("#grid_search"),
     			sessionKey: self.collectionName +"_filter"
 			});
 			var created_by = self.getApp().currentUser.id;
-    		filter.render();
+			filter.render();
+			
+			self.$el.find(".button-filter").unbind("click").bind("click", function () {
+				var tinhthanh_id = self.$el.find("#Tinhthanh").data("gonrin").getValue(),
+					quanhuyen_id = self.$el.find("#Quanhuyen").data("gonrin").getValue(),
+					text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
+				var filters;
+				if (quanhuyen_id !== null && quanhuyen_id !== undefined && quanhuyen_id !== "") {
+					filters = {
+						"$and": [
+							{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+							{ "quanhuyen_id": { "$eq": quanhuyen_id } },
+							{"type_donvi": {"$eq": "donvinhanuoc"  }}
+						]
+					};
+				} else if (tinhthanh_id !== null && tinhthanh_id !== undefined && tinhthanh_id !== "") {
+					filters = {
+						"$and": [
+							{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+							{ "tinhthanh_id": { "$eq": tinhthanh_id } },
+							{"type_donvi": {"$eq": "donvinhanuoc"  }}
+						]
+					};
+				} else {
+					filters = {
+						"$and": [
+							{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+							{"type_donvi": {"$eq": "donvinhanuoc"  }}
+						]
+					};
+				}
+				var $col = self.getCollectionElement();
+                $col.data('gonrin').filter(filters);
+			});
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
     			var filters = { "$and": [
@@ -102,7 +148,6 @@ define(function (require) {
 				self.uiControl.filters = filters;
 			}
 			var filters_donvidangki = { "$and": [
-				// {"created_by": {"$eq":created_by  }},
 				{"type_donvi": {"$eq": "donvinhanuoc"  }}
 			]};
 			self.uiControl.filters = filters_donvidangki;
@@ -112,14 +157,34 @@ define(function (require) {
     			var text = !!evt.data.text ? evt.data.text.trim() : "";
 				if ($col) {
 					if (text !== null){
-						
-						var filters = { "$and": [
-							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							// {"created_by": {"$eq":created_by  }},
-							{"type_donvi": {"$eq": "donvinhanuoc"  }}
-						]};
+						var tinhthanh_id = self.$el.find("#Tinhthanh").data("gonrin").getValue(),
+						quanhuyen_id = self.$el.find("#Quanhuyen").data("gonrin").getValue();
+						var filters;
+						if (quanhuyen_id !== null && quanhuyen_id !== undefined && quanhuyen_id !== "") {
+							filters = {
+								"$and": [
+									{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+									{ "quanhuyen_id": { "$eq": quanhuyen_id } },
+									{"type_donvi": {"$eq": "donvinhanuoc"  }}
+								]
+							};
+						} else if (tinhthanh_id !== null && tinhthanh_id !== undefined && tinhthanh_id !== "") {
+							filters = {
+								"$and": [
+									{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+									{ "tinhthanh_id": { "$eq": tinhthanh_id } },
+									{"type_donvi": {"$eq": "donvinhanuoc"  }}
+								]
+							};
+						} else {
+							filters = {
+								"$and": [
+									{ "unsigned_name": { "$likeI": gonrinApp().convert_khongdau(text) } },
+									{"type_donvi": {"$eq": "donvinhanuoc"  }}
+								]
+							};
+						}
 						$col.data('gonrin').filter(filters);
-						
 					}
 				}
 				self.applyBindings();
@@ -127,7 +192,16 @@ define(function (require) {
 			self.$el.find("table").addClass("table-hover");
 			self.$el.find("table").removeClass("table-striped");
 			self.applyBindings();
-			self.$el.find(".toolbar-import .toolbar").append('<button type="text" class="btn btn-info btn-sm import-excel">Import excel</button>');
+
+			//clear data filter
+			self.$el.find(".button-clear").unbind("click").bind("click", function () {
+				self.$el.find("#Quanhuyen").data("gonrin").setValue(null);
+				self.$el.find("#Tinhthanh").data("gonrin").setValue(null);
+				filter.model.set("text", "");
+			});
+
+			//import file
+			self.$el.find(".toolbar-import .toolbar").append('<button style="margin-left:6px" type="text" class="btn btn-info btn-sm import-excel">Import excel</button>');
 			self.$el.find(".import-excel").unbind("click").bind("click", function () {
 				self.$el.find("#upload_files").click();
 			})

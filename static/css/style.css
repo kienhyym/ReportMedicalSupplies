@@ -631,3 +631,7 @@ nav.bg-primary .navbar-brand {
 .nav-link.pl-2.navMenu {
   padding-left: 28px !important;
 }
+.btn.btn-danger.btn-sm.button_khoa {
+  background-color: #df7518 !important;
+  border: 1px solid #df7518;
+}

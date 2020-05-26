@@ -50,7 +50,7 @@ define(function (require) {
 	    	},
     	},
     	render:function(){
-			this.uiControl.orderBy = [{"field": "ten", "direction": "asc"}];
+			// this.uiControl.orderBy = [{"field": "ten", "direction": "asc"}];
     		this.applyBindings();
     		return this;
     	},
