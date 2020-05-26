@@ -75,7 +75,7 @@ define(function (require) {
 					}
 
 					if (entry_type === "view" && entry_text !== undefined) {
-						_html = _html + '<a class="nav-link pl-2" href="javascript:;">';
+						_html = _html + '<a class="nav-link pl-2 navMenu" href="javascript:;">';
 						if (entry_icon) {
 							_html = _html + '<i class="' + entry_icon + '"></i>'; //change icon
 						}
@@ -128,7 +128,6 @@ define(function (require) {
 					return this;
 				}
 				$a.unbind("click").bind("click", function (e) {
-					$(".nav-wrapper").children("a").removeClass("active");
 					// $(this).addClass("active");
 					var hasOpen = $(this).parents('li').hasClass('menu-open');
 					if (!hasOpen) {
@@ -147,11 +146,14 @@ define(function (require) {
 				}
 				$a.unbind("click").bind("click", function (e) {
 					e.preventDefault();
-					$("#menu-first").children("li").children("a").removeClass("active");
+					// $(this).addClass("active");
+					self.$el.find(".active").removeClass("active");
 					// $(this).addClass('active');
 					$('.main-sidebar').toggleClass('open');
 					self.getApp().getRouter().navigate(entry.route);
+					$(this).addClass("active");
 				});
+				
 			};
 			return this;
 
