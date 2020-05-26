@@ -135,6 +135,7 @@ define(function(require) {
         },
         {
             "text": "Vật tư y tế",
+            // "icon": "fa fa-pump-medical",
             "type": "view",
             "collectionName": "medical_supplies",
             "route": "vattuyte/collection",
