@@ -45,10 +45,10 @@ define(function (require) {
 								self.getApp().notify({ message: "Tên người dùng không được để trống!" }, { type: "danger" });
 								return
 							}
-							if (phone == null || phone == "") {
-								self.getApp().notify({ message: "Số điện thoại người dùng không được để trống!" }, { type: "danger" });
-								return
-							}
+							// if (phone == null || phone == "") {
+							// 	self.getApp().notify({ message: "Số điện thoại người dùng không được để trống!" }, { type: "danger" });
+							// 	return
+							// }
 							if (email == null || email == "") {
 								self.getApp().notify({ message: "Email người dùng không được để trống!" }, { type: "danger" });
 								return
@@ -242,21 +242,21 @@ define(function (require) {
 			self.on("get_tuyendonvi_1", function (event) {
 				var data_tuyendonvi = event.data;
 				var matuyendonvi = data_tuyendonvi.ma;
-				if (matuyendonvi == "01") {
-					self.get_tuyendonvi(null, "02");
+				if (matuyendonvi == "1") {
+					self.get_tuyendonvi(null, "2");
 				}
-				else if (matuyendonvi == "02") {
-					self.get_tuyendonvi(null, "03");
+				else if (matuyendonvi == "2") {
+					self.get_tuyendonvi(null, "3");
 					self.model.set("tinhthanh", obj.tinhthanh);
 				}
-				else if (matuyendonvi == "03") {
-					self.get_tuyendonvi(null, "04");
+				else if (matuyendonvi == "3") {
+					self.get_tuyendonvi(null, "4");
 					self.model.set("tinhthanh", obj.tinhthanh);
 				}
-				else if (matuyendonvi == "04") {
+				else if (matuyendonvi == "4") {
 					self.model.set({"tinhthanh": obj.tinhthanh}, {"quanhuyen": obj.quanhuyen});
-					self.get_tuyendonvi(null, "05");
-				} else if (obj.tuyendonvi_id == "05") {
+					self.get_tuyendonvi(null, "5");
+				} else if (obj.tuyendonvi_id == "5") {
 					self.getApp().notify("Bạn không có quyền tạo đơn vị!");
 					self.$el.find(".taodonvi").hide();
 					self.getApp().getRouter().navigate('canbo/donvi/collection');
@@ -274,17 +274,17 @@ define(function (require) {
 		},
 		valiedate_tuyendonvi: function () {
 			var self = this;
-			var tuyendonvi = self.model.get("tuyendonvi"),
+			var tuyendonvi_id = self.model.get("tuyendonvi_id"),
 				tinhthanh = self.model.get("tinhthanh"),
 				quanhuyen = self.model.get("quanhuyen"),
 				xaphuong = self.model.get("xaphuong");
-			if (tuyendonvi && tuyendonvi.ma) {
-				var matuyendonvi = tuyendonvi.ma;
-				if ((matuyendonvi == "02" || matuyendonvi == "03") && (tinhthanh == null || tinhthanh == undefined)) {
+			if (tuyendonvi_id) {
+				// var matuyendonvi = tuyendonvi.ma;
+				if ((tuyendonvi_id == "2" || tuyendonvi_id == "3") && (tinhthanh == null || tinhthanh == undefined)) {
 					self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố " });
 					return false;
 				}
-				else if (tuyendonvi_id == "04") {
+				else if (tuyendonvi_id == "4") {
 					if (tinhthanh == null || tinhthanh == undefined) {
 						self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
 						return false
@@ -293,7 +293,7 @@ define(function (require) {
 						return false
 					}
 				}
-				else if (tuyendonvi_id == "05") {
+				else if (tuyendonvi_id == "5") {
 					if (tinhthanh == null || tinhthanh == undefined) {
 						self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
 						return false;

@@ -204,12 +204,12 @@ define(function (require) {
 							});
 							self.button_duyet();
 						}
-						// self.$el.find(".create-account-user").unbind("click").bind("click", function() {
-                        //     var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true } });
-                        //     self.$el.find("#content").empty();
-                        //     dialogUserDonViView.render();
-                        //     self.$el.find("#content").append(dialogUserDonViView.el);
-                        // });
+						self.$el.find(".create-account-user").unbind("click").bind("click", function() {
+                            var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true } });
+                            self.$el.find("#content").empty();
+                            dialogUserDonViView.render();
+                            self.$el.find("#content").append(dialogUserDonViView.el);
+                        });
 					},
 					error: function (xhr, status, error) {
 						try {
@@ -365,14 +365,14 @@ define(function (require) {
 							page: 1,
 							pageSize: 20
 							},
-							// onRowClick: function(event) {
-                            //     if (event.rowId) {
-                            //         var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": event.rowData } });
-                            //         self.$el.find("#content").empty(); 
-                            //         dialogUserDonViView.render();
-                            //         self.$el.find("#content").append(dialogUserDonViView.el);
-                            //     }
-                            // },
+							onRowClick: function(event) {
+                                if (event.rowId) {
+                                    var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": event.rowData } });
+                                    self.$el.find("#content").empty(); 
+                                    dialogUserDonViView.render();
+                                    self.$el.find("#content").append(dialogUserDonViView.el);
+                                }
+                            },
 		                });
 					},
 					error: function (xhr, status, error) {

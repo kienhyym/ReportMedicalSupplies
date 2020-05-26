@@ -1,7 +1,7 @@
 [
-      {"value":"01","text":"Tuyến bộ y tế"},
-      {"value":"02","text":"Tuyến sở"},
-      {"value":"03","text":"Tuyến tỉnh"},
-      {"value":"04","text":"Tuyến sở"},
-      {"value":"05","text":"Tuyến xã"}
+      {"value":"1","text":"Tuyến bộ y tế"},
+      {"value":"2","text":"Tuyến sở"},
+      {"value":"3","text":"Tuyến tỉnh"},
+      {"value":"4","text":"Tuyến sở"},
+      {"value":"5","text":"Tuyến xã"}
 ]

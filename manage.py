@@ -296,7 +296,7 @@ def add_tuyendonvi():
             tuyendonvi_filter = db.session.query(TuyenDonVi).filter(TuyenDonVi.ma == item_tuyendonvi["value"]).first()
             if tuyendonvi_filter is None:
                 tuyendonvi = TuyenDonVi()
-                # tuyendonvi.id = item_tuyendonvi["value"]
+                tuyendonvi.id = item_tuyendonvi["value"]
                 tuyendonvi.ma = item_tuyendonvi["value"]
                 tuyendonvi.ten = item_tuyendonvi.get('text', None)
                 tuyendonvi.tenkhongdau = convert_text_khongdau(tuyendonvi.ten)

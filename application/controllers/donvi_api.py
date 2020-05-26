@@ -11,7 +11,7 @@ from gatco.response import json, text, html
 import time
 from math import floor
 from application.controllers.helpers.helper_common import *
-from application.models.model_danhmuc import TuyenDonVi
+from application.models.model_danhmuc import TuyenDonVi, TinhThanh, QuanHuyen, XaPhuong
 from application.controllers.helpers.helper_notify import send_notify_single
 
 
@@ -375,8 +375,115 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
     sheet = wb.sheet_by_index(0) 
     sheet.cell_value(0, 0) 
     count =0
-    # for i in range(sheet.nrows):
-        
+    for i in range(sheet.nrows):
+        for i in range(sheet.nrows):
+            if i == 0:
+                continue
+            ma_donvi = str(sheet.cell_value(i,1)).strip()
+            ten_donvi = str(sheet.cell_value(i,2)).strip()
+            tuyendonvi = convert_columexcel_to_string(sheet.cell_value(i,3)).strip()
+            parent_ma = convert_columexcel_to_string(sheet.cell_value(i,4)).strip()
+            type_donvi = convert_columexcel_to_string(sheet.cell_value(i,5)).strip()
+
+            # hinhthuc_tochuc = str(sheet.cell_value(i,6)).strip()
+            matinhthanh = convert_columexcel_to_string(sheet.cell_value(i,6))
+            maquanhuyen = convert_columexcel_to_string(sheet.cell_value(i,7))
+            maxaphuong = convert_columexcel_to_string(sheet.cell_value(i,8))
+            diachi_donvi = str(sheet.cell_value(i,9)).strip()
+            email_donvi = str(sheet.cell_value(i,10)).strip()
+            dienthoai_donvi = str(sheet.cell_value(i,11)).strip()
+            
+            account = str(sheet.cell_value(i,12)).strip()
+            email_admin = str(sheet.cell_value(i,13)).strip()
+            dienthoai_admin = str(sheet.cell_value(i,14)).strip()
+            matkhau = convert_columexcel_to_string(sheet.cell_value(i,15))
+            ten_admin = str(sheet.cell_value(i,16)).strip()
+
+            if account is None:
+                continue
+            
+            check_donvi = db.session.query(Organization).filter(Organization.code == ma_donvi).first()
+            if check_donvi is not None:
+                continue
+            donvi = Organization()
+            donvi.id = default_uuid()
+            donvi.code = ma_donvi
+            if tuyendonvi is not None:
+                check_tuyendonvi = db.session.query(TuyenDonVi).filter(TuyenDonVi.ma == tuyendonvi).first()
+                if check_tuyendonvi is not None:
+                    donvi.tuyendonvi_id = check_tuyendonvi.id
+            if parent_ma is not None:
+                check_parent = db.session.query(Organization).filter(Organization.code == ma_donvi).first()
+                if check_parent is not None:
+                    donvi.parent_id = check_parent.id
+                    donvi.parent_name = check_parent.name
+            donvi.type_donvi = type_donvi
+            donvi.name = ten_donvi
+            donvi.email = email_donvi
+            donvi.phone = dienthoai_donvi
+            donvi.address = diachi_donvi
+            # donvi.level = int(float(level_donvi))
+            donvi.unsigned_name = convert_text_khongdau(donvi.name)
+            donvi.active = 1
+            check_tinhthanh = db.session.query(TinhThanh).filter(TinhThanh.ma == matinhthanh).first()
+            if check_tinhthanh is not None:
+                donvi.tinhthanh_id = check_tinhthanh.id
+
+            check_quanhuyen = db.session.query(QuanHuyen).filter(QuanHuyen.ma == maquanhuyen).first()
+            if check_quanhuyen is not None:
+                donvi.quanhuyen_id = check_quanhuyen.id
+
+            check_xaphuong = db.session.query(XaPhuong).filter(XaPhuong.ma == maxaphuong).first()
+            if check_xaphuong is not None:
+                donvi.xaphuong_id = check_xaphuong.id
+
+            db.session.add(donvi)
+            print("donvi==================================", to_dict(donvi))
+            db.session.commit()
+
+            
+            check_admin = db.session.query(User).filter(User.accountName == account).first()
+            
+            if check_admin is not None:
+                continue
+            admin = User()
+            admin.id = default_uuid()
+            admin.accountName = account
+            admin.name = ten_admin
+            admin.unsigned_name = convert_text_khongdau(admin.name)
+            admin.organization_id = donvi.id
+            admin.active = 1
+            if email_admin is not None and email_admin != '':
+                admin.email = email_admin
+            else:
+                admin.email = None
+            if dienthoai_admin is not None and dienthoai_admin != '':
+                admin.phone = dienthoai_admin
+            else: 
+                admin.phone = None
+            role_admin_donvi = db.session.query(Role).filter(Role.name == 'admin_donvi').first()
+            admin.roles.append(role_admin_donvi)
+
+            salt = generator_salt()
+            if matkhau is not None:
+                newpassword = auth.encrypt_password(str(matkhau), str(salt))
+                admin.password = newpassword
+                admin.salt = salt
+
+            db.session.add(admin)
+            print("admin====================", to_dict(admin))
+            db.session.commit()
+            count = count + 1
+
         
     # print("fileInfo_thuoc", to_dict(fileInfo))
     return json(to_dict(fileInfo), status=200)
+
+def convert_columexcel_to_string(value):
+    # print("value", value)
+    if isinstance(value,str):
+        return value.strip()
+    if isinstance(value, float):
+        return str(int(value)).strip()
+    if isinstance(value,int):
+        return str(value).strip()

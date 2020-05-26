@@ -78,7 +78,9 @@ define(function (require) {
 								self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 								
 								var email = self.model.get("email");
-								if(!!email) {
+								if (email == null || email == undefined || email == "") {
+									self.getApp().notify({ message: "Vui lòng nhập email."}, { type: "danger", delay: 1000 });
+								} else {
 									self.model.set("email",email.toLowerCase());
 								}
   				            	self.getApp().showloading();
