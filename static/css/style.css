@@ -615,10 +615,16 @@ nav.bg-primary .navbar-brand {
   .content-login {
     padding: 0px;
   }
-
+}
   @media (min-width: 992px) {
     .content-login {
       padding: 15px;
     }
-
+  }
     /* end style login */
+.toolbar button {
+  min-width: 55px !important;
+}
+/* .main-sidebar .nav .nav-item .nav-link {
+  padding: .9375rem 1.250rem !important;
+} */

@@ -192,6 +192,7 @@ define(function (require) {
 			var curUser = self.getApp().currentUser;
 			if ( !!self.getApp().hasRole('canbo') && self.getApp().hasRole('admin_donvi') == false && self.getApp().hasRole('admin') == false ) {
 				self.$el.find("input").prop('disabled', true);
+				//tuyendonvi
 			}
 			if (curUser && !donvi_id) {
 				donvi_id = curUser.organization_id;
@@ -212,6 +213,9 @@ define(function (require) {
 						self.model.set(data);
 						self.getUserDonVi();
 						self.applyBindings();
+						if(!self.getApp().hasRole('admin')) {
+							self.$el.find(".tuyendonvi input").prop("disabled", true);
+						}
 						self.$el.find(".madonvi").removeClass("d-none");
 						self.model.on("change:tinhthanh", function() {
 							var tinhthanh_id = self.model.get("tinhthanh_id");
@@ -374,7 +378,7 @@ define(function (require) {
 								{field: "name", label: "Họ và tên", sortable: {order:"asc"}},
 								{field: "phone", label: "Số điện thoại"},
 								{field: "email", label: "Email"},
-								{field: "code", label: "Mã cán bộ"},
+								{field: "accountName", label: "Tên đăng nhập"},
 								{
 									field: "roles",
 									label: "Vai trò",

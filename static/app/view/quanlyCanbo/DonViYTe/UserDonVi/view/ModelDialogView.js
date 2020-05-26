@@ -77,12 +77,6 @@ define(function (require) {
 								self.model.set("name",ten.toUpperCase());
 								self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 								
-								var email = self.model.get("email");
-								if (email == null || email == undefined || email == "") {
-									self.getApp().notify({ message: "Vui lòng nhập email."}, { type: "danger", delay: 1000 });
-								} else {
-									self.model.set("email",email.toLowerCase());
-								}
   				            	self.getApp().showloading();
   						        self.model.save(null,{
   						            success: function (model, respose, options) {
@@ -169,7 +163,11 @@ define(function (require) {
 				self.applyBindings();
 				
 				var dataview = self.viewData.data;
-				if (gonrinApp().hasRole('admin_donvi') ===true || gonrinApp().hasRole('admin')=== true){
+				self.model.on("change", function () {
+					var filterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
+					self.getFieldElement("roles").data("gonrin").setFilters(filterobj);
+				});
+				if (gonrinApp().hasRole('admin_donvi') ===true || gonrinApp().hasRole('admin') ===true) {
 					self.$el.find(".roless").show();
 				} else {
 					self.$el.find(".roless").hide();
@@ -186,10 +184,10 @@ define(function (require) {
 						}
 					}
 				} else {
-					self.model.on("change", function () {
-						var filterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
-						self.getFieldElement("roles").data("gonrin").setFilters(filterobj);
-					});
+					// self.model.on("change", function () {
+					// 	var filterobj = {"$or": [{"name":{ "$eq": "admin_donvi" }}, {"name":{ "$eq": "canbo" }} ]};
+					// 	self.getFieldElement("roles").data("gonrin").setFilters(filterobj);
+					// });
 					self.model.set("organization_id", curUser.organization_id);
 
 					self.$el.find(".button_xoa").hide();
@@ -204,27 +202,27 @@ define(function (require) {
     		var password =self.model.get("password");
 			
     		var hoten = self.model.get("name");
-			var phone_number = self.model.get("phone");
+			var email = self.model.get("email");
 			var macongdan = self.model.get("id_card");
     		if (hoten === null || hoten ===""){
     			self.getApp().notify("Vui lòng nhập họ và tên cán bộ");
     			return false;
     		}
-    		if (phone_number === null || phone_number ===""){
-    			self.getApp().notify("Vui lòng nhập số điện thoại cán bộ");
-    			return false;
-    		}else{
-    			self.model.set("phone",phone_number);
+    		if  (email == null || email == ""){
+				self.getApp().notify({ message: "Email người dùng không được để trống." }, { type: "danger" });
+				return false;
+			} else {
+				self.model.set("email",email.toLowerCase());
 			}
 			var confirm_pass = self.model.get("confirm_password");
     		if(id === null || id ===""){
     			if (password===null || confirm_pass === null || password==="" || confirm_pass === ""){
-    				self.getApp().notify("Vui lòng nhập mật khẩu");
+    				self.getApp().notify({ message: "Vui lòng nhập mật khẩu" }, { type: "danger" });
     				return false;
     			}
     		}
     		if(password!==null && password!="" && password !==confirm_pass){
-				self.getApp().notify("Mật khẩu không khớp!");
+				self.getApp().notify({ message: "Mật khẩu không khớp." }, { type: "danger" });
 				return false;
 			}
     		return true;

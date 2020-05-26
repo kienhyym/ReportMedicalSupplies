@@ -9,7 +9,7 @@ define(function(require) {
             "icon":"fa fa-user",
             "type":"category",
             "visible": function(){
-                return (this.userHasRole("admin")||(this.userHasRole("admin_donvi") && gonrinApp().hasTypeDonvi("donvinhanuoc")));
+                return (this.userHasRole("admin")||((this.userHasRole("admin_donvi") || this.userHasRole("canbo") )&& gonrinApp().hasTypeDonvi("donvinhanuoc")));
             },
             "entries":[
                 {
@@ -59,7 +59,7 @@ define(function(require) {
                     "route":"canbo/donvi/collection",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/CollectionView",
                     "visible": function(){
-                        return (this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("10") == false));
+                        return (this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("5") == false));
                     }
                 },
                 {
