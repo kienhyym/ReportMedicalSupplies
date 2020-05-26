@@ -11,7 +11,7 @@ from gatco.response import json, text, html
 import time
 from math import floor
 from application.controllers.helpers.helper_common import *
-from application.models.model_danhmuc import TuyenDonVi
+from application.models.model_danhmuc import TuyenDonVi, TinhThanh, QuanHuyen, XaPhuong
 from application.controllers.helpers.helper_notify import send_notify_single
 
 
@@ -401,8 +401,8 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
 
             if account is None:
                 continue
-            elif level_donvi != "1" and level_donvi != "2":
-                continue
+            # elif level_donvi != "1" and level_donvi != "2":
+            #     continue
             
             check_donvi = db.session.query(Organization).filter(Organization.code == ma_donvi).first()
             if check_donvi is not None:
@@ -424,7 +424,7 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
             donvi.email = email_donvi
             donvi.phone = dienthoai_donvi
             donvi.address = diachi_donvi
-            donvi.level = int(float(level_donvi))
+            # donvi.level = int(float(level_donvi))
             donvi.unsigned_name = convert_text_khongdau(donvi.name)
             donvi.active = 1
             check_tinhthanh = db.session.query(TinhThanh).filter(TinhThanh.ma == matinhthanh).first()

@@ -12,6 +12,18 @@ define(function (require) {
     	modelSchema	: schema,
     	urlPrefix: "/api/v1/",
 		collectionName: "donvi",
+		tools: [
+			{
+				name: "create",
+				type: "button",
+				buttonClass: " btn-success btn-sm",
+				label: "Tạo mới",
+				command: function () {
+					var self = this;
+					self.getApp().getRouter().navigate("admin/DonViYTe/create");
+				},
+			},
+		],
     	uiControl:{
     		fields: [
 		     	{ field: "name", label: "Tên đơn vị"},
