@@ -127,7 +127,7 @@ define(function (require) {
 			self.$el.find("table").addClass("table-hover");
 			self.$el.find("table").removeClass("table-striped");
 			self.applyBindings();
-			self.$el.find(".toolbar").append('<button type="text" class="btn btn-info btn-sm import-excel">Import excel</button>');
+			self.$el.find(".toolbar-import .toolbar").append('<button type="text" class="btn btn-info btn-sm import-excel">Import excel</button>');
 			self.$el.find(".import-excel").unbind("click").bind("click", function () {
 				self.$el.find("#upload_files").click();
 			})

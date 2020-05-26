@@ -277,8 +277,8 @@ define(function (require) {
 						self.model.set("email",email.toLowerCase());
 					}
 
-					var ten = self.model.get("ten");
-					self.model.set("ten",ten.toUpperCase());
+					var ten = self.model.get("name");
+					self.model.set("name",ten.toUpperCase());
 					self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 					self.model.save(null, {
 						success: function (model, respose, options) {
@@ -312,8 +312,8 @@ define(function (require) {
 						self.model.set("email",email.toLowerCase());
 					}
 
-					var ten = self.model.get("ten");
-					self.model.set("ten",ten.toUpperCase());
+					var ten = self.model.get("name");
+					self.model.set("name",ten.toUpperCase());
 					self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
 					self.model.save(null,{
 						success: function (model, respose, options) {
