@@ -39,8 +39,8 @@ class User(CommonModel):
     id = db.Column(String, primary_key=True,default=default_uuid)
     name = db.Column(String())
     unsigned_name = db.Column(String())
-    email = db.Column(String(255), unique=True)
-    phone = db.Column(String(), unique=True)
+    email = db.Column(String(255))
+    phone = db.Column(String())
     password = db.Column(String(255))
     accountName  = db.Column(String(255))
     salt = db.Column(String())
@@ -161,4 +161,5 @@ class NotifyUser(CommonModel):
     notify_at = db.Column(BigInteger())
     read_at = db.Column(BigInteger())
 
-Index('user_uq_phone', User.phone, unique=True, postgresql_where=(and_(User.phone.isnot(None),User.phone !='')))
+Index('user_uq_phone', User.phone, unique=True, postgresql_where=(and_(User.phone.isnot(None),User.phone !='',User.phone != None)))
+Index('user_uq_email', User.email, unique=True, postgresql_where=(and_(User.email.isnot(None),User.email !='', User.email !=None)))

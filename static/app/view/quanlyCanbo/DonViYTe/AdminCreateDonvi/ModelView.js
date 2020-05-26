@@ -49,30 +49,22 @@ define(function (require) {
 								// }
 								var donvi_ten = self.model.get("donvi_name"),
 									captren_id = self.model.get("parent_id"),
-									email = self.model.get("email"),
+									accountName = self.model.get("accountName"),
 									donvi_email = self.model.get("donvi_email"),
 									fullname = self.model.get("name"),
-									phone = self.model.get("phone"),
+									email = self.model.get("email"),
 									pass = self.model.get("password"),
 									cfpass = self.model.get("cfpassword"),
 									tuyendonvi = self.model.get("tuyendonvi");
-								//  tuyendonvi_id = self.model.get("tuyendonvi_id"),
-								//  tinhthanh = self.model.get("tinhthanh"),
-								//  quanhuyen = self.model.get("quanhuyen"),
-								//  xaphuong = self.model.get("xaphuong");
 								if (fullname == null || fullname == "" ||fullname == undefined) {
-									self.getApp().notify({ message: "Tên người dùng không được để trống!" }, { type: "danger" });
+									self.getApp().notify({ message: "Tên người dùng không được để trống." }, { type: "danger" });
 									return
 								}
-								
-								// if  (phone == null || phone == ""){
-								// 	self.getApp().notify({ message: "Số điện thoại người dùng không được để trống!" }, { type: "danger" });
-								// 	return
-								// }
-								if  (email == null || email == ""){
-									self.getApp().notify({ message: "Email người dùng không được để trống!" }, { type: "danger" });
+								if  (accountName == null || accountName == ""){
+									self.getApp().notify({ message: "Tên đăng nhập không được để trống." }, { type: "danger" });
 									return
-								} else {
+								} 
+								if (email !== null && email == "" && email !== undefined) {
 									self.model.set("email",email.toLowerCase());
 								}
 
@@ -81,19 +73,19 @@ define(function (require) {
 								}
 								
 								if (pass == null || pass == "") {
-									self.getApp().notify({ message: "Mật khẩu không được để trống!" }, { type: "danger" });
+									self.getApp().notify({ message: "Mật khẩu không được để trống." }, { type: "danger" });
 									return
 								}
 								if (pass == null || pass != cfpass) {
-									self.getApp().notify({ message: "Xác nhận mật khẩu không đúng, vui lòng kiểm tra lại!" }, { type: "danger" });
+									self.getApp().notify({ message: "Xác nhận mật khẩu không đúng, vui lòng kiểm tra lại." }, { type: "danger" });
 									return
 								}
 								if  (donvi_ten == null || donvi_ten == ""){
-									self.getApp().notify({ message: "Tên đơn vị không được để trống!" }, { type: "danger" });
+									self.getApp().notify({ message: "Tên đơn vị không được để trống." }, { type: "danger" });
 									return
 								}
 								if (tuyendonvi == null || tuyendonvi == undefined) {
-									self.getApp().notify({ message: "Chưa chọn tuyến đơn vị!" }, { type: "danger" });
+									self.getApp().notify({ message: "Chưa chọn tuyến đơn vị." }, { type: "danger" });
 									return
 								}
 								var valiedate_tuyendonvi = self.valiedate_tuyendonvi();
@@ -184,17 +176,21 @@ define(function (require) {
 			
 			self.model.on("change", function(){
 				var tuyendonvi_id = self.model.get("tuyendonvi_id");
-				if (tuyendonvi_id == "2") {
+				console.log("tuy==========", tuyendonvi_id);
+				if (tuyendonvi_id == "6" || tuyendonvi_id == "7" || tuyendonvi_id == "8") {
+					self.$el.find("#donvicaptren").prop('disabled', false);
 					var filters = {"tuyendonvi_id": {"$eq": "1" }};
 					self.getFieldElement("parent").data("gonrin").setFilters(filters);
-				} else if (tuyendonvi_id == "3") {
+				} else if (tuyendonvi_id == "9" || tuyendonvi_id == "10" || tuyendonvi_id == "11") {
 					var tinhthanh_id = self.model.get("tinhthanh_id");
 					if (!tinhthanh_id || tinhthanh_id == null ) {
 						self.disabled_select_captren(0);
 					} else {
 						self.disabled_select_captren(1);
 						var filters = { "$or": [
-								{"tuyendonvi_id": {"$eq": "2" }},
+								{"tuyendonvi_id": {"$eq": "6" }},
+								{"tuyendonvi_id": {"$eq": "7" }},
+								{"tuyendonvi_id": {"$eq": "8" }},
 						]};
 						var filterobj = {
 							"$and": [
@@ -208,14 +204,16 @@ define(function (require) {
 						}
 						self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
 					}
-				} else if (tuyendonvi_id == "4") {
+				} else if (tuyendonvi_id == "12" || tuyendonvi_id == "13" || tuyendonvi_id == "14" || tuyendonvi_id == "15") {
 					var tinhthanh_id = self.model.get("tinhthanh_id");
 					if (!tinhthanh_id || tinhthanh_id == null ) {
 						self.disabled_select_captren(0);
 					} else {
 						self.disabled_select_captren(1);
 						var filters = { "$or": [
-							{"tuyendonvi_id": {"$eq": "3" }},
+							{"tuyendonvi_id": {"$eq": "9" }},
+							{"tuyendonvi_id": {"$eq": "10" }},
+							{"tuyendonvi_id": {"$eq": "11" }},
 						]};
 						var filterobj = {
 							"$and": [
@@ -229,14 +227,19 @@ define(function (require) {
 						}
 						self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
 					}
-				} else if (tuyendonvi_id == "5") {
+				} else if (tuyendonvi_id == "16" || tuyendonvi_id == "17") {
+					console.log("ewqrtyui");
 					var quanhuyen_id = self.model.get("quanhuyen_id");
 					if (!quanhuyen_id || quanhuyen_id == null ) {
 						self.disabled_select_captren(0);
 					} else {
+						console.log("ok mo");
 						self.disabled_select_captren(1);
 						var filters = { "$or": [
-							{"tuyendonvi_id": {"$eq": "4" }}
+							{"tuyendonvi_id": {"$eq": "12" }},
+							{"tuyendonvi_id": {"$eq": "13" }},
+							{"tuyendonvi_id": {"$eq": "14" }},
+							{"tuyendonvi_id": {"$eq": "15" }}
 						]};
 						var filterobj = {
 							"$and": [
@@ -274,10 +277,12 @@ define(function (require) {
 		},
 		disabled_select_captren: function(status = 0) {
 			var self = this;
-			//0 la khong the an nut,1 la co the an nut
+			// 0 la khong the an nut,1 la co the an nut
 			if (status == 1) {
+				console.log("disabled false")
 				self.$el.find("#donvicaptren").prop('disabled', false);
 			} else {
+				console.log("disabled true")
 				self.$el.find("#donvicaptren").prop('disabled', true);
 			}
 		},
@@ -287,36 +292,36 @@ define(function (require) {
 				tinhthanh = self.model.get("tinhthanh"),
 				quanhuyen = self.model.get("quanhuyen"),
 				xaphuong = self.model.get("xaphuong");
-				if (tuyendonvi_id) {
-					// var matuyendonvi = tuyendonvi.ma;
-					if ((tuyendonvi_id == "2" || tuyendonvi_id == "3") && (tinhthanh == null || tinhthanh == undefined)) {
-						self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố " });
-						return false;
-					}
-					else if (tuyendonvi_id == "4") {
-						if (tinhthanh == null || tinhthanh == undefined) {
-							self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
-							return false
-						} else if (quanhuyen == null || quanhuyen == undefined){
-							self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
-							return false
-						}
-					}
-					else if (tuyendonvi_id == "5") {
-						if (tinhthanh == null || tinhthanh == undefined) {
-							self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
-							return false;
+				// if (tuyendonvi_id) {
+				// 	// var matuyendonvi = tuyendonvi.ma;
+				// 	if ((tuyendonvi_id == "2" || tuyendonvi_id == "3") && (tinhthanh == null || tinhthanh == undefined)) {
+				// 		self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố " });
+				// 		return false;
+				// 	}
+				// 	else if (tuyendonvi_id == "4") {
+				// 		if (tinhthanh == null || tinhthanh == undefined) {
+				// 			self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
+				// 			return false
+				// 		} else if (quanhuyen == null || quanhuyen == undefined){
+				// 			self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
+				// 			return false
+				// 		}
+				// 	}
+				// 	else if (tuyendonvi_id == "5") {
+				// 		if (tinhthanh == null || tinhthanh == undefined) {
+				// 			self.getApp().notify({ message: "Vui lòng chọn Tỉnh/Thành phố!" });
+				// 			return false;
 		
-						} else if (quanhuyen == null || quanhuyen == undefined) {
-							self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
-							return false;
+				// 		} else if (quanhuyen == null || quanhuyen == undefined) {
+				// 			self.getApp().notify({ message: "Vui lòng chọn Quận/Huyện!" });
+				// 			return false;
 		
-						} else if (xaphuong == null || xaphuong == undefined){
-							self.getApp().notify({ message: "Vui lòng chọn  Xã/Phường!" });
-							return false;
-						}
-					};
-				}
+				// 		} else if (xaphuong == null || xaphuong == undefined){
+				// 			self.getApp().notify({ message: "Vui lòng chọn  Xã/Phường!" });
+				// 			return false;
+				// 		}
+				// 	};
+				// }
 			return true;
 		}
     });

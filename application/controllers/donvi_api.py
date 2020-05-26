@@ -262,12 +262,18 @@ async def create_account_donvi(request):
     name = data.get("name",None)
     phone = data.get("phone",None)
     email = data.get("email",None)
+    accountName = data.get("accountName",None)
     password = data.get("password",None)
     salt = generator_salt()
-
-    check_user = db.session.query(User).filter(or_(User.phone == phone, User.email == email)).first()
-    if check_user is not None:
-        return json({"error_code": "ERROR_PARAM", "error_message": "Tài khoản người dùng đã tồn tại"}, status=520)
+    if phone is not None or email is not None:
+        check_user = db.session.query(User).filter(or_(User.phone == phone, User.email == email)).first()
+        if check_user is not None:
+            return json({"error_code": "ERROR_PARAM", "error_message": "Email hoặc số điện thoại đã tồn tại."}, status=520)
+    if accountName is None:
+        return json({"error_code": "ERROR_PARAM", "error_message": "Tài khoản đăng nhập không được để trống."}, status=520)
+    check_accountName = db.session.query(User).filter(User.accountName == accountName).first()
+    if check_accountName is not None:
+        return json({"error_code": "ERROR_PARAM", "error_message": "Tài khoản đăng nhập đã tồn tại."}, status=520)
 
     organization = Organization()
     organization.id = default_uuid()
@@ -294,6 +300,7 @@ async def create_account_donvi(request):
     user.name = name
     user.phone = phone
     user.email = email
+    user.accountName = accountName
     user.unsigned_name = convert_text_khongdau(user.name)
     user.salt = salt
     user.password = auth.encrypt_password(password, str(salt))

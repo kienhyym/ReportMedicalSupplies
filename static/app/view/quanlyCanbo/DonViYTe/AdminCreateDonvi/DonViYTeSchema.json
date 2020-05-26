@@ -117,5 +117,8 @@
     },
     "donvi_code": {
         "type": "string"
+    },
+    "accountName": {
+        "type": "string"
     }
 }
