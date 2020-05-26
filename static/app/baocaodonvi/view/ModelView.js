@@ -160,6 +160,7 @@ define(function (require) {
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
+				var beginNetAmount = new Number(dropdownItemClick.attr('begin_net_amount')).toLocaleString("da-DK");
 
 				var itemID = dropdownItemClick.attr('item-id')
 				self.$el.find('#list-item').before(`
@@ -176,7 +177,7 @@ define(function (require) {
                         <input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
 					</div>
 					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT" type="number"  readonly begin_net_amount="0" class="form-control text-center p-1" value="0" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT" type="number"  readonly begin_net_amount="${dropdownItemClick.attr('begin_net_amount')}" class="form-control text-center p-1" value="${beginNetAmount}" style="font-size:14px">
                     </div>
                     <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT" type="number" quantity_import="0" class="form-control text-center p-1" value="0" style="font-size:14px">
@@ -289,7 +290,7 @@ define(function (require) {
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown",
-					data: JSON.stringify(text),
+					data: JSON.stringify({"text":text,"date":self.model.get('date'),"organization_id":self.model.get('organization_id')}),
 					success: function (response) {
 						var count = response.length
 						response.forEach(function (item, index) {
@@ -298,6 +299,7 @@ define(function (require) {
                             item-id = "${item.id}" 
 							title="${item.name}"
 							unit="${item.unit}"
+							begin_net_amount="${item.begin_net_amount}"
                             class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">${item.name}</button>
                             `)
 						})

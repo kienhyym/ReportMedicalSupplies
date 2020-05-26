@@ -133,7 +133,10 @@ async def link_file_upload(request):
 
 @app.route('/api/v1/load_item_dropdown',methods=['POST'])
 async def load_item_dropdown(request):
-    text = request.json
+    data = request.json
+    text = data['text']
+    organization_id = data['organization_id']
+    date = data['date']
     if text is not None and text != "":
         keySearch = text
         search = "%{}%".format(keySearch)
@@ -143,6 +146,11 @@ async def load_item_dropdown(request):
         arr = []
         for i in list:
             obj = to_dict(i)
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'],ReportOrganizationDetail.date < date)).all()
+            if len(reportOrganizationDetail)>0:
+                obj['begin_net_amount']= reportOrganizationDetail[0][0]
+            else:
+                obj['begin_net_amount']= 0
             arr.append(obj)
         return json(arr)
     else:
