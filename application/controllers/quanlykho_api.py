@@ -30,10 +30,18 @@ apimanager.create_api(MedicalSupplies,
     postprocess=dict(POST=[],PUT_SINGLE=[]),
     collection_name='medical_supplies')
 
+async def check_dict_like(request=None, data=None, Model=None, **kw):
+        del data['organization']
+        print ('_______________________________data',data)
+        # record = db.session.query(Model).filter(Model.ma == data['ma']).first()
+        # if record is not None:
+        #     data['id'] = record.id
+        #     return json(to_dict(record))
+
 apimanager.create_api(ReportOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[], PUT_SINGLE=[]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
     postprocess=dict(POST=[],PUT_SINGLE=[]),
     collection_name='report_organization')
 

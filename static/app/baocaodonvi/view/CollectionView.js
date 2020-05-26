@@ -53,7 +53,8 @@ define(function(require) {
             ],
         }],
         uiControl: {
-            orderBy: [{
+            orderBy: [
+                {
                     field: "code",
                     direction: "asc"
                 },
@@ -63,22 +64,21 @@ define(function(require) {
                 }
             ],
             fields: [{
-                    field: "code",
+                    field: "Tên đơn vị",
                     label: "Tên",
-                    // width: "30px",
-                    // template: function(rowData) {
-                    //     if (!!rowData) {
-                    //         return `
-                    //                     <div class='text-center pt-3'>${rowData.stt}</div>
-                    //                 `;
-                    //     }
-                    //     return "";
-                    // }
+                    template: function(rowData) {
+                        if (!!rowData.organization) {
+                            return `
+                                        <div>${rowData.organization.name}</div>
+                                    `;
+                        }
+                        return "";
+                    }
                 },
             ],
             onRowClick: function(event) {
                 if (event.rowId) {
-                    var path = this.collectionName + '/model?id=' + event.rowId;
+                    var path = '/baocaodonvi/model?id=' + event.rowId;
                     this.getApp().getRouter().navigate(path);
                 }
 
