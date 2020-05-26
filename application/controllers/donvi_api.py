@@ -401,8 +401,6 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
 
             if account is None:
                 continue
-            # elif level_donvi != "1" and level_donvi != "2":
-            #     continue
             
             check_donvi = db.session.query(Organization).filter(Organization.code == ma_donvi).first()
             if check_donvi is not None:
@@ -441,7 +439,7 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
 
             db.session.add(donvi)
             print("donvi==================================", to_dict(donvi))
-            # db.session.commit()
+            db.session.commit()
 
             
             check_admin = db.session.query(User).filter(User.accountName == account).first()
@@ -463,12 +461,8 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
                 admin.phone = dienthoai_admin
             else: 
                 admin.phone = None
-            # role_admin_tyt = db.session.query(Role).filter(Role.name == 'admin_tyt').first()
-            # role_admin_benhvien = db.session.query(Role).filter(Role.name == 'admin_benhvien').first()
-            # if donvi.level == 1:
-            #     admin.roles.append(role_admin_benhvien)
-            # elif donvi.level == 2:
-            #     admin.roles.append(role_admin_tyt)
+            role_admin_donvi = db.session.query(Role).filter(Role.name == 'admin_donvi').first()
+            admin.roles.append(role_admin_donvi)
 
             salt = generator_salt()
             if matkhau is not None:
@@ -477,7 +471,8 @@ async def write_file_excel_donvinhanuoc(file, fileId, attrs, uid_current):
                 admin.salt = salt
 
             db.session.add(admin)
-            # db.session.commit()
+            print("admin====================", to_dict(admin))
+            db.session.commit()
             count = count + 1
 
         

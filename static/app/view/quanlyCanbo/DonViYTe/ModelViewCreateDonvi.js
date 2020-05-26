@@ -45,10 +45,10 @@ define(function (require) {
 								self.getApp().notify({ message: "Tên người dùng không được để trống!" }, { type: "danger" });
 								return
 							}
-							if (phone == null || phone == "") {
-								self.getApp().notify({ message: "Số điện thoại người dùng không được để trống!" }, { type: "danger" });
-								return
-							}
+							// if (phone == null || phone == "") {
+							// 	self.getApp().notify({ message: "Số điện thoại người dùng không được để trống!" }, { type: "danger" });
+							// 	return
+							// }
 							if (email == null || email == "") {
 								self.getApp().notify({ message: "Email người dùng không được để trống!" }, { type: "danger" });
 								return

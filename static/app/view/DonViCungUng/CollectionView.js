@@ -32,7 +32,11 @@ define(function (require) {
       	    },
       	 ],
     	uiControl:{
+			orderBy:[
+				{ field: "name", direction: "asc" }
+			],
     		fields: [
+				
 		     	{ field: "name", label: "Tên đơn vị"},
 	           	{
 	            	 field: "tinhthanh_id", 

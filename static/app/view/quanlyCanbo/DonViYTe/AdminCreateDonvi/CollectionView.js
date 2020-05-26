@@ -102,7 +102,7 @@ define(function (require) {
 				self.uiControl.filters = filters;
 			}
 			var filters_donvidangki = { "$and": [
-				{"created_by": {"$eq":created_by  }},
+				// {"created_by": {"$eq":created_by  }},
 				{"type_donvi": {"$eq": "donvinhanuoc"  }}
 			]};
 			self.uiControl.filters = filters_donvidangki;
@@ -115,7 +115,7 @@ define(function (require) {
 						
 						var filters = { "$and": [
 							{"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }},
-							{"created_by": {"$eq":created_by  }},
+							// {"created_by": {"$eq":created_by  }},
 							{"type_donvi": {"$eq": "donvinhanuoc"  }}
 						]};
 						$col.data('gonrin').filter(filters);
