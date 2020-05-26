@@ -36,5 +36,8 @@
     },
     "organization": {
         "type": "dict"
+    },
+    "details": {
+        "type": "list"
     }
 }

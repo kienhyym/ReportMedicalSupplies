@@ -32,17 +32,17 @@ apimanager.create_api(MedicalSupplies,
 
 async def check_dict_like(request=None, data=None, Model=None, **kw):
         del data['organization']
-        print ('_______________________________data',data)
-        # record = db.session.query(Model).filter(Model.ma == data['ma']).first()
-        # if record is not None:
-        #     data['id'] = record.id
-        #     return json(to_dict(record))
+
+async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw):
+        for _ in result['details']:
+            print ('________________________-',_['id'])
+
 
 apimanager.create_api(ReportOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
-    postprocess=dict(POST=[],PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
     collection_name='report_organization')
 
 @app.route('/api/v1/link_file_upload', methods=['POST'])
@@ -108,3 +108,60 @@ async def link_file_upload(request):
         "error_code": "Upload Error",
         "error_message": "Could not upload file to store"
     }, status=520)
+
+@app.route('/api/v1/load_item_dropdown',methods=['POST'])
+async def load_item_dropdown(request):
+    text = request.json
+    if text is not None and text != "":
+        keySearch = text
+        search = "%{}%".format(keySearch)
+        tex_capitalize = keySearch.capitalize()
+        search_capitalize = "%{}%".format(tex_capitalize)
+        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(search_capitalize)))
+        arr = []
+        for i in list:
+            obj = to_dict(i)
+            arr.append(obj)
+        return json(arr)
+    else:
+        result = []
+        return json(result)
+
+
+
+
+@app.route("/api/v1/create_report_organization_detail", methods=["POST"])
+async def create_itembalances(request):
+    data = request.json
+    for _ in data:
+        new_item = ReportOrganizationDetail()
+
+        new_item.report_organization_id = _['report_organization_id']
+        new_item.organization_id = _['organization_id']
+        new_item.medical_supplies_id = _['medical_supplies_id']
+        new_item.quantity_export = _['quantity_export']
+        new_item.quantity_import = _['quantity_import']
+
+        db.session.add(new_item)
+        db.session.commit()
+    return json({"message":"create success"})
+
+@app.route('/api/v1/update_report_organization_detail', methods=["POST"])
+async def update_itembalances(request):
+    data = request.json
+    for _ in data:
+        old_item = db.session.query(ReportOrganizationDetail).filter(ReportOrganizationDetail.id == _['id']).first()
+        old_item.organization_id = _['organization_id']
+        old_item.quantity_export = _['quantity_export']
+        old_item.quantity_import = _['quantity_import']
+        db.session.commit()
+    return json({"message": "Update Success"})
+
+@app.route('/api/v1/delete_report_organization_detail', methods=["POST"])
+async def delete_itembalances(request):
+    list_id = request.json
+    for _ in list_id:
+        item_delete = db.session.query(ReportOrganizationDetail).filter(ReportOrganizationDetail.id == _).first()
+        db.session.delete(item_delete)
+        db.session.commit()
+    return json({"message": "Delete Success"})

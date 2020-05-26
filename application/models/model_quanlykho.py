@@ -28,6 +28,7 @@ class ReportOrganization(CommonModel):
 
     organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
     organization = relationship('Organization')
+    details = db.relationship("ReportOrganizationDetail", order_by="ReportOrganizationDetail.created_at", cascade="all, delete-orphan")
 
 class ReportOrganizationDetail(CommonModel):
     __tablename__ = 'report_organization_detail'
@@ -38,6 +39,9 @@ class ReportOrganizationDetail(CommonModel):
     report_organization_id = db.Column(String(), ForeignKey('report_organization.id'), nullable=True)
     report_organization = relationship('ReportOrganization')
     
+    organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
+    organization = relationship('Organization')
+
     medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
     medical_supplies = relationship('MedicalSupplies')
 
