@@ -36,6 +36,20 @@ define(function (require) {
 					data: JSON.stringify(params),
 					success: function (response) {
                         console.log(response)
+                        self.$el.find('#danhSachDonVi tr').remove()
+                        response.forEach(function(item,index){
+                            self.$el.find('#danhSachDonVi').append(`
+                            <tr>
+                                <th scope="row">${index+1}</th>
+                                <td>${item.organization_name}</td>
+                                <td>${item.quantity_import}</td>
+                                <td>${item.quantity_export}</td>
+                                <td>${item.net_amount}</td>
+                                <td>${item.estimates_net_amount}</td>
+                            </tr>
+                            `)
+                        })
+                        
 					},
 					error: function (xhr, status, error) {
 						try {
