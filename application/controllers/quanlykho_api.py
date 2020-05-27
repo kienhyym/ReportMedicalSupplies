@@ -123,7 +123,7 @@ async def link_file_upload(request):
             new_filename = newfilename.replace(" ", "_")
             async with aiofiles.open(fsroot + new_filename, 'wb+') as f:
                 await f.write(file.body)
-            df = pandas.read_excel("static/uploads/"+new_filename)
+            df = pandas.read_excel(fsroot+new_filename)
             count = df.STT.count()
             i = 0
             arr = []
