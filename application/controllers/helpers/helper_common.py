@@ -214,6 +214,20 @@ async def hasRole(request, role):
         else:
             return False
 
+async def  hasTuyenDonvi(request, tuyendonvi_id):
+    uid = current_uid(request)
+    if uid is None:
+        return False
+    else:
+        currentUser = await get_current_user(request, uid)
+        Organization = currentUser["Organization"]
+        if Organization is not None and tuyendonvi_id in  Organization:
+            if tuyendonvi_id == Organization["tuyendonvi_id"]:
+                return True
+            else:
+                return False
+
+
 async def validate_admin(request, **kw):
     
     uid = current_uid(request)
