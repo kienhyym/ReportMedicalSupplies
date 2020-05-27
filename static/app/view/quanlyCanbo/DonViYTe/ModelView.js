@@ -9,7 +9,8 @@ define(function (require) {
 	var TinhThanhSelectView 	= require("app/view/DanhMuc/TinhThanh/SelectView");
     var QuanHuyenSelectView 	= require("app/view/DanhMuc/QuanHuyen/SelectView");
     var XaPhuongSelectView 	= require("app/view/DanhMuc/XaPhuong/SelectView");
-    var TuyenDonViSelectView = require("app/view/DanhMuc/TuyenDonVi/SelectView");
+	var TuyenDonViSelectView = require("app/view/DanhMuc/TuyenDonVi/SelectView"),
+		DonviSelectView = require("app/view/quanlyCanbo/DangkiDonVi/DonviCaptrenSelectView");
 	var UserDonViDialogView = require('app/view/quanlyCanbo/DonViYTe/UserDonVi/view/ModelDialogView');
 	return Gonrin.ModelView.extend({
 		template: template,
@@ -183,7 +184,14 @@ define(function (require) {
 					foreignRemoteField: "id",
 					foreignField: "tuyendonvi_id",
 					dataSource: TuyenDonViSelectView
-    			}, 
+				},
+				{
+					field:"parent",
+					uicontrol:"ref",
+					foreignRemoteField:"id",
+					foreignField:"parent_id",
+					dataSource:DonviSelectView
+				},
 			]
 		},
 		render: function () {
@@ -214,6 +222,7 @@ define(function (require) {
 						self.applyBindings();
 						if(!self.getApp().hasRole('admin')) {
 							self.$el.find(".tuyendonvi input").prop("disabled", true);
+							self.$el.find("#parent_donvi").hide();
 						}
 						self.$el.find(".madonvi").removeClass("d-none");
 						self.model.on("change:tinhthanh", function() {

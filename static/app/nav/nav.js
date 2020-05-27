@@ -12,16 +12,16 @@ define(function(require) {
                 return (this.userHasRole("admin")||((this.userHasRole("admin_donvi") || this.userHasRole("canbo") )&& gonrinApp().hasTypeDonvi("donvinhanuoc")));
             },
             "entries":[
-                {
-                    "text":"Tạo đơn vị Y Tế",
-                    "type":"view",
-                    "collectionName":"donvi",
-                    "route":"admin/DonViYTe/create",
-                    "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/ModelView",
-                    "visible": function(){
-                        return (this.userHasRole("admin")) ;
-                    }
-                },
+                // {
+                //     "text":"Tạo đơn vị Y Tế",
+                //     "type":"view",
+                //     "collectionName":"donvi",
+                //     "route":"admin/DonViYTe/create",
+                //     "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/ModelView",
+                //     "visible": function(){
+                //         return (this.userHasRole("admin")) ;
+                //     }
+                // },
                 {
                     "text":"Danh sách đơn vị trực thuộc",
                     "type":"view",
