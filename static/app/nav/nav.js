@@ -155,7 +155,7 @@ define(function(require) {
             }
         },
         {
-            "text": "Danh sách báo cáo đơn vị",
+            "text": "Báo cáo trang thiết bị",
             "type": "view",
             "collectionName": "report_organization",
             "route": "baocaodonvi/collection",
@@ -165,7 +165,7 @@ define(function(require) {
             // }
         },
         {
-            "text": "Thống kê báo cáo",
+            "text": "Thống kê báo cáo đơn vị",
             "type": "view",
             // "collectionName": "report_organization",
             "route": "thongkebaocao/collection",

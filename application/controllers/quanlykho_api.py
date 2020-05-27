@@ -62,6 +62,23 @@ async def check_medical_supplies_name(request=None, data=None, Model=None, **kw)
             del _['begin_net_amount']
 
 
+@app.route('/api/v1/load_item_dropdown_statistical',methods=['POST'])
+async def load_item_dropdown_statistical(request):
+    data = request.json
+    arr = []
+    if data is not None and data != "":
+        search = "%{}%".format(data)
+        searchTitle = "%{}%".format(data.title())
+        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search))).all()
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+    else:
+        list = db.session.query(MedicalSupplies).all()
+        for _ in list:
+            arr.append(to_dict(_))
+        return json(arr)
+
 apimanager.create_api(MedicalSupplies,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
@@ -232,20 +249,3 @@ async def delete_itembalances(request):
 
 
 
-@app.route('/api/v1/load_item_dropdown_statistical',methods=['POST'])
-async def load_item_dropdown_statistical(request):
-    data = request.json
-    print ('__________________',data)
-    arr = []
-    if data is not None and data != "":
-        search = "%{}%".format(data)
-        searchTitle = "%{}%".format(data.title())
-        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search))).all()
-        for i in list:
-            arr.append(to_dict(i))
-        return json(arr)
-    else:
-        list = db.session.query(MedicalSupplies).all()
-        for i in list:
-            arr.append(to_dict(i))
-        return json(arr)

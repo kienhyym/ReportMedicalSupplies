@@ -69,8 +69,6 @@ define(function (require) {
 					success: function (response) {
 						self.$el.find('.dropdown-item').remove();
 						var count = response.length
-						
-
 						response.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
