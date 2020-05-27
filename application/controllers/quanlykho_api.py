@@ -284,12 +284,12 @@ async def create_report_donvicungung(request):
 async def organizational_list_statistics(request):
     data = request.json
 
-    type = data['type']
+    type_donvi = data['type_donvi']
     medical_supplies_id = data['medical_supplies_id']
     start_time = data['start_time']
     end_time = data['end_time']
 
-    organizations = db.session.query(Organization).filter(Organization.type == "type").all()
+    organizations = db.session.query(Organization).filter(Organization.type == "type_donvi").all()
     for organization in organizations:
         obj = {}
         obj['organization_name'] = arr_organization_id.append(to_dict(organization)['name'])
