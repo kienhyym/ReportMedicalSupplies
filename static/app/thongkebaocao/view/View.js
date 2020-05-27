@@ -26,7 +26,7 @@ define(function (require) {
 					"medical_supplies_id": vattu_id,
 					"type_donvi": type_donvi
 				}
-				var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics";
+				var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics1";
 				if (type_donvi == "donvicungung") {
 					url = self.getApp().serviceURL + "/api/v1/create_report_donvicungung";
 				}
