@@ -13,8 +13,8 @@ from math import floor
 from application.controllers.helpers.helper_common import *
 from application.models.model_danhmuc import TuyenDonVi, TinhThanh, QuanHuyen, XaPhuong
 from application.controllers.helpers.helper_notify import send_notify_single
-
-
+from sqlalchemy import or_, and_, func
+from application.models.model_quanlykho import *
 from application.models.models import User, Organization, Role
 from application.extensions import auth
 import xlrd
@@ -494,3 +494,118 @@ def convert_columexcel_to_string(value):
         return str(int(value)).strip()
     if isinstance(value,int):
         return str(value).strip()
+
+
+@app.route('/api/v1/organizational_list_statistics1',methods=['POST'])
+async def organizational_list_statistics(request):
+    uid_current = current_uid(request)
+    if uid_current is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+    
+    currentUser = db.session.query(User).filter(User.id == uid_current).first()
+    if currentUser is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+
+    data = request.json
+
+    type_donvi = data['type_donvi']
+    medical_supplies_id = data['medical_supplies_id']
+    start_time = data['start_time']
+    end_time = data['end_time']
+    check_ttdcn = await hasTuyenDonvi(request, "13")
+    check_cdc = await hasTuyenDonvi(request, "9")
+    check_phongyte = await hasTuyenDonvi(request, "10")
+    if check_ttdcn is True:
+        donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
+        if donvi is None:
+            return json(status=520)
+        abc = await get_thongke_xaphuong(donvi.quanhuyen_id, "16", medical_supplies_id, start_time, end_time)
+        # xaphuongs = db.session.query(XaPhuong).filter(XaPhuong.quanhuyen_id == donvi.quanhuyen_id).all()
+        # for xaphuong in xaphuongs:
+        #     # print("xaphuong", to_dict(xaphuong))
+        #     organization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.xaphuong_id == xaphuong.id, Organization.tuyendonvi_id == "16")).first()
+        #     arrOrganizations = []
+        #     # print("organization", to_dict(organization))
+        #     obj = {}
+        #     obj['organization_name'] = to_dict(organization)['name']
+        #     reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+        #     # print ('___reportOrganizationDetail_______',reportOrganizationDetail)
+        #     obj['quantity_import'] = reportOrganizationDetail[0][0]
+        #     obj['quantity_export'] = reportOrganizationDetail[0][1]
+        #     obj['net_amount'] = reportOrganizationDetail[0][2]
+        #     obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+        #     arrOrganizations.append(obj)
+        print("abc========================", abc)
+        return json(abc)
+    elif check_cdc is True:
+        donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
+        if donvi is None:
+            return json(status=520)
+        abc = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
+        return json(abc)
+    elif check_phongyte is True:
+        obj = []
+        donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
+        if donvi is None:
+            return json(status=520)
+        arr_thongke1 = {}
+
+        thongke_phuchoichucnang = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
+        print("thongke_phuchoichucnang===========", thongke_phuchoichucnang)
+
+        thongke_bvhuyen = await get_thongke_quanhuyen(donvi.tinhthanh_id, "14", medical_supplies_id, start_time, end_time, "17")
+        for thongke in thongke_phuchoichucnang:
+            thongke_bvhuyen.append(thongke)
+        print("thongke_bvhuyen===========", thongke_bvhuyen)
+        return json(thongke_bvhuyen)
+
+
+async def get_thongke_xaphuong(quanhuyen_id, tuyendonvi_id, medical_supplies_id, start_time, end_time):
+    xaphuongs = db.session.query(XaPhuong).filter(XaPhuong.quanhuyen_id == quanhuyen_id).all()
+    list_item  = []
+    for xaphuong in xaphuongs:
+        organization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.xaphuong_id == xaphuong.id, Organization.tuyendonvi_id == "16")).first()
+        if organization is None:
+            continue
+        obj = {}
+        obj['organization_name'] =  to_dict(organization)['name']
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+        print("sadfgj==========", reportOrganizationDetail)
+        if len(reportOrganizationDetail) > 0:
+            obj['quantity_import'] = reportOrganizationDetail[0][0]
+            obj['quantity_export'] = reportOrganizationDetail[0][1]
+            obj['net_amount'] = reportOrganizationDetail[0][2]
+            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+            list_item.append(obj)
+    return list_item
+
+
+async def get_thongke_quanhuyen(tinhthanh_id, tuyendonvi_id, medical_supplies_id, start_time, end_time, mode_tuyendv_xa):
+    quanhuyens = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == tinhthanh_id).all()
+    list_item  = []
+    for quanhuyen in quanhuyens:
+        organization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyendonvi_id)).first()
+        if organization is None:
+            continue
+        arrOrganizations = []
+        obj = {}
+        obj['organization_name'] = to_dict(organization)['name'] + " - " + quanhuyen.ten
+        # obj['organization_id'] = to_dict(organization)['id']
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+        # print("sadfgj==========", reportOrganizationDetail)
+        if len(reportOrganizationDetail) > 0:
+            obj['quantity_import'] = reportOrganizationDetail[0][0]
+            obj['quantity_export'] = reportOrganizationDetail[0][1]
+            obj['net_amount'] = reportOrganizationDetail[0][2]
+            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+
+            list_total_tyt = await get_thongke_xaphuong(quanhuyen.id, mode_tuyendv_xa, medical_supplies_id, start_time, end_time)
+            for tramyte in list_total_tyt:
+                obj['quantity_import'] =  obj['quantity_import'] + tramyte["quantity_import"]
+                obj['quantity_export'] = obj['quantity_export'] + tramyte["quantity_export"]
+                obj['net_amount'] = obj['net_amount'] + tramyte["net_amount"]
+                obj['estimates_net_amount'] = obj['estimates_net_amount'] + tramyte["estimates_net_amount"]
+            list_item.append(obj)
+    return list_item
+
+
