@@ -24,7 +24,7 @@ define(function (require) {
 					"start_time": start_time,
 					"end_time": end_time,
 					"vattu_id": vattu_id,
-					"type_donvi": "type_donvi"
+					"type_donvi": type_donvi
 				}
 				var url = self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical";
 				if (type_donvi == "donvicungung") {
