@@ -221,7 +221,7 @@ async def  hasTuyenDonvi(request, tuyendonvi_id):
     else:
         currentUser = await get_current_user(request, uid)
         Organization = currentUser["Organization"]
-        if Organization is not None and tuyendonvi_id in  Organization:
+        if Organization is not None and "tuyendonvi_id" in  Organization:
             if tuyendonvi_id == Organization["tuyendonvi_id"]:
                 return True
             else:
