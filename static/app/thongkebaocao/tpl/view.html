@@ -8,13 +8,16 @@
             <div class="col-md-4 col-lg-4 col-sm-12 col-12">
                 <div class="form-group">
                     <label for="">Trang thiết bị y tế</label>
-                    <input id="end_time" class="form-control" />
+                    <input type="text" class="form-control search-item" placeholder="Nhập tên mặt hàng để tìm kiếm">
+                    <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+                        <div class="dropdown-menu dropdown-menu-item" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 col-lg-4 col-sm-12 col-12">
                 <div class="form-group">
                     <label for="">Thời gian bắt đầu</label>
-                    <input id="start_time" class="form-control"/>
+                    <input id="start_time" class="form-control" />
                 </div>
             </div>
             <div class="col-md-4 col-lg-4 col-sm-12 col-12">
@@ -24,5 +27,35 @@
                 </div>
             </div>
         </div>
+        <div class="row col-md-12 col-lg-12 col-sm-12 col-12">
+            <div>
+                <button type="button" class="btn btn-primary m-1">Tìm kiếm</button>
+            </div>
+            <div>
+                <button type="button" class="btn btn-success m-1">Xuất Excel</button>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tên đơn vị</th>
+                <th scope="col">Nhập</th>
+                <th scope="col">Sử dụng</th>
+                <th scope="col">Tồn</th>
+                <th scope="col">Dự kiến nhập</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Mark</td>
+                <td>Otto</td>
+              </tr>
+            </tbody>
+          </table>
     </div>
 </div>

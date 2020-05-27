@@ -228,3 +228,24 @@ async def delete_itembalances(request):
         db.session.delete(item_delete)
         db.session.commit()
     return json({"message": "Delete Success"})
+
+
+
+
+@app.route('/api/v1/load_item_dropdown_statistical',methods=['POST'])
+async def load_item_dropdown_statistical(request):
+    data = request.json
+    print ('__________________',data)
+    arr = []
+    if data is not None and data != "":
+        search = "%{}%".format(data)
+        searchTitle = "%{}%".format(data.title())
+        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search))).all()
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+    else:
+        list = db.session.query(MedicalSupplies).all()
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
