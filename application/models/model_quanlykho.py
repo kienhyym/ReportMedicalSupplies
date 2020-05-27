@@ -47,7 +47,9 @@ class ReportOrganizationDetail(CommonModel):
     medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
     medical_supplies = relationship('MedicalSupplies')
 
+    begin_net_amount = db.Column(DECIMAL(25,3), default=0)
     quantity_import = db.Column(DECIMAL(25,3), default=0)
     quantity_export = db.Column(DECIMAL(25,3), default=0)
+    end_net_amount = db.Column(DECIMAL(25,3), default=0)
     quantity_original = db.Column(DECIMAL(25,3), default=0)
     estimates_net_amount = db.Column(DECIMAL(25,3), default=0)

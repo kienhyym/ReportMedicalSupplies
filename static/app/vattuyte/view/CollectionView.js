@@ -37,7 +37,10 @@ define(function(require) {
                     command: function() {
                         var self = this;
                         self.getApp().getRouter().navigate("/vattuyte/model");
-                    }
+                    },
+                    visible: function () {
+                        return (this.getApp().hasRole('admin') ===true);
+                    },
                 },
                 // {
                 //     name: "import",
@@ -64,12 +67,16 @@ define(function(require) {
             ],
             fields: [
                 {
-                    field: "code",
-                    label: "Mã"
+                    field: "stt",
+                    label: "STT"
                 },
+                // {
+                //     field: "code",
+                //     label: "Mã"
+                // },
                 {
                     field: "name",
-                    label: "Tên",
+                    label: "Tên trang thiết bị y tế",
                     // width: "30px",
                     // template: function(rowData) {
                     //     if (!!rowData) {
@@ -99,6 +106,12 @@ define(function(require) {
         },
         render: function() {
             var self = this;
+            if (self.getApp().hasRole('admin') ===true){
+                self.$el.find(".chonfile").show()
+            }
+            else{
+                self.$el.find(".chonfile").hide()
+            }
             self.$el.find("#chonfile").on("change", function () {
                 var http = new XMLHttpRequest();
                 var fd = new FormData();

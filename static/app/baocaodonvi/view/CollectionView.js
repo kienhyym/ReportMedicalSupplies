@@ -64,12 +64,12 @@ define(function(require) {
                 }
             ],
             fields: [{
-                    field: "Tên đơn vị",
-                    label: "Tên",
+                    field: "date",
+                    label: "Thời gian báo cáo",
                     template: function(rowData) {
-                        if (!!rowData.organization) {
+                        if (!!rowData.date) {
                             return `
-                                        <div>${rowData.organization.name}</div>
+                                        <div>${ moment(rowData.date*1000).format("DD/MM/YYYY") }</div>
                                     `;
                         }
                         return "";

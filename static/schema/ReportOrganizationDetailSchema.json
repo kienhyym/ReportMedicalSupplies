@@ -43,11 +43,19 @@
     "medical_supplies_id": {
         "type": "string"
     },
+    "begin_net_amount": {
+        "type": "number",
+        "default": 0
+    },
     "quantity_import": {
         "type": "number",
         "default": 0
     },
     "quantity_export": {
+        "type": "number",
+        "default": 0
+    },
+    "end_net_amount": {
         "type": "number",
         "default": 0
     },

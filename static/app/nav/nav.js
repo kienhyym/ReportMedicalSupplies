@@ -134,14 +134,14 @@ define(function(require) {
         ]
         },
         {
-            "text": "Vật tư y tế",
+            "text": "Danh sách trang thiết bị y tế",
             // "icon": "fa fa-pump-medical",
             "type": "view",
             "collectionName": "medical_supplies",
             "route": "vattuyte/collection",
             "$ref": "app/vattuyte/view/CollectionView",
             "visible": function() {
-                return this.userHasRole("admin");
+                return true
             }
         },
         {
@@ -155,7 +155,7 @@ define(function(require) {
             }
         },
         {
-            "text": "Báo cáo",
+            "text": "Danh sách báo cáo đơn vị",
             "type": "view",
             "collectionName": "report_organization",
             "route": "baocaodonvi/collection",

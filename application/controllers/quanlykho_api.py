@@ -23,6 +23,23 @@ from application.database import db
 import pandas
 
 
+async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
+    if result is not None and "objects" in result:
+        objects = to_dict(result["objects"])
+        data = []
+        i =1
+        page = request.args.get("page",None)
+        results_per_page = request.args.get("results_per_page",None)
+        if page is not None and results_per_page is not None and int(page) != 1:
+            i = i + int(results_per_page)*int(page)
+        for obj in objects:
+            if obj is not None:
+                obj_tmp = to_dict(obj)
+                obj_tmp["stt"] = i
+                i = i +1
+                data.append(obj_tmp)
+        result = data
+
 async def check_dict_like(request=None, data=None, Model=None, **kw):
         del data['organization']
 
@@ -49,7 +66,7 @@ apimanager.create_api(MedicalSupplies,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[], PUT_SINGLE=[]),
-    postprocess=dict(POST=[],PUT_SINGLE=[]),
+    postprocess=dict(POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='medical_supplies')
 
 
@@ -117,14 +134,15 @@ async def link_file_upload(request):
                 arr.append(obj)
                 i += 1
             for _ in arr:
-                print ('________________________',_)
-                medicalSuppliesNew = MedicalSupplies()
-                medicalSuppliesNew.name = _['name']
-                medicalSuppliesNew.code = str(_['stt'])
-                medicalSuppliesNew.unit = _['unit_name']
-                medicalSuppliesNew.name_not_tone_mark = _['name_not_tone_mark']
-                db.session.add(medicalSuppliesNew)
-                db.session.commit()
+                medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.code == str(_['stt'])).first()
+                if medicalSupplies is None:
+                    medicalSuppliesNew = MedicalSupplies()
+                    medicalSuppliesNew.name = _['name']
+                    medicalSuppliesNew.code = str(_['stt'])
+                    medicalSuppliesNew.unit = _['unit_name']
+                    medicalSuppliesNew.name_not_tone_mark = _['name_not_tone_mark']
+                    db.session.add(medicalSuppliesNew)
+                    db.session.commit()
             return json({'data':"success"})
     return json({
         "error_code": "Upload Error",
@@ -142,7 +160,7 @@ async def load_item_dropdown(request):
         search = "%{}%".format(keySearch)
         tex_capitalize = keySearch.capitalize()
         search_capitalize = "%{}%".format(tex_capitalize)
-        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(search_capitalize)))
+        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(search_capitalize))).all()
         arr = []
         for i in list:
             obj = to_dict(i)

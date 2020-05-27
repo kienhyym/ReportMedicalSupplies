@@ -35,6 +35,9 @@ define(function (require) {
 						type: "button",
 						buttonClass: "btn-success btn-sm",
 						label: "TRANSLATE:SAVE",
+						visible: function () {
+							return (this.getApp().hasRole('admin') ===true);
+						},
 						command: function () {
 							var self = this;
 							self.model.save(null, {
@@ -65,7 +68,7 @@ define(function (require) {
 						buttonClass: "btn-danger btn-sm",
 						label: "TRANSLATE:DELETE",
 						visible: function () {
-							return this.getApp().getRouter().getParam("id") !== null;
+							return (this.getApp().hasRole('admin') ===true);
 						},
 						command: function () {
 							var self = this;
