@@ -18,8 +18,8 @@ class Config(object):
     
     
     BUCKET_NAME = "bacsixa"
-    FS_ROOT= "/opt/deploys/baocaotrangthietbiyte/repo/static/files/uploads/"
-    FS_ROOT_FILE= "/opt/deploys/baocaotrangthietbiyte/repo/static/files/uploads/"
+    FS_ROOT= "/opt/deploys/baocaotrangthietbiyte/repo/static/uploads/files"
+    FS_ROOT_FILE= "/opt/deploys/baocaotrangthietbiyte/repo/static/uploads/files"
     IMAGE_SERVICE_URL = 'https://bacsixa.vn/static/images/uploads'
     FILE_SERVICE_URL = '/files/uploads'#lay static_url + FILE_SERVICE_URL + file=file_url
 
