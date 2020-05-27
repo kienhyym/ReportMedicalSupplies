@@ -155,12 +155,12 @@ async def load_item_dropdown(request):
     text = data['text']
     organization_id = data['organization_id']
     date = data['date']
+    selectedList = data['selectedList']
+
     if text is not None and text != "":
-        keySearch = text
-        search = "%{}%".format(keySearch)
-        tex_capitalize = keySearch.capitalize()
-        search_capitalize = "%{}%".format(tex_capitalize)
-        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(search_capitalize))).all()
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(MedicalSupplies).filter(and_(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search))),MedicalSupplies.id.notin_(selectedList)).all()
         arr = []
         for i in list:
             obj = to_dict(i)
@@ -170,10 +170,21 @@ async def load_item_dropdown(request):
             else:
                 obj['begin_net_amount']= 0
             arr.append(obj)
+        print ('___text________',len(arr))
         return json(arr)
     else:
-        result = []
-        return json(result)
+        list = db.session.query(MedicalSupplies).filter(MedicalSupplies.id.notin_(selectedList)).all()
+        arr = []
+        for i in list:
+            obj = to_dict(i)
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'],ReportOrganizationDetail.date < date)).all()
+            if len(reportOrganizationDetail)>0:
+                obj['begin_net_amount']= reportOrganizationDetail[0][0]
+            else:
+                obj['begin_net_amount']= 0
+            arr.append(obj)
+        print ('___no text________',len(arr))
+        return json(arr)
 
 
 
@@ -183,12 +194,13 @@ async def create_itembalances(request):
     data = request.json
     for _ in data:
         new_item = ReportOrganizationDetail()
-
         new_item.report_organization_id = _['report_organization_id']
         new_item.organization_id = _['organization_id']
         new_item.medical_supplies_id = _['medical_supplies_id']
+        # new_item.begin_net_amount = _['begin_net_amount']
         new_item.quantity_export = _['quantity_export']
         new_item.quantity_import = _['quantity_import']
+        # new_item.end_net_amount = _['end_net_amount']
         new_item.estimates_net_amount = _['estimates_net_amount']
         new_item.date = _['date']
         db.session.add(new_item)

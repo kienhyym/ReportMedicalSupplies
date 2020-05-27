@@ -161,7 +161,12 @@ define(function(require) {
                 var text = !!evt.data.text ? evt.data.text.trim() : "";
                 if ($col) {
                     if (text !== null) {
-                        var filters = { "name": { "$likeI": text } };
+                        var filters = { 
+                            "$or": [
+                                {"name": { "$likeI": text } },
+                                {"name_not_tone_mark": { "$likeI": text }}
+						    ]};
+
                         $col.data('gonrin').filter(filters);
                     } else {
                         self.uiControl.filters = null;

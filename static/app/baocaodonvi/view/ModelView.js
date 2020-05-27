@@ -166,9 +166,8 @@ define(function (require) {
 
 				var itemID = dropdownItemClick.attr('item-id')
 				self.$el.find('#list-item').before(`
-                <div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new" 
-                item-id = "${dropdownItemClick.attr('item-id')}"
-                >
+                <div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new selected-item-general" 
+                item_id = "${dropdownItemClick.attr('item-id')}" item-id = "${dropdownItemClick.attr('item-id')}">
                     <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="STT" class="form-control text-center p-1" value="${stt}" style="font-size:14px">
                     </div>
@@ -179,7 +178,7 @@ define(function (require) {
                         <input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
 					</div>
 					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT" type="number"  readonly begin_net_amount="${dropdownItemClick.attr('begin_net_amount')}" class="form-control text-center p-1" value="${beginNetAmount}" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT"  readonly begin_net_amount="${dropdownItemClick.attr('begin_net_amount')}" class="form-control text-center p-1" value="${beginNetAmount}" style="font-size:14px">
                     </div>
                     <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT" type="number" quantity_import="0" class="form-control text-center p-1" value="0" style="font-size:14px">
@@ -188,7 +187,7 @@ define(function (require) {
                         <input selected-item-id = "${itemID}" col-type="QUANTITY_EXPORT" type="number" quantity_export="0" class="form-control text-center p-1" value = "0" style="font-size:14px">
                     </div>
                     <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="END_NET_AMOUNT" type="number" end_net_amount = "0" value="0" class="form-control text-center p-1" readonly style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="END_NET_AMOUNT"  end_net_amount = "0" value="0" class="form-control text-center p-1" readonly style="font-size:14px">
 					</div>
 					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="ESTIMATES_NET_AMOUNT" type="number" estimates_net_amount="0" value="0" class="form-control text-center p-1"  style="font-size:14px">
@@ -211,7 +210,7 @@ define(function (require) {
 			var self = this;
 			self.$el.find('selected-item')
 			//Out Click QUANTITY_IMPORT
-			self.$el.find('[col-type="QUANTITY_IMPORT"]').unbind('click').bind('click',function () {
+			self.$el.find('[col-type="QUANTITY_IMPORT"]').unbind('click').bind('click', function () {
 				var pointerOutQuantityImport = $(this);
 				pointerOutQuantityImport.val(pointerOutQuantityImport.attr("quantity_import"))
 			})
@@ -223,8 +222,8 @@ define(function (require) {
 				if (pointerOutQuantityImportValue == null || pointerOutQuantityImportValue == '') {
 					pointerOutQuantityImport.val(0);
 				}
-				else{
-					pointerOutQuantityImport.attr("quantity_import",pointerOutQuantityImportValue)
+				else {
+					pointerOutQuantityImport.attr("quantity_import", pointerOutQuantityImportValue)
 					pointerOutQuantityImport.val(pointerOutQuantityImportValueString)
 				}
 
@@ -239,7 +238,7 @@ define(function (require) {
 				self.$el.find('[col-type="END_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmountString);
 			});
 			//Out Click QUANTITY_EXPORT
-			self.$el.find('[col-type="QUANTITY_EXPORT"]').unbind('click').bind('click',function () {
+			self.$el.find('[col-type="QUANTITY_EXPORT"]').unbind('click').bind('click', function () {
 				var pointerOutQuantityExport = $(this);
 				pointerOutQuantityExport.val(pointerOutQuantityExport.attr("quantity_export"))
 			})
@@ -251,22 +250,22 @@ define(function (require) {
 				if (pointerOutQuantityExportValue == null || pointerOutQuantityExportValue == '') {
 					pointerOutQuantityExport.val(0);
 				}
-				else{
-					pointerOutQuantityExport.attr("quantity_export",pointerOutQuantityExportValue)
+				else {
+					pointerOutQuantityExport.attr("quantity_export", pointerOutQuantityExportValue)
 					pointerOutQuantityExport.val(pointerOutQuantityExportValueString)
 				}
 
 				var selectedItemId = pointerOutQuantityExport.attr('selected-item-id');
 				var pointerOutQuantityBeginNetAmount = self.$el.find('[col-type="BEGIN_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').attr('begin_net_amount');
 				var pointerOutQuantityImport = self.$el.find('[col-type="QUANTITY_IMPORT"][selected-item-id = ' + selectedItemId + ']').attr('quantity_import');
-				var resultNetAmount = Number(pointerOutQuantityBeginNetAmount)+Number(pointerOutQuantityImport)-Number(pointerOutQuantityExport.attr('quantity_export'))
+				var resultNetAmount = Number(pointerOutQuantityBeginNetAmount) + Number(pointerOutQuantityImport) - Number(pointerOutQuantityExport.attr('quantity_export'))
 
 				var resultNetAmountString = new Number(resultNetAmount).toLocaleString("da-DK");
 				self.$el.find('[col-type="END_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmountString);
 			});
 
 			//Out Click QUANTITY_EXPORT
-			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').unbind('click').bind('click',function () {
+			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').unbind('click').bind('click', function () {
 				var pointerOutEstimatesNetAmount = $(this);
 				pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmount.attr("estimates_net_amount"))
 			})
@@ -278,23 +277,28 @@ define(function (require) {
 				if (pointerOutEstimatesNetAmountValue == null || pointerOutEstimatesNetAmountValue == '') {
 					pointerOutEstimatesNetAmount.val(0);
 				}
-				else{
-					pointerOutEstimatesNetAmount.attr("estimates_net_amount",pointerOutEstimatesNetAmountValue)
+				else {
+					pointerOutEstimatesNetAmount.attr("estimates_net_amount", pointerOutEstimatesNetAmountValue)
 					pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmountValueString)
 				}
 			});
 		},
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
-			self.$el.find('.search-item').keyup(function name() {
-				self.$el.find('.dropdown-item').remove();
+			self.$el.find('.search-item').unbind('click').bind('click', function () {
 				var text = $(this).val()
+				var selectedList = [];
+				self.$el.find('.selected-item-general').each(function (index, item) {
+					selectedList.push($(item).attr('item_id'))
+				})
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown",
-					data: JSON.stringify({"text":text,"date":self.model.get('date'),"organization_id":self.model.get('organization_id')}),
+					data: JSON.stringify({ "text": text, "date": self.model.get('date'), "organization_id": self.model.get('organization_id'), "selectedList": selectedList }),
 					success: function (response) {
+						self.$el.find('.dropdown-item').remove();
 						var count = response.length
+
 						response.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
@@ -302,7 +306,7 @@ define(function (require) {
 							title="${item.name}"
 							unit="${item.unit}"
 							begin_net_amount="${item.begin_net_amount}"
-                            class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">${item.name}</button>
+                            class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px">${item.name}</button>
                             `)
 						})
 						if (count == 0) {
@@ -316,8 +320,71 @@ define(function (require) {
 							self.$el.find('.dropdown-menu-item').css("height", "80px")
 							self.$el.find('.dropdown-menu-item').show()
 						}
-						if (count > 2) {
+						if (count == 3) {
 							self.$el.find('.dropdown-menu-item').css("height", "110px")
+							self.$el.find('.dropdown-menu-item').show()
+						}
+						if (count == 4) {
+							self.$el.find('.dropdown-menu-item').css("height", "130px")
+							self.$el.find('.dropdown-menu-item').show()
+						}
+						if (count > 4) {
+							self.$el.find('.dropdown-menu-item').css("height", "160px")
+							self.$el.find('.dropdown-menu-item').show()
+						}
+						self.chooseItemInListDropdownItem();
+
+					}
+				});
+			})
+			self.$el.find('.search-item').keyup(function name() {
+
+				var selectedList = [];
+				self.$el.find('.selected-item-general').each(function (index, item) {
+					selectedList.push($(item).attr('item_id'))
+				})
+				var text = $(this).val()
+				self.$el.find('.dropdown-item').remove();
+				$.ajax({
+					type: "POST",
+					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown",
+					data: JSON.stringify({ "text": text, "date": self.model.get('date'), "organization_id": self.model.get('organization_id'), "selectedList": selectedList }),
+					success: function (response) {
+						self.$el.find('.dropdown-item').remove();
+						var count = response.length
+						
+
+						response.forEach(function (item, index) {
+							self.$el.find('.dropdown-menu-item').append(`
+                            <button
+                            item-id = "${item.id}" 
+							title="${item.name}"
+							unit="${item.unit}"
+							begin_net_amount="${item.begin_net_amount}"
+                            class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px">${item.name}</button>
+                            `)
+						})
+						if (count == 0) {
+							self.$el.find('.dropdown-menu-item').hide()
+						}
+						if (count == 1) {
+							self.$el.find('.dropdown-menu-item').css("height", "45px")
+							self.$el.find('.dropdown-menu-item').show()
+						}
+						if (count == 2) {
+							self.$el.find('.dropdown-menu-item').css("height", "80px")
+							self.$el.find('.dropdown-menu-item').show()
+						}
+						if (count == 3) {
+							self.$el.find('.dropdown-menu-item').css("height", "110px")
+							self.$el.find('.dropdown-menu-item').show()
+						}
+						if (count == 4) {
+							self.$el.find('.dropdown-menu-item').css("height", "130px")
+							self.$el.find('.dropdown-menu-item').show()
+						}
+						if (count > 4) {
+							self.$el.find('.dropdown-menu-item').css("height", "160px")
 							self.$el.find('.dropdown-menu-item').show()
 						}
 						self.chooseItemInListDropdownItem();
@@ -343,7 +410,7 @@ define(function (require) {
 					var netAmountToLocaleString = new Number(item.quantity_import - item.quantity_export).toLocaleString("da-DK");
 
 					self.$el.find('#list-item').before(`
-                    <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old" >
+                    <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old selected-item-general" item_id = ${item.medical_supplies_id} >
                         <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="STT" class="form-control text-center p-1" value="${index + 1}" style="font-size:14px">
                         </div>
@@ -388,8 +455,10 @@ define(function (require) {
 					"report_organization_id": report_organization_id,
 					"organization_id": self.model.get('organization_id'),
 					"medical_supplies_id": $(item).attr('item-id'),
+					// "begin_net_amount": $(item).find('[col-type="BEGIN_NET_AMOUNT"]').attr('begin_net_amount'),
 					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').attr('quantity_export'),
 					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').attr('quantity_import'),
+					// "end_net_amount": $(item).find('[col-type="END_NET_AMOUNT"]').attr('end_net_amount'),
 					"estimates_net_amount": $(item).find('[col-type="ESTIMATES_NET_AMOUNT"]').attr('estimates_net_amount'),
 					"date": self.model.get('date')
 				}
