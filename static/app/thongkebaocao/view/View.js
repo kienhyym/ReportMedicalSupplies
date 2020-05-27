@@ -26,7 +26,7 @@ define(function (require) {
 					"medical_supplies_id": vattu_id,
 					"type_donvi": type_donvi
 				}
-				var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics1";
+				var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics";
 				if (type_donvi == "donvicungung") {
 					url = self.getApp().serviceURL + "/api/v1/create_report_donvicungung";
 				}
@@ -76,8 +76,8 @@ define(function (require) {
                 allowTextInput: true,
                 enableSearch: true,
                 dataSource: [
-                    { value: "donvinhanuoc", text: "Nhà nước" },
-                    { value: "donvicungung", text: "Cung ứng" },
+                    { value: "donvinhanuoc", text: "Đơn vị hành chính" },
+                    { value: "donvicungung", text: "Đơn vị cung ứng" },
                 ],
             });
 			self.$el.find("#type").data("gonrin").setValue("donvinhanuoc");
