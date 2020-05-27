@@ -26,7 +26,7 @@ define(function (require) {
 					"medical_supplies_id": vattu_id,
 					"type_donvi": type_donvi
 				}
-				var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics";
+				var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics1";
 				if (type_donvi == "donvicungung") {
 					url = self.getApp().serviceURL + "/api/v1/create_report_donvicungung";
 				}
@@ -40,7 +40,6 @@ define(function (require) {
                         response.forEach(function(item,index){
                             self.$el.find('#danhSachDonVi').append(`
                             <tr>
-                                <th scope="row">${index+1}</th>
                                 <td>${item.organization_name}</td>
                                 <td>${item.quantity_import}</td>
                                 <td>${item.quantity_export}</td>
