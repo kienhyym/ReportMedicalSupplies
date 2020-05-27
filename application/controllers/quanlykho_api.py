@@ -278,3 +278,22 @@ async def create_report_donvicungung(request):
     print ('___no text________',len(arr))
     return json(arr)
     # organization_id = currentUser.organization_id
+
+
+@app.route('/api/v1/organizational_list_statistics',methods=['POST'])
+async def organizational_list_statistics(request):
+    data = request.json
+
+    type = data['type']
+    medical_supplies_id = data['medical_supplies_id']
+    start_time = data['start_time']
+    end_time = data['end_time']
+
+    organizations = db.session.query(Organization).filter(Organization.type == "type").all()
+    for organization in organizations:
+        obj = {}
+        obj['organization_name'] = arr_organization_id.append(to_dict(organization)['name'])
+        organization_id = arr_organization_id.append(to_dict(organization)['id'])
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'],ReportOrganizationDetail.date > start_time,ReportOrganizationDetail.date < start_end)).all()
+        print ('___reportOrganizationDetail_______',reportOrganizationDetail)
+        return json(arr)
