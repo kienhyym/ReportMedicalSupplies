@@ -7,11 +7,51 @@ define(function (require) {
     var template = require('text!app/thongkebaocao/tpl/view.html');
 
     return Gonrin.View.extend({
-        template: template,
+		template: template,
+		vattu_id: "",
         render: function () {
-            var self = this;
+			var self = this;
+			self.vattu_id = "";
             self.loadUIControl();
-            self.loadItemDropdown();
+			self.loadItemDropdown();
+			self.$el.find(".button-filter").unbind("click").bind("click", function () {
+				var start_time = self.$el.find("#start_time").data("gonrin").getValue(),
+					end_time = self.$el.find("#end_time").data("gonrin").getValue(),
+					vattu_id = self.vattu_id,
+					type_donvi = self.$el.find("#type").data("gonrin").getValue();
+				console.log("start time", start_time, "end time", end_time, "type_donvi", type_donvi, "vatu_id", vattu_id);
+				var params = {
+					"start_time": start_time,
+					"end_time": end_time,
+					"vattu_id": vattu_id,
+					"type_donvi": "type_donvi"
+				}
+				var url = self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical";
+				if (type_donvi == "donvicungung") {
+					url = self.getApp().serviceURL + "/api/v1/create_report_donvicungung";
+				}
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: JSON.stringify(params),
+					success: function (response) {
+
+					},
+					error: function (xhr, status, error) {
+						try {
+							if (($.parseJSON(xhr.responseText).error_code) === "SESSION_EXPIRED"){
+								self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
+								self.getApp().getRouter().navigate("login");
+							} else {
+								self.getApp().notify({ message: $.parseJSON(xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+							}
+						}
+						catch (err) {
+						  self.getApp().notify({ message: "Lỗi truy cập dữ liệu, vui lòng thử lại sau"}, { type: "danger", delay: 1000 });
+						}
+					},
+				});
+			});
         },
         loadUIControl: function(){
             var self = this;
@@ -26,7 +66,7 @@ define(function (require) {
                     { value: "donvicungung", text: "Cung ứng" },
                 ],
             });
-
+			self.$el.find("#type").data("gonrin").setValue("donvinhanuoc");
             self.$el.find('#start_time').datetimepicker({
                 textFormat:'DD-MM-YYYY',
                 extraFormats:['DDMMYYYY'],
@@ -154,7 +194,9 @@ define(function (require) {
 			var self = this;
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
 				var dropdownItemClick = $(this);
-                self.$el.find('.search-item').val(dropdownItemClick.attr('title'))
+				console.log("dsafsghfg=======", dropdownItemClick);
+				self.$el.find('.search-item').val(dropdownItemClick.attr('title'));
+				self.vattu_id = dropdownItemClick.attr('item-id');
 				self.$el.find('.dropdown-menu-item').hide()
 			})
 
