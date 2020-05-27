@@ -32,10 +32,10 @@ define(function (require) {
 				}
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
+					url: url,
 					data: JSON.stringify(params),
 					success: function (response) {
-						
+
 					},
 					error: function (xhr, status, error) {
 						try {
