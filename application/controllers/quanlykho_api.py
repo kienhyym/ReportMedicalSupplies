@@ -291,10 +291,18 @@ async def organizational_list_statistics(request):
     start_time = data['start_time']
     end_time = data['end_time']
     organizations = db.session.query(Organization).filter(Organization.type_donvi == "donvinhanuoc").all()
+    arrOrganizations = []
     for organization in organizations:
         print("organization", to_dict(organization))
         obj = {}
-        # obj['organization_name'] = arr_organization_id.append(to_dict(organization)['name'])
-        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+        obj['organization_name'] = to_dict(organization)['name']
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
         print ('___reportOrganizationDetail_______',reportOrganizationDetail)
-        return json([])
+
+        obj['quantity_import'] = reportOrganizationDetail[0][0]
+        obj['quantity_export'] = reportOrganizationDetail[0][1]
+        obj['net_amount'] = reportOrganizationDetail[0][2]
+        obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+        arrOrganizations.append(obj)
+
+        return json(arrOrganizations)

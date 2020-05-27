@@ -35,6 +35,7 @@ define(function (require) {
 					url: url,
 					data: JSON.stringify(params),
 					success: function (response) {
+                        console.log(response)
 					},
 					error: function (xhr, status, error) {
 						try {
