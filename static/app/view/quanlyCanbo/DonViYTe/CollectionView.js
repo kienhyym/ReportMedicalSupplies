@@ -6,7 +6,9 @@ define(function (require) {
     
     var template 			= require('text!app/view/quanlyCanbo/DonViYTe/tpl/collection.html'),
     	schema 				= require('json!app/view/quanlyCanbo/DonViYTe/DonViYTeSchema.json');
-	var CustomFilterView      = require('app/base/view/CustomFilterView');
+	var CustomFilterView      = require('app/base/view/CustomFilterView'),
+		TinhThanhSelectView 	= require("app/view/DanhMuc/TinhThanh/SelectView"),
+		QuanHuyenSelectView 	= require("app/view/DanhMuc/QuanHuyen/SelectView");
     return Gonrin.CollectionView.extend({
     	template : template,
     	modelSchema	: schema,
