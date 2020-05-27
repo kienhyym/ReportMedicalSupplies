@@ -278,3 +278,19 @@ async def create_report_donvicungung(request):
     print ('___no text________',len(arr))
     return json(arr)
     # organization_id = currentUser.organization_id
+
+
+@app.route("/api/v1/create_report_trungtamdachucnang", methods=["GET"])
+async def create_report_donvicungung(request):
+    uid_current = current_uid(request)
+    if uid_current is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+    
+    currentUser = db.session.query(User).filter(User.id == uid_current).first()
+    if currentUser is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+
+    data = request.json
+    thoigian_bandau = data.get("thoigian_bandau",None)
+    thoigian_ketthuc = data.get("thoigian_kethuc", None)
+    vattu_id = data.get("vattu_id", None)

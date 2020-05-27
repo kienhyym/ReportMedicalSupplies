@@ -151,7 +151,7 @@ define(function(require) {
             "route":"donvicungung/collection",
             "$ref": "app/donvicungung/view/CollectionView",
             "visible": function(){
-                return (this.userHasRole("admin"));
+                return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
             }
         },
         {
