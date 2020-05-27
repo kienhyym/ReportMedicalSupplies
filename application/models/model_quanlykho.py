@@ -47,9 +47,9 @@ class ReportOrganizationDetail(CommonModel):
     medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
     medical_supplies = relationship('MedicalSupplies')
 
-    begin_net_amount = db.Column(DECIMAL(25,3), default=0)
-    quantity_import = db.Column(DECIMAL(25,3), default=0)
-    quantity_export = db.Column(DECIMAL(25,3), default=0)
-    end_net_amount = db.Column(DECIMAL(25,3), default=0)
-    quantity_original = db.Column(DECIMAL(25,3), default=0)
-    estimates_net_amount = db.Column(DECIMAL(25,3), default=0)
+    begin_net_amount = db.Column(DECIMAL(25,3), default=0) # tồn đầu kì
+    quantity_import = db.Column(DECIMAL(25,3), default=0) # số lượng nhập = sản xuất
+    quantity_export = db.Column(DECIMAL(25,3), default=0) # số lượng xuất bằng sử dụng
+    end_net_amount = db.Column(DECIMAL(25,3), default=0) # tồn cuối kì
+    quantity_original = db.Column(DECIMAL(25,3), default=0) # khởi tạo ban đầu, không cần nhập lại
+    estimates_net_amount = db.Column(DECIMAL(25,3), default=0) # du kiến nhập 

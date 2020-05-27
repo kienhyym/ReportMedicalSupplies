@@ -247,5 +247,34 @@ async def delete_itembalances(request):
     return json({"message": "Delete Success"})
 
 
+@app.route("/api/v1/create_report_donvicungung", methods=["POST"])
+async def create_report_donvicungung(request):
+    uid_current = current_uid(request)
+    if uid_current is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+    
+    currentUser = db.session.query(User).filter(User.id == uid_current).first()
+    if currentUser is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
 
+    data = request.json
+    thoigian_bandau = data.get("thoigian_bandau",None)
+    thoigian_ketthuc = data.get("thoigian_kethuc", None)
+    vattu_id = data.get("vattu_id", None)
 
+    list_donvicungung = db.session.query(Organization).filter(Organization.type_donvi == "donvicungung").all()
+    arr = []
+    for donvicungung in list_donvicungung:
+        vattu = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == vattu_id).first()
+        obj = to_dict(vattu)
+
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.organization_id).filter(and_(ReportOrganizationDetail.organization_id == donvicungung.id,ReportOrganizationDetail.medical_supplies_id == to_dict(vattu)['id'],ReportOrganizationDetail.date < date)).all()
+
+        if len(reportOrganizationDetail)>0:
+            obj['begin_net_amount']= reportOrganizationDetail[0][0]
+        else:
+            obj['begin_net_amount']= 0
+        arr.append(obj)
+    print ('___no text________',len(arr))
+    return json(arr)
+    # organization_id = currentUser.organization_id
