@@ -28,7 +28,6 @@ define(function (require) {
 						label: "TRANSLATE:BACK",
 						command: function () {
 							var self = this;
-
 							Backbone.history.history.back();
 						}
 					},
@@ -42,10 +41,11 @@ define(function (require) {
 							self.model.save(null, {
 								success: function (model, respose, options) {
 									self.getApp().notify("Lưu thông tin thành công");
-									self.getApp().getRouter().navigate(self.collectionName + "/collection");
 									self.createItem(respose.id)
 									self.updateItem();
 									self.deleteItem();
+									self.getApp().getRouter().navigate("/baocaodonvi/collection");
+
 								},
 								error: function (xhr, status, error) {
 									try {
@@ -76,7 +76,7 @@ define(function (require) {
 							self.model.destroy({
 								success: function (model, response) {
 									self.getApp().notify('Xoá dữ liệu thành công');
-									self.getApp().getRouter().navigate(self.collectionName + "/collection");
+									self.getApp().getRouter().navigate("/baocaodonvi/collection");
 								},
 								error: function (xhr, status, error) {
 									try {
