@@ -226,6 +226,7 @@ async def  hasTuyenDonvi(request, tuyendonvi_id):
                 return True
             else:
                 return False
+        return False
 
 
 async def validate_admin(request, **kw):
