@@ -164,6 +164,16 @@ define(function(require) {
             //     return this.userHasRole("admin");
             // }
         },
+        {
+            "text": "Thống kê báo cáo",
+            "type": "view",
+            // "collectionName": "report_organization",
+            "route": "thongkebaocao/collection",
+            "$ref": "app/thongkebaocao/view/View",
+            // "visible": function() {
+            //     return this.userHasRole("admin");
+            // }
+        },
     ];
 
 });
