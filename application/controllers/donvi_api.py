@@ -519,30 +519,32 @@ async def organizational_list_statistics(request):
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
         if donvi is None:
             return json(status=520)
-        abc = await get_thongke_xaphuong(donvi.quanhuyen_id, "16", medical_supplies_id, start_time, end_time)
-        # xaphuongs = db.session.query(XaPhuong).filter(XaPhuong.quanhuyen_id == donvi.quanhuyen_id).all()
-        # for xaphuong in xaphuongs:
-        #     # print("xaphuong", to_dict(xaphuong))
-        #     organization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.xaphuong_id == xaphuong.id, Organization.tuyendonvi_id == "16")).first()
-        #     arrOrganizations = []
-        #     # print("organization", to_dict(organization))
-        #     obj = {}
-        #     obj['organization_name'] = to_dict(organization)['name']
-        #     reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-        #     # print ('___reportOrganizationDetail_______',reportOrganizationDetail)
-        #     obj['quantity_import'] = reportOrganizationDetail[0][0]
-        #     obj['quantity_export'] = reportOrganizationDetail[0][1]
-        #     obj['net_amount'] = reportOrganizationDetail[0][2]
-        #     obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-        #     arrOrganizations.append(obj)
-        print("abc========================", abc)
-        return json(abc)
+        arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+        thongkes = await get_thongke_xaphuong(donvi.quanhuyen_id, "16", medical_supplies_id, start_time, end_time)
+        for thongke in thongkes:
+            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+        
+        thongkes.append(arr_thongke1)
+        print("abc========================", thongkes)
+        return json(thongkes)
     elif check_cdc is True:
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
         if donvi is None:
             return json(status=520)
+        thongkes = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
         abc = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
-        return json(abc)
+        for thongke in thongkes:
+            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+        
+        thongkes.append(arr_thongke1)
+        print("abc========================", thongkes)
+        return json(thongkes)
     elif check_phongyte is True:
         obj = []
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
