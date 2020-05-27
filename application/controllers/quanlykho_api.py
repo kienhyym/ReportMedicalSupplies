@@ -18,6 +18,8 @@ from gatco.response import json, text, html
 
 
 from application.models.model_quanlykho import *
+from application.models.models import Organization, User
+
 from application.controllers.helpers.helper_common import validate_user, convert_text_khongdau
 from application.database import db
 import pandas
@@ -288,12 +290,11 @@ async def organizational_list_statistics(request):
     medical_supplies_id = data['medical_supplies_id']
     start_time = data['start_time']
     end_time = data['end_time']
-
-    organizations = db.session.query(Organization).filter(Organization.type == "type_donvi").all()
+    organizations = db.session.query(Organization).filter(Organization.type_donvi == "donvinhanuoc").all()
     for organization in organizations:
+        print("organization", to_dict(organization))
         obj = {}
-        obj['organization_name'] = arr_organization_id.append(to_dict(organization)['name'])
-        organization_id = arr_organization_id.append(to_dict(organization)['id'])
-        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'],ReportOrganizationDetail.date > start_time,ReportOrganizationDetail.date < start_end)).all()
+        # obj['organization_name'] = arr_organization_id.append(to_dict(organization)['name'])
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
         print ('___reportOrganizationDetail_______',reportOrganizationDetail)
-        return json(arr)
+        return json([])
