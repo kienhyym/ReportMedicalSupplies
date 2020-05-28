@@ -51,8 +51,14 @@ define(function (require) {
 					 foreignTextField: "ten",
 				},
 				{
-					field: "code", 
-					label: "Mã đơn vị"
+					field: "tuyendonvi_id", 
+					label: "Tuyến đơn vị",
+					template: (rowData) => {
+						if(rowData.tuyendonvi) {
+							return `<div class="font-weight-bold">${rowData.tuyendonvi.ten}</div>`;
+						}
+						return '';
+					}
 			   	},
 				{ 
 					field: "active", 
