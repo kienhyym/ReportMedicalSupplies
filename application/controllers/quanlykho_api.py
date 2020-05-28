@@ -20,7 +20,7 @@ from gatco.response import json, text, html
 from application.models.model_quanlykho import *
 from application.models.models import Organization, User
 
-from application.controllers.helpers.helper_common import validate_user, convert_text_khongdau
+from application.controllers.helpers.helper_common import validate_user, convert_text_khongdau, current_uid, get_current_user
 from application.database import db
 import pandas
 
@@ -286,23 +286,39 @@ async def create_report_donvicungung(request):
 async def organizational_list_statistics(request):
     data = request.json
 
-    type_donvi = data['type_donvi']
     medical_supplies_id = data['medical_supplies_id']
     start_time = data['start_time']
     end_time = data['end_time']
-    organizations = db.session.query(Organization).filter(Organization.type_donvi == "donvinhanuoc").all()
-    arrOrganizations = []
-    for organization in organizations:
-        print("organization", to_dict(organization))
-        obj = {}
-        obj['organization_name'] = to_dict(organization)['name']
-        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-        print ('___reportOrganizationDetail_______',reportOrganizationDetail)
 
-        obj['quantity_import'] = reportOrganizationDetail[0][0]
-        obj['quantity_export'] = reportOrganizationDetail[0][1]
-        obj['net_amount'] = reportOrganizationDetail[0][2]
-        obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-        arrOrganizations.append(obj)
+    uid = current_uid(request)
+    currentUser = await get_current_user(request,uid)
+
+    if currentUser['Organization']['tuyendonvi_id'] == "6":
+        tinhthanh_id = currentUser['Organization']['tinhthanh_id']
+        list_organizations = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id.in_(["13","9"]),Organization.tinhthanh_id == tinhthanh_id)).all()
+        for _ in list_organizations:
+            print ('____________tinhthanh_id___________',to_dict(_)['id'])
+
+
+        arrOrganizations = []
+        for organization in list_organizations:
+            obj = {}
+            obj['organization_name'] = to_dict(organization)['name']
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+            if len(reportOrganizationDetail) > 0:
+                obj['quantity_import'] = reportOrganizationDetail[0][0]
+                obj['quantity_export'] = reportOrganizationDetail[0][1]
+                obj['net_amount'] = reportOrganizationDetail[0][2]
+                obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+                arrOrganizations.append(obj)
+            else:
+                obj['quantity_import'] = 0
+                obj['quantity_export'] = 0
+                obj['net_amount'] = 0
+                obj['estimates_net_amount'] = 0
+                arrOrganizations.append(obj)
 
         return json(arrOrganizations)
+
+
+    

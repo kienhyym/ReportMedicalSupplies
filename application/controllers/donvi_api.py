@@ -534,13 +534,14 @@ async def organizational_list_statistics(request):
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
         if donvi is None:
             return json(status=520)
-        thongkes = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
-        abc = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
+        # thongkes = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+        thongkes = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
         for thongke in thongkes:
-            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+            print ('___________________',thongke['quantity_import'])
+            arr_thongke1['quantity_import'] =  int(arr_thongke1['quantity_import']) + thongke["quantity_import"]
+            arr_thongke1['quantity_export'] = int(arr_thongke1['quantity_export']) + thongke["quantity_export"]
+            arr_thongke1['net_amount'] = int(arr_thongke1['net_amount']) + thongke["net_amount"]
+            arr_thongke1['estimates_net_amount'] = int(arr_thongke1['estimates_net_amount']) + thongke["estimates_net_amount"]
         
         thongkes.append(arr_thongke1)
         print("abc========================", thongkes)
@@ -580,7 +581,8 @@ async def get_thongke_xaphuong(quanhuyen_id, tuyendonvi_id, medical_supplies_id,
         organization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.xaphuong_id == xaphuong.id, Organization.tuyendonvi_id == "16")).first()
         if organization is None:
             continue
-        obj = {}
+        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+
         obj['organization_name'] =  to_dict(organization)['name']
         reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
         # print("sadfgj==========", reportOrganizationDetail)
@@ -601,7 +603,8 @@ async def get_thongke_quanhuyen(tinhthanh_id, tuyendonvi_id, medical_supplies_id
         if organization is None:
             continue
         arrOrganizations = []
-        obj = {}
+        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+
         obj['organization_name'] = to_dict(organization)['name'] + " - " + quanhuyen.ten
         # obj['organization_id'] = to_dict(organization)['id']
         reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
