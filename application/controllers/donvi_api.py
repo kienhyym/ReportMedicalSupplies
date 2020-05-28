@@ -696,6 +696,12 @@ async def get_thongke_quanhuyen_soyte(tinhthanh_id, tuyendonvi_id, medical_suppl
             obj['net_amount'] = reportOrganizationDetail[0][2]
             obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
             list_item.append(obj)
+        else:
+            obj['quantity_import'] = 0
+            obj['quantity_export'] = 0
+            obj['net_amount'] = 0
+            obj['estimates_net_amount'] = 0
+            list_item.append(obj)
     return list_item
 
 
@@ -721,7 +727,7 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
                 list_item.append(obj)
             else:
                 list_item.append(obj)
-    tinhthanhs = db.session.query(TinhThanh).all()
+    tinhthanhs = db.session.query(TinhThanh).order_by(TinhThanh.ma.asc()).all()
     for tinhthanh in tinhthanhs:
         listIDorganizations = []
         obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
@@ -751,6 +757,12 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
             obj['quantity_export'] = reportOrganizationDetail[0][1]
             obj['net_amount'] = reportOrganizationDetail[0][2]
             obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+            list_item.append(obj)
+        else:
+            obj['quantity_import'] = 0
+            obj['quantity_export'] = 0
+            obj['net_amount'] = 0
+            obj['estimates_net_amount'] = 0
             list_item.append(obj)
     print('_______________________________',listIDorganizations)
     return list_item
