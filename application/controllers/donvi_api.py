@@ -544,36 +544,35 @@ async def organizational_list_statistics(request):
             arr_thongke1['quantity_export'] = int(arr_thongke1['quantity_export']) + thongke["quantity_export"]
             arr_thongke1['net_amount'] = int(arr_thongke1['net_amount']) + thongke["net_amount"]
             arr_thongke1['estimates_net_amount'] = int(arr_thongke1['estimates_net_amount']) + thongke["estimates_net_amount"]
-        
         thongkes.append(arr_thongke1)
         print("abc========================", thongkes)
         return json(thongkes)
-    elif check_phongyte is True:
-        obj = []
-        donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
-        if donvi is None:
-            return json(status=520)
-        arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+    # elif check_phongyte is True:
+        # obj = []
+        # donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
+        # if donvi is None:
+        #     return json(status=520)
+        # arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
 
-        thongke_phuchoichucnang = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
-        # print("thongke_phuchoichucnang===========", thongke_phuchoichucnang)
+        # thongke_phuchoichucnang = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
+        # # print("thongke_phuchoichucnang===========", thongke_phuchoichucnang)
 
-        thongke_bvhuyen = await get_thongke_quanhuyen(donvi.tinhthanh_id, "14", medical_supplies_id, start_time, end_time, "17")
-        for thongke in thongke_phuchoichucnang:
-            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
-            thongke_bvhuyen.append(thongke)
-        for thongke in thongke_bvhuyen:
-            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+        # thongke_bvhuyen = await get_thongke_quanhuyen(donvi.tinhthanh_id, "14", medical_supplies_id, start_time, end_time, "17")
+        # for thongke in thongke_bvhuyen:
+        #     arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+        #     arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+        #     arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+        #     arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
         
-        thongke_bvhuyen.append(arr_thongke1)
-        print("thongke_bvhuyen===========", thongke_bvhuyen)
-        return json(thongke_bvhuyen)
+        # for thongke in thongke_phuchoichucnang:
+        #     arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+        #     arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+        #     arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+        #     arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+        #     thongke_bvhuyen.append(thongke)
+        # thongke_bvhuyen.append(arr_thongke1)
+        # print("thongke_bvhuyen===========", thongke_bvhuyen)
+        # return json(thongke_bvhuyen)
 
     elif check_soyte is True:
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
