@@ -28,7 +28,7 @@ define(function (require) {
 				}
 				var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics1";
 				if (type_donvi == "donvicungung") {
-					url = self.getApp().serviceURL + "/api/v1/create_report_donvicungung";
+					url = self.getApp().serviceURL + "/api/v1/organizational_list_donvicungung";
 				}
 				$.ajax({
 					type: "POST",

@@ -495,6 +495,35 @@ def convert_columexcel_to_string(value):
     if isinstance(value,int):
         return str(value).strip()
 
+@app.route('/api/v1/organizational_list_donvicungung',methods=['POST'])
+async def organizational_list_statistics(request):
+    uid_current = current_uid(request)
+    if uid_current is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+    
+    currentUser = db.session.query(User).filter(User.id == uid_current).first()
+    if currentUser is None:
+        return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
+
+    data = request.json
+    type_donvi = data['type_donvi']
+    medical_supplies_id = data['medical_supplies_id']
+    start_time = data['start_time']
+    end_time = data['end_time']
+    donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
+    if donvi is None:
+        return json(status=520)
+    arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+    thongkes = await get_thongke_tinhthanh_donvicungung(donvi.quanhuyen_id, "16", medical_supplies_id, start_time, end_time)
+    for thongke in thongkes:
+        arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+        arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+        arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+        arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+    thongkes.append(arr_thongke1)
+    print("abc========================", thongkes)
+    return json(thongkes)
+
 
 @app.route('/api/v1/organizational_list_statistics1',methods=['POST'])
 async def organizational_list_statistics(request):
@@ -529,7 +558,6 @@ async def organizational_list_statistics(request):
             arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
             arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
             arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
-        
         thongkes.append(arr_thongke1)
         print("abc========================", thongkes)
         return json(thongkes)
@@ -767,5 +795,40 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
     print('_______________________________',listIDorganizations)
     return list_item
 
+
+async def get_thongke_tinhthanh_donvicungung(tinhthanh_id, tuyendonvi_id, medical_supplies_id, start_time, end_time):
+    # tinhthanhs = db.session.query(TinhThanh).order_by(TinhThanh.ma.asc()).all()
+    # for tinhthanh in tinhthanhs:
+    #     listIDorganizations = []
+    #     obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+    #     obj['organization_name'] = tinhthanh.ten
+    #     organization_tinhthanh = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyensoyte)).first()
+    #     if organization_tinhthanh is not None:
+    #         listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
+    #         for tuyentinh_id in tuyentinh:
+    #             organization_tinhthanhs = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyentinh_id)).all()
+    #             for organization_tinhthanh in organization_tinhthanhs:
+    #                 listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
+    list_item = []
+    organization_donvicungung = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvicungung")).all()
+    for organization in organization_donvicungung:
+        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+        if len(reportOrganizationDetail) > 0:
+            obj['quantity_import'] = reportOrganizationDetail[0][0]
+            obj['quantity_export'] = reportOrganizationDetail[0][1]
+            obj['net_amount'] = reportOrganizationDetail[0][2]
+            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+            obj['organization_name'] = organization.name
+            list_item.append(obj)
+        else:
+            obj['quantity_import'] = 0
+            obj['quantity_export'] = 0
+            obj['net_amount'] = 0
+            obj['estimates_net_amount'] = 0
+            obj['organization_name'] = organization['name']
+            list_item.append(obj)
+    return list_item
 
 
