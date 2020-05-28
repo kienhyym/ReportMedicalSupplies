@@ -545,38 +545,32 @@ async def organizational_list_statistics(request):
         thongkes.append(arr_thongke1)
         print("abc========================", thongkes)
         return json(thongkes)
-    elif check_phongyte is True:
-        obj = []
-        donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
-        if donvi is None:
-            return json(status=520)
-        arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+    # elif check_phongyte is True:
+        # obj = []
+        # donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
+        # if donvi is None:
+        #     return json(status=520)
+        # arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
 
-        thongke_phuchoichucnang = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
-        # print("thongke_phuchoichucnang===========", thongke_phuchoichucnang)
+        # thongke_phuchoichucnang = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16")
+        # # print("thongke_phuchoichucnang===========", thongke_phuchoichucnang)
 
-        thongke_bvhuyen = await get_thongke_quanhuyen(donvi.tinhthanh_id, "14", medical_supplies_id, start_time, end_time, "17")
-        for thongke in thongke_bvhuyen:
-            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
-        
-        for thongke in thongke_phuchoichucnang:
-            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
-            thongke_bvhuyen.append(thongke)
+        # thongke_bvhuyen = await get_thongke_quanhuyen(donvi.tinhthanh_id, "14", medical_supplies_id, start_time, end_time, "17")
         # for thongke in thongke_bvhuyen:
         #     arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
         #     arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
         #     arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
         #     arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
         
-        thongke_bvhuyen.append(arr_thongke1)
-        print("thongke_bvhuyen===========", thongke_bvhuyen)
-        return json(thongke_bvhuyen)
+        # for thongke in thongke_phuchoichucnang:
+        #     arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+        #     arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+        #     arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+        #     arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+        #     thongke_bvhuyen.append(thongke)
+        # thongke_bvhuyen.append(arr_thongke1)
+        # print("thongke_bvhuyen===========", thongke_bvhuyen)
+        # return json(thongke_bvhuyen)
 
 
 async def get_thongke_xaphuong(quanhuyen_id, tuyendonvi_id, medical_supplies_id, start_time, end_time):
@@ -610,7 +604,7 @@ async def get_thongke_quanhuyen(tinhthanh_id, tuyendonvi_id, medical_supplies_id
         arrOrganizations = []
         obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
 
-        obj['organization_name'] = to_dict(organization)['name'] + " - " + quanhuyen.ten
+        obj['organization_name'] = quanhuyen.ten
         # obj['organization_id'] = to_dict(organization)['id']
         reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
         # print("sadfgj==========", reportOrganizationDetail)
