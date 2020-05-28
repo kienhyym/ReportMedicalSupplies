@@ -759,7 +759,6 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
     for tinhthanh in tinhthanhs:
         listIDorganizations = []
         obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-        obj['organization_name'] = tinhthanh.ten
         organization_tinhthanh = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyensoyte)).first()
         if organization_tinhthanh is not None:
             listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
@@ -769,8 +768,8 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
                 listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
         for tuyenhuyen_id in tuyenhuyen:
             organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyenhuyen_id)).all()
-        for organization_huyen in organization_huyens:
-            listIDorganizations.append(to_dict(organization_huyen)['id'])
+            for organization_huyen in organization_huyens:
+                listIDorganizations.append(to_dict(organization_huyen)['id'])
         for tuyenxa_id in tuyenxa:
             organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyenxa_id)).all()
             for organizations_xa in organizations_xas:
@@ -792,12 +791,14 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
             obj['quantity_export'] = reportOrganizationDetail[0][1]
             obj['net_amount'] = reportOrganizationDetail[0][2]
             obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+            obj['organization_name'] = tinhthanh.ten
             list_item.append(obj)
         else:
             obj['quantity_import'] = 0
             obj['quantity_export'] = 0
             obj['net_amount'] = 0
             obj['estimates_net_amount'] = 0
+            obj['organization_name'] = tinhthanh.ten
             list_item.append(obj)
     print('_______________________________',listIDorganizations)
     return list_item
