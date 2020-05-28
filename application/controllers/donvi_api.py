@@ -658,30 +658,29 @@ async def get_thongke_quanhuyen_soyte(tinhthanh_id, tuyendonvi_id, medical_suppl
 
     quanhuyens = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == tinhthanh_id).all()
     for quanhuyen in quanhuyens:
-        duoituyenduoi = ["13","14","15"]
+        duoituyenduoi = ["12","13","14","15"]
+        listIDorganizations = []
         for dtd in duoituyenduoi:
             organizations = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == dtd)).all()
             for organization in organizations:
-                print ('______________xxxxxxxxxxxxxxx_______',to_dict(organization))
-                if organization is None:
-                    continue
-                arrOrganizations = []
-                obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-                obj['organization_name'] = to_dict(organization)['name'] + " - " + quanhuyen.ten
-                reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-                if len(reportOrganizationDetail) > 0:
-                    obj['quantity_import'] = reportOrganizationDetail[0][0]
-                    obj['quantity_export'] = reportOrganizationDetail[0][1]
-                    obj['net_amount'] = reportOrganizationDetail[0][2]
-                    obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+                listIDorganizations.append(to_dict(organization)['id'])
+        arrOrganizations = []
+        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+        obj['organization_name'] = quanhuyen.ten
+        reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+        if len(reportOrganizationDetail) > 0:
+            obj['quantity_import'] = reportOrganizationDetail[0][0]
+            obj['quantity_export'] = reportOrganizationDetail[0][1]
+            obj['net_amount'] = reportOrganizationDetail[0][2]
+            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
 
-                    list_total_tyt = await get_thongke_xaphuong(quanhuyen.id, mode_tuyendv_xa, medical_supplies_id, start_time, end_time)
-                    for tramyte in list_total_tyt:
-                        obj['quantity_import'] =  obj['quantity_import'] + tramyte["quantity_import"]
-                        obj['quantity_export'] = obj['quantity_export'] + tramyte["quantity_export"]
-                        obj['net_amount'] = obj['net_amount'] + tramyte["net_amount"]
-                        obj['estimates_net_amount'] = obj['estimates_net_amount'] + tramyte["estimates_net_amount"]
-                    list_item.append(obj)
+            list_total_tyt = await get_thongke_xaphuong(quanhuyen.id, mode_tuyendv_xa, medical_supplies_id, start_time, end_time)
+            for tramyte in list_total_tyt:
+                obj['quantity_import'] =  obj['quantity_import'] + tramyte["quantity_import"]
+                obj['quantity_export'] = obj['quantity_export'] + tramyte["quantity_export"]
+                obj['net_amount'] = obj['net_amount'] + tramyte["net_amount"]
+                obj['estimates_net_amount'] = obj['estimates_net_amount'] + tramyte["estimates_net_amount"]
+            list_item.append(obj)
     return list_item
 
 
