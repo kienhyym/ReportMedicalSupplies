@@ -658,12 +658,17 @@ async def get_thongke_quanhuyen_soyte(tinhthanh_id, tuyendonvi_id, medical_suppl
 
     quanhuyens = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == tinhthanh_id).all()
     for quanhuyen in quanhuyens:
-        duoituyenduoi = ["12","13","14","15"]
+        tuyenhuyen = ["12","13","14","15"]
+        tuyenxa = ["17","16"]
         listIDorganizations = []
-        for dtd in duoituyenduoi:
-            organizations = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == dtd)).all()
-            for organization in organizations:
-                listIDorganizations.append(to_dict(organization)['id'])
+        for tuyenhuyen_id in tuyenhuyen:
+            organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenhuyen_id)).all()
+            for organization_huyen in organization_huyens:
+                listIDorganizations.append(to_dict(organization_huyen)['id'])
+        for tuyenxa_id in tuyenxa:
+            organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenxa_id)).all()
+            for organizations_xa in organizations_xas:
+                listIDorganizations.append(to_dict(organizations_xa)['id'])
         arrOrganizations = []
         obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
         obj['organization_name'] = quanhuyen.ten
@@ -674,13 +679,14 @@ async def get_thongke_quanhuyen_soyte(tinhthanh_id, tuyendonvi_id, medical_suppl
             obj['net_amount'] = reportOrganizationDetail[0][2]
             obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
 
-            list_total_tyt = await get_thongke_xaphuong(quanhuyen.id, mode_tuyendv_xa, medical_supplies_id, start_time, end_time)
-            for tramyte in list_total_tyt:
-                obj['quantity_import'] =  obj['quantity_import'] + tramyte["quantity_import"]
-                obj['quantity_export'] = obj['quantity_export'] + tramyte["quantity_export"]
-                obj['net_amount'] = obj['net_amount'] + tramyte["net_amount"]
-                obj['estimates_net_amount'] = obj['estimates_net_amount'] + tramyte["estimates_net_amount"]
+            # list_total_tyt = await get_thongke_xaphuong(quanhuyen.id, mode_tuyendv_xa, medical_supplies_id, start_time, end_time)
+            # for tramyte in list_total_tyt:
+            #     obj['quantity_import'] =  obj['quantity_import'] + tramyte["quantity_import"]
+            #     obj['quantity_export'] = obj['quantity_export'] + tramyte["quantity_export"]
+            #     obj['net_amount'] = obj['net_amount'] + tramyte["net_amount"]
+            #     obj['estimates_net_amount'] = obj['estimates_net_amount'] + tramyte["estimates_net_amount"]
             list_item.append(obj)
     return list_item
+
 
 
