@@ -542,7 +542,6 @@ async def organizational_list_statistics(request):
             arr_thongke1['quantity_export'] = int(arr_thongke1['quantity_export']) + thongke["quantity_export"]
             arr_thongke1['net_amount'] = int(arr_thongke1['net_amount']) + thongke["net_amount"]
             arr_thongke1['estimates_net_amount'] = int(arr_thongke1['estimates_net_amount']) + thongke["estimates_net_amount"]
-        
         thongkes.append(arr_thongke1)
         print("abc========================", thongkes)
         return json(thongkes)
@@ -557,17 +556,23 @@ async def organizational_list_statistics(request):
         # print("thongke_phuchoichucnang===========", thongke_phuchoichucnang)
 
         thongke_bvhuyen = await get_thongke_quanhuyen(donvi.tinhthanh_id, "14", medical_supplies_id, start_time, end_time, "17")
+        for thongke in thongke_bvhuyen:
+            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+        
         for thongke in thongke_phuchoichucnang:
             arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
             arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
             arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
             arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
             thongke_bvhuyen.append(thongke)
-        for thongke in thongke_bvhuyen:
-            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
+        # for thongke in thongke_bvhuyen:
+        #     arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
+        #     arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
+        #     arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
+        #     arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
         
         thongke_bvhuyen.append(arr_thongke1)
         print("thongke_bvhuyen===========", thongke_bvhuyen)
