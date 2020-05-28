@@ -763,21 +763,28 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
         organization_tinhthanh = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyensoyte)).first()
         if organization_tinhthanh is not None:
             listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
-            for tuyentinh_id in tuyentinh:
-                organization_tinhthanhs = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyentinh_id)).all()
-                for organization_tinhthanh in organization_tinhthanhs:
-                    listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
-        
-            quanhuyens = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == to_dict(tinhthanh)['id']).all()
-            for quanhuyen in quanhuyens:
-                for tuyenhuyen_id in tuyenhuyen:
-                    organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenhuyen_id)).all()
-                    for organization_huyen in organization_huyens:
-                        listIDorganizations.append(to_dict(organization_huyen)['id'])
-                for tuyenxa_id in tuyenxa:
-                    organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenxa_id)).all()
-                    for organizations_xa in organizations_xas:
-                        listIDorganizations.append(to_dict(organizations_xa)['id'])
+        for tuyentinh_id in tuyentinh:
+            organization_tinhthanhs = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyentinh_id)).all()
+            for organization_tinhthanh in organization_tinhthanhs:
+                listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
+        for tuyenhuyen_id in tuyenhuyen:
+            organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyenhuyen_id)).all()
+        for organization_huyen in organization_huyens:
+            listIDorganizations.append(to_dict(organization_huyen)['id'])
+        for tuyenxa_id in tuyenxa:
+            organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyenxa_id)).all()
+            for organizations_xa in organizations_xas:
+                listIDorganizations.append(to_dict(organizations_xa)['id'])
+            # quanhuyens = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == to_dict(tinhthanh)['id']).all()
+            # for quanhuyen in quanhuyens:
+            #     for tuyenhuyen_id in tuyenhuyen:
+            #         organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenhuyen_id)).all()
+            #         for organization_huyen in organization_huyens:
+            #             listIDorganizations.append(to_dict(organization_huyen)['id'])
+            #     for tuyenxa_id in tuyenxa:
+            #         organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenxa_id)).all()
+            #         for organizations_xa in organizations_xas:
+            #             listIDorganizations.append(to_dict(organizations_xa)['id'])
                 
         reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
         if len(reportOrganizationDetail) > 0:
