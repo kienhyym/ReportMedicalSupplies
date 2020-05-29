@@ -16,9 +16,8 @@ define(function (require) {
 					self.$el.find('#type').removeAttr('readonly')
 				}
 			}
-			esle{
+			else{
 				self.$el.find('#type').removeAttr('readonly')
-
 			}
 			
 			self.vattu_id = "";
