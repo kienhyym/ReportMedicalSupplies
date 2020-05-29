@@ -51,10 +51,17 @@ async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw)
             _['medical_supplies_name']= to_dict(medicalSupplies)['name']
             _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
             reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == result["organization_id"],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'],ReportOrganizationDetail.date < _['date'])).all()
-            if len(reportOrganizationDetail)>0:
-                _['begin_net_amount']= reportOrganizationDetail[0][0]
+            begin_net_amount = 0
+            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == result["organization_id"],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'])).order_by(ReportOrganizationDetail.date.asc()).first()
+            if reportOrganizatiobegin_net_amount is not None:
+                begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
+                _['check_begin_net_amount'] = to_dict(reportOrganizatiobegin_net_amount)['date']
             else:
-                _['begin_net_amount']= 0
+                _['check_begin_net_amount'] = None
+            if len(reportOrganizationDetail)>0:
+                _['begin_net_amount']= reportOrganizationDetail[0][0] + begin_net_amount
+            else:
+                _['begin_net_amount']= 0 + begin_net_amount
 
 
 async def check_medical_supplies_name(request=None, data=None, Model=None, **kw):
@@ -184,10 +191,14 @@ async def load_item_dropdown(request):
         for i in list:
             obj = to_dict(i)
             reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'],ReportOrganizationDetail.date < date)).all()
+            begin_net_amount = 0
+            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'])).order_by(ReportOrganizationDetail.date.asc()).first()
+            if reportOrganizatiobegin_net_amount is not None:
+                begin_net_amount = reportOrganizatiobegin_net_amount[0]
             if len(reportOrganizationDetail)>0:
-                obj['begin_net_amount']= reportOrganizationDetail[0][0]
+                obj['begin_net_amount']= reportOrganizationDetail[0][0]+ begin_net_amount
             else:
-                obj['begin_net_amount']= 0
+                obj['begin_net_amount']= 0 + begin_net_amount
             arr.append(obj)
         print ('___text________',len(arr))
         return json(arr)
@@ -197,10 +208,14 @@ async def load_item_dropdown(request):
         for i in list:
             obj = to_dict(i)
             reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'],ReportOrganizationDetail.date < date)).all()
+            begin_net_amount = 0
+            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(i)['id'])).order_by(ReportOrganizationDetail.date.asc()).first()
+            if reportOrganizatiobegin_net_amount is not None:
+                begin_net_amount = reportOrganizatiobegin_net_amount[0]
             if len(reportOrganizationDetail)>0:
-                obj['begin_net_amount']= reportOrganizationDetail[0][0]
+                    obj['begin_net_amount']= reportOrganizationDetail[0][0] + begin_net_amount
             else:
-                obj['begin_net_amount']= 0
+                obj['begin_net_amount']= 0 + begin_net_amount
             arr.append(obj)
         print ('___no text________',len(arr))
         return json(arr)
@@ -216,7 +231,7 @@ async def create_itembalances(request):
         new_item.report_organization_id = _['report_organization_id']
         new_item.organization_id = _['organization_id']
         new_item.medical_supplies_id = _['medical_supplies_id']
-        # new_item.begin_net_amount = _['begin_net_amount']
+        new_item.begin_net_amount = _['begin_net_amount']
         new_item.quantity_export = _['quantity_export']
         new_item.quantity_import = _['quantity_import']
         # new_item.end_net_amount = _['end_net_amount']
@@ -232,6 +247,7 @@ async def update_itembalances(request):
     for _ in data:
         old_item = db.session.query(ReportOrganizationDetail).filter(ReportOrganizationDetail.id == _['id']).first()
         old_item.organization_id = _['organization_id']
+        old_item.begin_net_amount = _['begin_net_amount']
         old_item.quantity_export = _['quantity_export']
         old_item.quantity_import = _['quantity_import']
         old_item.estimates_net_amount = _['estimates_net_amount']
@@ -279,46 +295,7 @@ async def create_report_donvicungung(request):
         arr.append(obj)
     print ('___no text________',len(arr))
     return json(arr)
-    # organization_id = currentUser.organization_id
 
-
-@app.route('/api/v1/organizational_list_statistics',methods=['POST'])
-async def organizational_list_statistics(request):
-    data = request.json
-
-    medical_supplies_id = data['medical_supplies_id']
-    start_time = data['start_time']
-    end_time = data['end_time']
-
-    uid = current_uid(request)
-    currentUser = await get_current_user(request,uid)
-
-    if currentUser['Organization']['tuyendonvi_id'] == "6":
-        tinhthanh_id = currentUser['Organization']['tinhthanh_id']
-        list_organizations = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id.in_(["13","9"]),Organization.tinhthanh_id == tinhthanh_id)).all()
-        for _ in list_organizations:
-            print ('____________tinhthanh_id___________',to_dict(_)['id'])
-
-
-        arrOrganizations = []
-        for organization in list_organizations:
-            obj = {}
-            obj['organization_name'] = to_dict(organization)['name']
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-            if len(reportOrganizationDetail) > 0:
-                obj['quantity_import'] = reportOrganizationDetail[0][0]
-                obj['quantity_export'] = reportOrganizationDetail[0][1]
-                obj['net_amount'] = reportOrganizationDetail[0][2]
-                obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-                arrOrganizations.append(obj)
-            else:
-                obj['quantity_import'] = 0
-                obj['quantity_export'] = 0
-                obj['net_amount'] = 0
-                obj['estimates_net_amount'] = 0
-                arrOrganizations.append(obj)
-
-        return json(arrOrganizations)
 
 
     

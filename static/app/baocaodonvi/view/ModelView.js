@@ -180,7 +180,7 @@ define(function (require) {
                         <input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
 					</div>
 					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT"  readonly begin_net_amount="${dropdownItemClick.attr('begin_net_amount')}" class="form-control text-center p-1" value="${beginNetAmount}" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT"  begin_net_amount="${dropdownItemClick.attr('begin_net_amount')}" class="form-control text-center p-1" value="${beginNetAmount}" style="font-size:14px">
                     </div>
                     <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT" type="number" quantity_import="0" class="form-control text-center p-1" value="0" style="font-size:14px">
@@ -266,7 +266,7 @@ define(function (require) {
 				self.$el.find('[col-type="END_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmountString);
 			});
 
-			//Out Click QUANTITY_EXPORT
+			//Out Click ESTIMATES_NET_AMOUNT
 			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').unbind('click').bind('click', function () {
 				var pointerOutEstimatesNetAmount = $(this);
 				pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmount.attr("estimates_net_amount"))
@@ -282,6 +282,25 @@ define(function (require) {
 				else {
 					pointerOutEstimatesNetAmount.attr("estimates_net_amount", pointerOutEstimatesNetAmountValue)
 					pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmountValueString)
+				}
+			});
+
+			//Out Click BEGIN_NET_AMOUNT
+			self.$el.find('[col-type="BEGIN_NET_AMOUNT"]').unbind('click').bind('click', function () {
+				var pointerOutBeginNetAmount = $(this);
+				pointerOutBeginNetAmount.val(pointerOutBeginNetAmount.attr("begin_net_amount"))
+			})
+			self.$el.find('[col-type="BEGIN_NET_AMOUNT"]').focusout(function () {
+				var pointerOutBeginNetAmount = $(this);
+				var pointerOutBeginNetAmountValue = pointerOutBeginNetAmount.val();
+				var pointerOutBeginNetAmountValueString = new Number(pointerOutBeginNetAmountValue).toLocaleString("da-DK");
+
+				if (pointerOutBeginNetAmountValue == null || pointerOutBeginNetAmountValue == '') {
+					pointerOutBeginNetAmount.val(0);
+				}
+				else {
+					pointerOutBeginNetAmount.attr("begin_net_amount", pointerOutBeginNetAmountValue)
+					pointerOutBeginNetAmount.val(pointerOutBeginNetAmountValueString)
 				}
 			});
 		},
@@ -403,6 +422,7 @@ define(function (require) {
 			var self = this;
 			if (self.model.get('details').length > 0) {
 				self.model.get('details').forEach(function (item, index) {
+					console.log(item)
 					var quantityImportToLocaleString = new Number(item.quantity_import).toLocaleString("da-DK");
 					var quantityExportToLocaleString = new Number(item.quantity_export).toLocaleString("da-DK");
 					var beginNetAmountToLocaleString = new Number(item.begin_net_amount).toLocaleString("da-DK");
@@ -423,7 +443,7 @@ define(function (require) {
 							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" readonly value="${item.medical_supplies_unit}" style="font-size:14px">
 						</div>
 						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="BEGIN_NET_AMOUNT" class="form-control text-center p-1" begin_net_amount="${item.begin_net_amount}" value="${beginNetAmountToLocaleString}" readonly style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="BEGIN_NET_AMOUNT" class="form-control text-center p-1" begin_net_amount="${item.begin_net_amount}" value="${beginNetAmountToLocaleString}"  style="font-size:14px">
                         </div>
                         <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" quantity_import="${item.quantity_import}" value="${quantityImportToLocaleString}" style="font-size:14px">
@@ -441,7 +461,10 @@ define(function (require) {
                             <i selected-item-id = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
                         </div>
                     </div>
-                    `)
+					`)
+					if (item.date > item.check_begin_net_amount){
+						self.$el.find('[col-type = "BEGIN_NET_AMOUNT"]').attr("readonly","readonly")
+					}
 				})
 				self.clickImportExport();
 
@@ -457,7 +480,7 @@ define(function (require) {
 					"report_organization_id": report_organization_id,
 					"organization_id": self.model.get('organization_id'),
 					"medical_supplies_id": $(item).attr('item-id'),
-					// "begin_net_amount": $(item).find('[col-type="BEGIN_NET_AMOUNT"]').attr('begin_net_amount'),
+					"begin_net_amount": $(item).find('[col-type="BEGIN_NET_AMOUNT"]').attr('begin_net_amount'),
 					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').attr('quantity_export'),
 					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').attr('quantity_import'),
 					// "end_net_amount": $(item).find('[col-type="END_NET_AMOUNT"]').attr('end_net_amount'),
@@ -465,6 +488,7 @@ define(function (require) {
 					"date": self.model.get('date')
 				}
 				arr.push(obj)
+				console.log(arr)
 			})
 			if (arr.length > 0) {
 				$.ajax({
@@ -485,6 +509,7 @@ define(function (require) {
 				var obj = {
 					"id": $(item).attr('selected-item-id'),
 					"organization_id": self.model.get('organization_id'),
+					"begin_net_amount": $(item).find('[col-type="BEGIN_NET_AMOUNT"]').attr('begin_net_amount'),
 					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').attr('quantity_export'),
 					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').attr('quantity_import'),
 					"estimates_net_amount": $(item).find('[col-type="ESTIMATES_NET_AMOUNT"]').attr('estimates_net_amount'),
@@ -492,6 +517,7 @@ define(function (require) {
 				}
 				arr.push(obj)
 			})
+
 			if (arr.length > 0) {
 				$.ajax({
 					type: "POST",
