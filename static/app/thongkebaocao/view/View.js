@@ -11,7 +11,7 @@ define(function (require) {
 		vattu_id: "",
         render: function () {
 			var self = this;
-			if (self.getApp().currentUser.Organization.tuyendonvi_id === "1"){
+			if (self.getApp().currentUser.Organization.tuyendonvi_id === "1" || self.getApp().currentUser.Organization.tuyendonvi_id === null){
 				self.$el.find('#type').removeAttr('readonly')
 			}
 			self.vattu_id = "";
