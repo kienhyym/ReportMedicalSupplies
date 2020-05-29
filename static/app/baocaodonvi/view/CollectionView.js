@@ -55,7 +55,7 @@ define(function(require) {
         uiControl: {
             orderBy: [
                 {
-                    field: "created_at",
+                    field: "date",
                     direction: "desc"
                 }
             ],
