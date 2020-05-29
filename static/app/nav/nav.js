@@ -9,7 +9,7 @@ define(function(require) {
             "icon":"fa fa-user",
             "type":"category",
             "visible": function(){
-                return ((this.userHasRole("admin")||this.userHasRole("admin_donvi")) && gonrinApp().hasTypeDonvi("donvinhanuoc"));
+                return (this.userHasRole("admin")|| (this.userHasRole("admin_donvi") && gonrinApp().hasTypeDonvi("donvinhanuoc")) );
             },
             "entries":[
                 {
@@ -22,16 +22,16 @@ define(function(require) {
                         return (this.userHasRole("admin"));
                     }
                 },
-                {
-                    "text":"Đơn vị Y Tế",
-                    "type":"view",
-                    "collectionName":"donvi",
-                    "route":"canbo/DonViYTe/model",
-                    "$ref": "app/view/quanlyCanbo/DonViYTe/ModelView",
-                    "visible": function(){
-                        return (this.userHasRole("admin_donvi") || this.userHasRole("canbo") ) ;
-                    }
-                },
+                // {
+                //     "text":"Đơn vị Y Tế",
+                //     "type":"view",
+                //     "collectionName":"donvi",
+                //     "route":"canbo/DonViYTe/model",
+                //     "$ref": "app/view/quanlyCanbo/DonViYTe/ModelView",
+                //     "visible": function(){
+                //         return (this.userHasRole("admin_donvi") || this.userHasRole("canbo") ) ;
+                //     }
+                // },
                 {
                     "text":"Danh sách đơn vị trực thuộc",
                     "type":"view",
