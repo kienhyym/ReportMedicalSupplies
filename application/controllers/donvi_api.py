@@ -805,18 +805,6 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
 
 
 async def get_thongke_tinhthanh_donvicungung(tinhthanh_id, tuyendonvi_id, medical_supplies_id, start_time, end_time):
-    # tinhthanhs = db.session.query(TinhThanh).order_by(TinhThanh.ma.asc()).all()
-    # for tinhthanh in tinhthanhs:
-    #     listIDorganizations = []
-    #     obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-    #     obj['organization_name'] = tinhthanh.ten
-    #     organization_tinhthanh = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyensoyte)).first()
-    #     if organization_tinhthanh is not None:
-    #         listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
-    #         for tuyentinh_id in tuyentinh:
-    #             organization_tinhthanhs = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyentinh_id)).all()
-    #             for organization_tinhthanh in organization_tinhthanhs:
-    #                 listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
     list_item = []
     organization_donvicungung = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvicungung")).all()
     for organization in organization_donvicungung:

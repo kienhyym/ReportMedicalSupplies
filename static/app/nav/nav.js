@@ -144,7 +144,8 @@ define(function(require) {
             // }
         },
         {
-            "text": "Thống kê báo cáo đơn vị",
+            "text": "Thống kê",
+            // "text": "Thống kê báo cáo đơn vị",
             "type": "view",
             // "collectionName": "report_organization",
             "route": "thongkebaocao/collection",
