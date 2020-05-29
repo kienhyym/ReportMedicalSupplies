@@ -435,7 +435,7 @@ define(function (require) {
                             <input selected-item-id = "${item.id}" col-type="END_NET_AMOUNT" class="form-control text-center p-1" value="${endNetAmountToLocaleString}" end_net_amount="${item.begin_net_amount + item.quantity_import - item.quantity_export}" readonly style="font-size:14px">
 						</div>
 						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="ESTIMATES_NET_AMOUNT" class="form-control text-center p-1" estimates_net_amount = "0" value="${estimatesNetAmountToLocaleString}"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="ESTIMATES_NET_AMOUNT" class="form-control text-center p-1" estimates_net_amount = "${item.estimates_net_amount}" value="${estimatesNetAmountToLocaleString}"  style="font-size:14px">
 						</div>
                         <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
                             <i selected-item-id = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
