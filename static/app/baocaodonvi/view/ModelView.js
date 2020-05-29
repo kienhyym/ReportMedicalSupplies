@@ -123,6 +123,8 @@ define(function (require) {
 		render: function () {
 			var self = this;
 			var id = this.getApp().getRouter().getParam("id");
+			console.log(moment(moment().unix()).format('DD MM YYYY'))
+			self.model.set('date',moment().unix())
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({

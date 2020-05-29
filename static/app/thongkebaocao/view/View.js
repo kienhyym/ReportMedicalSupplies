@@ -11,8 +11,11 @@ define(function (require) {
 		vattu_id: "",
         render: function () {
 			var self = this;
+			if (self.getApp().currentUser.Organization.tuyendonvi_id === "1"){
+				self.$el.find('#type').removeAttr('readonly')
+			}
 			self.vattu_id = "";
-            // self.loadUIControl();
+            self.loadUIControl();
 			self.loadItemDropdown();
 			var start_time = null;
 			var end_time = null;
@@ -150,22 +153,25 @@ define(function (require) {
 				
 
 
-
-
+				var type_donvi = self.$el.find("#type").data("gonrin").getValue();
 				self.$el.find('.spinner-border').show()
 				var params = {
 					"start_time": start_time,
 					"end_time": end_time,
 					"medical_supplies_id": self.vattu_id,
-					"type_donvi": "donvinhanuoc"
+					"type_donvi": type_donvi
 				}
-				// var url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics1";
-				// if (type_donvi == "donvicungung") {
-				// 	url = self.getApp().serviceURL + "/api/v1/organizational_list_donvicungung";
-				// }
+				console.log(type_donvi)
+				var url
+				if (type_donvi == "donvicungung") {
+					url = self.getApp().serviceURL + "/api/v1/organizational_list_donvicungung";
+				}
+				else{
+					url = self.getApp().serviceURL + "/api/v1/organizational_list_statistics1";
+				}
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/organizational_list_statistics1",
+					url: url,
 					data: JSON.stringify(params),
 					success: function (response) {
 						console.log(response)
@@ -214,27 +220,27 @@ define(function (require) {
                 ],
             });
 			self.$el.find("#type").data("gonrin").setValue("donvinhanuoc");
-            self.$el.find('#start_time').datetimepicker({
-                textFormat:'DD-MM-YYYY',
-                extraFormats:['DDMMYYYY'],
-                parseInputDate: function(val){
-                    return moment.unix(val)
-                },
-                parseOutputDate: function(date){
-                    return date.unix()
-                }
-            });
+            // self.$el.find('#start_time').datetimepicker({
+            //     textFormat:'DD-MM-YYYY',
+            //     extraFormats:['DDMMYYYY'],
+            //     parseInputDate: function(val){
+            //         return moment.unix(val)
+            //     },
+            //     parseOutputDate: function(date){
+            //         return date.unix()
+            //     }
+            // });
 
-            self.$el.find('#end_time').datetimepicker({
-                textFormat:'DD-MM-YYYY',
-                extraFormats:['DDMMYYYY'],
-                parseInputDate: function(val){
-                    return moment.unix(val)
-                },
-                parseOutputDate: function(date){
-                    return date.unix()
-                }
-            });
+            // self.$el.find('#end_time').datetimepicker({
+            //     textFormat:'DD-MM-YYYY',
+            //     extraFormats:['DDMMYYYY'],
+            //     parseInputDate: function(val){
+            //         return moment.unix(val)
+            //     },
+            //     parseOutputDate: function(date){
+            //         return date.unix()
+            //     }
+            // });
 
         },
 
@@ -346,7 +352,10 @@ define(function (require) {
 				self.vattu_id = dropdownItemClick.attr('item-id');
 				self.$el.find('.dropdown-menu-item').hide()
 			})
+			self.$el.find('.hideDrop').unbind('click').bind('click', function () {
+				self.$el.find('.dropdown-menu-item').hide()
 
+			})
 		},
     });
 

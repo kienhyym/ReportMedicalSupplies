@@ -823,7 +823,7 @@ async def get_thongke_tinhthanh_donvicungung(tinhthanh_id, tuyendonvi_id, medica
             obj['quantity_export'] = 0
             obj['net_amount'] = 0
             obj['estimates_net_amount'] = 0
-            obj['organization_name'] = organization['name']
+            obj['organization_name'] = organization.name
             list_item.append(obj)
     return list_item
 
