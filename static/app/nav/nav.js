@@ -43,7 +43,7 @@ define(function(require) {
                     }
                 },
                 {
-                    "text":"Danh sách đơn vị sản xuất",
+                    "text":"Danh sách đơn vị cung ứng",
                     "type":"view",
                     "collectionName":"donvi",
                     "route":"donvicungung/collection",
