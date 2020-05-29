@@ -150,7 +150,8 @@ define(function(require) {
             "route": "thongkebaocao/collection",
             "$ref": "app/thongkebaocao/view/View",
             "visible": function() {
-                return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
             }
         },
     ];
