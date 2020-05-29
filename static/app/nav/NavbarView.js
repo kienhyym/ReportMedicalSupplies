@@ -38,6 +38,17 @@ define(function (require) {
 			}
 			return false;
 		},
+		requireTuyenDonVi: function (listTuyenDonVi) {
+			var currentUser = gonrinApp().currentUser;
+			if (currentUser !== null && currentUser !== undefined && currentUser.Organization != null && currentUser.Organization.tuyendonvi_id!=null && listTuyenDonVi instanceof Array) {
+				for (var i = 0; i < listTuyenDonVi.length; i++) {
+					if(currentUser.Organization.tuyendonvi_id == listTuyenDonVi[i]) {
+						return true;
+					}
+				}
+			}
+			return false;
+		},
 		requirePointRole: function (point_name, role) {
 			var user = gonrinApp().currentUser;
 			if (!!user) {

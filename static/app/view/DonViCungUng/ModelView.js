@@ -184,7 +184,7 @@ define(function (require) {
 						self.model.set(data);
 						self.getUserDonVi();
 						self.applyBindings();
-						if ( !self.getApp().hasRole('admin')) {
+						if (self.getApp().hasRole('canbo')) {
 							self.$el.find("input").prop('disabled', true);
 						} else {
 							self.model.on("change:tinhthanh", function() {
@@ -226,9 +226,9 @@ define(function (require) {
 				self.applyBindings();
 				self.getApp().notify("Lỗi truy cập dữ liệu. Vui lòng thử lại sau")
 				if(gonrinApp().hasRole("admin")) {
-					self.getApp().getRouter().navigate("admin/donvi/collection");
+					self.getApp().getRouter().navigate("donvicungung/collection");
 				} else {
-					self.getApp().getRouter().navigate("canbo/donvi/collection");
+					self.getApp().getRouter().navigate("donvicungung/model");
 				}
 			}
 		},

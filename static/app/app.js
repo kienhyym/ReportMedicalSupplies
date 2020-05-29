@@ -135,9 +135,15 @@ require(['jquery',
 					self.router.navigate("logout");
 				});
 				$("#info_myself").unbind('click').bind('click', function () {
-					self.router.navigate("user/model?id=" + currentUser);
+					// self.router.navigate("user/model?id=" + currentUser);
+					if (gonrinApp().hasTypeDonvi("donvicungung")) {
+						gonrinApp().getRouter().navigate("donvicungung/model");
+					} else if (gonrinApp().hasTypeDonvi("donvinhanuoc")) {
+						gonrinApp().getRouter().navigate("canbo/DonViYTe/model");
+					}
 
 				});
+
 				$('#list_search').hide()
 				$('#list_search_mobile').hide()
 

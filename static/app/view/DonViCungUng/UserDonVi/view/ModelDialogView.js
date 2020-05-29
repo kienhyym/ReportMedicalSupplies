@@ -73,6 +73,7 @@ define(function (require) {
 								// if (curUser) {
 								// 	self.model.set("madonvi_bmte",curUser.madonvi_bmte);
 								// }
+								console.log(234567);
 								var ten = self.model.get("name");
 								self.model.set("name",ten.toUpperCase());
 								self.model.set("unsigned_name",gonrinApp().convert_khongdau(ten));
@@ -84,6 +85,7 @@ define(function (require) {
 								if (!!email) {
 									self.model.set("email",email.toLowerCase());
 								}
+								var email = self.model.get("email");
   				            	self.getApp().showloading();
   						        self.model.save(null,{
   						            success: function (model, respose, options) {
@@ -212,12 +214,6 @@ define(function (require) {
     			self.getApp().notify("Vui lòng nhập họ và tên cán bộ");
     			return false;
     		}
-    		if (phone_number === null || phone_number ===""){
-    			self.getApp().notify("Vui lòng nhập số điện thoại cán bộ");
-    			return false;
-    		}else{
-    			self.model.set("phone",phone_number);
-			}
 			var confirm_pass = self.model.get("confirm_password");
     		if(id === null || id ===""){
     			if (password===null || confirm_pass === null || password==="" || confirm_pass === ""){

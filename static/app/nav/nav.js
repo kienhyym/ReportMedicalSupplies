@@ -9,19 +9,9 @@ define(function(require) {
             "icon":"fa fa-user",
             "type":"category",
             "visible": function(){
-                return (this.userHasRole("admin")||((this.userHasRole("admin_donvi") || this.userHasRole("canbo") )&& gonrinApp().hasTypeDonvi("donvinhanuoc")));
+                return ((this.userHasRole("admin")||this.userHasRole("admin_donvi")) && gonrinApp().hasTypeDonvi("donvinhanuoc"));
             },
             "entries":[
-                // {
-                //     "text":"Tạo đơn vị Y Tế",
-                //     "type":"view",
-                //     "collectionName":"donvi",
-                //     "route":"admin/DonViYTe/create",
-                //     "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/ModelView",
-                //     "visible": function(){
-                //         return (this.userHasRole("admin")) ;
-                //     }
-                // },
                 {
                     "text":"Danh sách đơn vị trực thuộc",
                     "type":"view",
@@ -42,16 +32,6 @@ define(function(require) {
                         return (this.userHasRole("admin_donvi") || this.userHasRole("canbo") ) ;
                     }
                 },
-                // {
-                //     "text":"Danh sách đơn vị đăng kí",
-                //     "type":"view",
-                //     "collectionName":"donvidangki",
-                //     "route":"canbo/donvidangki/collection",
-                //     "$ref": "app/view/quanlyCanbo/DangkiDonVi/CollectionView",
-                //     "visible": function(){
-                //         return (this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("10") == false));
-                //     }
-                // },
                 {
                     "text":"Danh sách đơn vị trực thuộc",
                     "type":"view",
@@ -59,20 +39,19 @@ define(function(require) {
                     "route":"canbo/donvi/collection",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/CollectionView",
                     "visible": function(){
-                        return (this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("5") == false));
+                        return ((this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("16") == false)) && gonrinApp().hasTypeDonvi("donvinhanuoc"));
                     }
                 },
-                // {
-                //     "text":"Danh sách người dùng trực thuộc",
-                //     "type":"view",
-                //     "collectionName":"user",
-                //     "route":"canbo/user/collection",
-                //     "$ref": "app/view/quanlyCanbo/DonViYTe/UserDonVi/view/CollectionView",
-                //     "visible":function() {
-                //         return (this.userHasRole("admin_donvi"));
-                //     }
-                // },
-
+                {
+                    "text":"Danh sách đơn vị sản xuất",
+                    "type":"view",
+                    "collectionName":"donvi",
+                    "route":"donvicungung/collection",
+                    "$ref": "app/donvicungung/view/CollectionView",
+                    "visible": function() {
+                        return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
+                    }
+                },
         ]},
         {
             "text": "Danh mục",
@@ -144,16 +123,16 @@ define(function(require) {
                 return true
             }
         },
-        {
-            "text":"Danh sách đơn vị sản xuất",
-            "type":"view",
-            "collectionName":"donvi",
-            "route":"donvicungung/collection",
-            "$ref": "app/donvicungung/view/CollectionView",
-            "visible": function(){
-                return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
-            }
-        },
+        // {
+        //     "text":"Danh sách đơn vị sản xuất",
+        //     "type":"view",
+        //     "collectionName":"donvi",
+        //     "route":"donvicungung/collection",
+        //     "$ref": "app/donvicungung/view/CollectionView",
+        //     "visible": function(){
+        //         return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
+        //     }
+        // },
         {
             "text": "Báo cáo trang thiết bị",
             "type": "view",
@@ -170,9 +149,9 @@ define(function(require) {
             // "collectionName": "report_organization",
             "route": "thongkebaocao/collection",
             "$ref": "app/thongkebaocao/view/View",
-            // "visible": function() {
-            //     return this.userHasRole("admin");
-            // }
+            "visible": function() {
+                return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+            }
         },
     ];
 

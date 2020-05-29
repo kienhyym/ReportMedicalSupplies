@@ -206,19 +206,16 @@ define(function (require) {
     		var password =self.model.get("password");
 			
     		var hoten = self.model.get("name");
-			var email = self.model.get("email");
+			var accountName = self.model.get("accountName");
 			var macongdan = self.model.get("id_card");
     		if (hoten === null || hoten ===""){
-    			self.getApp().notify("Vui lòng nhập họ và tên cán bộ");
+    			self.getApp().notify({ message: "Vui lòng nhập họ và tên cán bộ." }, { type: "danger" });
     			return false;
-    		}
-    		if  (email == null || email == ""){
-				self.getApp().notify({ message: "Email người dùng không được để trống." }, { type: "danger" });
-				return false;
-			} else {
-				self.model.set("email",email.toLowerCase());
 			}
-			var confirm_pass = self.model.get("confirm_password");
+			if (accountName === null || accountName ===""){
+    			self.getApp().notify({ message: "Tài khoản đăng nhập không được để trống." }, { type: "danger" });
+    			return false;
+			}
     		if(id === null || id ===""){
     			if (password===null || confirm_pass === null || password==="" || confirm_pass === ""){
     				self.getApp().notify({ message: "Vui lòng nhập mật khẩu" }, { type: "danger" });
