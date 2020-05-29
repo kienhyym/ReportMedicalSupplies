@@ -15,6 +15,7 @@ define(function (require) {
             self.loadUIControl();
 			self.loadItemDropdown();
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
+				self.$el.find('.spinner-border').show()
 				var start_time = self.$el.find("#start_time").data("gonrin").getValue(),
 					end_time = self.$el.find("#end_time").data("gonrin").getValue(),
 					vattu_id = self.vattu_id,
@@ -35,7 +36,9 @@ define(function (require) {
 					url: url,
 					data: JSON.stringify(params),
 					success: function (response) {
-                        console.log(response)
+						console.log(response)
+						self.$el.find('.spinner-border').hide()
+
                         self.$el.find('#danhSachDonVi tr').remove()
                         response.forEach(function(item,index){
                             self.$el.find('#danhSachDonVi').append(`
