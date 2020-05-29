@@ -9,7 +9,7 @@ define(function(require) {
             "icon":"fa fa-user",
             "type":"category",
             "visible": function(){
-                return (this.userHasRole("admin")|| (this.userHasRole("admin_donvi") && gonrinApp().hasTypeDonvi("donvinhanuoc")) );
+                return (this.userHasRole("admin")|| (this.userHasRole("admin_donvi") && gonrinApp().hasTypeDonvi("donvinhanuoc") && !this.checkTuyenDonVi("16") && !this.checkTuyenDonVi("17")));
             },
             "entries":[
                 {
@@ -139,9 +139,9 @@ define(function(require) {
             "collectionName": "report_organization",
             "route": "baocaodonvi/collection",
             "$ref": "app/baocaodonvi/view/CollectionView",
-            // "visible": function() {
-            //     return this.userHasRole("admin");
-            // }
+            "visible": function() {
+                return ( !this.requireTuyenDonVi(["1"]));
+            }
         },
         {
             "text": "Thống kê",

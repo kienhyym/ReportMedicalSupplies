@@ -222,7 +222,7 @@ define(function (require) {
                 allowTextInput: true,
                 enableSearch: true,
                 dataSource: [
-                    { value: "donvinhanuoc", text: "Đơn vị hành chính" },
+                    { value: "donvinhanuoc", text: "Cơ sở y tế" },
                     { value: "donvicungung", text: "Đơn vị cung ứng" },
                 ],
             });
