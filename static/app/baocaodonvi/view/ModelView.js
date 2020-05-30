@@ -38,33 +38,58 @@ define(function (require) {
 						label: "TRANSLATE:SAVE",
 						command: function () {
 							var self = this;
-							self.model.get('details').forEach(function(item,index){
+							self.model.get('details').forEach(function (item, index) {
 								delete item.check_begin_net_amount
 							})
-							self.checkItem();
-							self.model.save(null, {
-								success: function (model, respose, options) {
-									self.getApp().notify("Lưu thông tin thành công");
-									self.createItem(respose.id)
-									self.updateItem();
-									self.deleteItem();
-									self.getApp().getRouter().navigate("/baocaodonvi/collection");
+							var arr = [];
+							self.$el.find('.selected-item-general').each(function (index, item) {
+								var obj = {
+									"organization_id": self.model.get('organization_id'),
+									"medical_supplies_id": $(item).attr('item_id'),
+									"date": self.model.get('date')
+								}
+								arr.push(obj)
+							})
+							if (arr.length > 0) {
+								$.ajax({
+									type: "POST",
+									url: self.getApp().serviceURL + "/api/v1/check_date_begin_new_amount",
+									data: JSON.stringify(arr),
+									success: function (response) {
+										console.log(response)
+										if (response.message == "false") {
+											self.getApp().notify({ message: "Ngày tạo báo cáo thấp hơn ngày khởi tạo tồn" }, { type: "danger", delay: 1000 });
+											return false
+										}
+										else {
+											self.model.save(null, {
+												success: function (model, respose, options) {
+													self.getApp().notify("Lưu thông tin thành công");
+													self.createItem(respose.id)
+													self.updateItem();
+													self.deleteItem();
+													self.getApp().getRouter().navigate("/baocaodonvi/collection");
 
-								},
-								error: function (xhr, status, error) {
-									try {
-										if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED") {
-											self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
-											self.getApp().getRouter().navigate("login");
-										} else {
-											self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+												},
+												error: function (xhr, status, error) {
+													try {
+														if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED") {
+															self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
+															self.getApp().getRouter().navigate("login");
+														} else {
+															self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+														}
+													}
+													catch (err) {
+														self.getApp().notify({ message: "Lưu thông tin không thành công" }, { type: "danger", delay: 1000 });
+													}
+												}
+											});
 										}
 									}
-									catch (err) {
-										self.getApp().notify({ message: "Lưu thông tin không thành công" }, { type: "danger", delay: 1000 });
-									}
-								}
-							});
+								});
+							}
+
 						}
 					},
 					{
@@ -128,7 +153,7 @@ define(function (require) {
 			var self = this;
 			var id = this.getApp().getRouter().getParam("id");
 			console.log(moment(moment().unix()).format('DD MM YYYY'))
-			self.model.set('date',moment().unix())
+			self.model.set('date', moment().unix())
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({
@@ -377,7 +402,7 @@ define(function (require) {
 					success: function (response) {
 						self.$el.find('.dropdown-item').remove();
 						var count = response.length
-						
+
 
 						response.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
@@ -466,8 +491,8 @@ define(function (require) {
                         </div>
                     </div>
 					`)
-					if (item.date > item.check_begin_net_amount){
-						self.$el.find('[col-type = "BEGIN_NET_AMOUNT"]').attr("readonly","readonly")
+					if (item.date > item.check_begin_net_amount) {
+						self.$el.find('[col-type = "BEGIN_NET_AMOUNT"]').attr("readonly", "readonly")
 					}
 				})
 				self.clickImportExport();
@@ -556,30 +581,6 @@ define(function (require) {
 					}
 				});
 			}
-		},
-		checkItem: function () {
-			var self = this;
-			var arr = [];
-			self.$el.find('.selected-item-general').each(function (index, item) {
-				var obj = {
-					"organization_id": self.model.get('organization_id'),
-					"medical_supplies_id": $(item).attr('item-id'),
-					"date": self.model.get('date')
-				}
-				arr.push(obj)
-				console.log('_____axxxx____',arr)
-			})
-			// if (arr.length > 0) {
-			// 	$.ajax({
-			// 		type: "POST",
-			// 		url: self.getApp().serviceURL + "/api/v1/create_report_organization_detail",
-			// 		data: JSON.stringify(arr),
-			// 		success: function (response) {
-			// 			console.log(response)
-			// 		}
-			// 	});
-			// }
-
 		},
 
 
