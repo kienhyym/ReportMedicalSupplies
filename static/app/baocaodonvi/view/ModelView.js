@@ -153,7 +153,8 @@ define(function (require) {
 			var self = this;
 			var id = this.getApp().getRouter().getParam("id");
 			console.log(moment(moment().unix()).format('DD MM YYYY'))
-			self.model.set('date', moment().unix())
+			self.model.set('date', moment().unix());
+			self.loadItemDropdown = [];
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({
