@@ -38,6 +38,10 @@ define(function (require) {
 						label: "TRANSLATE:SAVE",
 						command: function () {
 							var self = this;
+							self.model.get('details').forEach(function(item,index){
+								delete item.check_begin_net_amount
+							})
+							self.checkItem();
 							self.model.save(null, {
 								success: function (model, respose, options) {
 									self.getApp().notify("Lưu thông tin thành công");
@@ -502,6 +506,8 @@ define(function (require) {
 			}
 
 		},
+
+
 		updateItem: function () {
 			var self = this;
 			var arr = [];
@@ -550,6 +556,30 @@ define(function (require) {
 					}
 				});
 			}
+		},
+		checkItem: function () {
+			var self = this;
+			var arr = [];
+			self.$el.find('.selected-item-general').each(function (index, item) {
+				var obj = {
+					"organization_id": self.model.get('organization_id'),
+					"medical_supplies_id": $(item).attr('item-id'),
+					"date": self.model.get('date')
+				}
+				arr.push(obj)
+				console.log('_____axxxx____',arr)
+			})
+			// if (arr.length > 0) {
+			// 	$.ajax({
+			// 		type: "POST",
+			// 		url: self.getApp().serviceURL + "/api/v1/create_report_organization_detail",
+			// 		data: JSON.stringify(arr),
+			// 		success: function (response) {
+			// 			console.log(response)
+			// 		}
+			// 	});
+			// }
+
 		},
 
 
