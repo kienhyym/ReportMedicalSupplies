@@ -9,9 +9,11 @@ define(function (require) {
 	return Gonrin.View.extend({
 		template: template,
 		vattu_id: "",
+		vattu_ten: "",
 		render: function () {
 			var self = this;
 			self.vattu_id = "";
+			self.vattu_ten = "";
 			self.typeFilter();
 			self.loadItemDropdown();
 
@@ -20,6 +22,7 @@ define(function (require) {
 				params['type'] = self.$el.find('.type-filter button').attr('filter');
 				params['type_donvi'] = "donvinhanuoc";
 				params['medical_supplies_id'] = self.vattu_id;
+				params['medical_supplies_name'] = self.vattu_ten;
 
 				if (self.$el.find('.type-filter button').attr('filter') == "none") {
 					self.getApp().notify({ message: "Bạn chưa chọn bộ lọc" }, { type: "danger", delay: 1000 });
@@ -59,6 +62,8 @@ define(function (require) {
                             </tr>
                             `)
 						})
+						self.exportExcel(response,params);
+
 					},
 					error: function (xhr, status, error) {
 						try {
@@ -227,9 +232,10 @@ define(function (require) {
 			var self = this;
 			self.$el.find('.dropdown-menu-item .dropdown-item').unbind('click').bind('click', function () {
 				var dropdownItemClick = $(this);
-				console.log("dsafsghfg=======", dropdownItemClick);
 				self.$el.find('.search-item').val(dropdownItemClick.attr('title'));
 				self.vattu_id = dropdownItemClick.attr('item-id');
+				self.vattu_ten = dropdownItemClick.attr('title');
+
 				self.$el.find('.dropdown-menu-item').hide()
 			})
 			self.$el.find('.hideDrop').unbind('click').bind('click', function () {
@@ -237,6 +243,33 @@ define(function (require) {
 
 			})
 		},
+		exportExcel: function(data,params){
+			var self = this;
+			self.$el.find('.button-excel').unbind('click').bind('click',function(){
+				if (params.type == "all") {
+					var filter = "Thống kê "+params.medical_supplies_name+" từ trước đến nay";
+				}
+				else if (params.type == "fromBeforeToDay") {
+					var to_date = moment(params.to_date * 1000).format('DD MM YYYY'); 
+					var filter = "Thống kê "+params.medical_supplies_name+" từ trước đến ngày "+ to_date;
+				}
+				else if (params.type == "fromDayToDay") {
+					var from_date = moment(params.from_date * 1000).format('DD MM YYYY'); 
+					var to_date = moment(params.to_date * 1000).format('DD MM YYYY'); 
+					var filter = "Thống kê "+params.medical_supplies_name+" từ ngày "+from_date+" đến ngày "+ to_date;
+				}
+				$.ajax({
+					type: "POST",
+					url: self.getApp().serviceURL + "/api/v1/export_excel",
+					data: JSON.stringify({"data":data,"filter":filter}),
+					success: function (response) {
+						window.location=String(self.getApp().serviceURL+response.message);
+
+					}
+				})
+			})
+			
+		}
 	});
 
 });

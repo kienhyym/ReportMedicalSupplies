@@ -110,6 +110,30 @@ apimanager.create_api(ReportOrganizationDetail,
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
     collection_name='report_organization_detail')
 
+
+    
+
+@app.route('/api/v1/export_excel', methods=["POST"])
+async def export_excel(request):
+    data = request.json
+    list_id = data['data']
+    dataFrame_name = []
+    dataFrame = []
+    for i in range(len(list_id)):
+        arr = []
+        arr.append(i)
+        arr.append(list_id[i]['organization_name'])
+        arr.append(list_id[i]['quantity_import'])
+        arr.append(list_id[i]['quantity_export'])
+        arr.append(list_id[i]['net_amount'])
+        arr.append(list_id[i]['estimates_net_amount'])
+        dataFrame.append(arr)
+    print ("_____________________",dataFrame)
+    df1 = pandas.DataFrame(dataFrame,columns=['STT','Tên đơn vị','Tổng Nhập', 'Tổng sử dụng','Tổng tồn','Tổng dự kiến nhu cầu nhập'])
+
+    df1.to_excel("static/uploads/"+data['filter']+".xlsx",index=False)  
+    return json({"message": "/static/uploads/"+data['filter']+".xlsx"})
+
 @app.route('/api/v1/link_file_upload', methods=['POST'])
 async def link_file_upload(request):
     kituA=["á","à","ạ","ã","ả","â","ấ","ầ","ậ","ẫ","ă","ằ","ắ","ẳ"]
@@ -311,4 +335,4 @@ async def create_report_donvicungung(request):
 
 
 
-    
+
