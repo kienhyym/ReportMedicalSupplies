@@ -786,7 +786,8 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
                     begin_net_amount = to_dict(reportOrganizatiobegin_net_amountfromDayToDayreportOrganizatiobegin_net_amountfromDayToDay)['begin_net_amount']
             # TRƯỚC KHOẢNG THỜI GIAN
                 reportOrganizationDetailBefore = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-                begin_net_amount = reportOrganizationDetailBefore[0][0]
+                if len(reportOrganizationDetailBefore) > 0:
+                    begin_net_amount = reportOrganizationDetailBefore[0][0]
                 reportOrganizatiobegin_net_amounBeforefromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
                 if reportOrganizatiobegin_net_amounBeforefromDayToDay is not None:
                     begin_net_amount = to_dict(reportOrganizatiobegin_net_amounBeforefromDayToDay)['begin_net_amount'] + begin_net_amount
