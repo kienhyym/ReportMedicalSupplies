@@ -270,10 +270,9 @@ async def check_date_begin_new_amount(request):
     if list_id is not None: 
         for _ in list_id:
             reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == _["organization_id"],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'])).order_by(ReportOrganizationDetail.date.asc()).first()
-            print ('____________________',to_dict(reportOrganizatiobegin_net_amount)['date'],_['date'])
-            if int(to_dict(reportOrganizatiobegin_net_amount)['date']) > int(_['date']):
-                print ('____________________',to_dict(reportOrganizatiobegin_net_amount)['date'],_['date'])
-                return json({"message":"false"})
+            if reportOrganizatiobegin_net_amount is not None: 
+                if int(to_dict(reportOrganizatiobegin_net_amount)['date']) > int(_['date']):
+                    return json({"message":"false"})
         return json({"message": "true"})
     return json({"message": "true"})
 

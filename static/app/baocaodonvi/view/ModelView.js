@@ -152,9 +152,8 @@ define(function (require) {
 		render: function () {
 			var self = this;
 			var id = this.getApp().getRouter().getParam("id");
-			console.log(moment(moment().unix()).format('DD MM YYYY'))
 			self.model.set('date', moment().unix());
-			self.loadItemDropdown = [];
+			self.listItemRemove = [];
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({
@@ -183,8 +182,7 @@ define(function (require) {
 				self.loadItemDropdown();
 				var currentUser = gonrinApp().currentUser;
 				self.model.set("organization", currentUser.Organization);
-				// self.$el.find("#organization").prop("")
-
+				console.log(currentUser.Organization)
 			}
 
 		},

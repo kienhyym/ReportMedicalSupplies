@@ -18,11 +18,21 @@ define(function (require) {
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
 				var params = {};
 				params['type'] = self.$el.find('.type-filter button').attr('filter');
+				params['type_donvi'] = "donvinhanuoc";
+				params['medical_supplies_id'] = self.vattu_id;
+
 				if (self.$el.find('.type-filter button').attr('filter') == "none") {
 					self.getApp().notify({ message: "Bạn chưa chọn bộ lọc" }, { type: "danger", delay: 1000 });
+					params['from_date'] = null;
+					params['to_date'] = null;
+				}
+				else if (self.$el.find('.type-filter button').attr('filter') == "all") {
+					params['from_date'] = null;
+					params['to_date'] = null;
 				}
 				else if (self.$el.find('.type-filter button').attr('filter') == "fromBeforeToDay") {
-					params['date'] = self.$el.find('#end_time').data("gonrin").getValue()
+					params['from_date'] = null;
+					params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
 				}
 				else if (self.$el.find('.type-filter button').attr('filter') == "fromDayToDay") {
 					params['from_date'] = self.$el.find('#start_time').data("gonrin").getValue()
