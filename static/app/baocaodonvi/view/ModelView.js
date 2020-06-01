@@ -234,7 +234,6 @@ define(function (require) {
 					self.$el.find('.selected-item-new[selected-item-id="' + $(this).attr('selected-item-id') + '"]').remove();
 				})
 			})
-
 		},
 		clickImportExport: function () {
 			var self = this;
@@ -247,14 +246,16 @@ define(function (require) {
 			self.$el.find('[col-type="QUANTITY_IMPORT"]').focusout(function () {
 				var pointerOutQuantityImport = $(this);
 				var pointerOutQuantityImportValue = pointerOutQuantityImport.val();
-				var pointerOutQuantityImportValueString = new Number(pointerOutQuantityImportValue).toLocaleString("da-DK");
 
 				if (pointerOutQuantityImportValue == null || pointerOutQuantityImportValue == '') {
 					pointerOutQuantityImport.val(0);
 				}
 				else {
 					pointerOutQuantityImport.attr("quantity_import", pointerOutQuantityImportValue)
-					pointerOutQuantityImport.val(pointerOutQuantityImportValueString)
+					setTimeout(() => {
+						var pointerOutQuantityImportValueString = new Number(pointerOutQuantityImportValue).toLocaleString("da-DK");
+						pointerOutQuantityImport.val(pointerOutQuantityImportValueString)
+					}, 200);
 				}
 
 				var selectedItemId = pointerOutQuantityImport.attr('selected-item-id');
@@ -275,14 +276,16 @@ define(function (require) {
 			self.$el.find('[col-type="QUANTITY_EXPORT"]').focusout(function () {
 				var pointerOutQuantityExport = $(this);
 				var pointerOutQuantityExportValue = pointerOutQuantityExport.val();
-				var pointerOutQuantityExportValueString = new Number(pointerOutQuantityExportValue).toLocaleString("da-DK");
 
 				if (pointerOutQuantityExportValue == null || pointerOutQuantityExportValue == '') {
 					pointerOutQuantityExport.val(0);
 				}
 				else {
 					pointerOutQuantityExport.attr("quantity_export", pointerOutQuantityExportValue)
-					pointerOutQuantityExport.val(pointerOutQuantityExportValueString)
+					setTimeout(() => {
+						var pointerOutQuantityExportValueString = new Number(pointerOutQuantityExportValue).toLocaleString("da-DK");
+						pointerOutQuantityExport.val(pointerOutQuantityExportValueString)
+					}, 200);
 				}
 
 				var selectedItemId = pointerOutQuantityExport.attr('selected-item-id');
@@ -302,14 +305,16 @@ define(function (require) {
 			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').focusout(function () {
 				var pointerOutEstimatesNetAmount = $(this);
 				var pointerOutEstimatesNetAmountValue = pointerOutEstimatesNetAmount.val();
-				var pointerOutEstimatesNetAmountValueString = new Number(pointerOutEstimatesNetAmountValue).toLocaleString("da-DK");
 
 				if (pointerOutEstimatesNetAmountValue == null || pointerOutEstimatesNetAmountValue == '') {
 					pointerOutEstimatesNetAmount.val(0);
 				}
 				else {
 					pointerOutEstimatesNetAmount.attr("estimates_net_amount", pointerOutEstimatesNetAmountValue)
-					pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmountValueString)
+					setTimeout(() => {
+						var pointerOutEstimatesNetAmountValueString = new Number(pointerOutEstimatesNetAmountValue).toLocaleString("da-DK");
+						pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmountValueString)
+					}, 200);
 				}
 			});
 
@@ -321,16 +326,28 @@ define(function (require) {
 			self.$el.find('[col-type="BEGIN_NET_AMOUNT"]').focusout(function () {
 				var pointerOutBeginNetAmount = $(this);
 				var pointerOutBeginNetAmountValue = pointerOutBeginNetAmount.val();
-				var pointerOutBeginNetAmountValueString = new Number(pointerOutBeginNetAmountValue).toLocaleString("da-DK");
 
 				if (pointerOutBeginNetAmountValue == null || pointerOutBeginNetAmountValue == '') {
 					pointerOutBeginNetAmount.val(0);
 				}
 				else {
 					pointerOutBeginNetAmount.attr("begin_net_amount", pointerOutBeginNetAmountValue)
-					pointerOutBeginNetAmount.val(pointerOutBeginNetAmountValueString)
+					setTimeout(() => {
+						var pointerOutBeginNetAmountValueString = new Number(pointerOutBeginNetAmountValue).toLocaleString("da-DK");
+						pointerOutBeginNetAmount.val(pointerOutBeginNetAmountValueString)
+					}, 200);
 				}
 			});
+
+
+			  
+
+
+
+
+
+
+
 		},
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
