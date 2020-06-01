@@ -6,7 +6,7 @@
       <div class="col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
         <h3 class="card-title">Thống kê báo cáo</h3>
       </div>
-      <div class="col-md-6 col-lg-6 col-sm-12 col-12 p-1">
+      <div class="col-md-6 col-lg-6 col-sm-12 col-12 p-1 hideDrop">
         <div class="form-group">
           <label for="">Trang thiết bị y tế</label>
           <input type="text" class="form-control search-item" placeholder="Nhập tên mặt hàng để tìm kiếm">
@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1">
+      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 hideDrop">
         <div class="form-group">
           <label>Chọn bộ lọc</label>
           <div class="dropdown type-filter">
@@ -24,7 +24,7 @@
               Chọn bộ lọc:
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" filter="none" text = "Chọn bộ lọc: " >Bỏ chọn</a>
+              <!-- <a class="dropdown-item" filter="none" text = "Chọn bộ lọc: " >Bỏ chọn</a> -->
               <a class="dropdown-item" filter="all" text = "Từ trước đến nay">Từ trước đến nay</a>
               <a class="dropdown-item" filter="fromBeforeToDay" text = "Từ trước đến ngày">Từ trước đến ngày</a>
               <a class="dropdown-item" filter="fromDayToDay" text = "Trong khoảng thời gian">Trong khoảng thời gian</a>
@@ -33,14 +33,14 @@
         </div>
       </div>
 
-      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 start-time" style="display: none;">
+      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 start-time hideDrop" style="display: none;">
         <div class="form-group start_time">
           <label for="">Từ ngày</label>
           <input type="text" class="form-control" id="start_time">
         </div>
       </div>
 
-      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 end-time" style="display: none;" >
+      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 end-time hideDrop" style="display: none;" >
         <div class="form-group end_time">
           <label for="">Đến ngày</label>
           <input type="text" class="form-control" id="end_time">
@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <div class="row col-md-12 col-lg-12 col-sm-12 col-12 p-1">
+    <div class="row col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
       <div>
         <button type="button" class="btn btn-primary m-1 button-filter">Tìm kiếm</button>
       </div>
@@ -59,7 +59,7 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <table class="table table-striped col-md-12 col-lg-12 col-sm-12 col-12 p-1">
+    <table class="table table-striped col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
       <thead>
         <tr>
           <!-- <th scope="col">STT</th> -->

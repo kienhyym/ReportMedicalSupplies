@@ -21,7 +21,6 @@ define(function (require) {
 			self.typeFilter();
 			self.loadItemDropdown();
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
-				self.$el.find('.spinner-border').show()
 				var params = {};
 				params['type'] = self.$el.find('.type-filter button').attr('filter');
 				params['type_donvi'] = "donvinhanuoc";
@@ -36,12 +35,14 @@ define(function (require) {
 						params['from_date'] = null;
 						params['to_date'] = null;
 						self.apiFilter(params)
+						self.$el.find('.spinner-border').show()
 
 					}
 					else if (self.$el.find('.type-filter button').attr('filter') == "fromBeforeToDay") {
 						params['from_date'] = null;
 						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
 						self.apiFilter(params)
+						self.$el.find('.spinner-border').show()
 
 					}
 					else if (self.$el.find('.type-filter button').attr('filter') == "fromDayToDay") {
@@ -53,6 +54,8 @@ define(function (require) {
 						}
 						else{
 							self.apiFilter(params)
+							self.$el.find('.spinner-border').show()
+
 						}
 					}
 				}
