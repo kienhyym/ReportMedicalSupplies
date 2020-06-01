@@ -153,6 +153,8 @@ define(function (require) {
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
 			self.$el.find('.search-item').unbind('click').bind('click', function () {
+				$(this).select();
+
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",

@@ -81,7 +81,7 @@ define(function(require) {
             },
             pagination: {
                 page: 1,
-                pageSize: 100
+                pageSize: 20
             },
         },
         render: function() {
