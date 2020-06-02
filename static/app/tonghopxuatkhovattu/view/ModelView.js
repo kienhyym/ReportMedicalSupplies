@@ -5,7 +5,7 @@ define(function (require) {
 		Gonrin = require('gonrin');
 
 	var template = require('text!app/tonghopxuatkhovattu/tpl/model.html'),
-		schema = require('json!schema/ReportOrganizationSchema.json');
+		schema = require('json!schema/SyntheticReleaseSchema.json');
 	var OrganizationView = require('app/donvicungung/view/SelectView');
 
 	return Gonrin.ModelView.extend({

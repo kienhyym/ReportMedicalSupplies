@@ -5,7 +5,7 @@ define(function(require) {
         Gonrin = require('gonrin');
 
         var template = require('text!app/tonghopxuatkhovattu/tpl/collection.html'),
-        schema = require('json!schema/ReportOrganizationSchema.json');
+        schema = require('json!schema/SyntheticReleaseSchema.json');
 
     var CustomFilterView = require('app/base/view/CustomFilterView');
 
@@ -14,7 +14,7 @@ define(function(require) {
         template: template,
         modelSchema: schema,
         urlPrefix: "/api/v1/",
-        collectionName: "report_organization",
+        collectionName: "synthetic_release",
         tools: [{
             name: "defaultgr",
             type: "group",
@@ -92,7 +92,6 @@ define(function(require) {
                 } else {
                     filters = {"$and": [
                         { "code": { "$likeI": text } },
-                        { "organization_id": {"$eq": currentUser.organization_id}}
                     ]};
                 }
                 self.uiControl.filters = filters;
@@ -101,7 +100,6 @@ define(function(require) {
             if(gonrinApp().hasRole("admin")) {
             } else {
                 filterobj = {"$and": [
-                    { "organization_id": {"$eq": currentUser.organization_id}}
                 ]};
             }
             self.uiControl.filters = filterobj;
