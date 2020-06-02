@@ -90,3 +90,34 @@ class ReportSupplyOrganizationDetail(CommonModel):
     price = db.Column(DECIMAL(25,3), default=0) # Đơn giá
     effective_time = db.Column(BigInteger()) # Thời hạn 
     file = db.Column(String()) #file báo giá
+
+
+class SyntheticRelease(CommonModel):
+    __tablename__ = 'synthetic_release'
+    id = db.Column(String(), primary_key=True, default=default_uuid)
+    code = db.Column(String())
+    period = db.Column(String())
+    date = db.Column(BigInteger())
+
+    medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
+    medical_supplies = relationship('MedicalSupplies')
+
+    details = db.relationship("SyntheticReleaseDetail", order_by="SyntheticReleaseDetail.created_at", cascade="all, delete-orphan")
+
+class SyntheticReleaseDetail(CommonModel):
+    __tablename__ = 'synthetic_release_detail'
+    id = db.Column(String(), primary_key=True, default=default_uuid)
+    code = db.Column(String())
+    period = db.Column(String())
+    date = db.Column(BigInteger())
+
+    synthetic_release_id = db.Column(String(), ForeignKey('synthetic_release.id'), nullable=True)
+    synthetic_release = relationship('SyntheticRelease')
+    
+    organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
+    organization = relationship('Organization')
+
+    date_export = db.Column(BigInteger())
+    quantity  = db.Column(DECIMAL(25,3), default=0)
+    medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
+    medical_supplies = relationship('MedicalSupplies')
