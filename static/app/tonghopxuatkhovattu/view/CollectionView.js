@@ -48,7 +48,8 @@ define(function(require) {
                     direction: "desc"
                 }
             ],
-            fields: [{
+            fields: [
+                {
                     field: "date",
                     label: "Thời gian báo cáo",
                     template: function(rowData) {

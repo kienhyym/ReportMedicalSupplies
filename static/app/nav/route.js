@@ -162,7 +162,11 @@ define(function(require) {
 			"route":"canbo/DonViYTe/create",
 			"$ref": "app/view/quanlyCanbo/DonViYTe/ModelViewCreateDonvi"
         },
-
+        {
+            // "collectionName":"donvidangki",
+            "route":"thongkebaocao/collection",
+            "$ref": "app/thongkebaocao/view/View"
+        },
 
         {
             "collectionName": "synthetic_release",
@@ -175,7 +179,6 @@ define(function(require) {
             "$ref": "app/tonghopxuatkhovattu/view/ModelView",
         },
         
-
     ];
 
 });
