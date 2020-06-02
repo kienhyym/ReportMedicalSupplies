@@ -29,7 +29,10 @@ define(function (require) {
         },
         checkTuyenDonVi: function(tuyendonvi_id) {
             return (gonrinApp().currentUser != null && gonrinApp().currentUser.Organization != null) && (gonrinApp().currentUser.Organization.tuyendonvi_id == tuyendonvi_id);
-        },
+		},
+		checkDonViCungUng:function(type_donvi){
+			return (gonrinApp().currentUser != null && gonrinApp().currentUser.Organization != null) && (gonrinApp().currentUser.Organization.type_donvi == type_donvi);
+		},
 		requireRole: function (role) {
 			var user = gonrinApp().currentUser;
 			// console.log("user.role====", user.role);

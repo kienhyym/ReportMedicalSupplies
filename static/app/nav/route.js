@@ -167,6 +167,31 @@ define(function(require) {
             "route":"thongkebaocao/collection",
             "$ref": "app/thongkebaocao/view/View"
         },
+        {
+            // "collectionName":"donvidangki",
+            "route":"xuatkhovattu/collection",
+            "$ref":"app/thongkebaocao/xuatkhovattu/view/View"
+        },
+        
+        {
+            // "collectionName":"donvidangki",
+            "route":"muathietbiyte/collection",
+            "$ref": "app/thongkebaocao/thongkemuathietbiyte/view/View"
+        },
+        {
+            // "collectionName":"donvidangki",
+            "route":"soluongkhautrangvapdc/collection",
+            "$ref":"app/thongkebaocao/baocaosoluongkhautrangvapcd/view/View",
+        },
+        {
+            // "collectionName":"donvidangki",
+            "route":"muatrangthietbiduphong/collection",
+            "$ref":"app/thongkebaocao/baocaomuatrangthietbiduphongpcd/view/View",
+        },
+        {
+            "route": "baocaocungungtrangthietbi/collection",
+            "$ref": "app/baocaodonvi_cungung/view/CollectionView",
+        }
     ];
 
 });

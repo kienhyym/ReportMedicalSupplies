@@ -23,7 +23,7 @@ class Config(object):
     IMAGE_SERVICE_URL = 'https://drlinks.yte360.com/static/images/uploads'
     # FILE_SERVICE_URL = '/files/uploads'#lay static_url + FILE_SERVICE_URL + file=file_url
 
-    FS_ROOT_DONVI = "/home/chinh/Documents/workspace/baocaovattuyte/repo/file_donvi/"
+    FS_ROOT_DONVI = "/home/winter/Documents/workspace/baocaovattuyte/repo/file_donvi/"
     
     FS_ROOT= "static/uploads/"
     FILE_SERVICE_URL = '/static/uploads'

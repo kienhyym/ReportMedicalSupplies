@@ -123,6 +123,7 @@ define(function(require) {
                 return true
             }
         },
+        
         // {
         //     "text":"Danh sách đơn vị sản xuất",
         //     "type":"view",
@@ -140,20 +141,102 @@ define(function(require) {
             "route": "baocaodonvi/collection",
             "$ref": "app/baocaodonvi/view/CollectionView",
             "visible": function() {
-                return ( !this.requireTuyenDonVi(["1"]));
+                return (!this.checkDonViCungUng("donvicungung"));
+                
+            }
+        },
+        {
+            "text": "Báo báo cung ứng trang thiết bị",
+            "type": "view",
+            "collectionName": "report_supply_organization",
+            "route": "baocaocungungtrangthietbi/collection",
+            "$ref": "app/baocaodonvi_cungung/view/CollectionView",
+            "visible": function() {
+              return (this.userHasRole("admin") || this.checkDonViCungUng("donvicungung"))
             }
         },
         {
             "text": "Thống kê",
+            "icon": "fa fa-list-ul",
             // "text": "Thống kê báo cáo đơn vị",
-            "type": "view",
+            "type": "category",
             // "collectionName": "report_organization",
-            "route": "thongkebaocao/collection",
-            "$ref": "app/thongkebaocao/view/View",
             "visible": function() {
                 return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
-            }
+            },
+            "entries":[
+                {
+                "text":"Thống kê báo cáo",
+                "type":"view",
+                "route": "thongkebaocao/collection",
+                "$ref": "app/thongkebaocao/view/View",
+                "visible": function() {
+                    return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                    // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                }
+                },
+                {
+                    "text":"Báo cáo đơn vị cung ứng",
+                    "type":"view",
+                    "route": "thongkebaocao/collection",
+                    "$ref": "app/thongkebaocao/view/View",
+                    "visible": function() {
+                        return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                        // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                    }
+                    },
+                    {
+                        "text":"Báo cáo đơn vị y tế",
+                        "type":"view",
+                        "route": "thongkebaocao/collection",
+                        "$ref": "app/thongkebaocao/view/View",
+                        "visible": function() {
+                            return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                            // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                        }
+                    },
+                {
+                    "text":"Thống kê xuất kho vật tư",
+                    "type":"view",
+                    "route":"xuatkhovattu/collection",
+                    "$ref":"app/thongkebaocao/xuatkhovattu/view/View",
+                    "visible": false
+                    // function(){
+                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                    // }
+                },
+                {
+                    "text":"Thống kê mua thiết bị y tế",
+                    "type":"view",
+                    "route":"muathietbiyte/collection",
+                    "$ref":"app/thongkebaocao/thongkemuathietbiyte/view/View",
+                    "visible": false
+                    // function(){
+                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                    // }
+                },
+                {
+                    "text":"Thống kê số lượng khẩu trang và PCD",
+                    "type":"view",
+                    "route":"soluongkhautrangvapdc/collection",
+                    "$ref":"app/thongkebaocao/baocaosoluongkhautrangvapcd/view/View",
+                    "visible": false
+                    // function(){
+                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                    // }
+                },
+                {
+                    "text":"Thống kê mua trang thiết bị dự phòng",
+                    "type":"view",
+                    "route":"muatrangthietbiduphong/collection",
+                    "$ref":"app/thongkebaocao/baocaomuatrangthietbiduphongpcd/view/View",
+                    "visible": false
+                    // function(){
+                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                    // }
+                }
+        
+        ]
         },
     ];
 

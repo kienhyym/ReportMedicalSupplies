@@ -1,0 +1,99 @@
+<style type="text/css">
+	.address {
+		width: 9%;
+		vertical-align: top;
+	}
+
+	.tyle {
+		width: 10%;
+		vertical-align: top;
+	}
+</style>
+
+<div class="card mt-3">
+  <div id="filter" class="col-md-12"></div>
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
+        <h3 class="card-title">Thống kê mua trang thiết bị dự phòng</h3>
+      </div>
+      <div class="col-md-6 col-lg-6 col-sm-12 col-12 p-1 hideDrop">
+        <div class="form-group">
+          <label for="">Trang thiết bị y tế</label>
+          <input type="text" class="form-control search-item" placeholder="Nhập tên mặt hàng để tìm kiếm">
+          <div class="card" style="position: absolute;top: 65px;left: 15px;width: 300px;">
+            <div class="dropdown-menu dropdown-menu-item" style="height: 110px;overflow-x: hidden;width:300px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 hideDrop">
+        <div class="form-group">
+          <label>Chọn bộ lọc</label>
+          <div class="dropdown type-filter">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" filter="none">
+              Chọn bộ lọc:
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <!-- <a class="dropdown-item" filter="none" text = "Chọn bộ lọc: " >Bỏ chọn</a> -->
+              <a class="dropdown-item" filter="all" text = "Từ trước đến nay">Từ trước đến nay</a>
+              <a class="dropdown-item" filter="fromBeforeToDay" text = "Từ trước đến ngày">Từ trước đến ngày</a>
+              <a class="dropdown-item" filter="fromDayToDay" text = "Trong khoảng thời gian">Trong khoảng thời gian</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 start-time hideDrop" style="display: none;">
+        <div class="form-group start_time">
+          <label for="">Từ ngày</label>
+          <input type="text" class="form-control" id="start_time">
+        </div>
+      </div>
+
+      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 end-time hideDrop" style="display: none;" >
+        <div class="form-group end_time">
+          <label for="">Đến ngày</label>
+          <input type="text" class="form-control" id="end_time">
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
+      <div>
+        <button type="button" class="btn btn-primary m-1 button-filter">Tìm kiếm</button>
+      </div>
+      <div>
+        <button type="button" class="btn btn-success m-1 button-excel">Xuất Excel</button>
+      </div>
+      <div class="spinner-border" role="status" style="display: none;">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <table class="col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop" border="1px solid" style="text-align: center;">
+      <thead>
+        <tr>
+          <th rowspan="2">STT</th>
+          <th rowspan="3">Tên thiết bị</th>
+          <th  colspan="3" class="text-center">Dự toán giao 02 Bệnh viện</th>
+          <th  colspan="3" class="text-center" >Thực hiện</th>
+          <th  colspan="2" class="text-center" >Chênh lệch</th>
+        </tr>
+        <tr>
+          <th>Số lượng</th>
+          <th>Đơn giá dự kiến</th>
+          <th>Thành tiền</th>
+          <th>Số lượng</th>
+          <th>Đơn giá trung bình</th>
+          <th>Thành tiền</th>
+          <th>Tỷ lệ %</th>
+          <th>Số tuyệt đối</th>
+        </tr>
+      </thead>
+      
+      <tbody id="danhSachDonVi">
+      </tbody>
+    </table>
+  </div>
+</div>
