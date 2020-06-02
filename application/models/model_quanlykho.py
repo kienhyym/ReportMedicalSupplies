@@ -53,3 +53,40 @@ class ReportOrganizationDetail(CommonModel):
     end_net_amount = db.Column(DECIMAL(25,3), default=0) # tồn cuối kì
     quantity_original = db.Column(DECIMAL(25,3), default=0) # khởi tạo ban đầu, không cần nhập lại
     estimates_net_amount = db.Column(DECIMAL(25,3), default=0) # du kiến nhập 
+
+
+class ReportSupplyOrganization(CommonModel):
+    __tablename__ = 'report_supply_organization'
+    id = db.Column(String(), primary_key=True, default=default_uuid)
+    code = db.Column(String())
+    period = db.Column(String())
+    date = db.Column(BigInteger())
+    organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
+    organization = relationship('Organization')
+    details = db.relationship("ReportSupplyOrganizationDetail", order_by="ReportSupplyOrganizationDetail.created_at", cascade="all, delete-orphan")
+
+
+class ReportSupplyOrganizationDetail(CommonModel):
+    __tablename__ = 'report_supply_organization_detail'
+    id = db.Column(String(), primary_key=True, default=default_uuid)
+    code = db.Column(String())
+    period = db.Column(String())
+    date = db.Column(BigInteger())
+
+    report_supply_organization_id = db.Column(String(), ForeignKey('report_supply_organization.id'), nullable=True)
+    report_supply_organization = relationship('ReportSupplyOrganization')
+    
+    organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
+    organization = relationship('Organization')
+
+    medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
+    medical_supplies = relationship('MedicalSupplies')
+
+    begin_net_amount = db.Column(DECIMAL(25,3), default=0) # tồn đầu kì
+    Ability_provide = db.Column(DECIMAL(25,3), default=0) # Khả năng cung cấp
+    quantity_import = db.Column(DECIMAL(25,3), default=0) # số lượng cung cấp thực tế
+    quantity_export = db.Column(DECIMAL(25,3), default=0) # số lượng xuất thực tế
+
+    price = db.Column(DECIMAL(25,3), default=0) # Đơn giá
+    effective_time = db.Column(BigInteger()) # Thời hạn 
+    file = db.Column(String()) #file báo giá

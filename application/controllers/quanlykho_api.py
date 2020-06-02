@@ -110,6 +110,20 @@ apimanager.create_api(ReportOrganizationDetail,
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
     collection_name='report_organization_detail')
 
+apimanager.create_api(ReportSupplyOrganization,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    collection_name='report_supply_organization')
+
+apimanager.create_api(ReportSupplyOrganizationDetail,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    collection_name='report_supply_organization_detail')
+
 
     
 

@@ -190,6 +190,7 @@ define(function (require) {
 		chooseItemInListDropdownItem: function () {
 			var self = this;
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
+				console.log("__________self.listItemRemove ________",self.listItemRemove )
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
 				var beginNetAmount = new Number(dropdownItemClick.attr('begin_net_amount')).toLocaleString("da-DK");
@@ -533,7 +534,7 @@ define(function (require) {
 					"date": self.model.get('date')
 				}
 				arr.push(obj)
-				console.log(arr)
+				console.log('Tạo mới',arr)
 			})
 			if (arr.length > 0) {
 				$.ajax({
