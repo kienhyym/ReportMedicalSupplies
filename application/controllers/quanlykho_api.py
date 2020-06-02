@@ -373,18 +373,18 @@ async def create_report_donvicungung(request):
 #     arr = [{'XXXX':"cccccccccccccc"}]
 #     return json(arr)
 
-Danh sách đơn vị nhận hàng
-@app.route("/api/v1/get_synthetic_receive", methods=["GET"])
-async def get_synthetic_receive(request):
-    # uid = await current_user(request)
-    tenant_id = await get_tennat_id(request)
-    goodsreciept = db.session.query(GoodsReciept).filter(GoodsReciept.tenant_id==tenant_id).all()
-    result = []
-    if goodsreciept is not None:
-        for g in goodsreciept:
-            listg = to_dict(g)
-            result.append(listg)
-        # print("result", result)
-        return json(result)
+# Danh sách đơn vị nhận hàng
+# @app.route("/api/v1/get_synthetic_receive", methods=["GET"])
+# async def get_synthetic_receive(request):
+#     # uid = await current_user(request)
+#     tenant_id = await get_tennat_id(request)
+#     goodsreciept = db.session.query(GoodsReciept).filter(GoodsReciept.tenant_id==tenant_id).all()
+#     result = []
+#     if goodsreciept is not None:
+#         for g in goodsreciept:
+#             listg = to_dict(g)
+#             result.append(listg)
+#         # print("result", result)
+#         return json(result)
 
 
