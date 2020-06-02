@@ -613,8 +613,8 @@ define(function (require) {
 					console.log('===',response)
 					response.forEach(function(item,index){
 						self.$el.find('tbody').append(` <tr>
-						<td>${index+1}</td>
-						<td>${item.tuyen}</td>
+						<td style="font-weight:bold; font-size:16px">${item.stt}</td>
+						<td style="font-weight:bold; font-size:16px">${item.tuyen}</td>
 						<td><input class="form-control text-center"></td>
 						<td><input class="form-control text-center"></td>
 					</tr>`)
@@ -622,7 +622,7 @@ define(function (require) {
 						item.list.forEach(function(item2,index2){
 							self.$el.find('tbody').append(` <tr>
 							<td>${index2+1}</td>
-							<td>${item2.name}</td>
+							<td>${item2.tendonvi}</td>
 							<td><input class="form-control text-center"></td>
 							<td><input class="form-control text-center"></td>
 						</tr>`)
