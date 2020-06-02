@@ -4,7 +4,7 @@ define(function(require) {
         _ = require('underscore'),
         Gonrin = require('gonrin');
 
-        var template = require('text!app/baocaodonvi/tpl/collection.html'),
+        var template = require('text!app/baocaodonvi_cungung/tpl/collection.html'),
         schema = require('json!schema/ReportOrganizationSchema.json');
 
     var CustomFilterView = require('app/base/view/CustomFilterView');
@@ -36,7 +36,7 @@ define(function(require) {
                     label: "TRANSLATE:Tạo mới",
                     command: function() {
                         var self = this;
-                        self.getApp().getRouter().navigate("/baocaodonvi/model");
+                        self.getApp().getRouter().navigate("/baocaodonvi_cungung/model");
                     }
                 },
                 // {
@@ -74,7 +74,7 @@ define(function(require) {
             ],
             onRowClick: function(event) {
                 if (event.rowId) {
-                    var path = '/baocaodonvi/model?id=' + event.rowId;
+                    var path = '/baocaodonvi_cungung/model?id=' + event.rowId;
                     this.getApp().getRouter().navigate(path);
                 }
 

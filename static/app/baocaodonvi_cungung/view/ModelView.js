@@ -4,7 +4,7 @@ define(function (require) {
 		_ = require('underscore'),
 		Gonrin = require('gonrin');
 
-	var template = require('text!app/baocaodonvi/tpl/model.html'),
+	var template = require('text!app/baocaodonvi_cungung/tpl/model.html'),
 		schema = require('json!schema/ReportOrganizationSchema.json');
 	var OrganizationView = require('app/donvicungung/view/SelectView');
 

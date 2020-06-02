@@ -189,9 +189,17 @@ define(function(require) {
             "$ref":"app/thongkebaocao/baocaomuatrangthietbiduphongpcd/view/View",
         },
         {
+            "collectionName":"report_supply_organization",
             "route": "baocaocungungtrangthietbi/collection",
             "$ref": "app/baocaodonvi_cungung/view/CollectionView",
+        },
+        {
+            // "collectionName":"report_supply_organization",
+            "route": "baocaodonvi_cungung/model",
+            "$ref": "app/baocaodonvi_cungung/view/ModelView",
         }
+
+        
     ];
 
 });
