@@ -16,56 +16,39 @@
                     </div>
                 </div>
                 <div class="card-body row">
-                    <div class="col-md-8 col-lg-8 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Tên đơn vị doanh nghiệp</label>
-                            <input id="organization" readonly type="text" data-bind="dict:organization" />
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-4 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Thời gian</label>
-                            <input type="text" data-bind="value:date" />
-                        </div>
-                    </div>
-                    <!-- <div class="col-md-6 col-lg-6 col-sm-8 col-12">
-                        <div class="form-group">
-                            <label for="">Mã vật tư y tế</label>
-                            <input type="text" class="form-control" data-bind="value:code">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
-                        <div class="form-group">
-                            <label for="">Tên vật tư y tế</label>
-                            <input type="text" class="form-control" data-bind="value:name">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-sm-8 col-12">
-                        <div class="form-group">
-                            <label for="">Đơn vị tính</label>
-                            <input type="text" class="form-control" data-bind="value:unit">
-
-                        </div>
-                    </div> -->
-
-                    <div class="col-12 out-click" style="overflow-x: scroll;height: 500px;" >
-                        <div style="width: 1000px;height: 35px;box-sizing: border-box;">
-                            <div style="width: 28px;display: inline-block;text-align: center;padding: 1px;">TT</div>
-                            <div style="width: 248px;display: inline-block;text-align: center;padding: 1px;">Tên trang thiết bị y tế</div>
-                            <div style="width: 148px;display: inline-block;text-align: center;padding: 1px;">Đơn vị tính
-                            </div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Tồn đầu kỳ
-                            </div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Nhập vào
-                            </div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Sử dụng
-                            </div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Tồn cuối kỳ
-                            </div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">Dự kiến nhập
-                            </div>
-                        </div>
-
+                  
+                    <table class="col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop" border="1px solid" cellspacing="15" style="text-align: center;" >
+                        <thead>
+                          <tr>
+                            <th>STT</th>
+                            <th >Đơn vị</th>
+                            <th >Thời gian xuất cấp</th>
+                            <th >
+                                <div class="dropdown show">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      Loại thiết bị
+                                    </a>
+                                  
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                      <a class="dropdown-item" href="#">Thiết bị 1</a>
+                                      <a class="dropdown-item" href="#">Thiết bị 2</a>
+                                      <a class="dropdown-item" href="#">Thiết bị 3</a>
+                                    </div>
+                                  </div>
+                            </th>
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr>
+                                <td><input class="form-control text-center stt pl-0 pr-0" value="+"></td>
+                                <td><input type="text" class="form-control search-item" placeholder="Nhập tên đơn vị cần tìm kiếm"></td>
+                                <td><input class="form-control text-center"></td>
+                                <td><input class="form-control text-center"></td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    <!-- <div class="col-12 out-click" style="overflow-x: scroll;height: 500px;" >
                         <div style="width: 1000px;height: 35px;" id="list-item">
                             <div style="width: 28px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center stt pl-0 pr-0" value="+"></div>
                             <div style="width: 248px;display: inline-block;padding: 1px;position: relative;">
@@ -76,13 +59,8 @@
                             </div>
                             <div style="width: 148px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
                             <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
-
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
