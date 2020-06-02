@@ -12,7 +12,7 @@ define(function (require) {
 		template: template,
 		modelSchema: schema,
 		urlPrefix: "/api/v1/",
-		collectionName: "report_organization",
+		collectionName: "synthetic_release",
 		bindings: "data-bind",
 		listItemRemove: [],
 		tools: [
@@ -610,7 +610,29 @@ define(function (require) {
 				type: "GET",
 				url: self.getApp().serviceURL + "/api/v1/get_synthetic_receive",
 				success: function (response) {
-					console.log('XXXXXXXXXXXXXXXXXXXXX',response)
+					console.log('===',response)
+					response.forEach(function(item,index){
+						self.$el.find('tbody').append(` <tr>
+						<td>${index+1}</td>
+						<td>${item.tuyen}</td>
+						<td><input class="form-control text-center"></td>
+						<td><input class="form-control text-center"></td>
+					</tr>`)
+					if(item.list!=null && item.list!=undefined){
+						item.list.forEach(function(item2,index2){
+							self.$el.find('tbody').append(` <tr>
+							<td>${index2+1}</td>
+							<td>${item2.name}</td>
+							<td><input class="form-control text-center"></td>
+							<td><input class="form-control text-center"></td>
+						</tr>`)
+						});
+					}
+					
+					
+					});
+				
+
 				}
 			});
 		},
