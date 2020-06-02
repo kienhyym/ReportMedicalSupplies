@@ -374,17 +374,27 @@ async def create_report_donvicungung(request):
 #     return json(arr)
 
 # Danh sách đơn vị nhận hàng
-# @app.route("/api/v1/get_synthetic_receive", methods=["GET"])
-# async def get_synthetic_receive(request):
-#     # uid = await current_user(request)
-#     tenant_id = await get_tennat_id(request)
-#     goodsreciept = db.session.query(GoodsReciept).filter(GoodsReciept.tenant_id==tenant_id).all()
-#     result = []
-#     if goodsreciept is not None:
-#         for g in goodsreciept:
-#             listg = to_dict(g)
-#             result.append(listg)
-#         # print("result", result)
-#         return json(result)
+@app.route("/api/v1/get_synthetic_receive", methods=["GET"])
+async def get_synthetic_receive(request):
+    listOrganization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id.in_(["6","7","8"]))).all()
+    
+    tuyen6 = {"tuyen":"sở y tế"}
+    tuyen78 = {"tuyen":"Bệnh viện/Viện trực thuộc Bộ y tế"}
+    tuyenkhac = {"tuyen":"Các Bộ và cơ quan khác"}
+
+    result = [tuyen6,tuyen78,tuyenkhac]
+    arr6 = []
+    arr78 = []
+    if listOrganization is not None:
+        for i in range(len(listOrganization)):
+            to_dict(listOrganization[i])['stt'] = i
+            if to_dict(listOrganization[i])['tuyendonvi_id'] == '6':
+                arr6.append(to_dict(listOrganization[i]))
+            else:
+                arr78.append(to_dict(listOrganization[i]))
+        tuyen6['list'] = arr6
+        tuyen78['list'] = arr78
+
+        return json(result)
 
 

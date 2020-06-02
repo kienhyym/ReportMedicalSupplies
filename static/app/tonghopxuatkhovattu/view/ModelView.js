@@ -154,6 +154,7 @@ define(function (require) {
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
 			self.listItemRemove = [];
+			self.getSyntheticReceive();
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({
@@ -190,7 +191,7 @@ define(function (require) {
 		chooseItemInListDropdownItem: function () {
 			var self = this;
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
-				console.log("__________self.listItemRemove ________",self.listItemRemove )
+				console.log("__________self.listItemRemove ________", self.listItemRemove)
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
 				var beginNetAmount = new Number(dropdownItemClick.attr('begin_net_amount')).toLocaleString("da-DK");
@@ -341,7 +342,7 @@ define(function (require) {
 			});
 
 
-			  
+
 
 
 
@@ -534,7 +535,7 @@ define(function (require) {
 					"date": self.model.get('date')
 				}
 				arr.push(obj)
-				console.log('Tạo mới',arr)
+				console.log('Tạo mới', arr)
 			})
 			if (arr.length > 0) {
 				$.ajax({
@@ -599,10 +600,21 @@ define(function (require) {
 				});
 			}
 		},
-
+		
 
 		// HẾT CHỨC NĂNG CHỌN ITEM XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		// XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		getSyntheticReceive: function () {
+			var self = this;
+			$.ajax({
+				type: "GET",
+				url: self.getApp().serviceURL + "/api/v1/get_synthetic_receive",
+				success: function (response) {
+					console.log('XXXXXXXXXXXXXXXXXXXXX',response)
+				}
+			});
+		},
+
 	});
 
 });
