@@ -5,7 +5,7 @@ define(function(require) {
         Gonrin = require('gonrin');
 
         var template = require('text!app/baocaodonvi_cungung/tpl/collection.html'),
-        schema = require('json!schema/ReportOrganizationSchema.json');
+        schema = require('json!schema/ReportSupplyOrganizationSchema.json');
 
     var CustomFilterView = require('app/base/view/CustomFilterView');
 
@@ -36,7 +36,7 @@ define(function(require) {
                     label: "TRANSLATE:Tạo mới",
                     command: function() {
                         var self = this;
-                        self.getApp().getRouter().navigate("/baocaodonvi_cungung/model");
+                        self.getApp().getRouter().navigate("/thongkebaocaodonvicungung/model");
                     }
                 },
                 // {

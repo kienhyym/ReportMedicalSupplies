@@ -5,14 +5,14 @@ define(function (require) {
 		Gonrin = require('gonrin');
 
 	var template = require('text!app/baocaodonvi_cungung/tpl/model.html'),
-		schema = require('json!schema/ReportOrganizationSchema.json');
+	schema = require('json!schema/ReportSupplyOrganizationSchema.json');
 	var OrganizationView = require('app/donvicungung/view/SelectView');
 
 	return Gonrin.ModelView.extend({
 		template: template,
 		modelSchema: schema,
 		urlPrefix: "/api/v1/",
-		collectionName: "report_organization",
+		collectionName: "report_supply_organization",
 		bindings: "data-bind",
 		listItemRemove: [],
 		tools: [

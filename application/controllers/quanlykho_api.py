@@ -19,6 +19,7 @@ from gatco.response import json, text, html
 
 from application.models.model_quanlykho import *
 from application.models.models import Organization, User
+from application.models.model_danhmuc import TinhThanh
 
 from application.controllers.helpers.helper_common import validate_user, convert_text_khongdau, current_uid, get_current_user
 from application.database import db
@@ -378,20 +379,23 @@ async def create_report_donvicungung(request):
 async def get_synthetic_receive(request):
     listOrganization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id.in_(["6","7","8"]))).all()
     
-    tuyen6 = {"tuyen":"sở y tế"}
-    tuyen78 = {"tuyen":"Bệnh viện/Viện trực thuộc Bộ y tế"}
-    tuyenkhac = {"tuyen":"Các Bộ và cơ quan khác"}
+    tuyen6 = {"tuyen":"sở y tế","stt":"I"}
+    tuyen78 = {"tuyen":"Bệnh viện/Viện trực thuộc Bộ y tế","stt":"II"}
+    tuyenkhac = {"tuyen":"Các Bộ và cơ quan khác","stt":"III"}
 
     result = [tuyen6,tuyen78,tuyenkhac]
     arr6 = []
     arr78 = []
     if listOrganization is not None:
         for i in range(len(listOrganization)):
-            to_dict(listOrganization[i])['stt'] = i
-            if to_dict(listOrganization[i])['tuyendonvi_id'] == '6':
-                arr6.append(to_dict(listOrganization[i]))
+            obj = to_dict(listOrganization[i])
+            province = db.session.query(TinhThanh.ten).filter(TinhThanh.id == obj['tinhthanh_id']).first()
+            if obj['tuyendonvi_id'] == '6':
+                obj["tendonvi"]= province[0]
+                arr6.append(obj)
             else:
-                arr78.append(to_dict(listOrganization[i]))
+                obj["tendonvi"]= obj['name']
+                arr78.append(obj)
         tuyen6['list'] = arr6
         tuyen78['list'] = arr78
 

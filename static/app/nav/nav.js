@@ -168,7 +168,7 @@ define(function (require) {
             "entries": [
                 
                 {
-                    "text": "Báo cáo đơn vị y tế",
+                    "text": "Vật tư PCD Cơ sở y tế",
                     "type": "view",
                     "route": "thongkebaocao/search",
                     "$ref": "app/thongkebaocao/view/View",
@@ -178,17 +178,17 @@ define(function (require) {
                     }
                 },
                 {
-                    "text": "Báo cáo đơn vị cung ứng",
+                    "text": "Vật tư PCD ĐV cung ứng",
                     "type": "view",
-                    "route": "thongkebaocao/collection",
-                    "$ref": "app/thongkebaocao/view/View",
+                    "route": "thongkebaocaodonvicungung/collection",
+                    "$ref": "app/baocaodonvi_cungung/view/CollectionView",
                     "visible": function () {
                         return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
                         // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
                     }
                 },
                 {
-                    "text": "Tổng hợp xuất kho vật tư",
+                    "text": "Tổng hợp xuất kho vật tư PCD",
                     "type": "view",
                     "route": "tonghopxuatkhovattu/collection",
                     "$ref": "app/tonghopxuatkhovattu/view/CollectionView",

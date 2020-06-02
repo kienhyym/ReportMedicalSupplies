@@ -169,6 +169,17 @@ define(function(require) {
         },
 
         {
+            "collectionName": "report_supply_organization",
+            "route": "thongkebaocaodonvicungung/collection",
+            "$ref": "app/baocaodonvi_cungung/view/CollectionView",
+        },
+        {
+            "collectionName": "report_supply_organization",
+            "route": "thongkebaocaodonvicungung/model(/:id)",
+            "$ref": "app/baocaodonvi_cungung/view/ModelView",
+        },
+
+        {
             "collectionName": "synthetic_release",
             "route": "tonghopxuatkhovattu/collection",
             "$ref": "app/tonghopxuatkhovattu/view/CollectionView",

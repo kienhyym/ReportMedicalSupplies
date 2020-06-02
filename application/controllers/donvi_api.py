@@ -249,7 +249,6 @@ apimanager.create_api(Organization,
     collection_name='donvi')
 
 
-
 @app.route('/api/v1/donvi/create', methods=['POST'])
 async def create_account_donvi(request):
     uid_current = current_uid(request)
