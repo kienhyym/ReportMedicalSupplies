@@ -14,7 +14,7 @@ define(function(require) {
         template: template,
         modelSchema: schema,
         urlPrefix: "/api/v1/",
-        collectionName: "report_organization",
+        collectionName: "report_supply_organization",
         tools: [{
             name: "defaultgr",
             type: "group",
