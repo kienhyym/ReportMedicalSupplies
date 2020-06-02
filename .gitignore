@@ -7,5 +7,7 @@ application/**/__pycache__
 alembic/versions/**
 file_donvi/
 static/uploads
+static/schema
+
 application/config/development.py
 #application/config.py
