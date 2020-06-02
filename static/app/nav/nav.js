@@ -156,16 +156,6 @@ define(function(require) {
             }
         },
         {
-            "text": "Báo báo cung ứng trang thiết bị",
-            "type": "view",
-            "collectionName": "report_supply_organization",
-            "route": "baocaocungungtrangthietbi/collection",
-            "$ref": "app/baocaodonvi_cungung/view/CollectionView",
-            "visible": function() {
-              return (this.userHasRole("admin") || this.checkDonViCungUng("donvicungung"))
-            }
-        },
-        {
             "text": "Thống kê",
             "icon": "fa fa-list-ul",
             // "text": "Thống kê báo cáo đơn vị",
