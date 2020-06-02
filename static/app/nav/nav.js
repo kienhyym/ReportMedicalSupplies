@@ -1,24 +1,24 @@
-define(function(require) {
+define(function (require) {
     "use strict";
     var $ = require('jquery'),
         _ = require('underscore'),
         Gonrin = require('gonrin');
     return [
         {
-            "text":"Quản lý đơn vị",
-            "icon":"fa fa-user",
-            "type":"category",
-            "visible": function(){
-                return (this.userHasRole("admin")|| (this.userHasRole("admin_donvi") && gonrinApp().hasTypeDonvi("donvinhanuoc") && !this.checkTuyenDonVi("16") && !this.checkTuyenDonVi("17")));
+            "text": "Quản lý đơn vị",
+            "icon": "fa fa-user",
+            "type": "category",
+            "visible": function () {
+                return (this.userHasRole("admin") || (this.userHasRole("admin_donvi") && gonrinApp().hasTypeDonvi("donvinhanuoc") && !this.checkTuyenDonVi("16") && !this.checkTuyenDonVi("17")));
             },
-            "entries":[
+            "entries": [
                 {
-                    "text":"Danh sách đơn vị trực thuộc",
-                    "type":"view",
-                    "collectionName":"donvidangki",
-                    "route":"admin/donvi/collection",
+                    "text": "Danh sách đơn vị trực thuộc",
+                    "type": "view",
+                    "collectionName": "donvidangki",
+                    "route": "admin/donvi/collection",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/AdminCreateDonvi/CollectionView",
-                    "visible": function(){
+                    "visible": function () {
                         return (this.userHasRole("admin"));
                     }
                 },
@@ -33,31 +33,32 @@ define(function(require) {
                 //     }
                 // },
                 {
-                    "text":"Danh sách đơn vị trực thuộc",
-                    "type":"view",
-                    "collectionName":"donvidangki",
-                    "route":"canbo/donvi/collection",
+                    "text": "Danh sách đơn vị trực thuộc",
+                    "type": "view",
+                    "collectionName": "donvidangki",
+                    "route": "canbo/donvi/collection",
                     "$ref": "app/view/quanlyCanbo/DonViYTe/CollectionView",
-                    "visible": function(){
+                    "visible": function () {
                         return ((this.userHasRole("admin_donvi") && (this.checkTuyenDonVi("16") == false)) && gonrinApp().hasTypeDonvi("donvinhanuoc"));
                     }
                 },
                 {
-                    "text":"Danh sách đơn vị cung ứng",
-                    "type":"view",
-                    "collectionName":"donvi",
-                    "route":"donvicungung/collection",
+                    "text": "Danh sách đơn vị cung ứng",
+                    "type": "view",
+                    "collectionName": "donvi",
+                    "route": "donvicungung/collection",
                     "$ref": "app/donvicungung/view/CollectionView",
-                    "visible": function() {
+                    "visible": function () {
                         return (this.userHasRole("admin") || gonrinApp().hasTypeDonvi("donvicungung"));
                     }
                 },
-        ]},
+            ]
+        },
         {
             "text": "Danh mục",
             "icon": "fa fa-list-ul",
             "type": "category",
-            "visible": function() {
+            "visible": function () {
                 return this.userHasRole("admin");
             },
             "entries": [{
@@ -66,7 +67,7 @@ define(function(require) {
                 "collectionName": "dantoc",
                 "route": "dantoc/collection",
                 "$ref": "app/view/DanhMuc/DanToc/CollectionView",
-                "visible": function() {
+                "visible": function () {
                     return this.userHasRole("admin");
                 }
             },
@@ -76,7 +77,7 @@ define(function(require) {
                 "collectionName": "quocgia",
                 "route": "quocgia/collection",
                 "$ref": "app/view/DanhMuc/QuocGia/CollectionView",
-                "visible": function() {
+                "visible": function () {
                     return this.userHasRole("admin");
                 }
             },
@@ -86,7 +87,7 @@ define(function(require) {
                 "collectionName": "tinhthanh",
                 "route": "tinhthanh/collection",
                 "$ref": "app/view/DanhMuc/TinhThanh/CollectionView",
-                "visible": function() {
+                "visible": function () {
                     return this.userHasRole("admin");
                 }
             },
@@ -96,7 +97,7 @@ define(function(require) {
                 "collectionName": "quanhuyen",
                 "route": "quanhuyen/collection",
                 "$ref": "app/view/DanhMuc/QuanHuyen/CollectionView",
-                "visible": function() {
+                "visible": function () {
                     return this.userHasRole("admin");
                 }
             },
@@ -106,11 +107,11 @@ define(function(require) {
                 "collectionName": "xaphuong",
                 "route": "xaphuong/collection",
                 "$ref": "app/view/DanhMuc/XaPhuong/CollectionView",
-                "visible": function() {
+                "visible": function () {
                     return this.userHasRole("admin");
                 }
             },
-        ]
+            ]
         },
         {
             "text": "Danh sách trang thiết bị y tế",
@@ -119,11 +120,11 @@ define(function(require) {
             "collectionName": "medical_supplies",
             "route": "vattuyte/collection",
             "$ref": "app/vattuyte/view/CollectionView",
-            "visible": function() {
+            "visible": function () {
                 return true
             }
         },
-        
+
         // {
         //     "text":"Danh sách đơn vị sản xuất",
         //     "type":"view",
@@ -140,9 +141,9 @@ define(function(require) {
             "collectionName": "report_organization",
             "route": "baocaodonvi/collection",
             "$ref": "app/baocaodonvi/view/CollectionView",
-            "visible": function() {
+            "visible": function () {
                 return (!this.checkDonViCungUng("donvicungung"));
-                
+
             }
         },
         {
@@ -151,8 +152,8 @@ define(function(require) {
             "collectionName": "report_supply_organization",
             "route": "baocaocungungtrangthietbi/collection",
             "$ref": "app/baocaodonvi_cungung/view/CollectionView",
-            "visible": function() {
-              return (this.userHasRole("admin") || this.checkDonViCungUng("donvicungung"))
+            "visible": function () {
+                return (this.userHasRole("admin") || this.checkDonViCungUng("donvicungung"))
             }
         },
         {
@@ -161,82 +162,42 @@ define(function(require) {
             // "text": "Thống kê báo cáo đơn vị",
             "type": "category",
             // "collectionName": "report_organization",
-            "visible": function() {
+            "visible": function () {
                 return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
             },
-            "entries":[
+            "entries": [
+                
                 {
-                "text":"Thống kê báo cáo",
-                "type":"view",
-                "route": "thongkebaocao/collection",
-                "$ref": "app/thongkebaocao/view/View",
-                "visible": function() {
-                    return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                    // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
-                }
-                },
-                {
-                    "text":"Báo cáo đơn vị cung ứng",
-                    "type":"view",
+                    "text": "Báo cáo đơn vị y tế",
+                    "type": "view",
                     "route": "thongkebaocao/collection",
                     "$ref": "app/thongkebaocao/view/View",
-                    "visible": function() {
+                    "visible": function () {
                         return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
                         // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
                     }
-                    },
-                    {
-                        "text":"Báo cáo đơn vị y tế",
-                        "type":"view",
-                        "route": "thongkebaocao/collection",
-                        "$ref": "app/thongkebaocao/view/View",
-                        "visible": function() {
-                            return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                            // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
-                        }
-                    },
-                {
-                    "text":"Thống kê xuất kho vật tư",
-                    "type":"view",
-                    "route":"xuatkhovattu/collection",
-                    "$ref":"app/thongkebaocao/xuatkhovattu/view/View",
-                    "visible": false
-                    // function(){
-                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                    // }
                 },
                 {
-                    "text":"Thống kê mua thiết bị y tế",
-                    "type":"view",
-                    "route":"muathietbiyte/collection",
-                    "$ref":"app/thongkebaocao/thongkemuathietbiyte/view/View",
-                    "visible": false
-                    // function(){
-                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                    // }
+                    "text": "Báo cáo đơn vị cung ứng",
+                    "type": "view",
+                    "route": "thongkebaocao/collection",
+                    "$ref": "app/thongkebaocao/view/View",
+                    "visible": function () {
+                        return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                        // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                    }
                 },
                 {
-                    "text":"Thống kê số lượng khẩu trang và PCD",
-                    "type":"view",
-                    "route":"soluongkhautrangvapdc/collection",
-                    "$ref":"app/thongkebaocao/baocaosoluongkhautrangvapcd/view/View",
-                    "visible": false
-                    // function(){
-                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                    // }
+                    "text": "Tổng hợp xuất kho vật tư",
+                    "type": "view",
+                    "route": "tonghopxuatkhovattu/collection",
+                    "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
+                    "visible": function () {
+                        return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                        // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                    }
                 },
-                {
-                    "text":"Thống kê mua trang thiết bị dự phòng",
-                    "type":"view",
-                    "route":"muatrangthietbiduphong/collection",
-                    "$ref":"app/thongkebaocao/baocaomuatrangthietbiduphongpcd/view/View",
-                    "visible": false
-                    // function(){
-                    //     return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                    // }
-                }
-        
-        ]
+            ]
         },
     ];
 

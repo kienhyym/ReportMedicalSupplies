@@ -162,44 +162,20 @@ define(function(require) {
 			"route":"canbo/DonViYTe/create",
 			"$ref": "app/view/quanlyCanbo/DonViYTe/ModelViewCreateDonvi"
         },
-        {
-            // "collectionName":"donvidangki",
-            "route":"thongkebaocao/collection",
-            "$ref": "app/thongkebaocao/view/View"
-        },
-        {
-            // "collectionName":"donvidangki",
-            "route":"xuatkhovattu/collection",
-            "$ref":"app/thongkebaocao/xuatkhovattu/view/View"
-        },
-        
-        {
-            // "collectionName":"donvidangki",
-            "route":"muathietbiyte/collection",
-            "$ref": "app/thongkebaocao/thongkemuathietbiyte/view/View"
-        },
-        {
-            // "collectionName":"donvidangki",
-            "route":"soluongkhautrangvapdc/collection",
-            "$ref":"app/thongkebaocao/baocaosoluongkhautrangvapcd/view/View",
-        },
-        {
-            // "collectionName":"donvidangki",
-            "route":"muatrangthietbiduphong/collection",
-            "$ref":"app/thongkebaocao/baocaomuatrangthietbiduphongpcd/view/View",
-        },
-        {
-            "collectionName":"report_supply_organization",
-            "route": "baocaocungungtrangthietbi/collection",
-            "$ref": "app/baocaodonvi_cungung/view/CollectionView",
-        },
-        {
-            // "collectionName":"report_supply_organization",
-            "route": "baocaodonvi_cungung/model",
-            "$ref": "app/baocaodonvi_cungung/view/ModelView",
-        }
 
+
+        {
+            "collectionName": "donvi",
+            "route": "tonghopxuatkhovattu/collection",
+            "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
+        },
+        {
+            "collectionName": "donvi",
+            "route": "tonghopxuatkhovattu/model(/:id)",
+            "$ref": "app/tonghopxuatkhovattu/view/ModelView",
+        },
         
+
     ];
 
 });
