@@ -39,17 +39,6 @@ define(function(require) {
                         self.getApp().getRouter().navigate("/baocaodonvi/model");
                     }
                 },
-                // {
-                //     name: "import",
-                //     type: "button",
-                //     buttonClass: "btn-info btn-sm imp",
-                //     label: "TRANSLATE:Import",
-                //     command: function () {
-                //         var self = this;
-
-
-                //     }
-                // },
             ],
         }],
         uiControl: {

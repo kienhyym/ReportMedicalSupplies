@@ -165,12 +165,12 @@ define(function(require) {
 
 
         {
-            "collectionName": "donvi",
+            "collectionName": "synthetic_release",
             "route": "tonghopxuatkhovattu/collection",
             "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
         },
         {
-            "collectionName": "donvi",
+            "collectionName": "synthetic_release",
             "route": "tonghopxuatkhovattu/model(/:id)",
             "$ref": "app/tonghopxuatkhovattu/view/ModelView",
         },

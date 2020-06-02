@@ -125,6 +125,21 @@ apimanager.create_api(ReportSupplyOrganizationDetail,
     collection_name='report_supply_organization_detail')
 
 
+apimanager.create_api(SyntheticRelease,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    collection_name='synthetic_release')
+
+apimanager.create_api(SyntheticReleaseDetail,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    collection_name='synthetic_release_detail')
+
+
     
 
 @app.route('/api/v1/export_excel', methods=["POST"])
@@ -348,5 +363,20 @@ async def create_report_donvicungung(request):
     return json(arr)
 
 
+
+
+
+# # TỔNG HỢP XUẤT KHO VÂT TƯ PHÒNG CHỐNG DỊCH COVID-19 
+# # Danh sách đơn vị nhận hàng
+# @app.route("/api/v1/list_organization_synthetic_receive", methods=["GET"])
+# async def list_organization_synthetic_release(request):
+#     arr = [{'XXXX':"cccccccccccccc"}]
+#     return json(arr)
+
+# Danh sách đơn vị nhận hàng
+# @app.route("/api/v1/synthetic_release", methods=["GET"])
+# async def synthetic_release(request):
+#     arr = [{'XXXX':"cccccccccccccc"}]
+#     return json(arr)
 
 
