@@ -170,7 +170,7 @@ define(function (require) {
                 {
                     "text": "Báo cáo đơn vị y tế",
                     "type": "view",
-                    "route": "thongkebaocao/collection",
+                    "route": "thongkebaocao/search",
                     "$ref": "app/thongkebaocao/view/View",
                     "visible": function () {
                         return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));

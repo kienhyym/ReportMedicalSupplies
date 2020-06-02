@@ -164,7 +164,7 @@ define(function(require) {
         },
         {
             // "collectionName":"donvidangki",
-            "route":"thongkebaocao/collection",
+            "route":"thongkebaocao/search",
             "$ref": "app/thongkebaocao/view/View"
         },
 
