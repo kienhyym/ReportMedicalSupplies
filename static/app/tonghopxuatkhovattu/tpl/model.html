@@ -1,6 +1,6 @@
 <style>
     input {
-        border:none;
+        border: none;
     }
 </style>
 <div block-bind="content">
@@ -21,40 +21,35 @@
                     </div>
                 </div>
                 <div class="card-body">
-                  
+
                     <table class="table table-sm table-bordered">
                         <thead class="thead-light text-center">
-                          <tr>
-                            <th>STT</th>
-                            <th>Đơn vị</th>
-                            <th>Thời gian xuất cấp</th>
-                            <th>
-                                <div class="dropdown show">
-                                    <a class="btn btn-light dropdown-toggle" style="padding: 8px 200px" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      Loại thiết bị
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                      <input type="text" class="form-control search-item" placeholder="Nhập tên mặt hàng để tìm kiếm">
-                                      <div class="card" style="position: absolute;top: 65px;left: 15px;width: 300px;">
-                                        <div class="dropdown-menu dropdown-menu-item" style="height: 110px;overflow-x: hidden;width:300px;"></div>
-                                      </div>
+                            <tr>
+                                <th>STT</th>
+                                <th>Đơn vị</th>
+                                <th>Thời gian xuất cấp</th>
+                                <th style="position: relative;">
+                                    <input type="text" class="form-control search-item"
+                                        placeholder="Nhập tên mặt hàng để tìm kiếm">
+                                    <div class="card" style="position: absolute;top: 65px;left: 15px;width: 300px;">
+                                        <div class="dropdown-menu dropdown-menu-item"
+                                            style="height: 110px;overflow-x: hidden;width:300px;"></div>
                                     </div>
-                                  </div>
-                            </th>
-                          </tr>
+                                </th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td></td>
-                                <td>Tổng cộng xuất</td>
-                                <td></td>
-                                <td></td>
-                                
+                                <td><input class="form-control text-center" readonly></td>
+                                <td><input class="form-control text-center" readonly value="Tổng cộng xuất"></td>
+                                <td><input class="form-control text-center" readonly></td>
+                                <td><input class="form-control text-center" readonly></td>
+
                             </tr>
-                           
+
                         </tbody>
 
-                      </table>
+                    </table>
                     <!-- <div class="col-12 out-click" style="overflow-x: scroll;height: 500px;" >
                         <div style="width: 1000px;height: 35px;" id="list-item">
                             <div style="width: 28px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center stt pl-0 pr-0" value="+"></div>
