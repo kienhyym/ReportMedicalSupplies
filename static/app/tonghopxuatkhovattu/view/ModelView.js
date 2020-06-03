@@ -600,12 +600,26 @@ define(function (require) {
 				});
 			}
 		},
-		
+		datetimepick: function(i){
+			var self = this;
+			self.$el.find("#datetime"+i).datetimepicker({
+				textFormat:'DD-MM-YYYY',
+				extraFormats:['DDMMYYYY'],
+				parseInputDate: function(val){
+					return moment.unix(val)
+				},
+				parseOutputDate: function(date){
+					return date.unix()
+				}
+			});
+		}
+		,
 
 		// HẾT CHỨC NĂNG CHỌN ITEM XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		// XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		getSyntheticReceive: function () {
 			var self = this;
+			
 			$.ajax({
 				type: "GET",
 				url: self.getApp().serviceURL + "/api/v1/get_synthetic_receive",
@@ -613,19 +627,26 @@ define(function (require) {
 					console.log('===',response)
 					response.forEach(function(item,index){
 						self.$el.find('tbody').append(` <tr>
-						<td style="font-weight:bold;">${item.stt}</td>
+						<td style="font-weight:bold;" class="text-center">${item.stt}</td>
 						<td style="font-weight:bold;">${item.tuyen}</td>
-						<td><input class="form-control text-center" style=" border:none;"></td>
-						<td><input class="form-control text-center" style=" border:none;"></td>
+						<td></td>
+						<td><input class="form-control text-center" type="number" style=" border:none;"></td>
 					</tr>`)
+
 					if(item.list!=null && item.list!=undefined){
+
 						item.list.forEach(function(item2,index2){
+							
 							self.$el.find('tbody').append(` <tr>
-							<td>${index2+1}</td>
+							<td class="text-center">${index2+1}</td>
 							<td>${item2.tendonvi}</td>
-							<td><input class="form-control text-center" style=" border:none;"></td>
+							<td><input class="form-control text-center" id="datetime`+(index2+index)+`" style=" border:none;"></td>
 							<td><input class="form-control text-center" style=" border:none;"></td>
 						</tr>`)
+						
+						
+	
+						self.datetimepick(index2+index);
 						});
 					}
 					
