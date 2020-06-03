@@ -147,23 +147,12 @@ define(function (require) {
             }
         },
         {
-            "text": "Báo báo cung ứng trang thiết bị",
-            "type": "view",
-            "collectionName": "report_supply_organization",
-            "route": "baocaocungungtrangthietbi/collection",
-            "$ref": "app/baocaodonvi_cungung/view/CollectionView",
-            "visible": function () {
-                return (this.userHasRole("admin") || this.checkDonViCungUng("donvicungung"))
-            }
-        },
-        {
             "text": "Báo cáo vật tư PCD ĐV cung ứng",
             "type": "view",
-            "route": "thongkebaocaodonvicungung/collection",
+            "route": "baocaodonvi_cungung/collection",
             "$ref": "app/baocaodonvi_cungung/view/CollectionView",
             "visible": function () {
-                return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                return (this.userHasRole("admin") || this.checkDonViCungUng("donvicungung"));
             }
         },
         {

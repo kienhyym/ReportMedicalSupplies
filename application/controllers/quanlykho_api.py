@@ -118,7 +118,7 @@ apimanager.create_api(ReportOrganizationDetail,
 apimanager.create_api(ReportSupplyOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name]),
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
     collection_name='report_supply_organization')
 
@@ -403,3 +403,24 @@ async def get_synthetic_receive(request):
         return json(result)
 
 
+
+
+@app.route("/api/v1/create_report_supply_organization_detail", methods=["POST"])
+async def create_report_supply_organization_detail(request):
+    data = request.json
+    for _ in data:
+        new_item = ReportSupplyOrganizationDetail()
+        new_item.report_supply_organization_id = _['report_supply_organization_id']
+        new_item.organization_id = _['organization_id']
+        new_item.medical_supplies_id = _['medical_supplies_id']
+        new_item.date = _['date']
+
+        new_item.supply_ability = _['supply_ability']
+        new_item.sell_number = _['sell_number']
+        new_item.sponsored_number = _['sponsored_number']
+        new_item.price = _['price']
+        new_item.file = _['file']
+
+        db.session.add(new_item)
+        db.session.commit()
+    return json({"message":"create success"})

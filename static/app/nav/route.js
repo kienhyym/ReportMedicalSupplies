@@ -170,12 +170,12 @@ define(function(require) {
 
         {
             "collectionName": "report_supply_organization",
-            "route": "thongkebaocaodonvicungung/collection",
+            "route": "baocaodonvi_cungung/collection",
             "$ref": "app/baocaodonvi_cungung/view/CollectionView",
         },
         {
             "collectionName": "report_supply_organization",
-            "route": "thongkebaocaodonvicungung/model(/:id)",
+            "route": "baocaodonvi_cungung/model(/:id)",
             "$ref": "app/baocaodonvi_cungung/view/ModelView",
         },
 

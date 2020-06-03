@@ -53,8 +53,6 @@ async def upload_file(request):
     
     if request.method == 'POST':
         # try:
-            
-            
         fileId = request.headers.get("fileId",None)
         file_data = request.files.get('file', None)
         attrs = request.form.get('attrs',None)
@@ -126,3 +124,32 @@ async def write_file(file, fileId, attrs, uid_current):
     return json(to_dict(fileInfo), status=200)
 
 
+
+@app.route('/api/v1/upload/file', methods=['POST'])
+async def upload_file(request):
+    url = app.config['FILE_SERVICE_URL']
+    fsroot = app.config['FS_ROOT']
+    if request.method == 'POST':
+        file = request.files.get('file', None)
+        if file :
+            rand = ''.join(random.choice(string.digits) for _ in range(15))
+            file_name = os.path.splitext(file.name)[0]
+            extname = os.path.splitext(file.name)[1]
+            newfilename = file_name + "-" + rand + extname
+            new_filename = newfilename.replace(" ", "_")
+            async with aiofiles.open(fsroot + new_filename, 'wb+') as f:
+                await f.write(file.body)
+            return json({
+                    "error_code": "OK",
+                    "error_message": "successful",
+                    "id":rand,
+                    "link":url  + "/" + new_filename,
+                    "filename":newfilename,
+                    "filename_organization":file_name,
+                    "extname":extname
+                }, status=200)
+    
+    return json({
+        "error_code": "Upload Error",
+        "error_message": "Could not upload file to store"
+    }, status=520)

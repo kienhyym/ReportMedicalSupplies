@@ -5,7 +5,7 @@ define(function (require) {
 		Gonrin = require('gonrin');
 
 	var template = require('text!app/baocaodonvi_cungung/tpl/model.html'),
-	schema = require('json!schema/ReportSupplyOrganizationSchema.json');
+		schema = require('json!schema/ReportSupplyOrganizationSchema.json');
 	var OrganizationView = require('app/donvicungung/view/SelectView');
 
 	return Gonrin.ModelView.extend({
@@ -66,9 +66,9 @@ define(function (require) {
 												success: function (model, respose, options) {
 													self.getApp().notify("Lưu thông tin thành công");
 													self.createItem(respose.id)
-													self.updateItem();
-													self.deleteItem();
-													self.getApp().getRouter().navigate("/baocaodonvi/collection");
+													// self.updateItem();
+													// self.deleteItem();
+													self.getApp().getRouter().navigate("/baocaodonvi_cungung/collection");
 
 												},
 												error: function (xhr, status, error) {
@@ -205,20 +205,23 @@ define(function (require) {
                         <input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
 					</div>
 					<div style="width: 124px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0"        class="form-control text-center p-1" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0"                    class="form-control text-center p-1" style="font-size:14px">
                     </div>
                     <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0"   value="0"             type="number"  class="form-control text-center p-1" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0" value="0"                           type="number"  class="form-control text-center p-1" style="font-size:14px">
                     </div>
                     <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0"   type="number"  class="form-control text-center p-1" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0"               type="number"  class="form-control text-center p-1" style="font-size:14px">
                     </div>
                     <div style="width: 130px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0"              			 class="form-control text-center p-1"  style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0"              			              class="form-control text-center p-1"  style="font-size:14px">
 					</div>
 					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-					<input type="file">
-					<button class= "btn btn-outline-secondary pl-0 pr-0">Tải về</button>
+					<div style="position: relative;">
+						<input selected-item-id = "${itemID}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
+						<button class= "btn btn-outline-secondary pl-0 pr-0">Tải lên</button>
+						<a selected-item-id = "${itemID}" col-type="DOWNLOAD"  href="#"  class= "btn btn-outline-secondary pl-0 pr-0">Tải về</a>
+					</div>
                     </div>
                     <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
                             <i selected-item-id = "${itemID}" class="fa fa-trash" style="font-size: 17px"></i>
@@ -227,93 +230,68 @@ define(function (require) {
                 `)
 				self.$el.find('.dropdown-menu-item').hide()
 				self.$el.find('.search-item').val('')
-				self.clickImportExport();
+				self.clickInput();
 				self.$el.find('.selected-item-new div .fa-trash').unbind('click').bind('click', function () {
 					self.$el.find('.selected-item-new[selected-item-id="' + $(this).attr('selected-item-id') + '"]').remove();
 				})
 			})
 		},
-		clickImportExport: function () {
+		clickInput: function () {
 			var self = this;
-			self.$el.find('selected-item')
-			//Out Click QUANTITY_IMPORT
-			self.$el.find('[col-type="QUANTITY_IMPORT"]').unbind('click').bind('click', function () {
-				var pointerOutQuantityImport = $(this);
-				pointerOutQuantityImport.val(pointerOutQuantityImport.attr("quantity_import"))
+			// Click vào ô số tự đông thêm dấu chấm
+			var listClick = [
+				{ "col_type": "SUPPLY_ABILITY", "attr": "supply_ability" },
+				{ "col_type": "SELL_NUMBER", "attr": "sell_number" },
+				{ "col_type": "SPONSORED_NUMBER", "attr": "sponsored_number" },
+				{ "col_type": "PRICE", "attr": "price" },
+			]
+			listClick.forEach(function (item, index) {
+				self.$el.find('[col-type="' + item.col_type + '"]').unbind('click').bind('click', function () {
+					var clickThis = $(this);
+					clickThis.val(clickThis.attr(item.attr))
+				})
+				self.$el.find('[col-type="' + item.col_type + '"]').focusout(function () {
+					var clickThis = $(this);
+					var clickThisValue = clickThis.val();
+					if (clickThisValue == null || clickThisValue == '') {
+						clickThis.val(0);
+					}
+					else {
+						clickThis.attr(item.attr, clickThisValue)
+						setTimeout(() => {
+							var clickThisString = new Number(clickThisValue).toLocaleString("da-DK");
+							clickThis.val(clickThisString)
+						}, 200);
+					}
+				});
 			})
-			self.$el.find('[col-type="QUANTITY_IMPORT"]').focusout(function () {
-				var pointerOutQuantityImport = $(this);
-				var pointerOutQuantityImportValue = pointerOutQuantityImport.val();
+			// Upload file
+			self.$el.find("[col-type='FILE']").on("change", function () {
+				var http = new XMLHttpRequest();
+				var fd = new FormData();
+				fd.append('file', this.files[0]);
+				http.open('POST', '/api/v1/upload/file');
+				http.upload.addEventListener('progress', function (evt) {
+					if (evt.lengthComputable) {
+						var percent = evt.loaded / evt.total;
+						percent = parseInt(percent * 100);
+					}
+				}, false);
+				http.addEventListener('error', function () {
+				}, false);
 
-				if (pointerOutQuantityImportValue == null || pointerOutQuantityImportValue == '') {
-					pointerOutQuantityImport.val(0);
-				}
-				else {
-					pointerOutQuantityImport.attr("quantity_import", pointerOutQuantityImportValue)
-					setTimeout(() => {
-						var pointerOutQuantityImportValueString = new Number(pointerOutQuantityImportValue).toLocaleString("da-DK");
-						pointerOutQuantityImport.val(pointerOutQuantityImportValueString)
-					}, 200);
-				}
-
-				var selectedItemId = pointerOutQuantityImport.attr('selected-item-id');
-				var pointerOutQuantityBeginNetAmount = self.$el.find('[col-type="SUPPLY_ABILITY"][selected-item-id = ' + selectedItemId + ']').attr('begin_net_amount');
-
-				var pointerOutQuantityExport = self.$el.find('[col-type="QUANTITY_EXPORT"][selected-item-id = ' + selectedItemId + ']').attr('quantity_export');
-
-				var resultNetAmount = Number(pointerOutQuantityBeginNetAmount) + Number(pointerOutQuantityImport.attr('quantity_import')) - Number(pointerOutQuantityExport);
-				var resultNetAmountString = new Number(resultNetAmount).toLocaleString("da-DK");
-
-				self.$el.find('[col-type="END_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmountString);
-			});
-			//Out Click QUANTITY_EXPORT
-			self.$el.find('[col-type="QUANTITY_EXPORT"]').unbind('click').bind('click', function () {
-				var pointerOutQuantityExport = $(this);
-				pointerOutQuantityExport.val(pointerOutQuantityExport.attr("quantity_export"))
-			})
-			self.$el.find('[col-type="QUANTITY_EXPORT"]').focusout(function () {
-				var pointerOutQuantityExport = $(this);
-				var pointerOutQuantityExportValue = pointerOutQuantityExport.val();
-
-				if (pointerOutQuantityExportValue == null || pointerOutQuantityExportValue == '') {
-					pointerOutQuantityExport.val(0);
-				}
-				else {
-					pointerOutQuantityExport.attr("quantity_export", pointerOutQuantityExportValue)
-					setTimeout(() => {
-						var pointerOutQuantityExportValueString = new Number(pointerOutQuantityExportValue).toLocaleString("da-DK");
-						pointerOutQuantityExport.val(pointerOutQuantityExportValueString)
-					}, 200);
-				}
-
-				var selectedItemId = pointerOutQuantityExport.attr('selected-item-id');
-				var pointerOutQuantityBeginNetAmount = self.$el.find('[col-type="SUPPLY_ABILITY"][selected-item-id = ' + selectedItemId + ']').attr('begin_net_amount');
-				var pointerOutQuantityImport = self.$el.find('[col-type="QUANTITY_IMPORT"][selected-item-id = ' + selectedItemId + ']').attr('quantity_import');
-				var resultNetAmount = Number(pointerOutQuantityBeginNetAmount) + Number(pointerOutQuantityImport) - Number(pointerOutQuantityExport.attr('quantity_export'))
-
-				var resultNetAmountString = new Number(resultNetAmount).toLocaleString("da-DK");
-				self.$el.find('[col-type="END_NET_AMOUNT"][selected-item-id = ' + selectedItemId + ']').val(resultNetAmountString);
-			});
-
-			//Out Click ESTIMATES_NET_AMOUNT
-			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').unbind('click').bind('click', function () {
-				var pointerOutEstimatesNetAmount = $(this);
-				pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmount.attr("estimates_net_amount"))
-			})
-			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').focusout(function () {
-				var pointerOutEstimatesNetAmount = $(this);
-				var pointerOutEstimatesNetAmountValue = pointerOutEstimatesNetAmount.val();
-
-				if (pointerOutEstimatesNetAmountValue == null || pointerOutEstimatesNetAmountValue == '') {
-					pointerOutEstimatesNetAmount.val(0);
-				}
-				else {
-					pointerOutEstimatesNetAmount.attr("estimates_net_amount", pointerOutEstimatesNetAmountValue)
-					setTimeout(() => {
-						var pointerOutEstimatesNetAmountValueString = new Number(pointerOutEstimatesNetAmountValue).toLocaleString("da-DK");
-						pointerOutEstimatesNetAmount.val(pointerOutEstimatesNetAmountValueString)
-					}, 200);
-				}
+				http.onreadystatechange = function () {
+					if (http.status === 200) {
+						if (http.readyState === 4) {
+							var data_file = JSON.parse(http.responseText), link, p, t;
+							self.getApp().notify("Tải file thành công");
+							self.$el.find("[col-type='DOWNLOAD']").attr('href',data_file.link)
+						}
+					} else {
+						self.getApp().notify("Không thể tải tệp tin lên máy chủ");
+					}
+				};
+				http.send(fd);
 			});
 		},
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
@@ -329,7 +307,7 @@ define(function (require) {
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
-					data: JSON.stringify({ "text": text,"selectedList": selectedList }),
+					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
 					success: function (response) {
 						self.$el.find('.dropdown-item').remove();
 						var count = response.length
@@ -385,8 +363,6 @@ define(function (require) {
 					success: function (response) {
 						self.$el.find('.dropdown-item').remove();
 						var count = response.length
-
-
 						response.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
@@ -431,16 +407,15 @@ define(function (require) {
 		},
 		showDetail: function () {
 			var self = this;
-			if (self.model.get('details').length > 0) {
-				self.model.get('details').forEach(function (item, index) {
-					console.log(item)
-					var quantityImportToLocaleString = new Number(item.quantity_import).toLocaleString("da-DK");
-					var quantityExportToLocaleString = new Number(item.quantity_export).toLocaleString("da-DK");
-					var beginNetAmountToLocaleString = new Number(item.begin_net_amount).toLocaleString("da-DK");
-					var estimatesNetAmountToLocaleString = new Number(item.estimates_net_amount).toLocaleString("da-DK");
-					var endNetAmountToLocaleString = new Number(item.begin_net_amount + item.quantity_import - item.quantity_export).toLocaleString("da-DK");
+			console.log('xxxxxxxxxxxxxxxx',self.model)
 
-					var netAmountToLocaleString = new Number(item.quantity_import - item.quantity_export).toLocaleString("da-DK");
+			if (self.model.get('details').length > 0) {
+
+				self.model.get('details').forEach(function (item, index) {
+					var String_SupplyAbility = new Number(item.supply_ability).toLocaleString("da-DK");
+					var String_SellNumber = new Number(item.sell_number).toLocaleString("da-DK");
+					var String_SponsoredNumber = new Number(item.sponsored_number).toLocaleString("da-DK");
+					var String_Price = new Number(item.price).toLocaleString("da-DK");
 
 					self.$el.find('#list-item').before(`
                     <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old selected-item-general" item_id = ${item.medical_supplies_id} >
@@ -451,23 +426,26 @@ define(function (require) {
                             <input selected-item-id = "${item.id}" col-type="NAME" class="form-control p-1" value="${item.medical_supplies_name}" readonly style="font-size:14px">
 						</div>
 						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" readonly value="${item.medical_supplies_unit}" style="font-size:14px">
+							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" readonly  style="font-size:14px">
 						</div>
 						<div style="width: 124px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" class="form-control text-center p-1" begin_net_amount="${item.begin_net_amount}" value="${beginNetAmountToLocaleString}"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY"  value="${String_SupplyAbility}" class="form-control text-center p-1"   style="font-size:14px">
                         </div>
                         <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" quantity_import="${item.quantity_import}" value="${quantityImportToLocaleString}" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" value="${String_SellNumber}" type="number" class="form-control text-center p-1"   style="font-size:14px">
                         </div>
                         <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="QUANTITY_EXPORT" type="number" class="form-control text-center p-1" quantity_export="${item.quantity_export}" value = "${quantityExportToLocaleString}" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" value = "${String_SponsoredNumber}" type="number"  class="form-control text-center p-1"  style="font-size:14px">
                         </div>
                         <div style="width: 130px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="END_NET_AMOUNT" class="form-control text-center p-1" value="${endNetAmountToLocaleString}" end_net_amount="${item.begin_net_amount + item.quantity_import - item.quantity_export}" readonly style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="PRICE" value="${String_Price}" class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-							<i class="fa fa-upload" aria-hidden="true"></i>
-                            <input selected-item-id = "${item.id}" col-type="ESTIMATES_NET_AMOUNT" class="form-control text-center p-1" estimates_net_amount = "${item.estimates_net_amount}" value="${estimatesNetAmountToLocaleString}"  style="font-size:14px">
+							<div style="position: relative;">
+								<input selected-item-id = "${item.id}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
+								<button class= "btn btn-outline-secondary pl-1 pr-1">Tải lên</button>
+								<a selected-item-id = "${item.id}" col-type="DOWNLOAD" href="${item.file}"  class= "btn btn-outline-secondary pl-1 pr-1">Xem</a>
+							</div>
 						</div>
                         <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
                             <i selected-item-id = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
@@ -478,34 +456,34 @@ define(function (require) {
 						self.$el.find('[col-type = "SUPPLY_ABILITY"]').attr("readonly", "readonly")
 					}
 				})
-				self.clickImportExport();
+				self.clickInput();
 
 			}
 
 
 		},
-		createItem: function (report_organization_id) {
+		createItem: function (report_supply_organization_id) {
 			var self = this;
 			var arr = [];
 			self.$el.find('.selected-item-new').each(function (index, item) {
 				var obj = {
-					"report_organization_id": report_organization_id,
+					"report_supply_organization_id": report_supply_organization_id,
 					"organization_id": self.model.get('organization_id'),
 					"medical_supplies_id": $(item).attr('item-id'),
-					"begin_net_amount": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('begin_net_amount'),
-					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').attr('quantity_export'),
-					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').attr('quantity_import'),
-					// "end_net_amount": $(item).find('[col-type="END_NET_AMOUNT"]').attr('end_net_amount'),
-					"estimates_net_amount": $(item).find('[col-type="ESTIMATES_NET_AMOUNT"]').attr('estimates_net_amount'),
-					"date": self.model.get('date')
+					"date": self.model.get('date'),
+
+					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
+					"sell_number": $(item).find('[col-type="SELL_NUMBER"]').attr('sell_number'),
+					"sponsored_number": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('sponsored_number'),
+					"price": $(item).find('[col-type="PRICE"]').attr('price'),
+					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href')
 				}
 				arr.push(obj)
-				console.log(arr)
 			})
 			if (arr.length > 0) {
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/create_report_organization_detail",
+					url: self.getApp().serviceURL + "/api/v1/create_report_supply_organization_detail",
 					data: JSON.stringify(arr),
 					success: function (response) {
 						console.log(response)
@@ -524,9 +502,9 @@ define(function (require) {
 					"id": $(item).attr('selected-item-id'),
 					"organization_id": self.model.get('organization_id'),
 					"begin_net_amount": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('begin_net_amount'),
-					"quantity_export": $(item).find('[col-type="QUANTITY_EXPORT"]').attr('quantity_export'),
-					"quantity_import": $(item).find('[col-type="QUANTITY_IMPORT"]').attr('quantity_import'),
-					"estimates_net_amount": $(item).find('[col-type="ESTIMATES_NET_AMOUNT"]').attr('estimates_net_amount'),
+					"quantity_export": $(item).find('[col-type="SELL_NUMBER"]').attr('quantity_export'),
+					"quantity_import": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('quantity_import'),
+					"estimates_net_amount": $(item).find('[col-type="PRICE"]').attr('estimates_net_amount'),
 					"date": self.model.get('date')
 				}
 				arr.push(obj)

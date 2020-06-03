@@ -36,7 +36,7 @@ define(function(require) {
                     label: "TRANSLATE:Tạo mới",
                     command: function() {
                         var self = this;
-                        self.getApp().getRouter().navigate("/thongkebaocaodonvicungung/model");
+                        self.getApp().getRouter().navigate("/baocaodonvi_cungung/model");
                     }
                 },
                 // {
