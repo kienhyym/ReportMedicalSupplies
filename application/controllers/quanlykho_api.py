@@ -424,3 +424,26 @@ async def create_report_supply_organization_detail(request):
         db.session.add(new_item)
         db.session.commit()
     return json({"message":"create success"})
+
+@app.route('/api/v1/update_report_supply_organization_detail', methods=["POST"])
+async def update_report_supply_organization_detail(request):
+    data = request.json
+    for _ in data:
+        old_item = db.session.query(ReportSupplyOrganizationDetail).filter(ReportSupplyOrganizationDetail.id == _['id']).first()
+        old_item.date = _['date']
+        old_item.supply_ability = _['supply_ability']
+        old_item.sell_number = _['sell_number']
+        old_item.sponsored_number = _['sponsored_number']
+        old_item.price = _['price']
+        old_item.file = _['file']
+        db.session.commit()
+    return json({"message": "Update Success"})
+
+@app.route('/api/v1/delete_report_supply_organization_detail', methods=["POST"])
+async def delete_report_supply_organization_detail(request):
+    list_id = request.json
+    for _ in list_id:
+        item_delete = db.session.query(ReportSupplyOrganizationDetail).filter(ReportSupplyOrganizationDetail.id == _).first()
+        db.session.delete(item_delete)
+        db.session.commit()
+    return json({"message": "Delete Success"})

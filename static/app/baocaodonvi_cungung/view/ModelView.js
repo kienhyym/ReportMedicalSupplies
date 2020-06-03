@@ -66,8 +66,8 @@ define(function (require) {
 												success: function (model, respose, options) {
 													self.getApp().notify("Lưu thông tin thành công");
 													self.createItem(respose.id)
-													// self.updateItem();
-													// self.deleteItem();
+													self.updateItem();
+													self.deleteItem();
 													self.getApp().getRouter().navigate("/baocaodonvi_cungung/collection");
 
 												},
@@ -420,25 +420,25 @@ define(function (require) {
 					self.$el.find('#list-item').before(`
                     <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old selected-item-general" item_id = ${item.medical_supplies_id} >
                         <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="STT" class="form-control text-center p-1" value="${index + 1}" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="STT" value="${index + 1}" class="form-control text-center p-1"  readonly style="font-size:14px">
                         </div>
                         <div style="width: 248px;display: inline-block;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="NAME" class="form-control p-1" value="${item.medical_supplies_name}" readonly style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="NAME" value="${item.medical_supplies_name}" class="form-control p-1" readonly style="font-size:14px">
 						</div>
 						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
 							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" readonly  style="font-size:14px">
 						</div>
 						<div style="width: 124px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY"  value="${String_SupplyAbility}" class="form-control text-center p-1"   style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}" type="number"  class="form-control text-center p-1" style="font-size:14px">
                         </div>
                         <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" value="${String_SellNumber}" type="number" class="form-control text-center p-1"   style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}" type="number" class="form-control text-center p-1"   style="font-size:14px">
                         </div>
                         <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" value = "${String_SponsoredNumber}" type="number"  class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}" type="number"  class="form-control text-center p-1"  style="font-size:14px">
                         </div>
                         <div style="width: 130px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="PRICE" value="${String_Price}" class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" type="number" class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">
@@ -452,15 +452,9 @@ define(function (require) {
                         </div>
                     </div>
 					`)
-					if (item.date > item.check_begin_net_amount) {
-						self.$el.find('[col-type = "SUPPLY_ABILITY"]').attr("readonly", "readonly")
-					}
 				})
 				self.clickInput();
-
 			}
-
-
 		},
 		createItem: function (report_supply_organization_id) {
 			var self = this;
@@ -500,20 +494,19 @@ define(function (require) {
 			self.$el.find('.selected-item-old').each(function (index, item) {
 				var obj = {
 					"id": $(item).attr('selected-item-id'),
-					"organization_id": self.model.get('organization_id'),
-					"begin_net_amount": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('begin_net_amount'),
-					"quantity_export": $(item).find('[col-type="SELL_NUMBER"]').attr('quantity_export'),
-					"quantity_import": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('quantity_import'),
-					"estimates_net_amount": $(item).find('[col-type="PRICE"]').attr('estimates_net_amount'),
+					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
+					"sell_number": $(item).find('[col-type="SELL_NUMBER"]').attr('sell_number'),
+					"sponsored_number": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('sponsored_number'),
+					"price": $(item).find('[col-type="PRICE"]').attr('price'),
+					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href'),
 					"date": self.model.get('date')
 				}
 				arr.push(obj)
 			})
-
 			if (arr.length > 0) {
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/update_report_organization_detail",
+					url: self.getApp().serviceURL + "/api/v1/update_report_supply_organization_detail",
 					data: JSON.stringify(arr),
 					success: function (response) {
 						console.log(response)
@@ -534,7 +527,7 @@ define(function (require) {
 			if (arrayItemRemove > 0) {
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/delete_report_organization_detail",
+					url: self.getApp().serviceURL + "/api/v1/delete_report_supply_organization_detail",
 					data: JSON.stringify(self.listItemRemove),
 					success: function (response) {
 						self.listItemRemove.splice(0, arrayItemRemove);
