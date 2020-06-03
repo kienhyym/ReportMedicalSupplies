@@ -157,6 +157,16 @@ define(function (require) {
             }
         },
         {
+            "text": "Báo cáo vật tư PCD ĐV cung ứng",
+            "type": "view",
+            "route": "thongkebaocaodonvicungung/collection",
+            "$ref": "app/baocaodonvi_cungung/view/CollectionView",
+            "visible": function () {
+                return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+            }
+        },
+        {
             "text": "Thống kê",
             "icon": "fa fa-list-ul",
             // "text": "Thống kê báo cáo đơn vị",
@@ -177,16 +187,7 @@ define(function (require) {
                         // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
                     }
                 },
-                {
-                    "text": "Vật tư PCD ĐV cung ứng",
-                    "type": "view",
-                    "route": "thongkebaocaodonvicungung/collection",
-                    "$ref": "app/baocaodonvi_cungung/view/CollectionView",
-                    "visible": function () {
-                        return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                        // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
-                    }
-                },
+              
                 {
                     "text": "Tổng hợp xuất kho vật tư PCD",
                     "type": "view",

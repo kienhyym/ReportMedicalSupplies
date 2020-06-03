@@ -75,18 +75,22 @@ async def check_medical_supplies_name(request=None, data=None, Model=None, **kw)
 @app.route('/api/v1/load_item_dropdown_statistical',methods=['POST'])
 async def load_item_dropdown_statistical(request):
     data = request.json
-    arr = []
-    if data is not None and data != "":
-        search = "%{}%".format(data)
-        searchTitle = "%{}%".format(data.title())
-        list = db.session.query(MedicalSupplies).filter(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search))).all()
+    text = data['text']
+    selectedList = data['selectedList']
+
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(MedicalSupplies).filter(and_(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search))),MedicalSupplies.id.notin_(selectedList)).all()
+        arr = []
         for i in list:
             arr.append(to_dict(i))
         return json(arr)
     else:
-        list = db.session.query(MedicalSupplies).all()
-        for _ in list:
-            arr.append(to_dict(_))
+        list = db.session.query(MedicalSupplies).filter(MedicalSupplies.id.notin_(selectedList)).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
         return json(arr)
 
 apimanager.create_api(MedicalSupplies,
@@ -378,11 +382,9 @@ async def create_report_donvicungung(request):
 @app.route("/api/v1/get_synthetic_receive", methods=["GET"])
 async def get_synthetic_receive(request):
     listOrganization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id.in_(["6","7","8"]))).all()
-    
-    tuyen6 = {"tuyen":"sở y tế","stt":"I"}
+    tuyen6 = {"tuyen":"Sở y tế","stt":"I"}
     tuyen78 = {"tuyen":"Bệnh viện/Viện trực thuộc Bộ y tế","stt":"II"}
     tuyenkhac = {"tuyen":"Các Bộ và cơ quan khác","stt":"III"}
-
     result = [tuyen6,tuyen78,tuyenkhac]
     arr6 = []
     arr78 = []
@@ -398,7 +400,6 @@ async def get_synthetic_receive(request):
                 arr78.append(obj)
         tuyen6['list'] = arr6
         tuyen78['list'] = arr78
-
         return json(result)
 
 
