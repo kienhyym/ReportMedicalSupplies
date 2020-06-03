@@ -613,18 +613,18 @@ define(function (require) {
 					console.log('===',response)
 					response.forEach(function(item,index){
 						self.$el.find('tbody').append(` <tr>
-						<td style="font-weight:bold; font-size:16px">${item.stt}</td>
-						<td style="font-weight:bold; font-size:16px">${item.tuyen}</td>
-						<td><input class="form-control text-center"></td>
-						<td><input class="form-control text-center"></td>
+						<td style="font-weight:bold;">${item.stt}</td>
+						<td style="font-weight:bold;">${item.tuyen}</td>
+						<td><input class="form-control text-center" style=" border:none;"></td>
+						<td><input class="form-control text-center" style=" border:none;"></td>
 					</tr>`)
 					if(item.list!=null && item.list!=undefined){
 						item.list.forEach(function(item2,index2){
 							self.$el.find('tbody').append(` <tr>
 							<td>${index2+1}</td>
 							<td>${item2.tendonvi}</td>
-							<td><input class="form-control text-center"></td>
-							<td><input class="form-control text-center"></td>
+							<td><input class="form-control text-center" style=" border:none;"></td>
+							<td><input class="form-control text-center" style=" border:none;"></td>
 						</tr>`)
 						});
 					}

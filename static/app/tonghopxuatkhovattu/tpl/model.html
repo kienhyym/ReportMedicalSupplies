@@ -1,3 +1,8 @@
+<style>
+    input {
+        border:none;
+    }
+</style>
 <div block-bind="content">
     <div class="page-header row no-gutters py-2">
 
@@ -15,20 +20,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body row">
+                <div class="card-body">
                   
-                    <table class="table table-striped table-bordered  col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
-                        <thead class="thead-light">
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-light text-center">
                           <tr>
                             <th>STT</th>
                             <th>Đơn vị</th>
-                            <th >Thời gian xuất cấp</th>
-                            <th >
+                            <th>Thời gian xuất cấp</th>
+                            <th>
                                 <div class="dropdown show">
-                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="btn btn-secondary dropdown-toggle" style="padding: 8px 200px" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       Loại thiết bị
                                     </a>
-                                  
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                       <input type="text" class="form-control search-item" placeholder="Nhập tên mặt hàng để tìm kiếm">
                                       <div class="card" style="position: absolute;top: 65px;left: 15px;width: 300px;">
