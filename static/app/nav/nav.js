@@ -176,6 +176,15 @@ define(function (require) {
                         // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
                     }
                 },
+                {
+                    "text": "Vật tư PCD đơn vị cung ứng",
+                    "type": "view",
+                    "route": "thongkebaocao_cungung/search",
+                    "$ref": "app/thongkebaocao_cungung/view/View",
+                    "visible": function () {
+                        return (this.userHasRole("admin")|| this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                    }
+                },
               
                 {
                     "text": "Tổng hợp xuất kho vật tư PCD",
