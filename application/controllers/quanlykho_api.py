@@ -43,7 +43,8 @@ async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
         result = data
 
 async def check_dict_like(request=None, data=None, Model=None, **kw):
-        del data['organization']
+    pass
+        # del data['organization']
 
 async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw):
         for _ in result['details']:
@@ -447,6 +448,7 @@ async def delete_report_supply_organization_detail(request):
         db.session.commit()
     return json({"message": "Delete Success"})
 
+<<<<<<< HEAD
 
 
 # Thêm vật tư y tế vào danh sách vật tư mà đơn vị ko sử dụng

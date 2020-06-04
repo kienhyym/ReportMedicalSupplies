@@ -38,25 +38,27 @@ define(function (require) {
 						label: "TRANSLATE:SAVE",
 						command: function () {
 							var self = this;
-							self.model.save(null, {
-								success: function (model, respose, options) {
-									self.getApp().notify("Lưu thông tin thành công");
-									self.getApp().getRouter().navigate("/baocaodonvi/collection");
-								},
-								error: function (xhr, status, error) {
-									try {
-										if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED") {
-											self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
-											self.getApp().getRouter().navigate("login");
-										} else {
-											self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
-										}
-									}
-									catch (err) {
-										self.getApp().notify({ message: "Lưu thông tin không thành công" }, { type: "danger", delay: 1000 });
-									}
-								}
-							});
+							self.createItem();
+							
+							// self.model.save(null, {
+							// 	success: function (model, respose, options) {
+							// 		self.getApp().notify("Lưu thông tin thành công");
+							// 		self.getApp().getRouter().navigate("/baocaodonvi/collection");
+							// 	},
+							// 	error: function (xhr, status, error) {
+							// 		try {
+							// 			if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED") {
+							// 				self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
+							// 				self.getApp().getRouter().navigate("login");
+							// 			} else {
+							// 				self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+							// 			}
+							// 		}
+							// 		catch (err) {
+							// 			self.getApp().notify({ message: "Lưu thông tin không thành công" }, { type: "danger", delay: 1000 });
+							// 		}
+							// 	}
+							// });
 
 						}
 					},
@@ -305,6 +307,7 @@ define(function (require) {
 				var dropdownItemClick = $(this);
 				self.$el.find('.search-item').val(dropdownItemClick.attr('title'));
 				self.vattu_id = dropdownItemClick.attr('item-id');
+				
 				self.vattu_ten = dropdownItemClick.attr('title');
 
 				self.$el.find('.dropdown-menu-item').hide()
@@ -314,6 +317,11 @@ define(function (require) {
 
 			})
 		},
+		createItem: function(){
+			var self = this;
+	
+
+		}
 
 	});
 
