@@ -1002,9 +1002,10 @@ async def enterprise_supply_statistics(request):
     medical_supplies_name = data['medical_supplies_name']
 
     reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.date >= date_start,ReportSupplyOrganizationDetail.date <= date_end)).all()
+    
     arr = []
     obj = {"medical_supplies_name":medical_supplies_name,"data":arr}
-    if reportSupplyOrganizationDetails is not None:
+    if len(reportSupplyOrganizationDetails) > 0:
         price = 0
         sum_sponsored_sell_number = 0
         sum_price = 0
@@ -1019,11 +1020,17 @@ async def enterprise_supply_statistics(request):
             sum_sponsored_sell_number = to_dict(_)['sell_number'] + to_dict(_)['sponsored_number'] + sum_sponsored_sell_number  
             sum_price = (to_dict(_)['sell_number']+to_dict(_)['sponsored_number']) * to_dict(_)['price'] +sum_price  
 
-
         obj["avg_price"]= price/len(reportSupplyOrganizationDetails)
         obj["sum_sponsored_sell_number"]= sum_sponsored_sell_number
         obj["sum_price"]= sum_price
-
+    else:
+        obj = {
+            "medical_supplies_name":medical_supplies_name,
+            "data":[],
+            "avg_price":0,
+            "sum_sponsored_sell_number":0,
+            "sum_price":0,
+        }
     return json(obj)
 
 
