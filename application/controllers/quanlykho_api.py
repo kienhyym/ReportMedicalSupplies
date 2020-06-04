@@ -44,7 +44,8 @@ async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
         result = data
 
 async def check_dict_like(request=None, data=None, Model=None, **kw):
-        del data['organization']
+    pass
+        # del data['organization']
 
 async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw):
         for _ in result['details']:
@@ -447,3 +448,17 @@ async def delete_report_supply_organization_detail(request):
         db.session.delete(item_delete)
         db.session.commit()
     return json({"message": "Delete Success"})
+
+@app.route("/api/v1/create_report_synthesis",methods=["POST"])
+async def create_report_synthesis(request):
+    data = request.json
+    for obj in data:
+        obj_item = SyntheticReleaseDetail()
+        obj_item.organization_id = obj['organization_id']
+        obj_item.date = obj['date']
+        obj_item.date_export= obj['date_export']
+        obj_item.quantity = obj['quantity']
+        obj_item.medical_supplies_id = obj['medical_supplies_id']
+    db.session.add(obj)
+    db.session.commit()
+    return json({"message":"create success"})
