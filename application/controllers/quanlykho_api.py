@@ -466,3 +466,18 @@ async def save_check_use_medical_supplies(request):
     print('--------organization--------', to_dict(organization))
     db.session.commit()
     return json({"message": "Success"})
+=======
+@app.route("/api/v1/create_report_synthesis",methods=["POST"])
+async def create_report_synthesis(request):
+    data = request.json
+    for obj in data:
+        obj_item = SyntheticReleaseDetail()
+        obj_item.organization_id = obj['organization_id']
+        obj_item.date = obj['date']
+        obj_item.date_export= obj['date_export']
+        obj_item.quantity = obj['quantity']
+        obj_item.medical_supplies_id = obj['medical_supplies_id']
+    db.session.add(obj)
+    db.session.commit()
+    return json({"message":"create success"})
+>>>>>>> 5cd5ec96a3e7cf720288d98b3ee84ba4b27f837c
