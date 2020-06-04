@@ -129,6 +129,7 @@ async def write_file(file, fileId, attrs, uid_current):
 async def upload_file(request):
     url = app.config['FILE_SERVICE_URL']
     fsroot = app.config['FS_ROOT']
+    print ('____________fsroot________________',fsroot)
     if request.method == 'POST':
         file = request.files.get('file', None)
         if file :

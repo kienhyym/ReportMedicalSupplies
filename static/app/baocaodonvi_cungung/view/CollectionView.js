@@ -112,7 +112,7 @@ define(function(require) {
             if(gonrinApp().hasRole("admin")) {
             } else {
                 filterobj = {"$and": [
-                    // { "organization_id": {"$eq": currentUser.organization_id}}
+                    { "organization_id": {"$eq": currentUser.organization_id}}
                 ]};
             }
             self.uiControl.filters = filterobj;

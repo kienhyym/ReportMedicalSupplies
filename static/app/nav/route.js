@@ -167,6 +167,11 @@ define(function(require) {
             "route":"thongkebaocao/search",
             "$ref": "app/thongkebaocao/view/View"
         },
+        {
+            // "collectionName":"donvidangki",
+            "route":"thongkebaocao_cungung/search",
+            "$ref": "app/thongkebaocao_cungung/view/View"
+        },
 
         {
             "collectionName": "report_supply_organization",
