@@ -466,7 +466,7 @@ async def save_check_use_medical_supplies(request):
     print('--------organization--------', to_dict(organization))
     db.session.commit()
     return json({"message": "Success"})
-=======
+    
 @app.route("/api/v1/create_report_synthesis",methods=["POST"])
 async def create_report_synthesis(request):
     data = request.json
@@ -480,4 +480,3 @@ async def create_report_synthesis(request):
     db.session.add(obj)
     db.session.commit()
     return json({"message":"create success"})
->>>>>>> 5cd5ec96a3e7cf720288d98b3ee84ba4b27f837c
