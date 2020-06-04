@@ -448,8 +448,6 @@ async def delete_report_supply_organization_detail(request):
         db.session.commit()
     return json({"message": "Delete Success"})
 
-<<<<<<< HEAD
-
 
 # Thêm vật tư y tế vào danh sách vật tư mà đơn vị ko sử dụng
 @app.route('/api/v1/save_check_use_medical_supplies', methods=["POST"])
@@ -466,7 +464,7 @@ async def save_check_use_medical_supplies(request):
     print('--------organization--------', to_dict(organization))
     db.session.commit()
     return json({"message": "Success"})
-    
+
 @app.route("/api/v1/create_report_synthesis",methods=["POST"])
 async def create_report_synthesis(request):
     data = request.json
