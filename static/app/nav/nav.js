@@ -142,7 +142,7 @@ define(function (require) {
             "route": "baocaodonvi/collection",
             "$ref": "app/baocaodonvi/view/CollectionView",
             "visible": function () {
-                return (!this.checkDonViCungUng("donvicungung") && !this.requireTuyenDonVi(["1"]));
+                return (!this.userHasRole("admin")) && !this.requireTuyenDonVi(["1"]) && !this.checkDonViCungUng("donvicungung");
 
             }
         },
@@ -152,7 +152,7 @@ define(function (require) {
             "route": "tonghopxuatkhovattu/collection",
             "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
             "visible": function () {
-                return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                return (this.userHasRole("admin") || this.requireTuyenDonVi(["1","2","3","4","5"]));
                 // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
             }
         },
@@ -162,7 +162,7 @@ define(function (require) {
             "route": "baocaodonvi_cungung/collection",
             "$ref": "app/baocaodonvi_cungung/view/CollectionView",
             "visible": function () {
-                return (this.userHasRole("admin") || this.checkDonViCungUng("donvicungung"));
+                return ( this.checkDonViCungUng("donvicungung"));
             }
         },
         {
@@ -187,14 +187,24 @@ define(function (require) {
                     }
                 },
                 {
-                    "text": "Vật tư PCD đơn vị cung ứng",
+                    "text": "Vật tư PCD Đơn vị cung ứng",
                     "type": "view",
                     "route": "thongkebaocao_cungung/search",
                     "$ref": "app/thongkebaocao_cungung/view/View",
                     "visible": function () {
-                        return (this.userHasRole("admin")|| this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                        return (this.userHasRole("admin")|| this.requireTuyenDonVi(["1","2","3","4","5"]));
                     }
                 },
+                // {
+                //     "text": "Tổng hợp xuất kho vật tư PCD",
+                //     "type": "view",
+                //     "route": "tonghopxuatkhovattu/collection",
+                //     "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
+                //     "visible": function () {
+                //         return (this.userHasRole("admin") || this.requireTuyenDonVi(["1"]));
+                //         // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
+                //     }
+                // },
               
                
             ]
