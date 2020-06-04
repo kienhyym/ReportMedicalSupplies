@@ -4,7 +4,6 @@ from gatco_restapi.helpers import to_dict
 from application.server import app
 from sqlalchemy import or_, and_, func
 
-from gatco.response import json
 from datetime import datetime
 import ujson
 import asyncio
@@ -447,3 +446,21 @@ async def delete_report_supply_organization_detail(request):
         db.session.delete(item_delete)
         db.session.commit()
     return json({"message": "Delete Success"})
+
+
+
+# Thêm vật tư y tế vào danh sách vật tư mà đơn vị ko sử dụng
+@app.route('/api/v1/save_check_use_medical_supplies', methods=["POST"])
+async def save_check_use_medical_supplies(request):
+    data = request.json
+    medical_supplies_id = data.get('medical_supplies_id', None)
+    organization = db.session.query(Organization).filter(Organization.id == data['organization_id']).first()
+
+    list_unused_medical_supplies = to_dict(organization).get('list_unused_medical_supplies', [])
+    print('----list_unused_medical_supplies', list_unused_medical_supplies)
+    list_unused_medical_supplies.append(medical_supplies_id)
+    print('----list_unused_medical_supplies-2', list_unused_medical_supplies)
+    organization.list_unused_medical_supplies = list_unused_medical_supplies
+    print('--------organization--------', to_dict(organization))
+    db.session.commit()
+    return json({"message": "Success"})

@@ -77,6 +77,9 @@
         "type": "string",
         "length": 255
     },
+    "list_unused_medical_supplies": {
+        "type": "json"
+    },
     "tuyendonvi_id": {
         "type": "string",
         "length": 255

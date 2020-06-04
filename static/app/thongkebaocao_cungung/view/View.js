@@ -21,64 +21,47 @@ define(function (require) {
 			self.typeFilter();
 			self.loadItemDropdown();
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
+				self.$el.find('.spinner-border').show()
+				var date = moment(self.$el.find('#date-report').data("gonrin").getValue()*1000).format('MM DD YYYY') + ' 00:00:00';
+				var date_start = Date.parse(date) /1000
+				var date_end = date_start + 86400
+
 				var params = {};
-				params['type'] = self.$el.find('.type-filter button').attr('filter');
-				params['type_donvi'] = "donvinhanuoc";
+				params['type_donvi'] = "donvicungung";
 				params['medical_supplies_id'] = self.vattu_id;
 				params['medical_supplies_name'] = self.vattu_ten;
-
-				if (self.$el.find('.type-filter button').attr('filter') == "none" || self.vattu_id == "") {
-					self.getApp().notify({ message: "Bạn chưa chọn bộ lọc" }, { type: "danger", delay: 1000 });
-				}
-				else {
-					if (self.$el.find('.type-filter button').attr('filter') == "all") {
-						params['from_date'] = null;
-						params['to_date'] = null;
-						self.apiFilter(params)
-						self.$el.find('.spinner-border').show()
-
-					}
-					else if (self.$el.find('.type-filter button').attr('filter') == "fromBeforeToDay") {
-						params['from_date'] = null;
-						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
-						self.apiFilter(params)
-						self.$el.find('.spinner-border').show()
-
-					}
-					else if (self.$el.find('.type-filter button').attr('filter') == "fromDayToDay") {
-						params['from_date'] = self.$el.find('#start_time').data("gonrin").getValue()
-						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
-						if (self.$el.find('#start_time').data("gonrin").getValue() > self.$el.find('#end_time').data("gonrin").getValue()){
-							self.getApp().notify({ message: "Ngày bắt đầu không được  lớn hơn ngày kết thúc" }, { type: "danger", delay: 1000 });
-							self.$el.find('.spinner-border').hide()
-						}
-						else{
-							self.apiFilter(params)
-							self.$el.find('.spinner-border').show()
-
-						}
-					}
-				}
-
+				params['date_report_start'] =date_start
+				params['date_report_end'] = date_end
+				self.apiFilter(params)
 			});
 		},
 		apiFilter : function(params){
 			var self = this;
 			$.ajax({
 				type: "POST",
-				url: self.getApp().serviceURL + "/api/v1/organizational_list_statistics1",
+				url: self.getApp().serviceURL + "/api/v1/enterprise_supply_statistics",
 				data: JSON.stringify(params),
 				success: function (response) {
 					self.$el.find('.spinner-border').hide()
 					self.$el.find('#danhSachDonVi tr').remove()
-					response.forEach(function (item, index) {
+
+					self.$el.find('#danhSachDonVi').append(`
+						<tr>
+							<th>I</th>
+							<th>${response.medical_supplies_name}</th>
+							<th>${response.avg_price}</th>
+							<th>${response.sum_sponsored_sell_number}</th>
+							<th>${response.sum_price}</th>
+						</tr>
+						`)
+					response.data.forEach(function (item, index) {
 						self.$el.find('#danhSachDonVi').append(`
 						<tr>
+						<td>${index+1}</td>
 							<td>${item.organization_name}</td>
-							<td>${item.quantity_import}</td>
-							<td>${item.quantity_export}</td>
-							<td>${item.net_amount}</td>
-							<td>${item.estimates_net_amount}</td>
+							<td>${item.price}</td>
+							<td>${item.sponsored_number + item.sell_number}</td>
+							<td>${(item.sponsored_number + item.sell_number) * item.price }</td>
 						</tr>
 						`)
 					})
@@ -102,7 +85,7 @@ define(function (require) {
 		},
 		typeFilter: function () {
 			var self = this;
-			self.$el.find('#start_time').datetimepicker({
+			self.$el.find('#date-report').datetimepicker({
 				textFormat: 'DD-MM-YYYY',
 				extraFormats: ['DDMMYYYY'],
 				parseInputDate: function (val) {
@@ -112,57 +95,21 @@ define(function (require) {
 					return date.unix()
 				}
 			});
-
-			self.$el.find('#end_time').datetimepicker({
-				textFormat: 'DD-MM-YYYY',
-				extraFormats: ['DDMMYYYY'],
-				parseInputDate: function (val) {
-					return moment.unix(val)
-				},
-				parseOutputDate: function (date) {
-					return date.unix()
-				}
-			});
-
-			self.$el.find('.type-filter .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
-				self.$el.find('.type-filter button').text($(this).attr('text'))
-				self.$el.find('.type-filter button').attr("filter", $(this).attr('filter'))
-
-				if ($(this).attr('filter') == "none") {
-					self.$el.find('.start-time').hide()
-					self.$el.find('.end-time').hide()
-				}
-				else if ($(this).attr('filter') == "all") {
-					self.$el.find('.start-time').hide()
-					self.$el.find('.end-time').hide()
-				}
-				else if ($(this).attr('filter') == "fromBeforeToDay") {
-					self.$el.find('.start-time').hide()
-					self.$el.find('.end-time').show()
-					self.$el.find('.end_time .input-group .datetimepicker-input').val(moment().format('DD-MM-YYYY'))
-				}
-				else if ($(this).attr('filter') == "fromDayToDay") {
-					self.$el.find('.start-time').show()
-					self.$el.find('.end-time').show()
-					self.$el.find('.start_time .input-group .datetimepicker-input').val(moment().format('DD-MM-YYYY'))
-					self.$el.find('.end_time .input-group .datetimepicker-input').val(moment().format('DD-MM-YYYY'))
-				}
-			})
-
-
-			
 		},
 
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
 			self.$el.find('.search-item').unbind('click').bind('click', function () {
 				$(this).select();
-
+				var selectedList = [];
+				self.$el.find('.selected-item-general').each(function (index, item) {
+					selectedList.push($(item).attr('item_id'))
+				})
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
-					data: JSON.stringify(text),
+					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
@@ -293,7 +240,6 @@ define(function (require) {
 					}
 				})
 			})
-
 		}
 	});
 

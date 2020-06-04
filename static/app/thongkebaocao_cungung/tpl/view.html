@@ -15,38 +15,13 @@
           </div>
         </div>
       </div>
-      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 hideDrop">
+      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1">
         <div class="form-group">
-          <label>Chọn bộ lọc</label>
-          <div class="dropdown type-filter">
-            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" filter="none">
-              Chọn bộ lọc:
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <!-- <a class="dropdown-item" filter="none" text = "Chọn bộ lọc: " >Bỏ chọn</a> -->
-              <a class="dropdown-item" filter="all" text = "Từ trước đến nay">Từ trước đến nay</a>
-              <a class="dropdown-item" filter="fromBeforeToDay" text = "Từ trước đến ngày">Từ trước đến ngày</a>
-              <a class="dropdown-item" filter="fromDayToDay" text = "Trong khoảng thời gian">Trong khoảng thời gian</a>
-            </div>
+          <label>Chọn ngày</label>
+            <input type="text" id="date-report">
           </div>
         </div>
       </div>
-
-      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 start-time hideDrop" style="display: none;">
-        <div class="form-group start_time">
-          <label for="">Từ ngày</label>
-          <input type="text" class="form-control" id="start_time">
-        </div>
-      </div>
-
-      <div class="col-md-2 col-lg-2 col-sm-12 col-12 p-1 end-time hideDrop" style="display: none;" >
-        <div class="form-group end_time">
-          <label for="">Đến ngày</label>
-          <input type="text" class="form-control" id="end_time">
-        </div>
-      </div>
-    </div>
 
     <div class="row col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
       <div>
@@ -59,15 +34,14 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <table class="table table-striped col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
+    <table class="table  col-md-12 col-lg-12 col-sm-12 col-12 p-1 hideDrop">
       <thead>
         <tr>
-          <!-- <th scope="col">STT</th> -->
+          <th scope="col">STT</th>
           <th scope="col">Tên đơn vị</th>
-          <th scope="col">Tổng nhập</th>
-          <th scope="col">Tổng sử dụng</th>
-          <th scope="col">Tổng Tồn</th>
-          <th scope="col">Tổng dự kiến nhu cầu nhập</th>
+          <th scope="col">Báo giá(bao gồm VAT)-đồng</th>
+          <th scope="col">Số lượng đã và đang ký hợp đồng</th>
+          <th scope="col">Tổng tiền(vnđ)</th>
         </tr>
       </thead>
       <tbody id="danhSachDonVi">

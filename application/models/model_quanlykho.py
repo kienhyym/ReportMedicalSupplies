@@ -20,6 +20,7 @@ class MedicalSupplies(CommonModel):
     unit = db.Column(String())
     name_not_tone_mark = db.Column(String())
 
+
 class ReportOrganization(CommonModel):
     __tablename__ = 'report_organization'
     id = db.Column(String(), primary_key=True, default=default_uuid)

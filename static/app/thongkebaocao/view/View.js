@@ -157,12 +157,15 @@ define(function (require) {
 			var self = this;
 			self.$el.find('.search-item').unbind('click').bind('click', function () {
 				$(this).select();
-
+				var selectedList = [];
+				self.$el.find('.selected-item-general').each(function (index, item) {
+					selectedList.push($(item).attr('item_id'))
+				})
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
-					data: JSON.stringify(text),
+					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length

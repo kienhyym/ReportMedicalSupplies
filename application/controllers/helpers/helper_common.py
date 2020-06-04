@@ -171,7 +171,7 @@ async def get_current_user(request, userId):
 def response_current_user(user):
     response = {}
     token = generate_user_token(user.id)
-    print("token1=================", token)
+    print("token1=================", user)
     response["id"] = user.id
     response["name"] = user.name
     response["phone"] = user.phone

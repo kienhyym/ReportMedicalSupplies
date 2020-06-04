@@ -96,7 +96,7 @@ class Organization(CommonModel):
     users = relationship('User', viewonly=True)
     active = db.Column(SmallInteger(), default=0) 
     type_donvi = db.Column(String(255)) # donvicungung / donvinhanuoc
-
+    list_unused_medical_supplies = db.Column(JSONB())
     tuyendonvi_id = db.Column(String(255), ForeignKey('tuyendonvi.id'), nullable=True)
     tuyendonvi = relationship('TuyenDonVi')
     children = relationship("Organization",

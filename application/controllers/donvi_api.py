@@ -990,3 +990,41 @@ async def get_thongke_tinhthanh_donvicungung(tinhthanh_id, tuyendonvi_id, medica
     return list_item
 
 
+    
+
+#Thống kê đơn vị cung ứng
+@app.route('/api/v1/enterprise_supply_statistics', methods=["POST"])
+async def enterprise_supply_statistics(request):
+    data = request.json
+    medical_supplies_id = data['medical_supplies_id']
+    date_start = data['date_report_start']
+    date_end = data['date_report_end']
+    medical_supplies_name = data['medical_supplies_name']
+
+    reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.date >= date_start,ReportSupplyOrganizationDetail.date <= date_end)).all()
+    arr = []
+    obj = {"medical_supplies_name":medical_supplies_name,"data":arr}
+    if reportSupplyOrganizationDetails is not None:
+        price = 0
+        sum_sponsored_sell_number = 0
+        sum_price = 0
+
+        for _ in reportSupplyOrganizationDetails:
+            reportSupplyOrganizationDetail = to_dict(_)
+            organization_name = db.session.query(Organization.name).filter(Organization.id == to_dict(_)['organization_id']).first()
+            reportSupplyOrganizationDetail['organization_name'] = organization_name[0]
+            arr.append(reportSupplyOrganizationDetail)
+           
+            price = to_dict(_)['price'] + price
+            sum_sponsored_sell_number = to_dict(_)['sell_number'] + to_dict(_)['sponsored_number'] + sum_sponsored_sell_number  
+            sum_price = (to_dict(_)['sell_number']+to_dict(_)['sponsored_number']) * to_dict(_)['price'] +sum_price  
+
+
+        obj["avg_price"]= price/len(reportSupplyOrganizationDetails)
+        obj["sum_sponsored_sell_number"]= sum_sponsored_sell_number
+        obj["sum_price"]= sum_price
+
+    return json(obj)
+
+
+

@@ -635,6 +635,6 @@ nav.bg-primary .navbar-brand {
   background-color: #df7518 !important;
   border: 1px solid #df7518;
 }
-#danhSachDonVi tr:last-child {
+/* #danhSachDonVi tr:last-child {
   font-weight: 800;
-}
+} */
