@@ -142,8 +142,18 @@ define(function (require) {
             "route": "baocaodonvi/collection",
             "$ref": "app/baocaodonvi/view/CollectionView",
             "visible": function () {
-                return (!this.checkDonViCungUng("donvicungung"));
+                return (!this.checkDonViCungUng("donvicungung") && !this.requireTuyenDonVi(["1"]));
 
+            }
+        },
+        {
+            "text": "Tổng hợp xuất kho vật tư PCD",
+            "type": "view",
+            "route": "tonghopxuatkhovattu/collection",
+            "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
+            "visible": function () {
+                return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
+                // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
             }
         },
         {
@@ -177,16 +187,7 @@ define(function (require) {
                     }
                 },
               
-                {
-                    "text": "Tổng hợp xuất kho vật tư PCD",
-                    "type": "view",
-                    "route": "tonghopxuatkhovattu/collection",
-                    "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
-                    "visible": function () {
-                        return (this.userHasRole("admin") || this.requireTuyenDonVi(["13", "9", "5", "6", "1"]));
-                        // return this.requireTuyenDonVi(["13", "9", "5", "6", "1"]);
-                    }
-                },
+               
             ]
         },
     ];
