@@ -41,6 +41,7 @@ define(function (require) {
 								success: function (model, respose, options) {
 									self.createItem(respose.id);
 									self.updateItem();
+									self.deleteItem();
 									self.getApp().notify("Lưu thông tin thành công");
 									self.getApp().getRouter().navigate("/tonghopxuatkhovattu/collection");
 								},
@@ -112,6 +113,8 @@ define(function (require) {
 		},
 		render: function () {
 			var self = this;
+			self.listItemRemove= [];
+
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
 			self.searchItem();
@@ -248,11 +251,14 @@ define(function (require) {
 				var stt = self.$el.find('.class-'+CLASS +' tr').length
 				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
 				self.$el.find('.class-'+CLASS).append(` 
-				<tr id-row = "id-${itemJSON.id}" class = "data-row-new">
-					<td><input id-row = "id-${itemJSON.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
-					<td><input id-row = "id-${itemJSON.id}" attr-type = "ORGANIZATION" organization-id = "${itemJSON.id}" value="${itemJSON.name}" class="form-control" ></td>
-					<td><input id-row = "id-${itemJSON.id}" attr-type = "DATE" id = "date-${itemJSON.id}" class="form-control text-center "></td>
-					<td><input id-row = "id-${itemJSON.id}" attr-type = "QUANTITY" quantity = "0" type="number" class="form-control text-center"></td>
+				<tr id-row = "${itemJSON.id}" class = "data-row-new">
+					<td><input id-row = "${itemJSON.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
+					<td><input id-row = "${itemJSON.id}" attr-type = "ORGANIZATION" organization-id = "${itemJSON.id}" value="${itemJSON.name}" class="form-control" ></td>
+					<td><input id-row = "${itemJSON.id}" attr-type = "DATE" id = "date-${itemJSON.id}" class="form-control text-center "></td>
+					<td><input id-row = "${itemJSON.id}" attr-type = "QUANTITY" quantity = "0" type="number" class="form-control text-center"></td>
+					<td>
+						<i id-row = "${itemJSON.id}" class="fa fa-trash" style="font-size: 17px"></i>
+					</td>
 				</tr>`)
 				self.$el.find('#date-'+itemJSON.id).datetimepicker({
 					textFormat: 'DD-MM-YYYY',
@@ -266,6 +272,9 @@ define(function (require) {
 				});
 				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
 				self.clickInput();
+				self.$el.find('.data-row-new td .fa-trash').unbind('click').bind('click', function () {
+					self.$el.find('.data-row-new[id-row="' + $(this).attr('id-row') + '"]').remove();
+				})
 			})
 			$(document).unbind('click').bind('click', function (e) {
 				if ($(e.target).attr('out-side-'+CLASS) == undefined){
@@ -305,18 +314,30 @@ define(function (require) {
 		showDetail: function () {
 			var self = this;
 			self.$el.find('.dropdown-medical-supplies input').blur(function(){
+				var listClass =["class-dropdown-organization-soyte","class-dropdown-organization-hospital","class-dropdown-organization-other"]
+				listClass.forEach(function(item,index){
+					self.$el.find('.'+item+' .data-row-old').remove()
+					self.$el.find('.'+item+' .data-row-new').remove()
+				})
 				setTimeout(function(){
 					var medical_supplies_id = self.$el.find('.dropdown-medical-supplies input').attr('item-id')
+					console.log('medical_supplies_id',medical_supplies_id)
 					if (self.model.get('details').length > 0) {
 						self.model.get('details').forEach(function (item, index) {
 							var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
 							if(item.tuyendonvi_id == "6" && item.medical_supplies_id == medical_supplies_id){
+								var stt = self.$el.find('.class-dropdown-organization-soyte tr').length
+
 								self.$el.find('.class-dropdown-organization-soyte').append(` 
-								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
-									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
-									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+								<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
+									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
+									<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+									<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
+									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+									<td>
+										<i id-row = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
+									</td>
+								
 								</tr>`)
 								self.$el.find('#date-'+item.id).datetimepicker({
 									textFormat: 'DD-MM-YYYY',
@@ -328,17 +349,21 @@ define(function (require) {
 										return date.unix()
 									}
 								});
-								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.$el.find('[id-row = "'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
 								self.clickInput();
 								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
 							}
 							else if((item.tuyendonvi_id == "7" && item.medical_supplies_id == medical_supplies_id) || (item.tuyendonvi_id == "8" && item.medical_supplies_id == medical_supplies_id)){
+								var stt2 = self.$el.find('.class-dropdown-organization-hospital tr').length
 								self.$el.find('.class-dropdown-organization-hospital').append(` 
-								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
-									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
-									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+								<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
+									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt2}" class="form-control text-center" ></td>
+									<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+									<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
+									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+									<td>
+										<i id-row = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
+									</td>
 								</tr>`)
 								self.$el.find('#date-'+item.id).datetimepicker({
 									textFormat: 'DD-MM-YYYY',
@@ -350,18 +375,22 @@ define(function (require) {
 										return date.unix()
 									}
 								});
-								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.$el.find('[id-row = "'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
 								self.clickInput();
 								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
 
 							}
 							else if(item.medical_supplies_id == medical_supplies_id && item.tuyendonvi_id != "7" && item.tuyendonvi_id != "6" && item.tuyendonvi_id != "8"){
-								self.$el.find('.class-dropdown-organization-soyte').append(` 
-								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
-									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
-									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+								var stt3 = self.$el.find('.class-dropdown-organization-other tr').length
+								self.$el.find('.class-dropdown-organization-other').append(` 
+								<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
+									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt3}" class="form-control text-center" ></td>
+									<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+									<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
+									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+									<td>
+										<i id-row = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
+									</td>
 								</tr>`)
 								self.$el.find('#date-'+item.id).datetimepicker({
 									textFormat: 'DD-MM-YYYY',
@@ -373,14 +402,16 @@ define(function (require) {
 										return date.unix()
 									}
 								});
-								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.$el.find('[id-row = "'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
 								self.clickInput();
 								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
 
 							}
 						})
 					}
-				}, 300);
+					self.listItemsOldRemove();
+
+				}, 1000);
 			})
 			
 		},
@@ -444,6 +475,28 @@ define(function (require) {
 				});
 			}
 
+		},
+		listItemsOldRemove: function () {
+			var self = this;
+			self.$el.find('.data-row-old td .fa-trash').unbind('click').bind('click', function () {
+				self.$el.find('.data-row-old[id-row="' + $(this).attr('id-row') + '"]').remove();
+				self.listItemRemove.push($(this).attr('id-row'))
+			})
+		},
+		deleteItem: function () {
+			var self = this;
+			var arrayItemRemove = self.listItemRemove.length;
+			if (arrayItemRemove > 0) {
+				$.ajax({
+					type: "POST",
+					url: self.getApp().serviceURL + "/api/v1/delete_synthetic_release_detail",
+					data: JSON.stringify(self.listItemRemove),
+					success: function (response) {
+						self.listItemRemove.splice(0, arrayItemRemove);
+						console.log(response)
+					}
+				});
+			}
 		},
 	});
 

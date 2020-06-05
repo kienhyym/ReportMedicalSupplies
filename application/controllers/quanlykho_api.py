@@ -569,3 +569,12 @@ async def update_synthetic_release_detail(request):
         db.session.commit()
     return json({"message":"update success"})
 
+@app.route('/api/v1/delete_synthetic_release_detail', methods=["POST"])
+async def delete_synthetic_release_detail(request):
+    list_id = request.json
+    for _ in list_id:
+        item_delete = db.session.query(SyntheticReleaseDetail).filter(SyntheticReleaseDetail.id == _).first()
+        db.session.delete(item_delete)
+        db.session.commit()
+    return json({"message": "Delete Success"})
+
