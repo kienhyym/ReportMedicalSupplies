@@ -200,33 +200,43 @@ define(function (require) {
                     <div style="width: 248px;display: inline-block;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="NAME" class="form-control p-1" value="${dropdownItemClick.attr('title')}" readonly style="font-size:14px">
 					</div>
-					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+					<div style="width: 66px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
 					</div>
-					<div style="width: 124px;display: inline-block;text-align: center;padding: 1px;">
+					<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0"                    class="form-control text-center p-1" style="font-size:14px">
                     </div>
-                    <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+                    <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0" value="0"                           type="number"  class="form-control text-center p-1" style="font-size:14px">
                     </div>
-                    <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
+                    <div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0"               type="number"  class="form-control text-center p-1" style="font-size:14px">
                     </div>
-                    <div style="width: 130px;display: inline-block;text-align: center;padding: 1px;">
+                    <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0"              			              class="form-control text-center p-1"  style="font-size:14px">
 					</div>
-					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+					<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
+					<div style="position: relative;">
+					<div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${itemID}">
+						<input selected-item-id = "${itemID}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="null" class-name = "dropdown-${itemID}">
+						<div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+							<div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+						</div>
+					</div>
+				</div>						</div>
+					<div style="width: 90px;display: inline-block;text-align: center;padding: 1px;">
 					<div style="position: relative;">
 						<input selected-item-id = "${itemID}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
-						<button class= "btn btn-outline-secondary pl-0 pr-0">Tải lên</button>
-						<a selected-item-id = "${itemID}" col-type="DOWNLOAD"  href="#"  class= "btn btn-outline-secondary pl-0 pr-0">Tải về</a>
+						<button class= "btn btn-outline-secondary pl-1 pr-1">Tải lên</button>
+						<a selected-item-id = "${itemID}" col-type="DOWNLOAD" href="#" class= "btn btn-outline-secondary pl-1 pr-1">Xem</a>
 					</div>
                     </div>
                     <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
                             <i selected-item-id = "${itemID}" class="fa fa-trash" style="font-size: 17px"></i>
                         </div>
                 </div>
-                `)
+				`)
+				self.searchItem(itemID)
 				self.$el.find('.dropdown-menu-item').hide()
 				self.$el.find('.search-item').val('')
 				self.clickInput();
@@ -423,22 +433,32 @@ define(function (require) {
                         <div style="width: 248px;display: inline-block;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="NAME" value="${item.medical_supplies_name}" class="form-control p-1" readonly style="font-size:14px">
 						</div>
-						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+						<div style="width: 66px;display: inline-block;text-align: center;padding: 1px;">
 							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" readonly  style="font-size:14px">
 						</div>
-						<div style="width: 124px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}"  pattern="[0-9]*" inputmode="numeric"  class="form-control text-center p-1" style="font-size:14px">
+						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}"  class="form-control text-center p-1" style="font-size:14px">
                         </div>
-                        <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}"  pattern="[0-9]*" inputmode="numeric" class="form-control text-center p-1"   style="font-size:14px">
+                        <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}"  class="form-control text-center p-1"   style="font-size:14px">
                         </div>
-                        <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}"  inputmode="numeric" pattern="[0-9]*"  class="form-control text-center p-1"  style="font-size:14px">
+                        <div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}"   class="form-control text-center p-1"  style="font-size:14px">
                         </div>
-                        <div style="width: 130px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" pattern="[0-9]*" inputmode="numeric" class="form-control text-center p-1"  style="font-size:14px">
+                        <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
+                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" class="form-control text-center p-1"  style="font-size:14px">
 						</div>
-						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
+						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
+							<div style="position: relative;">
+                            <div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${item.id}">
+                                <input selected-item-id = "${item.id}" value="${item.health_facilities_name}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="${item.health_facilities_id}" class-name = "dropdown-${item.id}">
+                                <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+                                    <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+                                </div>
+                            </div>
+                        </div>
+						</div>
+						<div style="width: 90px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">
 								<input selected-item-id = "${item.id}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
 								<button class= "btn btn-outline-secondary pl-1 pr-1">Tải lên</button>
@@ -450,6 +470,7 @@ define(function (require) {
                         </div>
                     </div>
 					`)
+					self.searchItem(item.id)
 				})
 				self.clickInput();
 			}
@@ -458,6 +479,7 @@ define(function (require) {
 			var self = this;
 			var arr = [];
 			self.$el.find('.selected-item-new').each(function (index, item) {
+				var ccName = $(item).attr('selected-item-id')
 				var obj = {
 					"report_supply_organization_id": report_supply_organization_id,
 					"organization_id": self.model.get('organization_id'),
@@ -467,6 +489,7 @@ define(function (require) {
 					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
 					"sell_number": $(item).find('[col-type="SELL_NUMBER"]').attr('sell_number'),
 					"sponsored_number": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('sponsored_number'),
+					"health_facilities_id": self.$el.find('.dropdown-'+ccName +" input").attr('item-id'),
 					"price": $(item).find('[col-type="PRICE"]').attr('price'),
 					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href')
 				}
@@ -490,12 +513,14 @@ define(function (require) {
 			var self = this;
 			var arr = [];
 			self.$el.find('.selected-item-old').each(function (index, item) {
+				var ccName = $(item).attr('selected-item-id')
 				var obj = {
 					"id": $(item).attr('selected-item-id'),
 					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
 					"sell_number": $(item).find('[col-type="SELL_NUMBER"]').attr('sell_number'),
 					"sponsored_number": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('sponsored_number'),
 					"price": $(item).find('[col-type="PRICE"]').attr('price'),
+					"health_facilities_id": self.$el.find('.dropdown-'+ccName +" input").attr('item-id'),
 					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href'),
 					"date": self.model.get('date')
 				}
@@ -536,6 +561,92 @@ define(function (require) {
 		},
 		// HẾT CHỨC NĂNG CHỌN ITEM XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		// XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+		searchItem: function (id) {
+			var self = this;
+			var listDropDown= [
+				{
+					"class_name":"dropdown-"+id,
+					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_all",
+					"type":"single"
+				},
+				
+			]
+			listDropDown.forEach(function(item,index){
+				self.$el.find('.'+item.class_name+' input').keyup(function name() {
+					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+				})
+				self.$el.find('.'+item.class_name+' input').unbind('click').bind('click', function () {
+					$(this).select();
+					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+				})
+			})
+			
+
+		},
+		loadItemDropDown: function (TEXT,CLASS,URL,TYPE) { // Đổ danh sách Item vào ô tìm kiếm
+			var self = this;
+			$.ajax({
+				type: "POST",
+				url: URL,
+				data: JSON.stringify(TEXT),
+				success: function (response) {
+					self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').remove();
+					var count = response.length
+					response.forEach(function (item, index) {
+						var itemSTRING = JSON.stringify(item)
+						self.$el.find('.'+CLASS+' div .dropdown-menu').append(`
+						<button item-info = '${itemSTRING}' out-side-${CLASS} class='dropdown-item' style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px'>${item.name}</button>`)
+					})
+					if (count == 0) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').hide()
+					}
+					if (count == 1) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "45px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count == 2) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "80px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count == 3) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "110px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count == 4) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "130px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count > 4) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "160px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (TYPE == "single"){
+						self.chooseItemInListDropdown(CLASS);
+					}
+					else if(TYPE == "multiple") {
+						self.appendItemInListDropdown(CLASS);
+					}
+				}
+			});
+		},
+		chooseItemInListDropdown: function (CLASS) { //Chọn lẻ 1 item 
+			var self = this;
+			self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+				var dropdownItemClick = $(this);
+				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
+				self.$el.find('.'+CLASS+' input').val(itemJSON.name);
+				self.$el.find('.'+CLASS+' input').attr('item-id',itemJSON.id);
+				self.medicalSuppliesId = itemJSON.id
+				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+			})
+			$(document).unbind('click').bind('click', function (e) {
+				if ($(e.target).attr('out-side-'+CLASS) == undefined){
+					self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				}
+			})
+			
+		},
 	});
 
 });

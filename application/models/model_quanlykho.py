@@ -80,6 +80,9 @@ class ReportSupplyOrganizationDetail(CommonModel):
     organization_id = db.Column(String(), ForeignKey('organization.id'), nullable=True)
     organization = relationship('Organization')
 
+    health_facilities_id = db.Column(String())
+
+
     medical_supplies_id = db.Column(String(), ForeignKey('medical_supplies.id'), nullable=True)
     medical_supplies = relationship('MedicalSupplies')
 

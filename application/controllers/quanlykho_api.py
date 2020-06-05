@@ -48,6 +48,11 @@ async def check_dict_like(request=None, data=None, Model=None, **kw):
 
 async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw):
         for _ in result['details']:
+            organization = db.session.query(Organization.name).filter(Organization.id == _['health_facilities_id']).first()
+            if organization is not None:
+                _['health_facilities_name']= organization[0]
+            else:
+                _['health_facilities_name'] = ""
             medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == _['medical_supplies_id']).first()
             _['medical_supplies_name']= to_dict(medicalSupplies)['name']
             _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
@@ -71,6 +76,8 @@ async def check_medical_supplies_name(request=None, data=None, Model=None, **kw)
             del _['medical_supplies_name']
             del _['medical_supplies_unit']
             del _['begin_net_amount']
+            del _['health_facilities_name']
+
 
 async def check_name_organization(request=None, data=None, Model=None, **kw):
         for _ in data['details']:
@@ -184,6 +191,27 @@ async def load_organization_dropdown_other(request):
         arr = []
         for i in list:
             arr.append(to_dict(i))
+        return json(arr)
+
+# // TÌM KIẾM DANH SÁCH CẤP DƯỚI BỘ
+@app.route('/api/v1/load_organization_dropdown_all',methods=['POST'])
+async def load_organization_dropdown_all(request):
+    text = request.json
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id.in_(["6","7","8"]))).all()
+        arr = []
+        for i in list:
+            obj =  to_dict(i)
+            arr.append(obj)
+        return json(arr)
+    else:
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id.in_(["6","7","8"]))).all()
+        arr = []
+        for i in list:
+            obj =  to_dict(i)
+            arr.append(obj)
         return json(arr)
 
 apimanager.create_api(MedicalSupplies,
@@ -512,6 +540,8 @@ async def create_report_supply_organization_detail(request):
         new_item.sell_number = _['sell_number']
         new_item.sponsored_number = _['sponsored_number']
         new_item.price = _['price']
+        new_item.health_facilities_id = _['health_facilities_id']
+
         new_item.file = _['file']
 
         db.session.add(new_item)
@@ -528,6 +558,7 @@ async def update_report_supply_organization_detail(request):
         old_item.sell_number = _['sell_number']
         old_item.sponsored_number = _['sponsored_number']
         old_item.price = _['price']
+        old_item.health_facilities_id = _['health_facilities_id']
         old_item.file = _['file']
         db.session.commit()
     return json({"message": "Update Success"})
