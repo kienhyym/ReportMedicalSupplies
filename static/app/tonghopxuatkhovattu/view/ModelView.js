@@ -326,11 +326,14 @@ define(function (require) {
 					var medical_supplies_id = self.medicalSuppliesId
 					console.log('medical_supplies_id',medical_supplies_id)
 					if (self.model.get('details').length > 0) {
+						var demSoyte = 0;
+						var demHospital = 0;
+						var demOther = 0;
 						self.model.get('details').forEach(function (item, index) {
 							var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
 							if(item.tuyendonvi_id == "6" && item.medical_supplies_id == medical_supplies_id){
 								var stt = self.$el.find('.class-dropdown-organization-soyte tr').length
-
+								demSoyte = demSoyte + Number(item.quantity)
 								self.$el.find('.class-dropdown-organization-soyte').append(` 
 								<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
@@ -340,7 +343,6 @@ define(function (require) {
 									<td>
 										<i id-row = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
 									</td>
-								
 								</tr>`)
 								self.$el.find('#date-'+item.id).datetimepicker({
 									textFormat: 'DD-MM-YYYY',
@@ -358,6 +360,7 @@ define(function (require) {
 							}
 							else if((item.tuyendonvi_id == "7" && item.medical_supplies_id == medical_supplies_id) || (item.tuyendonvi_id == "8" && item.medical_supplies_id == medical_supplies_id)){
 								var stt2 = self.$el.find('.class-dropdown-organization-hospital tr').length
+								demHospital = demHospital + Number(item.quantity)
 								self.$el.find('.class-dropdown-organization-hospital').append(` 
 								<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt2}" class="form-control text-center" ></td>
@@ -385,6 +388,7 @@ define(function (require) {
 							}
 							else if(item.medical_supplies_id == medical_supplies_id && item.tuyendonvi_id != "7" && item.tuyendonvi_id != "6" && item.tuyendonvi_id != "8"){
 								var stt3 = self.$el.find('.class-dropdown-organization-other tr').length
+								demOther = demOther + Number(item.quantity)
 								self.$el.find('.class-dropdown-organization-other').append(` 
 								<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt3}" class="form-control text-center" ></td>
@@ -412,6 +416,11 @@ define(function (require) {
 							}
 						})
 					}
+					self.$el.find('.count-soyte').val(demSoyte)
+					self.$el.find('.count-hospital').val(demHospital)
+					self.$el.find('.count-other').val(demOther)
+					self.$el.find('.count-all').val(demOther+ demHospital + demSoyte)
+
 					self.listItemsOldRemove();
 
 				}, 1000);
