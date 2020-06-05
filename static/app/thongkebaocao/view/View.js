@@ -164,7 +164,7 @@ define(function (require) {
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
+					url: self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown2",
 					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
@@ -210,7 +210,7 @@ define(function (require) {
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
+					url: self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown2",
 					data: JSON.stringify(text),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();

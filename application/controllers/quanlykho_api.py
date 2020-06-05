@@ -84,7 +84,25 @@ async def get_name_organization(request=None, Model=None, result=None ,**kw):
             organization_name = db.session.query(Organization.name,Organization.tuyendonvi_id).filter(Organization.id == _['organization_id']).first()
             _['organization_name']= organization_name[0]   
             _['tuyendonvi_id']= organization_name[1]            
-         
+
+@app.route('/api/v1/load_medical_supplies_dropdown2',methods=['POST'])
+async def load_medical_supplies_dropdown2(request):
+    data = request.json
+    text =data['text']
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(MedicalSupplies).filter(and_(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search)))).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+    else:
+        list = db.session.query(MedicalSupplies).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
 
 # // TÌM KIẾM DANH SÁCH VÂT TƯ Y TẾ 
 @app.route('/api/v1/load_medical_supplies_dropdown',methods=['POST'])
