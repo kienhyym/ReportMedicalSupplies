@@ -219,21 +219,11 @@ define(function (require) {
 		exportExcel: function (data, params) {
 			var self = this;
 			self.$el.find('.button-excel').unbind('click').bind('click', function () {
-				if (params.type == "all") {
-					var filter = "Thống kê " + params.medical_supplies_name + " từ trước đến nay";
-				}
-				else if (params.type == "fromBeforeToDay") {
-					var to_date = moment(params.to_date * 1000).format('DD MM YYYY');
-					var filter = "Thống kê " + params.medical_supplies_name + " từ trước đến ngày " + to_date;
-				}
-				else if (params.type == "fromDayToDay") {
-					var from_date = moment(params.from_date * 1000).format('DD MM YYYY');
-					var to_date = moment(params.to_date * 1000).format('DD MM YYYY');
-					var filter = "Thống kê " + params.medical_supplies_name + " từ ngày " + from_date + " đến ngày " + to_date;
-				}
+					var date_report_start = moment(params.date_report_start * 1000).format('DD MM YYYY');
+					var filter = "Thống kê " + params.medical_supplies_name + " trong ngày " + date_report_start;
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/export_excel",
+					url: self.getApp().serviceURL + "/api/v1/export_excel_cungung",
 					data: JSON.stringify({ "data": data, "filter": filter }),
 					success: function (response) {
 						window.location = String(self.getApp().serviceURL + response.message);

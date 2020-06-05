@@ -272,7 +272,6 @@ apimanager.create_api(SyntheticReleaseDetail,
 async def export_excel(request):
     data = request.json
     list_id = data['data']
-    dataFrame_name = []
     dataFrame = []
     for i in range(len(list_id)):
         arr = []
@@ -288,6 +287,35 @@ async def export_excel(request):
 
     df1.to_excel("static/uploads/"+data['filter']+".xlsx",index=False)  
     return json({"message": "/static/uploads/"+data['filter']+".xlsx"})
+
+
+@app.route('/api/v1/export_excel_cungung', methods=["POST"])
+async def export_excel_cungung(request):
+    data = request.json
+    dataFrame = []
+    list_id = data['data']['data']
+    print ("_____________________",list_id)
+    arrHead = []
+    arrHead.append('')
+    arrHead.append(data['data']['medical_supplies_name'])
+    arrHead.append(data['data']['avg_price'])
+    arrHead.append(data['data']['sum_sponsored_sell_number'])
+    arrHead.append(data['data']['sum_price'])
+    dataFrame.append(arrHead)
+
+    for i in range(len(list_id)):
+        arr = []
+        arr.append(i+1)
+        arr.append(list_id[i]['organization_name'])
+        arr.append(list_id[i]['price'])
+        arr.append(list_id[i]['sell_number'])
+        arr.append(list_id[i]['sell_number'] * list_id[i]['price'] )
+        dataFrame.append(arr)
+    df1 = pandas.DataFrame(dataFrame,columns=['STT','Tên đơn vị','Báo giá(bao gồm VAT)-đồng', 'Số lượng đã và đang ký hợp đồng','Tổng tiền(vnđ)'])
+
+    df1.to_excel("static/uploads/"+data['filter']+".xlsx",index=False)  
+    return json({"message": "/static/uploads/"+data['filter']+".xlsx"})
+
 
 @app.route('/api/v1/link_file_upload', methods=['POST'])
 async def link_file_upload(request):
