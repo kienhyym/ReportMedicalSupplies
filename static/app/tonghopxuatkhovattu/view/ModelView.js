@@ -6,7 +6,6 @@ define(function (require) {
 
 	var template = require('text!app/tonghopxuatkhovattu/tpl/model.html'),
 		schema = require('json!schema/SyntheticReleaseSchema.json');
-	var OrganizationView = require('app/donvicungung/view/SelectView');
 
 	return Gonrin.ModelView.extend({
 		template: template,
@@ -38,27 +37,27 @@ define(function (require) {
 						label: "TRANSLATE:SAVE",
 						command: function () {
 							var self = this;
-							self.createItem();
-							
-							// self.model.save(null, {
-							// 	success: function (model, respose, options) {
-							// 		self.getApp().notify("Lưu thông tin thành công");
-							// 		self.getApp().getRouter().navigate("/baocaodonvi/collection");
-							// 	},
-							// 	error: function (xhr, status, error) {
-							// 		try {
-							// 			if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED") {
-							// 				self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
-							// 				self.getApp().getRouter().navigate("login");
-							// 			} else {
-							// 				self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
-							// 			}
-							// 		}
-							// 		catch (err) {
-							// 			self.getApp().notify({ message: "Lưu thông tin không thành công" }, { type: "danger", delay: 1000 });
-							// 		}
-							// 	}
-							// });
+							self.model.save(null, {
+								success: function (model, respose, options) {
+									self.createItem(respose.id);
+									self.updateItem();
+									self.getApp().notify("Lưu thông tin thành công");
+									self.getApp().getRouter().navigate("/tonghopxuatkhovattu/collection");
+								},
+								error: function (xhr, status, error) {
+									try {
+										if (($.parseJSON(error.xhr.responseText).error_code) === "SESSION_EXPIRED") {
+											self.getApp().notify("Hết phiên làm việc, vui lòng đăng nhập lại!");
+											self.getApp().getRouter().navigate("login");
+										} else {
+											self.getApp().notify({ message: $.parseJSON(error.xhr.responseText).error_message }, { type: "danger", delay: 1000 });
+										}
+									}
+									catch (err) {
+										self.getApp().notify({ message: "Lưu thông tin không thành công" }, { type: "danger", delay: 1000 });
+									}
+								}
+							});
 
 						}
 					},
@@ -75,7 +74,7 @@ define(function (require) {
 							self.model.destroy({
 								success: function (model, response) {
 									self.getApp().notify('Xoá dữ liệu thành công');
-									self.getApp().getRouter().navigate("/baocaodonvi/collection");
+									self.getApp().getRouter().navigate("/tonghopxuatkhovattu/collection");
 								},
 								error: function (xhr, status, error) {
 									try {
@@ -98,14 +97,6 @@ define(function (require) {
 		uiControl: {
 			fields: [
 				{
-					field: "organization",
-					uicontrol: "ref",
-					textField: "name",
-					foreignRemoteField: "id",
-					foreignField: "organization_id",
-					dataSource: OrganizationView
-				},
-				{
 					field: "date",
 					uicontrol: "datetimepicker",
 					textFormat: "DD/MM/YYYY",
@@ -123,14 +114,13 @@ define(function (require) {
 			var self = this;
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
-			self.getSyntheticReceive();
-			self.loadItemDropdown();
-
+			self.searchItem();
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({
 					success: function (data) {
 						self.applyBindings();
+						self.showDetail();
 					},
 					error: function (xhr, status, error) {
 						try {
@@ -151,178 +141,305 @@ define(function (require) {
 			}
 
 		},
-		getSyntheticReceive: function () {
+		searchItem: function () {
+			var self = this;
+			var listDropDown= [
+				{
+					"class_name":"dropdown-medical-supplies",
+					"url":self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown",
+					"type":"single"
+				},
+				{
+					"class_name":"dropdown-organization-soyte",
+					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_soyte",
+					"type":"multiple"
+				},
+				{
+					"class_name":"dropdown-organization-hospital",
+					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_hospital",
+					"type":"multiple"
+				},
+				{
+					"class_name":"dropdown-organization-other",
+					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_other",
+					"type":"multiple"
+				}
+				
+			]
+			listDropDown.forEach(function(item,index){
+				self.$el.find('.'+item.class_name+' input').keyup(function name() {
+					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+				})
+				self.$el.find('.'+item.class_name+' input').unbind('click').bind('click', function () {
+					$(this).select();
+					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+				})
+			})
+			
+
+		},
+		loadItemDropDown: function (TEXT,CLASS,URL,TYPE) { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
 			$.ajax({
-				type: "GET",
-				url: self.getApp().serviceURL + "/api/v1/get_synthetic_receive",
+				type: "POST",
+				url: URL,
+				data: JSON.stringify(TEXT),
 				success: function (response) {
+					self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').remove();
+					var count = response.length
 					response.forEach(function (item, index) {
-						self.$el.find('tbody').append(`
-							<tr>
-								<td><input class="form-control text-center border-0 w-100" readonly value="${item.stt}"></td>
-								<td><input class="form-control border-0 w-100" readonly value="${item.tuyen} "></td>
-								<td><input class="form-control text-center border-0 w-100" readonly></td>
-								<td><input class="form-control text-center border-0 w-100" readonly></td>
-							</tr>`)
-						if (item.list != null && item.list != undefined) {
-							item.list.forEach(function (item2, index2) {
-								var datetimeID = "datetime"+index+index2
-								self.$el.find('tbody').append(` 
-								<tr>
-									<td><input class="form-control text-center" value="${index2 + 1}"></td>
-									<td><input class="form-control" value="${item2.tendonvi}"></td>
-									<td><input class="form-control text-center" id="${datetimeID}"></td>
-									<td><input class="form-control text-center"></td>
-								</tr>`)
-								self.$el.find('#'+datetimeID).datetimepicker({
-									textFormat:'DD-MM-YYYY',
-									extraFormats:['DDMMYYYY'],
-									parseInputDate: function(val){
-										return moment.unix(val)
-									},
-									parseOutputDate: function(date){
-										return date.unix()
-									}
-								});
-							});
-						}
-					});
-
-
+						var itemSTRING = JSON.stringify(item)
+						self.$el.find('.'+CLASS+' div .dropdown-menu').append(`
+						<button item-info = '${itemSTRING}' out-side-${CLASS} class='dropdown-item' style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px'>${item.name}</button>`)
+					})
+					if (count == 0) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').hide()
+					}
+					if (count == 1) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "45px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count == 2) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "80px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count == 3) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "110px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count == 4) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "130px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (count > 4) {
+						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "160px")
+						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+					}
+					if (TYPE == "single"){
+						self.chooseItemInListDropdown(CLASS);
+					}
+					else if(TYPE == "multiple") {
+						self.appendItemInListDropdown(CLASS);
+					}
 				}
 			});
 		},
-		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
+		chooseItemInListDropdown: function (CLASS) { //Chọn lẻ 1 item 
 			var self = this;
-			self.$el.find('.search-item').unbind('click').bind('click', function () {
-				var selectedList = [];
-				self.$el.find('.selected-item-general').each(function (index, item) {
-					selectedList.push($(item).attr('item_id'))
-				})
-				$(this).select();
-				var text = $(this).val()
-				$.ajax({
-					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
-					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
-					success: function (response) {
-						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
-						var count = response.length
-						response.forEach(function (item, index) {
-							self.$el.find('.dropdown-menu-item').append(`
-                            <button
-                            item-id = "${item.id}" 
-							title="${item.name}"
-							unit="${item.unit}"
-                            class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px">${item.name}</button>
-                            `)
-						})
-						if (count == 0) {
-							self.$el.find('.dropdown-menu-item').hide()
-						}
-						if (count == 1) {
-							self.$el.find('.dropdown-menu-item').css("height", "45px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count == 2) {
-							self.$el.find('.dropdown-menu-item').css("height", "80px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count == 3) {
-							self.$el.find('.dropdown-menu-item').css("height", "110px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count == 4) {
-							self.$el.find('.dropdown-menu-item').css("height", "130px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count > 4) {
-							self.$el.find('.dropdown-menu-item').css("height", "160px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						self.chooseItemInListDropdownItem();
-
-					}
-				});
-			})
-			self.$el.find('.search-item').keyup(function name() {
-				var selectedList = [];
-				self.$el.find('.selected-item-general').each(function (index, item) {
-					selectedList.push($(item).attr('item_id'))
-				})
-				var text = $(this).val()
-				$.ajax({
-					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/load_item_dropdown_statistical",
-					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
-					success: function (response) {
-						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
-						var count = response.length
-						response.forEach(function (item, index) {
-							self.$el.find('.dropdown-menu-item').append(`
-                            <button
-                            item-id = "${item.id}" 
-							title="${item.name}"
-							unit="${item.unit}"
-                            class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px">${item.name}</button>
-                            `)
-						})
-						if (count == 0) {
-							self.$el.find('.dropdown-menu-item').hide()
-						}
-						if (count == 1) {
-							self.$el.find('.dropdown-menu-item').css("height", "45px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count == 2) {
-							self.$el.find('.dropdown-menu-item').css("height", "80px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count == 3) {
-							self.$el.find('.dropdown-menu-item').css("height", "110px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count == 4) {
-							self.$el.find('.dropdown-menu-item').css("height", "130px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						if (count > 4) {
-							self.$el.find('.dropdown-menu-item').css("height", "160px")
-							self.$el.find('.dropdown-menu-item').show()
-						}
-						self.chooseItemInListDropdownItem();
-
-					}
-				});
-			})
-			self.$el.find('.out-click').bind('click', function () {
-				self.$el.find('.dropdown-menu-item').hide()
-			})
-
-		},
-		chooseItemInListDropdownItem: function () {
-			var self = this;
-			self.$el.find('.dropdown-menu-item .dropdown-item').unbind('click').bind('click', function () {
+			self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
 				var dropdownItemClick = $(this);
-				self.$el.find('.search-item').val(dropdownItemClick.attr('title'));
-				self.vattu_id = dropdownItemClick.attr('item-id');
-				
-				self.vattu_ten = dropdownItemClick.attr('title');
-
-				self.$el.find('.dropdown-menu-item').hide()
+				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
+				self.$el.find('.'+CLASS+' input').val(itemJSON.name);
+				self.$el.find('.'+CLASS+' input').attr('item-id',itemJSON.id);
+				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
 			})
-			self.$el.find('.hideDrop').unbind('click').bind('click', function () {
-				self.$el.find('.dropdown-menu-item').hide()
-
+			$(document).unbind('click').bind('click', function (e) {
+				if ($(e.target).attr('out-side-'+CLASS) == undefined){
+					self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				}
+			})
+			
+		},
+		appendItemInListDropdown: function (CLASS) { //Chọn nhiều item 
+			var self = this;
+			
+			self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+				var dropdownItemClick = $(this);
+				var stt = self.$el.find('.class-'+CLASS +' tr').length
+				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
+				self.$el.find('.class-'+CLASS).append(` 
+				<tr id-row = "id-${itemJSON.id}" class = "data-row-new">
+					<td><input id-row = "id-${itemJSON.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
+					<td><input id-row = "id-${itemJSON.id}" attr-type = "ORGANIZATION" organization-id = "${itemJSON.id}" value="${itemJSON.name}" class="form-control" ></td>
+					<td><input id-row = "id-${itemJSON.id}" attr-type = "DATE" id = "date-${itemJSON.id}" class="form-control text-center "></td>
+					<td><input id-row = "id-${itemJSON.id}" attr-type = "QUANTITY" quantity = "0" type="number" class="form-control text-center"></td>
+				</tr>`)
+				self.$el.find('#date-'+itemJSON.id).datetimepicker({
+					textFormat: 'DD-MM-YYYY',
+					extraFormats: ['DDMMYYYY'],
+					parseInputDate: function (val) {
+						return moment.unix(val)
+					},
+					parseOutputDate: function (date) {
+						return date.unix()
+					}
+				});
+				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				self.clickInput();
+			})
+			$(document).unbind('click').bind('click', function (e) {
+				if ($(e.target).attr('out-side-'+CLASS) == undefined){
+					self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				}
 			})
 		},
-		createItem: function(){
+		clickInput: function () {
 			var self = this;
+			// Click vào ô số tự đông thêm dấu chấm
+			var listClick = [
+				{ "attr_type": "QUANTITY", "attr": "quantity" }
+			]
+			listClick.forEach(function (item, index) {
+				self.$el.find('[attr-type="' + item.attr_type + '"]').unbind('click').bind('click', function () {
+					var clickThis = $(this);
+					clickThis.val(clickThis.attr(item.attr))
+				})
+				self.$el.find('[attr-type="' + item.attr_type + '"]').focusout(function () {
+					var clickThis = $(this);
+					var clickThisValue = clickThis.val();
+					if (clickThisValue == null || clickThisValue == '') {
+						clickThis.val(0);
+					}
+					else {
+						clickThis.attr(item.attr, clickThisValue)
+						setTimeout(() => {
+							var clickThisString = new Number(clickThisValue).toLocaleString("da-DK");
+							console.log('clickThisString',clickThisString)
+
+							clickThis.val(clickThisString)
+						}, 200);
+					}
+				});
+			})
+		},
+		showDetail: function () {
+			var self = this;
+			self.$el.find('.dropdown-medical-supplies input').blur(function(){
+				setTimeout(function(){
+					var medical_supplies_id = self.$el.find('.dropdown-medical-supplies input').attr('item-id')
+					if (self.model.get('details').length > 0) {
+						self.model.get('details').forEach(function (item, index) {
+							var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
+							if(item.tuyendonvi_id == "6" && item.medical_supplies_id == medical_supplies_id){
+								self.$el.find('.class-dropdown-organization-soyte').append(` 
+								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
+									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
+									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" class="form-control text-center "></td>
+									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+								</tr>`)
+								self.$el.find('#date-'+item.id).datetimepicker({
+									textFormat: 'DD-MM-YYYY',
+									extraFormats: ['DDMMYYYY'],
+									parseInputDate: function (val) {
+										return moment.unix(val)
+									},
+									parseOutputDate: function (date) {
+										return date.unix()
+									}
+								});
+								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.clickInput();
+							}
+							else if((item.tuyendonvi_id == "7" && item.medical_supplies_id == medical_supplies_id) || (item.tuyendonvi_id == "8" && item.medical_supplies_id == medical_supplies_id)){
+								self.$el.find('.class-dropdown-organization-hospital').append(` 
+								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
+									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
+									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" class="form-control text-center "></td>
+									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+								</tr>`)
+								self.$el.find('#date-'+item.id).datetimepicker({
+									textFormat: 'DD-MM-YYYY',
+									extraFormats: ['DDMMYYYY'],
+									parseInputDate: function (val) {
+										return moment.unix(val)
+									},
+									parseOutputDate: function (date) {
+										return date.unix()
+									}
+								});
+								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.clickInput();
+							}
+							else if(item.medical_supplies_id == medical_supplies_id && item.tuyendonvi_id != "7" && item.tuyendonvi_id != "6" && item.tuyendonvi_id != "8"){
+								self.$el.find('.class-dropdown-organization-soyte').append(` 
+								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
+									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
+									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" class="form-control text-center "></td>
+									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+								</tr>`)
+								self.$el.find('#date-'+item.id).datetimepicker({
+									textFormat: 'DD-MM-YYYY',
+									extraFormats: ['DDMMYYYY'],
+									parseInputDate: function (val) {
+										return moment.unix(val)
+									},
+									parseOutputDate: function (date) {
+										return date.unix()
+									}
+								});
+								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.clickInput();
+							}
+						})
+					}
+				}, 300);
+			})
+			
+		},
+		createItem: function (synthetic_release_id) {
+			var self = this;
+			var arr = [];
+			var listClass =["class-dropdown-organization-soyte","class-dropdown-organization-hospital","class-dropdown-organization-other"]
+			listClass.forEach(function(item,index){
+				self.$el.find('.'+item+' .data-row-new').each(function (index2, item2) {
+					var dateID = self.$el.find($(item2).find('td [attr-type = "DATE"]')).attr('id')
+					var obj = {
+						"synthetic_release_id": synthetic_release_id,
+						"medical_supplies_id": self.$el.find('.dropdown-medical-supplies input').attr('item-id'),
+						"date": self.model.get('date'),
 	
+						"organization_id":$(item2).find('td [attr-type = "ORGANIZATION"]').attr('organization-id'),
+						"date_export":self.$el.find('#'+dateID).data("gonrin").getValue(),
+						"quantity": Number($(item2).find('td [attr-type = "QUANTITY"]').attr('quantity')),
+					}
+					arr.push(obj)
+				})
+			})
+			if (arr.length > 0) {
+				$.ajax({
+					type: "POST",
+					url: self.getApp().serviceURL + "/api/v1/create_synthetic_release_detail",
+					data: JSON.stringify(arr),
+					success: function (response) {
+						console.log(response)
+					}
+				});
+			}
 
-		}
+		},
+		updateItem: function () {
+			var self = this;
+			var arr = [];
+			var listClass =["class-dropdown-organization-soyte","class-dropdown-organization-hospital","class-dropdown-organization-other"]
+			listClass.forEach(function(item,index){
+				self.$el.find('.'+item+' .data-row-old').each(function (index2, item2) {
+					
+					var dateID = self.$el.find($(item2).find('td [attr-type = "DATE"]')).attr('id')
+					console.log(self.$el.find('#'+dateID).data("gonrin").getValue())
+					var obj = {
+						"id":$(item2).attr('synthetic-release-detail-id'),
+						"date": self.model.get('date'),
+						"date_export":self.$el.find('#'+dateID).data("gonrin").getValue(),
+						"quantity": Number($(item2).find('td [attr-type = "QUANTITY"]').attr('quantity')),
+					}
+					arr.push(obj)
+				})
+			})
+			if (arr.length > 0) {
+				$.ajax({
+					type: "POST",
+					url: self.getApp().serviceURL + "/api/v1/update_synthetic_release_detail",
+					data: JSON.stringify(arr),
+					success: function (response) {
+						console.log(response)
+					}
+				});
+			}
 
+		},
 	});
 
 });

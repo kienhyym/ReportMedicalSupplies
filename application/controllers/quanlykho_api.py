@@ -63,6 +63,7 @@ async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw)
                 _['begin_net_amount']= reportOrganizationDetail[0][0] + begin_net_amount
             else:
                 _['begin_net_amount']= 0 + begin_net_amount
+                
 
 
 async def check_medical_supplies_name(request=None, data=None, Model=None, **kw):
@@ -71,23 +72,97 @@ async def check_medical_supplies_name(request=None, data=None, Model=None, **kw)
             del _['medical_supplies_unit']
             del _['begin_net_amount']
 
+async def check_name_organization(request=None, data=None, Model=None, **kw):
+        for _ in data['details']:
+            del _['organization_name']
+            del _['tuyendonvi_id']
 
-@app.route('/api/v1/load_item_dropdown_statistical',methods=['POST'])
-async def load_item_dropdown_statistical(request):
-    data = request.json
-    text = data['text']
-    selectedList = data['selectedList']
+async def get_name_organization(request=None, Model=None, result=None ,**kw):
+    if result is not None:
+        print ('____________________',result)
+        for _ in result['details']:
+            organization_name = db.session.query(Organization.name,Organization.tuyendonvi_id).filter(Organization.id == _['organization_id']).first()
+            _['organization_name']= organization_name[0]   
+            _['tuyendonvi_id']= organization_name[1]            
+         
 
+# // TÌM KIẾM DANH SÁCH VÂT TƯ Y TẾ 
+@app.route('/api/v1/load_medical_supplies_dropdown',methods=['POST'])
+async def load_medical_supplies_dropdown(request):
+    text = request.json
     if text is not None and text != "":
         search = "%{}%".format(text)
         searchTitle = "%{}%".format(text.title())
-        list = db.session.query(MedicalSupplies).filter(and_(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search))),MedicalSupplies.id.notin_(selectedList)).all()
+        list = db.session.query(MedicalSupplies).filter(and_(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search)))).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
         return json(arr)
     else:
-        list = db.session.query(MedicalSupplies).filter(MedicalSupplies.id.notin_(selectedList)).all()
+        list = db.session.query(MedicalSupplies).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+
+# // TÌM KIẾM DANH SÁCH SỎ Y TẾ 
+@app.route('/api/v1/load_organization_dropdown_soyte',methods=['POST'])
+async def load_organization_dropdown_soyte(request):
+    text = request.json
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == "6")).all()
+        arr = []
+        for i in list:
+            obj =  to_dict(i)
+            tinhthanh_name = db.session.query(TinhThanh.ten).filter(TinhThanh.id == obj['tinhthanh_id']).first()
+            obj['name'] = tinhthanh_name[0]
+            arr.append(obj)
+        return json(arr)
+    else:
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == "6")).all()
+        arr = []
+        for i in list:
+            obj =  to_dict(i)
+            tinhthanh_name = db.session.query(TinhThanh.ten).filter(TinhThanh.id == obj['tinhthanh_id']).first()
+            obj['name'] = tinhthanh_name[0]
+            arr.append(obj)
+        return json(arr)
+
+# // TÌM KIẾM DANH SÁCH VIỆN BỆNH VIỆN
+@app.route('/api/v1/load_organization_dropdown_hospital',methods=['POST'])
+async def load_organization_dropdown_hospital(request):
+    text = request.json
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc",or_(Organization.tuyendonvi_id == "7",Organization.tuyendonvi_id == "8"))).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+    else:
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",or_(Organization.tuyendonvi_id == "7",Organization.tuyendonvi_id == "8"))).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+
+# // TÌM KIẾM DANH SÁCH KHÁC
+@app.route('/api/v1/load_organization_dropdown_other',methods=['POST'])
+async def load_organization_dropdown_other(request):
+    text = request.json
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"])).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+    else:
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"])).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
@@ -133,15 +208,15 @@ apimanager.create_api(ReportSupplyOrganizationDetail,
 apimanager.create_api(SyntheticRelease,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
-    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_name_organization]),
+    postprocess=dict(GET_SINGLE=[get_name_organization],POST=[],PUT_SINGLE=[],),
     collection_name='synthetic_release')
 
 apimanager.create_api(SyntheticReleaseDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
-    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[],),
     collection_name='synthetic_release_detail')
 
 
@@ -465,16 +540,32 @@ async def save_check_use_medical_supplies(request):
     db.session.commit()
     return json({"message": "Success"})
 
-@app.route("/api/v1/create_report_synthesis",methods=["POST"])
-async def create_report_synthesis(request):
+@app.route("/api/v1/create_synthetic_release_detail",methods=["POST"])
+async def create_synthetic_release_detail(request):
     data = request.json
     for obj in data:
-        obj_item = SyntheticReleaseDetail()
-        obj_item.organization_id = obj['organization_id']
-        obj_item.date = obj['date']
-        obj_item.date_export= obj['date_export']
-        obj_item.quantity = obj['quantity']
-        obj_item.medical_supplies_id = obj['medical_supplies_id']
-    db.session.add(obj)
-    db.session.commit()
+        new_item = SyntheticReleaseDetail()
+
+        new_item.date = obj['date']
+        new_item.synthetic_release_id = obj['synthetic_release_id']
+        new_item.medical_supplies_id = obj['medical_supplies_id']
+
+        new_item.organization_id = obj['organization_id']
+        new_item.date_export= obj['date_export']
+        new_item.quantity = obj['quantity']
+
+        db.session.add(new_item)
+        db.session.commit()
     return json({"message":"create success"})
+
+@app.route("/api/v1/update_synthetic_release_detail",methods=["POST"])
+async def update_synthetic_release_detail(request):
+    data = request.json
+    for obj in data:
+        old_item = db.session.query(SyntheticReleaseDetail).filter(SyntheticReleaseDetail.id == obj['id']).first()
+        old_item.date = obj['date']
+        old_item.date_export= obj['date_export']
+        old_item.quantity = obj['quantity']
+        db.session.commit()
+    return json({"message":"update success"})
+

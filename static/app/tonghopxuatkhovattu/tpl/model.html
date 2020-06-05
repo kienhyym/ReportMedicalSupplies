@@ -4,74 +4,117 @@
     }
 </style>
 <div block-bind="content">
-    <div class="page-header row no-gutters py-2">
-
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card  card-small mb-4" style="position: relative;">
-                <div class="card-header  border-bottom">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h6 class="m-0 pt-2">Thông tin báo cáo:</h6>
-                        </div>
-                        <div class="col-md-5 text-right">
-                            <div block-bind="toolbar"></div>
-                        </div>
-                    </div>
+    <div class="card  card-small mb-4" style="position: relative;">
+        <div class="card-header  border-bottom">
+            <div class="row">
+                <div class="col-md-7">
+                    <h6 class="m-0 pt-2">Tổng hợp xuất kho vật tư phòng chống dịch COVID-19:</h6>
                 </div>
-                <div class="card-body row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Thời gian</label>
-                            <input type="text" data-bind="value:date" />
-                        </div>
-                    </div>
-                    </div>
-                <div class="card-body">
-
-                    <table class="table table-sm table-bordered border">
-                        <thead class="thead-light text-center">
-                            <tr>
-                                <th>STT</th>
-                                <th>Đơn vị</th>
-                                <th>Thời gian xuất cấp</th>
-                                <th style="position: relative;">
-                                    <input type="text" class="form-control search-item"
-                                        placeholder="Nhập tên mặt hàng để tìm kiếm">
-                                    <div class="card" style="position: absolute;top: 65px;left: 15px;width: 300px;">
-                                        <div class="dropdown-menu dropdown-menu-item"
-                                            style="height: 110px;overflow-x: hidden;width:300px;"></div>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input class="form-control text-center" readonly></td>
-                                <td><input class="form-control text-center" readonly value="Tổng cộng xuất"></td>
-                                <td><input class="form-control text-center" readonly></td>
-                                <td><input class="form-control text-center" readonly></td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-                    <!-- <div class="col-12 out-click" style="overflow-x: scroll;height: 500px;" >
-                        <div style="width: 1000px;height: 35px;" id="list-item">
-                            <div style="width: 28px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center stt pl-0 pr-0" value="+"></div>
-                            <div style="width: 248px;display: inline-block;padding: 1px;position: relative;">
-                                <input type="text" class="form-control search-item" placeholder="Nhập tên mặt hàng để tìm kiếm">
-                                <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
-                                    <div class="dropdown-menu dropdown-menu-item" style="height: 110px;overflow-x: hidden;width:280px;"></div>
-                                </div>
-                            </div>
-                            <div style="width: 148px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
-                            <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;"><input class="form-control text-center"></div>
-                        </div>
-                    </div> -->
-
+                <div class="col-md-5 text-right">
+                    <div block-bind="toolbar"></div>
                 </div>
             </div>
         </div>
+        <div class="card-body row">
+            <div class="col-md-4 col-lg-4 col-sm-12 col-12">
+                <div class="form-group">
+                    <label for="">Ngày tạo báo cáo</label>
+                    <input type="text" data-bind="value:date" />
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm table-bordered border">
+                <thead class="thead-light text-center">
+                    <tr>
+                        <th>STT</th>
+                        <th>Đơn vị</th>
+                        <th>Thời gian xuất cấp</th>
+                        <th style="position: relative;">
+                            <div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-medical-supplies">
+                                <input type="text" class="form-control" placeholder="Nhập tên vật tư để tìm kiếm" item-id="" class-name = "dropdown-medical-supplies">
+                                <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+                                    <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <!-- CƠ SỞ Y TẾ LÀ SỞ Y TẾ -->
+                <tbody class="class-dropdown-organization-soyte">
+                    <tr>
+                        <td><input class="font-weight-bold form-control text-center" readonly value="I"></td>
+                        <td><input class="font-weight-bold form-control" readonly value="Sở Y tế"></td>
+                        <td><input class="font-weight-bold form-control text-center" readonly></td>
+                        <td><input class="font-weight-bold form-control text-center" readonly></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td><input class="form-control text-center" readonly value="+"></td>
+                        <td>
+                            <div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-organization-soyte">
+                                <input type="text" class="form-control" placeholder="Nhập tên Sở Y tế" class-name = "dropdown-organization-soyte">
+                                <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+                                    <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><input class="form-control text-center" readonly></td>
+                        <td><input class="form-control text-center" readonly></td>
+                    </tr>
+                </tbody>
+
+                <!-- CƠ SỞ Y TẾ LÀ BỆNH VIỆN ,CÁC VIÊN TRỨC THUỘC -->
+                <tbody class="class-dropdown-organization-hospital">
+                    <tr>
+                        <td><input class="font-weight-bold form-control text-center" readonly value="II"></td>
+                        <td><input class="font-weight-bold form-control" readonly value="Bệnh viện/Viện trực thuộc Bộ Y tế"></td>
+                        <td><input class="font-weight-bold form-control text-center" readonly></td>
+                        <td><input class="font-weight-bold form-control text-center" readonly></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td><input class="form-control text-center" readonly value="+"></td>
+                        <td>
+                            <div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-organization-hospital">
+                                <input type="text" class="form-control" placeholder="Nhập tên Bệnh viện/Viện trực thuộc Bộ Y tế" class-name = "dropdown-organization-hospital">
+                                <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+                                    <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><input class="form-control text-center" readonly></td>
+                        <td><input class="form-control text-center" readonly></td>
+                    </tr>
+                </tbody>
+                <!-- CƠ SỞ Y TẾ KHÁC -->
+                <tbody class="class-dropdown-organization-other">
+                    <tr>
+                        <td><input class="font-weight-bold form-control text-center" readonly value="III"></td>
+                        <td><input class="font-weight-bold form-control" readonly value="Các Bộ và cơ quan khác"></td>
+                        <td><input class="font-weight-bold form-control text-center" readonly></td>
+                        <td><input class="font-weight-bold form-control text-center" readonly></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td><input class="form-control text-center" readonly value="+"></td>
+                        <td>
+                            <div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-organization-other">
+                                <input type="text" class="form-control" placeholder="Nhập tên các Bộ và cơ quan khác" class-name = "dropdown-organization-other">
+                                <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+                                    <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><input class="form-control text-center" readonly></td>
+                        <td><input class="form-control text-center" readonly></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>

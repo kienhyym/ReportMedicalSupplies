@@ -68,8 +68,7 @@ define(function (require) {
 													self.createItem(respose.id)
 													self.updateItem();
 													self.deleteItem();
-													self.getApp().getRouter().navigate("/baocaodonvi_cungung/collection");
-
+													self.getApp().getRouter().navigate("baocaodonvi_cungung/collection");
 												},
 												error: function (xhr, status, error) {
 													try {
@@ -105,7 +104,7 @@ define(function (require) {
 							self.model.destroy({
 								success: function (model, response) {
 									self.getApp().notify('Xoá dữ liệu thành công');
-									self.getApp().getRouter().navigate("/baocaodonvi/collection");
+									self.getApp().getRouter().navigate("baocaodonvi/collection");
 								},
 								error: function (xhr, status, error) {
 									try {
@@ -260,6 +259,8 @@ define(function (require) {
 						clickThis.attr(item.attr, clickThisValue)
 						setTimeout(() => {
 							var clickThisString = new Number(clickThisValue).toLocaleString("da-DK");
+							console.log('clickThisString',clickThisString)
+
 							clickThis.val(clickThisString)
 						}, 200);
 					}
@@ -407,10 +408,7 @@ define(function (require) {
 		},
 		showDetail: function () {
 			var self = this;
-			console.log('xxxxxxxxxxxxxxxx',self.model)
-
 			if (self.model.get('details').length > 0) {
-
 				self.model.get('details').forEach(function (item, index) {
 					var String_SupplyAbility = new Number(item.supply_ability).toLocaleString("da-DK");
 					var String_SellNumber = new Number(item.sell_number).toLocaleString("da-DK");
@@ -429,16 +427,16 @@ define(function (require) {
 							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" readonly  style="font-size:14px">
 						</div>
 						<div style="width: 124px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}" type="number"  class="form-control text-center p-1" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}"  pattern="[0-9]*" inputmode="numeric"  class="form-control text-center p-1" style="font-size:14px">
                         </div>
                         <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}" type="number" class="form-control text-center p-1"   style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}"  pattern="[0-9]*" inputmode="numeric" class="form-control text-center p-1"   style="font-size:14px">
                         </div>
                         <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}" type="number"  class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}"  inputmode="numeric" pattern="[0-9]*"  class="form-control text-center p-1"  style="font-size:14px">
                         </div>
                         <div style="width: 130px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" type="number" class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" pattern="[0-9]*" inputmode="numeric" class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">
@@ -536,8 +534,6 @@ define(function (require) {
 				});
 			}
 		},
-
-
 		// HẾT CHỨC NĂNG CHỌN ITEM XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		// XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	});
