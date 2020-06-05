@@ -14,6 +14,8 @@ define(function (require) {
 		collectionName: "synthetic_release",
 		bindings: "data-bind",
 		listItemRemove: [],
+		medicalSuppliesId: null,
+
 		tools: [
 			{
 				name: "defaultgr",
@@ -114,7 +116,7 @@ define(function (require) {
 		render: function () {
 			var self = this;
 			self.listItemRemove= [];
-
+			self.medicalSuppliesId = null;
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
 			self.searchItem();
@@ -234,6 +236,7 @@ define(function (require) {
 				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
 				self.$el.find('.'+CLASS+' input').val(itemJSON.name);
 				self.$el.find('.'+CLASS+' input').attr('item-id',itemJSON.id);
+				self.medicalSuppliesId = itemJSON.id
 				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
 			})
 			$(document).unbind('click').bind('click', function (e) {
@@ -320,7 +323,7 @@ define(function (require) {
 					self.$el.find('.'+item+' .data-row-new').remove()
 				})
 				setTimeout(function(){
-					var medical_supplies_id = self.$el.find('.dropdown-medical-supplies input').attr('item-id')
+					var medical_supplies_id = self.medicalSuppliesId
 					console.log('medical_supplies_id',medical_supplies_id)
 					if (self.model.get('details').length > 0) {
 						self.model.get('details').forEach(function (item, index) {
