@@ -315,7 +315,7 @@ define(function (require) {
 								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
 									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" class="form-control text-center "></td>
+									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
 									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
 								</tr>`)
 								self.$el.find('#date-'+item.id).datetimepicker({
@@ -330,13 +330,14 @@ define(function (require) {
 								});
 								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
 								self.clickInput();
+								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
 							}
 							else if((item.tuyendonvi_id == "7" && item.medical_supplies_id == medical_supplies_id) || (item.tuyendonvi_id == "8" && item.medical_supplies_id == medical_supplies_id)){
 								self.$el.find('.class-dropdown-organization-hospital').append(` 
 								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
 									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" class="form-control text-center "></td>
+									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
 									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
 								</tr>`)
 								self.$el.find('#date-'+item.id).datetimepicker({
@@ -351,13 +352,15 @@ define(function (require) {
 								});
 								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
 								self.clickInput();
+								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
+
 							}
 							else if(item.medical_supplies_id == medical_supplies_id && item.tuyendonvi_id != "7" && item.tuyendonvi_id != "6" && item.tuyendonvi_id != "8"){
 								self.$el.find('.class-dropdown-organization-soyte').append(` 
 								<tr id-row = "id-${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 									<td><input id-row = "id-${item.id}" attr-type = "STT" value ="0" class="form-control text-center" ></td>
 									<td><input id-row = "id-${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
-									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" class="form-control text-center "></td>
+									<td><input id-row = "id-${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
 									<td><input id-row = "id-${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
 								</tr>`)
 								self.$el.find('#date-'+item.id).datetimepicker({
@@ -372,6 +375,8 @@ define(function (require) {
 								});
 								self.$el.find('[id-row = "id-'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
 								self.clickInput();
+								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
+
 							}
 						})
 					}
