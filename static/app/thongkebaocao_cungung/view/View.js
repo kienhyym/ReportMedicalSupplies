@@ -60,8 +60,8 @@ define(function (require) {
 						<td>${index+1}</td>
 							<td>${item.organization_name}</td>
 							<td>${item.price}</td>
-							<td>${item.sponsored_number + item.sell_number}</td>
-							<td>${(item.sponsored_number + item.sell_number) * item.price }</td>
+							<td>${ item.sell_number}</td>
+							<td>${item.sell_number * item.price }</td>
 						</tr>
 						`)
 					})

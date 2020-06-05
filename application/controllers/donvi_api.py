@@ -1017,8 +1017,8 @@ async def enterprise_supply_statistics(request):
             arr.append(reportSupplyOrganizationDetail)
            
             price = to_dict(_)['price'] + price
-            sum_sponsored_sell_number = to_dict(_)['sell_number'] + to_dict(_)['sponsored_number'] + sum_sponsored_sell_number  
-            sum_price = (to_dict(_)['sell_number']+to_dict(_)['sponsored_number']) * to_dict(_)['price'] +sum_price  
+            sum_sponsored_sell_number = to_dict(_)['sell_number'] + sum_sponsored_sell_number  
+            sum_price = to_dict(_)['sell_number'] * to_dict(_)['price'] +sum_price  
 
         obj["avg_price"]= price/len(reportSupplyOrganizationDetails)
         obj["sum_sponsored_sell_number"]= sum_sponsored_sell_number
