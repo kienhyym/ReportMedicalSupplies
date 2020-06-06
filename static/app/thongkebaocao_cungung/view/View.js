@@ -217,6 +217,7 @@ define(function (require) {
 			})
 		},
 		exportExcel: function (data, params) {
+			params.medical_supplies_name = params.medical_supplies_name.replace('%',' phần trăm')
 			var self = this;
 			self.$el.find('.button-excel').unbind('click').bind('click', function () {
 					var date_report_start = moment(params.date_report_start * 1000).format('DD MM YYYY');

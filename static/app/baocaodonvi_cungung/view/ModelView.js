@@ -104,7 +104,7 @@ define(function (require) {
 							self.model.destroy({
 								success: function (model, response) {
 									self.getApp().notify('Xoá dữ liệu thành công');
-									self.getApp().getRouter().navigate("baocaodonvi/collection");
+									self.getApp().getRouter().navigate("baocaodonvi_cungung/collection");
 								},
 								error: function (xhr, status, error) {
 									try {
