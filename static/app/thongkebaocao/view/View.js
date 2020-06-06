@@ -274,6 +274,8 @@ define(function (require) {
 		},
 		exportExcel: function (data, params) {
 			var self = this;
+			params.medical_supplies_name = params.medical_supplies_name.replace('%',' phần trăm')
+
 			self.$el.find('.button-excel').unbind('click').bind('click', function () {
 				if (params.type == "all") {
 					var filter = "Thống kê " + params.medical_supplies_name + " từ trước đến nay";
