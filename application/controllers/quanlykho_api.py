@@ -46,13 +46,8 @@ async def check_dict_like(request=None, data=None, Model=None, **kw):
     pass
         # del data['organization']
 
-async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw):
+async def get_name_medical_supplies1(request=None, Model=None, result=None ,**kw):
         for _ in result['details']:
-            organization = db.session.query(Organization.name).filter(Organization.id == _['health_facilities_id']).first()
-            if organization is not None:
-                _['health_facilities_name']= organization[0]
-            else:
-                _['health_facilities_name'] = ""
             medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == _['medical_supplies_id']).first()
             _['medical_supplies_name']= to_dict(medicalSupplies)['name']
             _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
@@ -68,14 +63,30 @@ async def get_name_medical_supplies(request=None, Model=None, result=None ,**kw)
                 _['begin_net_amount']= reportOrganizationDetail[0][0] + begin_net_amount
             else:
                 _['begin_net_amount']= 0 + begin_net_amount
+
+async def get_name_medical_supplies2(request=None, Model=None, result=None ,**kw):
+        for _ in result['details']:
+            organization = db.session.query(Organization.name).filter(Organization.id == _['health_facilities_id']).first()
+            if organization is not None:
+                _['health_facilities_name']= organization[0]
+            else:
+                _['health_facilities_name'] = ""
+            medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == _['medical_supplies_id']).first()
+            _['medical_supplies_name']= to_dict(medicalSupplies)['name']
+            _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
                 
 
 
-async def check_medical_supplies_name(request=None, data=None, Model=None, **kw):
+async def check_medical_supplies_name1(request=None, data=None, Model=None, **kw):
         for _ in data['details']:
             del _['medical_supplies_name']
             del _['medical_supplies_unit']
             del _['begin_net_amount']
+
+async def check_medical_supplies_name2(request=None, data=None, Model=None, **kw):
+        for _ in data['details']:
+            del _['medical_supplies_name']
+            del _['medical_supplies_unit']
             del _['health_facilities_name']
 
 
@@ -225,29 +236,29 @@ apimanager.create_api(MedicalSupplies,
 apimanager.create_api(ReportOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name]),
-    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name1]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies1],POST=[],PUT_SINGLE=[]),
     collection_name='report_organization')
 
 apimanager.create_api(ReportOrganizationDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
-    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[],),
     collection_name='report_organization_detail')
 
 apimanager.create_api(ReportSupplyOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name]),
-    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name2]),
+    postprocess=dict(GET_SINGLE=[get_name_medical_supplies2],POST=[],PUT_SINGLE=[]),
     collection_name='report_supply_organization')
 
 apimanager.create_api(ReportSupplyOrganizationDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
-    postprocess=dict(GET_SINGLE=[get_name_medical_supplies],POST=[],PUT_SINGLE=[],),
+    postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[]),
     collection_name='report_supply_organization_detail')
 
 
