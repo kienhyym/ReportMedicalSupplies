@@ -188,54 +188,67 @@ define(function (require) {
 		chooseItemInListDropdownItem: function () {
 			var self = this;
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
+				
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
 				var itemID = dropdownItemClick.attr('item-id')
-				self.$el.find('#list-item').before(`
-                <div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new selected-item-general" 
-                item_id = "${dropdownItemClick.attr('item-id')}" item-id = "${dropdownItemClick.attr('item-id')}">
-                    <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="STT" class="form-control text-center p-1" value="${stt}" style="font-size:14px">
-                    </div>
-                    <div style="width: 248px;display: inline-block;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="NAME" class="form-control p-1" value="${dropdownItemClick.attr('title')}" readonly style="font-size:14px">
-					</div>
-					<div style="width: 66px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
-					</div>
-					<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0"                    class="form-control text-center p-1" style="font-size:14px">
-                    </div>
-                    <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0" value="0"                           type="number"  class="form-control text-center p-1" style="font-size:14px">
-                    </div>
-                    <div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0"               type="number"  class="form-control text-center p-1" style="font-size:14px">
-                    </div>
-                    <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0"              			              class="form-control text-center p-1"  style="font-size:14px">
-					</div>
-					<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
-					<div style="position: relative;">
-					<div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${itemID}">
-						<input selected-item-id = "${itemID}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="null" class-name = "dropdown-${itemID}">
-						<div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
-							<div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+				var dem = 0
+				self.$el.find('.selected-item-general').each(function(index,item){
+					if (itemID == $(item).attr('item_id')){
+						dem++;
+					}
+				})
+				if (dem >=2 ){
+					self.getApp().notify({ message: "1 vật tư không được chọn quá 2 lần" }, { type: "danger", delay: 1000 });
+				}
+				else{
+					self.$el.find('#list-item').before(`
+					<div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new selected-item-general" 
+					item_id = "${dropdownItemClick.attr('item-id')}" item-id = "${dropdownItemClick.attr('item-id')}">
+						<div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
+							<input selected-item-id = "${itemID}" col-type="STT" class="form-control text-center p-1" value="${stt}" style="font-size:14px">
 						</div>
+						<div style="width: 248px;display: inline-block;padding: 1px;">
+							<input selected-item-id = "${itemID}" col-type="NAME" class="form-control p-1" value="${dropdownItemClick.attr('title')}" readonly style="font-size:14px">
+						</div>
+						<div style="width: 66px;display: inline-block;text-align: center;padding: 1px;">
+							<input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
+						</div>
+						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
+							<input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0" type="number"   class="form-control text-center p-1" style="font-size:14px">
+						</div>
+						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
+							<input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0" value="0" type="number"  class="form-control text-center p-1" style="font-size:14px">
+						</div>
+						<div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
+							<input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0" type="number"  class="form-control text-center p-1" style="font-size:14px">
+						</div>
+						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
+							<input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0" type="number"   class="form-control text-center p-1"  style="font-size:14px">
+						</div>
+						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
+						<div style="position: relative;">
+						<div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${itemID}">
+							<input selected-item-id = "${itemID}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="null" class-name = "dropdown-${itemID}">
+							<div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
+								<div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
+							</div>
+						</div>
+						</div>				
+						</div>
+						<div style="width: 90px;display: inline-block;text-align: center;padding: 1px;">
+						<div style="position: relative;">
+							<input selected-item-id = "${itemID}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
+							<button class= "btn btn-outline-secondary pl-1 pr-1">Tải lên</button>
+							<a selected-item-id = "${itemID}" col-type="DOWNLOAD" href="#" class= "btn btn-outline-secondary pl-1 pr-1">Xem</a>
+						</div>
+						</div>
+						<div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
+								<i selected-item-id = "${itemID}" class="fa fa-trash" style="font-size: 17px"></i>
+							</div>
 					</div>
-				</div>						</div>
-					<div style="width: 90px;display: inline-block;text-align: center;padding: 1px;">
-					<div style="position: relative;">
-						<input selected-item-id = "${itemID}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
-						<button class= "btn btn-outline-secondary pl-1 pr-1">Tải lên</button>
-						<a selected-item-id = "${itemID}" col-type="DOWNLOAD" href="#" class= "btn btn-outline-secondary pl-1 pr-1">Xem</a>
-					</div>
-                    </div>
-                    <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
-                            <i selected-item-id = "${itemID}" class="fa fa-trash" style="font-size: 17px"></i>
-                        </div>
-                </div>
-				`)
+					`)
+				}
 				self.searchItem(itemID)
 				self.$el.find('.dropdown-menu-item').hide()
 				self.$el.find('.search-item').val('')
@@ -437,16 +450,16 @@ define(function (require) {
 							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" readonly  style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}"  class="form-control text-center p-1" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}" type="number"   class="form-control text-center p-1" style="font-size:14px">
                         </div>
                         <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}"  class="form-control text-center p-1"   style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}" type="number"    class="form-control text-center p-1"   style="font-size:14px">
                         </div>
                         <div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}"   class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}" type="number"    class="form-control text-center p-1"  style="font-size:14px">
                         </div>
                         <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" type="number"   class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">

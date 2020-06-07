@@ -13,7 +13,7 @@ define(function (require) {
             },
             "entries": [
                 {
-                    "text": "Danh sách đơn vị trực thuộc",
+                    "text": "Danh sách đơn vị y tế",
                     "type": "view",
                     "collectionName": "donvidangki",
                     "route": "admin/donvi/collection",
@@ -33,7 +33,7 @@ define(function (require) {
                 //     }
                 // },
                 {
-                    "text": "Danh sách đơn vị trực thuộc",
+                    "text": "Danh sách đơn vị y tế",
                     "type": "view",
                     "collectionName": "donvidangki",
                     "route": "canbo/donvi/collection",
@@ -177,7 +177,7 @@ define(function (require) {
             "entries": [
                 
                 {
-                    "text": "Vật tư PCD Cơ sở y tế",
+                    "text": "Báo cáo cơ sở y tế",
                     "type": "view",
                     "route": "thongkebaocao/search",
                     "$ref": "app/thongkebaocao/view/View",
@@ -187,7 +187,7 @@ define(function (require) {
                     }
                 },
                 {
-                    "text": "Vật tư PCD Đơn vị cung ứng",
+                    "text": "Báo cáo đơn vị cung ứng",
                     "type": "view",
                     "route": "thongkebaocao_cungung/search",
                     "$ref": "app/thongkebaocao_cungung/view/View",
