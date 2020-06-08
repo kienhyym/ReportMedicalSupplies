@@ -73,8 +73,9 @@ define(function (require) {
 					self.$el.find('#danhSachDonVi tr').remove()
 					response.forEach(function (item, index) {
 						self.$el.find('#danhSachDonVi').append(`
-						<tr>
-							<td>${item.organization_name}</td>
+						<tr class="text-center">
+							<td>${index+1}</td>
+							<td class="text-left">${item.organization_name}</td>
 							<td>${item.quantity_import}</td>
 							<td>${item.quantity_export}</td>
 							<td>${item.net_amount}</td>
