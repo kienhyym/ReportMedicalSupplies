@@ -190,7 +190,7 @@ define(function (require) {
 		chooseItemInListDropdownItem: function () {
 			var self = this;
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
-				console.log("__________self.listItemRemove ________",self.listItemRemove )
+				console.log("__________self.listItemRemove ________", self.listItemRemove)
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
 				var beginNetAmount = new Number(dropdownItemClick.attr('begin_net_amount')).toLocaleString("da-DK");
@@ -212,16 +212,16 @@ define(function (require) {
                         <input selected-item-id = "${itemID}" col-type="BEGIN_NET_AMOUNT"  begin_net_amount="${dropdownItemClick.attr('begin_net_amount')}" class="form-control text-center p-1" value="${beginNetAmount}" style="font-size:14px">
                     </div>
                     <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT" type="number" quantity_import="0" class="form-control text-center p-1" value="0" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="QUANTITY_IMPORT"  quantity_import="0" class="form-control text-center p-1" value="0" style="font-size:14px">
                     </div>
                     <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="QUANTITY_EXPORT" type="number" quantity_export="0" class="form-control text-center p-1" value = "0" style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="QUANTITY_EXPORT"  quantity_export="0" class="form-control text-center p-1" value = "0" style="font-size:14px">
                     </div>
                     <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
                         <input selected-item-id = "${itemID}" col-type="END_NET_AMOUNT"  end_net_amount = "0" value="0" class="form-control text-center p-1" readonly style="font-size:14px">
 					</div>
 					<div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                        <input selected-item-id = "${itemID}" col-type="ESTIMATES_NET_AMOUNT" type="number" estimates_net_amount="0" value="0" class="form-control text-center p-1"  style="font-size:14px">
+                        <input selected-item-id = "${itemID}" col-type="ESTIMATES_NET_AMOUNT"  estimates_net_amount="0" value="0" class="form-control text-center p-1"  style="font-size:14px">
                     </div>
                     <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
                             <i selected-item-id = "${itemID}" class="fa fa-trash" style="font-size: 17px"></i>
@@ -238,6 +238,46 @@ define(function (require) {
 		},
 		clickImportExport: function () {
 			var self = this;
+			
+			self.$el.find('[col-type="QUANTITY_IMPORT"]').keyup(function () {
+				var num = $(this).attr('quantity_import')
+				if (Number.isNaN(Number($(this).val())) === true) {
+					console.log(String($(this).val()).slice(-1))
+					$(this).val(num)
+				}
+				num = Number($(this).val())
+			})
+
+			self.$el.find('[col-type="QUANTITY_EXPORT"]').keyup(function () {
+				var num = $(this).attr('quantity_export')
+				if (Number.isNaN(Number($(this).val())) === true) {
+					console.log(String($(this).val()).slice(-1))
+					$(this).val(num)
+				}
+				num = Number($(this).val())
+			})
+
+			self.$el.find('[col-type="ESTIMATES_NET_AMOUNT"]').keyup(function () {
+				var num = $(this).attr('end_net_amount')
+
+				if (Number.isNaN(Number($(this).val())) === true) {
+					console.log(String($(this).val()).slice(-1))
+					$(this).val(num)
+				}
+				num = Number($(this).val())
+			})
+
+			self.$el.find('[col-type="BEGIN_NET_AMOUNT"]').keyup(function () {
+				var num = $(this).attr('begin_net_amount')
+				if (Number.isNaN(Number($(this).val())) === true) {
+					console.log(String($(this).val()).slice(-1))
+					$(this).val(num)
+				}
+				num = Number($(this).val())
+			})
+
+
+
 			self.$el.find('selected-item')
 			//Out Click QUANTITY_IMPORT
 			self.$el.find('[col-type="QUANTITY_IMPORT"]').unbind('click').bind('click', function () {
@@ -341,7 +381,7 @@ define(function (require) {
 			});
 
 
-			  
+
 
 
 
@@ -492,10 +532,10 @@ define(function (require) {
                             <input selected-item-id = "${item.id}" col-type="BEGIN_NET_AMOUNT" class="form-control text-center p-1" begin_net_amount="${item.begin_net_amount}" value="${beginNetAmountToLocaleString}"  style="font-size:14px">
                         </div>
                         <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="QUANTITY_IMPORT" type="number" class="form-control text-center p-1" quantity_import="${item.quantity_import}" value="${quantityImportToLocaleString}" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="QUANTITY_IMPORT"  class="form-control text-center p-1" quantity_import="${item.quantity_import}" value="${quantityImportToLocaleString}" style="font-size:14px">
                         </div>
                         <div style="width: 106px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="QUANTITY_EXPORT" type="number" class="form-control text-center p-1" quantity_export="${item.quantity_export}" value = "${quantityExportToLocaleString}" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="QUANTITY_EXPORT"  class="form-control text-center p-1" quantity_export="${item.quantity_export}" value = "${quantityExportToLocaleString}" style="font-size:14px">
                         </div>
                         <div style="width: 106px;display: inline-block;text-align: center;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="END_NET_AMOUNT" class="form-control text-center p-1" value="${endNetAmountToLocaleString}" end_net_amount="${item.begin_net_amount + item.quantity_import - item.quantity_export}" readonly style="font-size:14px">
@@ -534,7 +574,7 @@ define(function (require) {
 					"date": self.model.get('date')
 				}
 				arr.push(obj)
-				console.log('Tạo mới',arr)
+				console.log('Tạo mới', arr)
 			})
 			if (arr.length > 0) {
 				$.ajax({

@@ -215,16 +215,16 @@ define(function (require) {
 							<input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0" type="number"   class="form-control text-center p-1" style="font-size:14px">
+							<input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0"    class="form-control text-center p-1" style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0" value="0" type="number"  class="form-control text-center p-1" style="font-size:14px">
+							<input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0" value="0"   class="form-control text-center p-1" style="font-size:14px">
 						</div>
 						<div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0" type="number"  class="form-control text-center p-1" style="font-size:14px">
+							<input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0"   class="form-control text-center p-1" style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0" type="number"   class="form-control text-center p-1"  style="font-size:14px">
+							<input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0"    class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
 						<div style="position: relative;">
@@ -260,6 +260,7 @@ define(function (require) {
 		},
 		clickInput: function () {
 			var self = this;
+			
 			// Click vào ô số tự đông thêm dấu chấm
 			var listClick = [
 				{ "col_type": "SUPPLY_ABILITY", "attr": "supply_ability" },
@@ -267,7 +268,18 @@ define(function (require) {
 				{ "col_type": "SPONSORED_NUMBER", "attr": "sponsored_number" },
 				{ "col_type": "PRICE", "attr": "price" },
 			]
+			
 			listClick.forEach(function (item, index) {
+				self.$el.find('[col-type="' + item.col_type + '"]').keyup(function () {
+					var num = $(this).attr(item.attr)
+					if(Number.isNaN(Number($(this).val())) === true){
+						console.log(String($(this).val()).slice(-1))
+						$(this).val(num)
+					}
+					num = Number($(this).val())
+				})
+			})
+				listClick.forEach(function (item, index) {
 				self.$el.find('[col-type="' + item.col_type + '"]').unbind('click').bind('click', function () {
 					var clickThis = $(this);
 					clickThis.val(clickThis.attr(item.attr))
@@ -450,16 +462,16 @@ define(function (require) {
 							<input selected-item-id = "${item.id}"  class="form-control text-center p-1" value="${item.medical_supplies_unit}" readonly  style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}" type="number"   class="form-control text-center p-1" style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}"    class="form-control text-center p-1" style="font-size:14px">
                         </div>
                         <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}" type="number"    class="form-control text-center p-1"   style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}"     class="form-control text-center p-1"   style="font-size:14px">
                         </div>
                         <div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}" type="number"    class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}"     class="form-control text-center p-1"  style="font-size:14px">
                         </div>
                         <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" type="number"   class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}"    class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">

@@ -115,7 +115,7 @@ define(function (require) {
 		},
 		render: function () {
 			var self = this;
-			self.listItemRemove= [];
+			self.listItemRemove = [];
 			self.medicalSuppliesId = null;
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
@@ -148,82 +148,82 @@ define(function (require) {
 		},
 		searchItem: function () {
 			var self = this;
-			var listDropDown= [
+			var listDropDown = [
 				{
-					"class_name":"dropdown-medical-supplies",
-					"url":self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown",
-					"type":"single"
+					"class_name": "dropdown-medical-supplies",
+					"url": self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown",
+					"type": "single"
 				},
 				{
-					"class_name":"dropdown-organization-soyte",
-					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_soyte",
-					"type":"multiple"
+					"class_name": "dropdown-organization-soyte",
+					"url": self.getApp().serviceURL + "/api/v1/load_organization_dropdown_soyte",
+					"type": "multiple"
 				},
 				{
-					"class_name":"dropdown-organization-hospital",
-					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_hospital",
-					"type":"multiple"
+					"class_name": "dropdown-organization-hospital",
+					"url": self.getApp().serviceURL + "/api/v1/load_organization_dropdown_hospital",
+					"type": "multiple"
 				},
 				{
-					"class_name":"dropdown-organization-other",
-					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_other",
-					"type":"multiple"
+					"class_name": "dropdown-organization-other",
+					"url": self.getApp().serviceURL + "/api/v1/load_organization_dropdown_other",
+					"type": "multiple"
 				}
-				
+
 			]
-			listDropDown.forEach(function(item,index){
-				self.$el.find('.'+item.class_name+' input').keyup(function name() {
-					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+			listDropDown.forEach(function (item, index) {
+				self.$el.find('.' + item.class_name + ' input').keyup(function name() {
+					self.loadItemDropDown($(this).val(), $(this).attr('class-name'), item.url, item.type)
 				})
-				self.$el.find('.'+item.class_name+' input').unbind('click').bind('click', function () {
+				self.$el.find('.' + item.class_name + ' input').unbind('click').bind('click', function () {
 					$(this).select();
-					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+					self.loadItemDropDown($(this).val(), $(this).attr('class-name'), item.url, item.type)
 				})
 			})
-			
+
 
 		},
-		loadItemDropDown: function (TEXT,CLASS,URL,TYPE) { // Đổ danh sách Item vào ô tìm kiếm
+		loadItemDropDown: function (TEXT, CLASS, URL, TYPE) { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
 			$.ajax({
 				type: "POST",
 				url: URL,
 				data: JSON.stringify(TEXT),
 				success: function (response) {
-					self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').remove();
+					self.$el.find('.' + CLASS + ' div .dropdown-menu .dropdown-item').remove();
 					var count = response.length
 					response.forEach(function (item, index) {
 						var itemSTRING = JSON.stringify(item)
-						self.$el.find('.'+CLASS+' div .dropdown-menu').append(`
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').append(`
 						<button item-info = '${itemSTRING}' out-side-${CLASS} class='dropdown-item' style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px'>${item.name}</button>`)
 					})
 					if (count == 0) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').hide()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').hide()
 					}
 					if (count == 1) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "45px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "45px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count == 2) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "80px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "80px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count == 3) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "110px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "110px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count == 4) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "130px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "130px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count > 4) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "160px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "160px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
-					if (TYPE == "single"){
+					if (TYPE == "single") {
 						self.chooseItemInListDropdown(CLASS);
 					}
-					else if(TYPE == "multiple") {
+					else if (TYPE == "multiple") {
 						self.appendItemInListDropdown(CLASS);
 					}
 				}
@@ -231,39 +231,39 @@ define(function (require) {
 		},
 		chooseItemInListDropdown: function (CLASS) { //Chọn lẻ 1 item 
 			var self = this;
-			self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+			self.$el.find('.' + CLASS + ' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
 				var dropdownItemClick = $(this);
 				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
-				self.$el.find('.'+CLASS+' input').val(itemJSON.name);
-				self.$el.find('.'+CLASS+' input').attr('item-id',itemJSON.id);
+				self.$el.find('.' + CLASS + ' input').val(itemJSON.name);
+				self.$el.find('.' + CLASS + ' input').attr('item-id', itemJSON.id);
 				self.medicalSuppliesId = itemJSON.id
-				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 			})
 			$(document).unbind('click').bind('click', function (e) {
-				if ($(e.target).attr('out-side-'+CLASS) == undefined){
-					self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				if ($(e.target).attr('out-side-' + CLASS) == undefined) {
+					self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 				}
 			})
-			
+
 		},
 		appendItemInListDropdown: function (CLASS) { //Chọn nhiều item 
 			var self = this;
-			
-			self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+
+			self.$el.find('.' + CLASS + ' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
 				var dropdownItemClick = $(this);
-				var stt = self.$el.find('.class-'+CLASS +' tr').length
+				var stt = self.$el.find('.class-' + CLASS + ' tr').length
 				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
-				self.$el.find('.class-'+CLASS).append(` 
+				self.$el.find('.class-' + CLASS).append(` 
 				<tr id-row = "${itemJSON.id}" class = "data-row-new">
 					<td><input id-row = "${itemJSON.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
 					<td><input id-row = "${itemJSON.id}" attr-type = "ORGANIZATION" organization-id = "${itemJSON.id}" value="${itemJSON.name}" class="form-control" ></td>
 					<td><input id-row = "${itemJSON.id}" attr-type = "DATE" id = "date-${itemJSON.id}" class="form-control text-center "></td>
-					<td><input id-row = "${itemJSON.id}" attr-type = "QUANTITY" quantity = "0" type="number" class="form-control text-center"></td>
+					<td><input id-row = "${itemJSON.id}" attr-type = "QUANTITY" quantity = "0"  class="form-control text-center"></td>
 					<td>
 						<i id-row = "${itemJSON.id}" class="fa fa-trash" style="font-size: 17px"></i>
 					</td>
 				</tr>`)
-				self.$el.find('#date-'+itemJSON.id).datetimepicker({
+				self.$el.find('#date-' + itemJSON.id).datetimepicker({
 					textFormat: 'DD-MM-YYYY',
 					extraFormats: ['DDMMYYYY'],
 					parseInputDate: function (val) {
@@ -273,15 +273,15 @@ define(function (require) {
 						return date.unix()
 					}
 				});
-				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 				self.clickInput();
 				self.$el.find('.data-row-new td .fa-trash').unbind('click').bind('click', function () {
 					self.$el.find('.data-row-new[id-row="' + $(this).attr('id-row') + '"]').remove();
 				})
 			})
 			$(document).unbind('click').bind('click', function (e) {
-				if ($(e.target).attr('out-side-'+CLASS) == undefined){
-					self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				if ($(e.target).attr('out-side-' + CLASS) == undefined) {
+					self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 				}
 			})
 		},
@@ -291,6 +291,14 @@ define(function (require) {
 			var listClick = [
 				{ "attr_type": "QUANTITY", "attr": "quantity" }
 			]
+			self.$el.find('[attr-type="QUANTITY"]').keyup(function () {
+				var num = $(this).attr("quantity")
+				if (Number.isNaN(Number($(this).val())) === true) {
+					console.log(String($(this).val()).slice(-1))
+					$(this).val(num)
+				}
+				num = Number($(this).val())
+			})
 			listClick.forEach(function (item, index) {
 				self.$el.find('[attr-type="' + item.attr_type + '"]').unbind('click').bind('click', function () {
 					var clickThis = $(this);
@@ -306,7 +314,7 @@ define(function (require) {
 						clickThis.attr(item.attr, clickThisValue)
 						setTimeout(() => {
 							var clickThisString = new Number(clickThisValue).toLocaleString("da-DK");
-							console.log('clickThisString',clickThisString)
+							console.log('clickThisString', clickThisString)
 
 							clickThis.val(clickThisString)
 						}, 200);
@@ -316,22 +324,22 @@ define(function (require) {
 		},
 		showDetail: function () {
 			var self = this;
-			self.$el.find('.dropdown-medical-supplies input').blur(function(){
-				var listClass =["class-dropdown-organization-soyte","class-dropdown-organization-hospital","class-dropdown-organization-other"]
-				listClass.forEach(function(item,index){
-					self.$el.find('.'+item+' .data-row-old').remove()
-					self.$el.find('.'+item+' .data-row-new').remove()
+			self.$el.find('.dropdown-medical-supplies input').blur(function () {
+				var listClass = ["class-dropdown-organization-soyte", "class-dropdown-organization-hospital", "class-dropdown-organization-other"]
+				listClass.forEach(function (item, index) {
+					self.$el.find('.' + item + ' .data-row-old').remove()
+					self.$el.find('.' + item + ' .data-row-new').remove()
 				})
-				setTimeout(function(){
+				setTimeout(function () {
 					var medical_supplies_id = self.medicalSuppliesId
-					console.log('medical_supplies_id',medical_supplies_id)
+					console.log('medical_supplies_id', medical_supplies_id)
 					if (self.model.get('details').length > 0) {
 						var demSoyte = 0;
 						var demHospital = 0;
 						var demOther = 0;
 						self.model.get('details').forEach(function (item, index) {
 							var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
-							if(item.tuyendonvi_id == "6" && item.medical_supplies_id == medical_supplies_id){
+							if (item.tuyendonvi_id == "6" && item.medical_supplies_id == medical_supplies_id) {
 								var stt = self.$el.find('.class-dropdown-organization-soyte tr').length
 								demSoyte = demSoyte + Number(item.quantity)
 								self.$el.find('.class-dropdown-organization-soyte').append(` 
@@ -339,12 +347,12 @@ define(function (require) {
 									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
 									<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
 									<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
-									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}"  class="form-control text-center"></td>
 									<td>
 										<i id-row = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
 									</td>
 								</tr>`)
-								self.$el.find('#date-'+item.id).datetimepicker({
+								self.$el.find('#date-' + item.id).datetimepicker({
 									textFormat: 'DD-MM-YYYY',
 									extraFormats: ['DDMMYYYY'],
 									parseInputDate: function (val) {
@@ -354,11 +362,11 @@ define(function (require) {
 										return date.unix()
 									}
 								});
-								self.$el.find('[id-row = "'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.$el.find('[id-row = "' + item.id + '"] td .input-group .datetimepicker-input').val(moment(item.date_export * 1000).format('DD-MM-YYYY'))
 								self.clickInput();
-								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
+								self.$el.find('#date-' + item.id).data("gonrin").setValue(item.date_export);
 							}
-							else if((item.tuyendonvi_id == "7" && item.medical_supplies_id == medical_supplies_id) || (item.tuyendonvi_id == "8" && item.medical_supplies_id == medical_supplies_id)){
+							else if ((item.tuyendonvi_id == "7" && item.medical_supplies_id == medical_supplies_id) || (item.tuyendonvi_id == "8" && item.medical_supplies_id == medical_supplies_id)) {
 								var stt2 = self.$el.find('.class-dropdown-organization-hospital tr').length
 								demHospital = demHospital + Number(item.quantity)
 								self.$el.find('.class-dropdown-organization-hospital').append(` 
@@ -366,12 +374,12 @@ define(function (require) {
 									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt2}" class="form-control text-center" ></td>
 									<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
 									<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
-									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}"  class="form-control text-center"></td>
 									<td>
 										<i id-row = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
 									</td>
 								</tr>`)
-								self.$el.find('#date-'+item.id).datetimepicker({
+								self.$el.find('#date-' + item.id).datetimepicker({
 									textFormat: 'DD-MM-YYYY',
 									extraFormats: ['DDMMYYYY'],
 									parseInputDate: function (val) {
@@ -381,12 +389,12 @@ define(function (require) {
 										return date.unix()
 									}
 								});
-								self.$el.find('[id-row = "'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.$el.find('[id-row = "' + item.id + '"] td .input-group .datetimepicker-input').val(moment(item.date_export * 1000).format('DD-MM-YYYY'))
 								self.clickInput();
-								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
+								self.$el.find('#date-' + item.id).data("gonrin").setValue(item.date_export);
 
 							}
-							else if(item.medical_supplies_id == medical_supplies_id && item.tuyendonvi_id != "7" && item.tuyendonvi_id != "6" && item.tuyendonvi_id != "8"){
+							else if (item.medical_supplies_id == medical_supplies_id && item.tuyendonvi_id != "7" && item.tuyendonvi_id != "6" && item.tuyendonvi_id != "8") {
 								var stt3 = self.$el.find('.class-dropdown-organization-other tr').length
 								demOther = demOther + Number(item.quantity)
 								self.$el.find('.class-dropdown-organization-other').append(` 
@@ -394,12 +402,12 @@ define(function (require) {
 									<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt3}" class="form-control text-center" ></td>
 									<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
 									<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
-									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}" type="number" class="form-control text-center"></td>
+									<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}"  class="form-control text-center"></td>
 									<td>
 										<i id-row = "${item.id}" class="fa fa-trash" style="font-size: 17px"></i>
 									</td>
 								</tr>`)
-								self.$el.find('#date-'+item.id).datetimepicker({
+								self.$el.find('#date-' + item.id).datetimepicker({
 									textFormat: 'DD-MM-YYYY',
 									extraFormats: ['DDMMYYYY'],
 									parseInputDate: function (val) {
@@ -409,9 +417,9 @@ define(function (require) {
 										return date.unix()
 									}
 								});
-								self.$el.find('[id-row = "'+item.id+'"] td .input-group .datetimepicker-input').val(moment(item.date_export*1000).format('DD-MM-YYYY'))
+								self.$el.find('[id-row = "' + item.id + '"] td .input-group .datetimepicker-input').val(moment(item.date_export * 1000).format('DD-MM-YYYY'))
 								self.clickInput();
-								self.$el.find('#date-'+item.id).data("gonrin").setValue(item.date_export);
+								self.$el.find('#date-' + item.id).data("gonrin").setValue(item.date_export);
 
 							}
 						})
@@ -419,7 +427,7 @@ define(function (require) {
 					var demSoytestring = new Number(demSoyte).toLocaleString("da-DK");
 					var demHospitalstring = new Number(demHospital).toLocaleString("da-DK");
 					var demOthertring = new Number(demOther).toLocaleString("da-DK");
-					var all = Number(demOther+ demHospital + demSoyte)
+					var all = Number(demOther + demHospital + demSoyte)
 					var allstring = new Number(all).toLocaleString("da-DK");
 
 
@@ -432,22 +440,22 @@ define(function (require) {
 
 				}, 1000);
 			})
-			
+
 		},
 		createItem: function (synthetic_release_id) {
 			var self = this;
 			var arr = [];
-			var listClass =["class-dropdown-organization-soyte","class-dropdown-organization-hospital","class-dropdown-organization-other"]
-			listClass.forEach(function(item,index){
-				self.$el.find('.'+item+' .data-row-new').each(function (index2, item2) {
+			var listClass = ["class-dropdown-organization-soyte", "class-dropdown-organization-hospital", "class-dropdown-organization-other"]
+			listClass.forEach(function (item, index) {
+				self.$el.find('.' + item + ' .data-row-new').each(function (index2, item2) {
 					var dateID = self.$el.find($(item2).find('td [attr-type = "DATE"]')).attr('id')
 					var obj = {
 						"synthetic_release_id": synthetic_release_id,
 						"medical_supplies_id": self.$el.find('.dropdown-medical-supplies input').attr('item-id'),
 						"date": self.model.get('date'),
-	
-						"organization_id":$(item2).find('td [attr-type = "ORGANIZATION"]').attr('organization-id'),
-						"date_export":self.$el.find('#'+dateID).data("gonrin").getValue(),
+
+						"organization_id": $(item2).find('td [attr-type = "ORGANIZATION"]').attr('organization-id'),
+						"date_export": self.$el.find('#' + dateID).data("gonrin").getValue(),
 						"quantity": Number($(item2).find('td [attr-type = "QUANTITY"]').attr('quantity')),
 					}
 					arr.push(obj)
@@ -468,16 +476,16 @@ define(function (require) {
 		updateItem: function () {
 			var self = this;
 			var arr = [];
-			var listClass =["class-dropdown-organization-soyte","class-dropdown-organization-hospital","class-dropdown-organization-other"]
-			listClass.forEach(function(item,index){
-				self.$el.find('.'+item+' .data-row-old').each(function (index2, item2) {
-					
+			var listClass = ["class-dropdown-organization-soyte", "class-dropdown-organization-hospital", "class-dropdown-organization-other"]
+			listClass.forEach(function (item, index) {
+				self.$el.find('.' + item + ' .data-row-old').each(function (index2, item2) {
+
 					var dateID = self.$el.find($(item2).find('td [attr-type = "DATE"]')).attr('id')
-					console.log(self.$el.find('#'+dateID).data("gonrin").getValue())
+					console.log(self.$el.find('#' + dateID).data("gonrin").getValue())
 					var obj = {
-						"id":$(item2).attr('synthetic-release-detail-id'),
+						"id": $(item2).attr('synthetic-release-detail-id'),
 						"date": self.model.get('date'),
-						"date_export":self.$el.find('#'+dateID).data("gonrin").getValue(),
+						"date_export": self.$el.find('#' + dateID).data("gonrin").getValue(),
 						"quantity": Number($(item2).find('td [attr-type = "QUANTITY"]').attr('quantity')),
 					}
 					arr.push(obj)
