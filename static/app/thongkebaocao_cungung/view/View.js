@@ -46,9 +46,9 @@ define(function (require) {
 					self.$el.find('#danhSachDonVi tr').remove()
 
 					self.$el.find('#danhSachDonVi').append(`
-						<tr>
+						<tr class="text-center">
 							<th>I</th>
-							<th>${response.medical_supplies_name}</th>
+							<th class="text-left">${response.medical_supplies_name}</th>
 							<th>${response.avg_price}</th>
 							<th>${response.sum_sponsored_sell_number}</th>
 							<th>${response.sum_price}</th>
@@ -56,9 +56,9 @@ define(function (require) {
 						`)
 					response.data.forEach(function (item, index) {
 						self.$el.find('#danhSachDonVi').append(`
-						<tr>
+						<tr class="text-center">
 						<td>${index+1}</td>
-							<td>${item.organization_name}</td>
+							<td class="text-left">${item.organization_name}</td>
 							<td>${item.price}</td>
 							<td>${ item.sell_number}</td>
 							<td>${item.sell_number * item.price }</td>
