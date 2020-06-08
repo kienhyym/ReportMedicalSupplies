@@ -201,6 +201,8 @@ define(function (require) {
 				if (dem >=2 ){
 					self.getApp().notify({ message: "1 vật tư không được chọn quá 2 lần" }, { type: "danger", delay: 1000 });
 				}
+
+
 				else{
 					self.$el.find('#list-item').before(`
 					<div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new selected-item-general" 
@@ -268,6 +270,7 @@ define(function (require) {
 				{ "col_type": "SPONSORED_NUMBER", "attr": "sponsored_number" },
 				{ "col_type": "PRICE", "attr": "price" },
 			]
+
 			
 			listClick.forEach(function (item, index) {
 				self.$el.find('[col-type="' + item.col_type + '"]').keyup(function () {
@@ -281,6 +284,16 @@ define(function (require) {
 			})
 				listClick.forEach(function (item, index) {
 				self.$el.find('[col-type="' + item.col_type + '"]').unbind('click').bind('click', function () {
+					if (item.col_type == "SELL_NUMBER"){
+						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SPONSORED_NUMBER"]').val(0)
+						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SPONSORED_NUMBER"]').attr("sponsored_number",0)
+
+					}
+					if (item.col_type == "SPONSORED_NUMBER"){
+						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SELL_NUMBER"]').val(0)
+						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER',0)
+
+					}
 					var clickThis = $(this);
 					clickThis.val(clickThis.attr(item.attr))
 				})
