@@ -266,7 +266,7 @@ apimanager.create_api(SyntheticRelease,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_name_organization]),
-    postprocess=dict(GET_SINGLE=[get_name_organization],POST=[],PUT_SINGLE=[],),
+    postprocess=dict(GET_SINGLE=[get_name_organization],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='synthetic_release')
 
 apimanager.create_api(SyntheticReleaseDetail,

@@ -50,6 +50,18 @@ define(function(require) {
             ],
             fields: [
                 {
+                    field: "stt",
+                    label: "STT",
+                    width:50,
+                    template: function(rowData) {
+                    return `
+                            <div class="text-center">${rowData.stt}</div>
+                        `;
+                    },
+                    
+                    
+                },
+                {
                     field: "date",
                     label: "Thời gian báo cáo",
                     template: function(rowData) {
