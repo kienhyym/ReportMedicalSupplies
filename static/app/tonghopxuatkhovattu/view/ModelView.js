@@ -416,10 +416,17 @@ define(function (require) {
 							}
 						})
 					}
-					self.$el.find('.count-soyte').val(demSoyte)
-					self.$el.find('.count-hospital').val(demHospital)
-					self.$el.find('.count-other').val(demOther)
-					self.$el.find('.count-all').val(demOther+ demHospital + demSoyte)
+					var demSoytestring = new Number(demSoyte).toLocaleString("da-DK");
+					var demHospitalstring = new Number(demHospital).toLocaleString("da-DK");
+					var demOthertring = new Number(demOther).toLocaleString("da-DK");
+					var all = Number(demOther+ demHospital + demSoyte)
+					var allstring = new Number(all).toLocaleString("da-DK");
+
+
+					self.$el.find('.count-soyte').val(demSoytestring)
+					self.$el.find('.count-hospital').val(demHospitalstring)
+					self.$el.find('.count-other').val(demOthertring)
+					self.$el.find('.count-all').val(allstring)
 
 					self.listItemsOldRemove();
 
