@@ -45,23 +45,31 @@ define(function (require) {
 					self.$el.find('.spinner-border').hide()
 					self.$el.find('#danhSachDonVi tr').remove()
 
+					var avg_price = new Number(response.avg_price).toLocaleString("da-DK");
+					var sum_sponsored_sell_number = new Number(response.sum_sponsored_sell_number).toLocaleString("da-DK");
+					var sum_price = new Number(response.sum_price).toLocaleString("da-DK");
+
 					self.$el.find('#danhSachDonVi').append(`
 						<tr class="text-center">
 							<th>I</th>
 							<th class="text-left">${response.medical_supplies_name}</th>
-							<th>${response.avg_price}</th>
-							<th>${response.sum_sponsored_sell_number}</th>
-							<th>${response.sum_price}</th>
+							<th>${avg_price}</th>
+							<th>${sum_sponsored_sell_number}</th>
+							<th>${sum_price}</th>
 						</tr>
 						`)
 					response.data.forEach(function (item, index) {
+						var price = new Number(item.price).toLocaleString("da-DK");
+						var sell_number = new Number(item.sell_number).toLocaleString("da-DK");
+						var sum_price2 = new Number(item.sell_number * item.price).toLocaleString("da-DK");
+
 						self.$el.find('#danhSachDonVi').append(`
 						<tr class="text-center">
 						<td>${index+1}</td>
 							<td class="text-left">${item.organization_name}</td>
-							<td>${item.price}</td>
-							<td>${ item.sell_number}</td>
-							<td>${item.sell_number * item.price }</td>
+							<td>${price}</td>
+							<td>${sell_number}</td>
+							<td>${sum_price2}</td>
 						</tr>
 						`)
 					})

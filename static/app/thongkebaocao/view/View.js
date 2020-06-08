@@ -72,14 +72,19 @@ define(function (require) {
 					self.$el.find('.spinner-border').hide()
 					self.$el.find('#danhSachDonVi tr').remove()
 					response.forEach(function (item, index) {
+						var net_amount = new Number(item.net_amount).toLocaleString("da-DK");
+						var quantity_export = new Number(item.quantity_export).toLocaleString("da-DK");
+						var quantity_import = new Number(item.quantity_import).toLocaleString("da-DK");
+						var estimates_net_amount = new Number(item.estimates_net_amount).toLocaleString("da-DK");
+
 						self.$el.find('#danhSachDonVi').append(`
 						<tr class="text-center">
 							<td>${index+1}</td>
 							<td class="text-left">${item.organization_name}</td>
-							<td>${item.quantity_import}</td>
-							<td>${item.quantity_export}</td>
-							<td>${item.net_amount}</td>
-							<td>${item.estimates_net_amount}</td>
+							<td>${quantity_import}</td>
+							<td>${quantity_export}</td>
+							<td>${net_amount}</td>
+							<td>${estimates_net_amount}</td>
 						</tr>
 						`)
 					})
