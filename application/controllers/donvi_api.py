@@ -525,7 +525,7 @@ async def organizational_list_statistics(request):
 
 
 @app.route('/api/v1/organizational_list_statistics1',methods=['POST'])
-async def organizational_list_statistics(request):
+async def organizational_list_statistics1(request):
     uid_current = current_uid(request)
     if uid_current is None:
         return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
@@ -549,10 +549,17 @@ async def organizational_list_statistics(request):
     # elif type_filter == "fromDayToDay":
     #     reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == currentUser.organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
 
-    check_ttdcn = await hasTuyenDonvi(request, "13")
-    check_cdc = await hasTuyenDonvi(request, "9")
-    check_soyte = await hasTuyenDonvi(request, "6")
-    check_boyte = await hasTuyenDonvi(request, "1")
+    
+   
+    is_admin = await hasRole(request, "admin")
+    print ('___________________',is_admin)
+    if is_admin is True:
+        check_boyte is True
+    else:
+        check_ttdcn = await hasTuyenDonvi(request, "13")
+        check_cdc = await hasTuyenDonvi(request, "9")
+        check_soyte = await hasTuyenDonvi(request, "6")
+        check_boyte = await hasTuyenDonvi(request, "1")
 
     if check_ttdcn is True:
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
@@ -598,11 +605,8 @@ async def organizational_list_statistics(request):
         return json(thongkes)
 
     elif check_boyte is True:
-        donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
-        if donvi is None:
-            return json(status=520)
         arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
-        thongkes = await get_thongke_tinhthanh_boyte(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16",type_filter)
+        thongkes = await get_thongke_tinhthanh_boyte( "13", medical_supplies_id, start_time, end_time, "16",type_filter)
         for thongke in thongkes:
             arr_thongke1['quantity_import'] =  int(arr_thongke1['quantity_import']) + thongke["quantity_import"] 
             arr_thongke1['quantity_export'] = int(arr_thongke1['quantity_export']) + thongke["quantity_export"]
@@ -842,7 +846,7 @@ async def get_thongke_quanhuyen_soyte(tinhthanh_id, tuyendonvi_id, medical_suppl
 
 
 
-async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_supplies_id, start_time, end_time, mode_tuyendv_xa,type_filter):
+async def get_thongke_tinhthanh_boyte( tuyendonvi_id, medical_supplies_id, start_time, end_time, mode_tuyendv_xa,type_filter):
     list_item  = []
     canBoYTe = ["7","8"]
     tuyentinh = ["9","11"]
@@ -850,6 +854,7 @@ async def get_thongke_tinhthanh_boyte(tinhthanh_id, tuyendonvi_id, medical_suppl
     tuyenxa = ["17","16"]
     tuyensoyte = "6"
     for td in canBoYTe:
+
         organizationCanBoYTe = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == td)).all()
         for orgCanBoYTe in organizationCanBoYTe:
             # reportOrganizationDetailCDC = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
@@ -998,38 +1003,45 @@ async def enterprise_supply_statistics(request):
     date_start = data['date_report_start']
     date_end = data['date_report_end']
     medical_supplies_name = data['medical_supplies_name']
-
-    reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.date >= date_start,ReportSupplyOrganizationDetail.date <= date_end)).all()
-    
     arr = []
     obj = {"medical_supplies_name":medical_supplies_name,"data":arr}
-    if len(reportSupplyOrganizationDetails) > 0:
-        price = 0
-        sum_sponsored_sell_number = 0
-        sum_price = 0
+    reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.type_sell_sponsor == "sell",ReportSupplyOrganizationDetail.date >= date_start,ReportSupplyOrganizationDetail.date <= date_end)).all()
+    price = 0
+    quantity = 0
+    sum_price = 0
+    if len(reportSupplyOrganizationDetails) >0:
+        if len(reportSupplyOrganizationDetails) > 0:
+            for _ in reportSupplyOrganizationDetails:
+                reportSupplyOrganizationDetail = to_dict(_)
+                organization_name = db.session.query(Organization.name).filter(Organization.id == to_dict(_)['organization_id']).first()
+                reportSupplyOrganizationDetail['organization_name'] = organization_name[0]
+                arr.append(reportSupplyOrganizationDetail)
+            
+                price = to_dict(_)['price'] + price
+                quantity = to_dict(_)['quantity'] + quantity  
+                sum_price = to_dict(_)['quantity'] * to_dict(_)['price'] +sum_price  
 
-        for _ in reportSupplyOrganizationDetails:
-            reportSupplyOrganizationDetail = to_dict(_)
-            organization_name = db.session.query(Organization.name).filter(Organization.id == to_dict(_)['organization_id']).first()
-            reportSupplyOrganizationDetail['organization_name'] = organization_name[0]
-            arr.append(reportSupplyOrganizationDetail)
-           
-            price = to_dict(_)['price'] + price
-            sum_sponsored_sell_number = to_dict(_)['sell_number'] + sum_sponsored_sell_number  
-            sum_price = to_dict(_)['sell_number'] * to_dict(_)['price'] +sum_price  
-
-        obj["avg_price"]= price/len(reportSupplyOrganizationDetails)
-        obj["sum_sponsored_sell_number"]= sum_sponsored_sell_number
-        obj["sum_price"]= sum_price
+            obj["avg_price"]= price/len(reportSupplyOrganizationDetails)
+            obj["quantity"]= quantity
+            obj["sum_price"]= sum_price
+        else:
+            obj = {
+                "medical_supplies_name":medical_supplies_name,
+                "data":[],
+                "avg_price":0,
+                "quantity":0,
+                "sum_price":0,
+            }
+        return json(obj)
     else:
         obj = {
-            "medical_supplies_name":medical_supplies_name,
-            "data":[],
-            "avg_price":0,
-            "sum_sponsored_sell_number":0,
-            "sum_price":0,
-        }
-    return json(obj)
+                "medical_supplies_name":medical_supplies_name,
+                "data":[],
+                "avg_price":0,
+                "quantity":0,
+                "sum_price":0,
+            }
+        return json(obj)
 
 
 

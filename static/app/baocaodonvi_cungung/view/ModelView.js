@@ -188,25 +188,23 @@ define(function (require) {
 		chooseItemInListDropdownItem: function () {
 			var self = this;
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
-				
+
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
 				var itemID = dropdownItemClick.attr('item-id')
 				var dem = 0
-				self.$el.find('.selected-item-general').each(function(index,item){
-					if (itemID == $(item).attr('item_id')){
+				self.$el.find('.selected-item-general').each(function (index, item) {
+					if (itemID == $(item).attr('item_id')) {
 						dem++;
 					}
 				})
-				if (dem >=2 ){
+				if (dem >= 2) {
 					self.getApp().notify({ message: "1 vật tư không được chọn quá 2 lần" }, { type: "danger", delay: 1000 });
 				}
-
-
-				else{
+				else {
 					self.$el.find('#list-item').before(`
 					<div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new selected-item-general" 
-					item_id = "${dropdownItemClick.attr('item-id')}" item-id = "${dropdownItemClick.attr('item-id')}">
+					item_id = "${dropdownItemClick.attr('item-id')}" item-id = "${dropdownItemClick.attr('item-id')}" id-stt="${itemID + dem}" >
 						<div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
 							<input selected-item-id = "${itemID}" col-type="STT" class="form-control text-center p-1" value="${stt}" style="font-size:14px">
 						</div>
@@ -214,19 +212,25 @@ define(function (require) {
 							<input selected-item-id = "${itemID}" col-type="NAME" class="form-control p-1" value="${dropdownItemClick.attr('title')}" readonly style="font-size:14px">
 						</div>
 						<div style="width: 66px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}"  class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
+							<input selected-item-id = "${itemID}" class="form-control text-center p-1" readonly value="${dropdownItemClick.attr('unit')}" style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0"    class="form-control text-center p-1" style="font-size:14px">
+							<input selected-item-id = "${itemID}" selected-item-id = "${itemID}" col-type="SUPPLY_ABILITY" supply_ability="0" value="0"    class="form-control text-center p-1" style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="SELL_NUMBER" sell_number="0" value="0"   class="form-control text-center p-1" style="font-size:14px">
+						<div class="btn-group w-100 type-ban-taitro" selected-item-id = "${itemID}"  role="group" type-ban-taitro = "type-ban-taitro">
+						  <button  type="button" class="btn btn-outline-secondary dropdown-toggle"  col-type="TYPE_SELL_SPONSOR" type_sell_sponsor = "sell" type-ban-taitro = "type-ban-taitro" >
+							Bán
+						  </button>
+						  <div class="dropdown-menu">
+						  </div>
 						</div>
+					  </div>					
 						<div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="SPONSORED_NUMBER" sponsored_number="0" value = "0"   class="form-control text-center p-1" style="font-size:14px">
+							<input selected-item-id = "${itemID}" id-stt="${itemID + dem}" col-type="QUANTITY" quantity="0" value = "0"   class="form-control text-center p-1" style="font-size:14px">
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0"    class="form-control text-center p-1"  style="font-size:14px">
+							<input selected-item-id = "${itemID}" col-type="PRICE"  price="0" value="0"class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
 						<div style="position: relative;">
@@ -252,6 +256,8 @@ define(function (require) {
 					`)
 				}
 				self.searchItem(itemID)
+				self.dropdownBanTaiTro()
+
 				self.$el.find('.dropdown-menu-item').hide()
 				self.$el.find('.search-item').val('')
 				self.clickInput();
@@ -262,37 +268,45 @@ define(function (require) {
 		},
 		clickInput: function () {
 			var self = this;
-			
+
 			// Click vào ô số tự đông thêm dấu chấm
 			var listClick = [
 				{ "col_type": "SUPPLY_ABILITY", "attr": "supply_ability" },
-				{ "col_type": "SELL_NUMBER", "attr": "sell_number" },
-				{ "col_type": "SPONSORED_NUMBER", "attr": "sponsored_number" },
+				{ "col_type": "QUANTITY", "attr": "quantity" },
 				{ "col_type": "PRICE", "attr": "price" },
 			]
-
-			
 			listClick.forEach(function (item, index) {
 				self.$el.find('[col-type="' + item.col_type + '"]').keyup(function () {
 					var num = $(this).attr(item.attr)
-					if(Number.isNaN(Number($(this).val())) === true){
+					if (Number.isNaN(Number($(this).val())) === true) {
 						console.log(String($(this).val()).slice(-1))
 						$(this).val(num)
 					}
 					num = Number($(this).val())
 				})
 			})
-				listClick.forEach(function (item, index) {
+			listClick.forEach(function (item, index) {
 				self.$el.find('[col-type="' + item.col_type + '"]').unbind('click').bind('click', function () {
-					if (item.col_type == "SELL_NUMBER"){
-						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SPONSORED_NUMBER"]').val(0)
-						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SPONSORED_NUMBER"]').attr("sponsored_number",0)
+					if (item.col_type == "SELL_NUMBER") {
+						if ($(this).attr('id-stt') != undefined) {
+							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SPONSORED_NUMBER"]').val(0)
+							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SPONSORED_NUMBER"]').attr("sponsored_number", 0)
+						}
+						else{
+							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').val(0)
+							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER', 0)
+						}
 
 					}
-					if (item.col_type == "SPONSORED_NUMBER"){
-						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SELL_NUMBER"]').val(0)
-						self.$el.find('.selected-item-general[selected-item-id = "'+$(this).attr('selected-item-id')+'"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER',0)
-
+					if (item.col_type == "SPONSORED_NUMBER") {
+						if ($(this).attr('id-stt') != undefined) {
+							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SELL_NUMBER"]').val(0)
+							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER', 0)
+						}
+						else{
+							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').val(0)
+							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER', 0)
+						}
 					}
 					var clickThis = $(this);
 					clickThis.val(clickThis.attr(item.attr))
@@ -307,7 +321,7 @@ define(function (require) {
 						clickThis.attr(item.attr, clickThisValue)
 						setTimeout(() => {
 							var clickThisString = new Number(clickThisValue).toLocaleString("da-DK");
-							console.log('clickThisString',clickThisString)
+							console.log('clickThisString', clickThisString)
 
 							clickThis.val(clickThisString)
 						}, 200);
@@ -334,7 +348,7 @@ define(function (require) {
 						if (http.readyState === 4) {
 							var data_file = JSON.parse(http.responseText), link, p, t;
 							self.getApp().notify("Tải file thành công");
-							self.$el.find("[col-type='DOWNLOAD']").attr('href',data_file.link)
+							self.$el.find("[col-type='DOWNLOAD']").attr('href', data_file.link)
 						}
 					} else {
 						self.getApp().notify("Không thể tải tệp tin lên máy chủ");
@@ -458,10 +472,18 @@ define(function (require) {
 			var self = this;
 			if (self.model.get('details').length > 0) {
 				self.model.get('details').forEach(function (item, index) {
+					console.log(item)
 					var String_SupplyAbility = new Number(item.supply_ability).toLocaleString("da-DK");
-					var String_SellNumber = new Number(item.sell_number).toLocaleString("da-DK");
-					var String_SponsoredNumber = new Number(item.sponsored_number).toLocaleString("da-DK");
+					var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
 					var String_Price = new Number(item.price).toLocaleString("da-DK");
+
+					var String_TypeSellSponsor;
+					if (item.type_sell_sponsor == "sell"){
+						String_TypeSellSponsor = "Bán"
+					}
+					else{
+						String_TypeSellSponsor = "Tài trợ"
+					}
 
 					self.$el.find('#list-item').before(`
                     <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old selected-item-general" item_id = ${item.medical_supplies_id} >
@@ -477,14 +499,22 @@ define(function (require) {
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="SUPPLY_ABILITY" supply_ability="${item.supply_ability}" value="${String_SupplyAbility}"    class="form-control text-center p-1" style="font-size:14px">
                         </div>
-                        <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SELL_NUMBER" sell_number="${item.sell_number}" value="${String_SellNumber}"     class="form-control text-center p-1"   style="font-size:14px">
+						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
+						
+						<div class="btn-group w-100 type-ban-taitro" selected-item-id = "${item.id}"  role="group" type-ban-taitro = "type-ban-taitro">
+						  <button  type="button" class="btn btn-outline-secondary dropdown-toggle"  col-type="TYPE_SELL_SPONSOR" type_sell_sponsor = "${item.type_sell_sponsor}" type-ban-taitro = "type-ban-taitro" >
+							${String_TypeSellSponsor}
+						  </button>
+						  <div class="dropdown-menu">
+						  </div>
+						</div>
+
                         </div>
                         <div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="SPONSORED_NUMBER" sponsored_number="${item.sponsored_number}" value = "${String_SponsoredNumber}"     class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="QUANTITY" quantity="${item.quantity}" value = "${String_quantity}" class="form-control text-center p-1"  style="font-size:14px">
                         </div>
                         <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}"    class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" class="form-control text-center p-1"  style="font-size:14px">
 						</div>
 						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">
@@ -511,6 +541,8 @@ define(function (require) {
 					self.searchItem(item.id)
 				})
 				self.clickInput();
+				self.dropdownBanTaiTro()
+
 			}
 		},
 		createItem: function (report_supply_organization_id) {
@@ -523,11 +555,10 @@ define(function (require) {
 					"organization_id": self.model.get('organization_id'),
 					"medical_supplies_id": $(item).attr('item-id'),
 					"date": self.model.get('date'),
-
 					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
-					"sell_number": $(item).find('[col-type="SELL_NUMBER"]').attr('sell_number'),
-					"sponsored_number": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('sponsored_number'),
-					"health_facilities_id": self.$el.find('.dropdown-'+ccName +" input").attr('item-id'),
+					"type_sell_sponsor": $(item).find('[col-type="TYPE_SELL_SPONSOR"]').attr('type_sell_sponsor'),
+					"quantity": $(item).find('[col-type="QUANTITY"]').attr('quantity'),
+					"health_facilities_id": self.$el.find('.dropdown-' + ccName + " input").attr('item-id'),
 					"price": $(item).find('[col-type="PRICE"]').attr('price'),
 					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href')
 				}
@@ -555,10 +586,10 @@ define(function (require) {
 				var obj = {
 					"id": $(item).attr('selected-item-id'),
 					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
-					"sell_number": $(item).find('[col-type="SELL_NUMBER"]').attr('sell_number'),
-					"sponsored_number": $(item).find('[col-type="SPONSORED_NUMBER"]').attr('sponsored_number'),
+					"type_sell_sponsor": $(item).find('[col-type="TYPE_SELL_SPONSOR"]').attr('type_sell_sponsor'),
+					"quantity": Number($(item).find('[col-type="QUANTITY"]').attr('quantity')),
 					"price": $(item).find('[col-type="PRICE"]').attr('price'),
-					"health_facilities_id": self.$el.find('.dropdown-'+ccName +" input").attr('item-id'),
+					"health_facilities_id": self.$el.find('.dropdown-' + ccName + " input").attr('item-id'),
 					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href'),
 					"date": self.model.get('date')
 				}
@@ -599,70 +630,94 @@ define(function (require) {
 		},
 		// HẾT CHỨC NĂNG CHỌN ITEM XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		// XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		
+		dropdownBanTaiTro: function () {
+			var self = this;
+			self.$el.find('.type-ban-taitro').each(function(index,item){
+				$(item).find('button').unbind('click').bind('click', function (){
+					$(item).find('.dropdown-menu').show();
+					$(item).find('.dropdown-menu .dropdown-item').remove()
+					$(item).find('.dropdown-menu').append(`
+						<a class="dropdown-item" value ="sell" text = "Bán" >Bán</a>
+						<a class="dropdown-item" value ="sponsor"  text = "Tài trợ" >Tài trợ</a>`	
+					)	
+					$(item).find('.dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+						$(item).find('button').text($(this).text());
+						$(item).find('button').attr('type_sell_sponsor',$(this).attr('value'));
+						$(item).find('.dropdown-menu').hide();
+					})	
+				})
+				
+			})
+			$(document).unbind('click').bind('click', function (e) {
+				if ($(e.target).attr('type-ban-taitro') == undefined) {
+					self.$el.find('.type-ban-taitro .dropdown-menu').hide();
+				}
+			})
+
+		},
 
 		searchItem: function (id) {
 			var self = this;
-			var listDropDown= [
+			var listDropDown = [
 				{
-					"class_name":"dropdown-"+id,
-					"url":self.getApp().serviceURL + "/api/v1/load_organization_dropdown_all",
-					"type":"single"
+					"class_name": "dropdown-" + id,
+					"url": self.getApp().serviceURL + "/api/v1/load_organization_dropdown_all",
+					"type": "single"
 				},
-				
+
 			]
-			listDropDown.forEach(function(item,index){
-				self.$el.find('.'+item.class_name+' input').keyup(function name() {
-					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+			listDropDown.forEach(function (item, index) {
+				self.$el.find('.' + item.class_name + ' input').keyup(function name() {
+					self.loadItemDropDown($(this).val(), $(this).attr('class-name'), item.url, item.type)
 				})
-				self.$el.find('.'+item.class_name+' input').unbind('click').bind('click', function () {
+				self.$el.find('.' + item.class_name + ' input').unbind('click').bind('click', function () {
 					$(this).select();
-					self.loadItemDropDown($(this).val(),$(this).attr('class-name'),item.url,item.type)
+					self.loadItemDropDown($(this).val(), $(this).attr('class-name'), item.url, item.type)
 				})
 			})
-			
-
 		},
-		loadItemDropDown: function (TEXT,CLASS,URL,TYPE) { // Đổ danh sách Item vào ô tìm kiếm
+		loadItemDropDown: function (TEXT, CLASS, URL, TYPE) { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
 			$.ajax({
 				type: "POST",
 				url: URL,
 				data: JSON.stringify(TEXT),
 				success: function (response) {
-					self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').remove();
+					self.$el.find('.' + CLASS + ' div .dropdown-menu .dropdown-item').remove();
 					var count = response.length
 					response.forEach(function (item, index) {
 						var itemSTRING = JSON.stringify(item)
-						self.$el.find('.'+CLASS+' div .dropdown-menu').append(`
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').append(`
 						<button item-info = '${itemSTRING}' out-side-${CLASS} class='dropdown-item' style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px'>${item.name}</button>`)
 					})
 					if (count == 0) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').hide()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').hide()
 					}
 					if (count == 1) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "45px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "45px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count == 2) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "80px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "80px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count == 3) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "110px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "110px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count == 4) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "130px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "130px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
 					if (count > 4) {
-						self.$el.find('.'+CLASS+' div .dropdown-menu').css("height", "160px")
-						self.$el.find('.'+CLASS+' div .dropdown-menu').show()
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').css("height", "160px")
+						self.$el.find('.' + CLASS + ' div .dropdown-menu').show()
 					}
-					if (TYPE == "single"){
+					if (TYPE == "single") {
 						self.chooseItemInListDropdown(CLASS);
 					}
-					else if(TYPE == "multiple") {
+					else if (TYPE == "multiple") {
 						self.appendItemInListDropdown(CLASS);
 					}
 				}
@@ -670,20 +725,20 @@ define(function (require) {
 		},
 		chooseItemInListDropdown: function (CLASS) { //Chọn lẻ 1 item 
 			var self = this;
-			self.$el.find('.'+CLASS+' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+			self.$el.find('.' + CLASS + ' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
 				var dropdownItemClick = $(this);
 				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
-				self.$el.find('.'+CLASS+' input').val(itemJSON.name);
-				self.$el.find('.'+CLASS+' input').attr('item-id',itemJSON.id);
+				self.$el.find('.' + CLASS + ' input').val(itemJSON.name);
+				self.$el.find('.' + CLASS + ' input').attr('item-id', itemJSON.id);
 				self.medicalSuppliesId = itemJSON.id
-				self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 			})
 			$(document).unbind('click').bind('click', function (e) {
-				if ($(e.target).attr('out-side-'+CLASS) == undefined){
-					self.$el.find('.'+CLASS+' div .dropdown-menu').hide();
+				if ($(e.target).attr('out-side-' + CLASS) == undefined) {
+					self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 				}
 			})
-			
+
 		},
 	});
 

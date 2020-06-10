@@ -114,6 +114,8 @@ def create_test_models():
     # user1.roles.append(role1)
     # db.session.add(user1)
 
+
+
     user2 = User(email='admin7', name='Admin7', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
     db.session.add(user2)
 
@@ -434,10 +436,14 @@ def run():
 
 @manager.command
 def rundev():
+    # organization = Organization(name='admin', tuyendonvi_id='1',type_donvi='admin')
+    # db.session.add(organization)
+    # db.session.commit()
     # create_test_models()
     """ Starts server on port 12002. """
     run_app(host="0.0.0.0", mode="development")
     # run_app(host="0.0.0.0", mode="production")
+
 
 if __name__ == '__main__':
     manager.main()

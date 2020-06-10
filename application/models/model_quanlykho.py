@@ -87,8 +87,8 @@ class ReportSupplyOrganizationDetail(CommonModel):
     medical_supplies = relationship('MedicalSupplies')
 
     supply_ability = db.Column(DECIMAL(25,3), default=0) # Khả năng cung cấp
-    sell_number = db.Column(DECIMAL(25,3), default=0) # số lượng cung cấp thực tế bán
-    sponsored_number = db.Column(DECIMAL(25,3), default=0) # số lượng xuất thực tế tài trợ
+    type_sell_sponsor = db.Column(String()) # số lượng cung cấp thực tế "sell" ,"sponsor"
+    quantity = db.Column(DECIMAL(25,3), default=0) # số lượng xuất thực tế 
 
     price = db.Column(DECIMAL(25,3), default=0) # Đơn giá
     effective_time = db.Column(BigInteger()) # Thời hạn 

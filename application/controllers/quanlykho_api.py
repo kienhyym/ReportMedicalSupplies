@@ -90,19 +90,6 @@ async def check_medical_supplies_name2(request=None, data=None, Model=None, **kw
             del _['health_facilities_name']
 
 
-async def check_name_organization(request=None, data=None, Model=None, **kw):
-        for _ in data['details']:
-            del _['organization_name']
-            del _['tuyendonvi_id']
-
-async def get_name_organization(request=None, Model=None, result=None ,**kw):
-    if result is not None:
-        print ('____________________',result)
-        for _ in result['details']:
-            organization_name = db.session.query(Organization.name,Organization.tuyendonvi_id).filter(Organization.id == _['organization_id']).first()
-            _['organization_name']= organization_name[0]   
-            _['tuyendonvi_id']= organization_name[1]            
-
 @app.route('/api/v1/load_medical_supplies_dropdown2',methods=['POST'])
 async def load_medical_supplies_dropdown2(request):
     data = request.json
@@ -225,6 +212,7 @@ async def load_organization_dropdown_all(request):
             arr.append(obj)
         return json(arr)
 
+
 apimanager.create_api(MedicalSupplies,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
@@ -262,17 +250,29 @@ apimanager.create_api(ReportSupplyOrganizationDetail,
     collection_name='report_supply_organization_detail')
 
 
+async def check_date_create_form(request=None, Model=None, result=None ,**kw):
+    timestamp_max = db.session.query(func.max(SyntheticRelease.date)).scalar()
+    date_max_string = str(datetime.fromtimestamp(timestamp_max))[0:10].replace("-", "/")
+    conver_date = datetime.strptime(date_max_string, '%Y/%m/%d')
+    data_max = datetime.timestamp(conver_date)+86400
+    if request.json['date'] <= data_max:
+        return json({
+            "error_code": "create Error",
+            "error_message": "Bạn đã tạo báo cáo ngày này rồi"
+        }, status=520)
+
+
 apimanager.create_api(SyntheticRelease,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_name_organization]),
-    postprocess=dict(GET_SINGLE=[get_name_organization],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form], PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='synthetic_release')
 
 apimanager.create_api(SyntheticReleaseDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[], PUT_SINGLE=[]),
     postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[],),
     collection_name='synthetic_release_detail')
 
@@ -576,8 +576,8 @@ async def create_report_supply_organization_detail(request):
         new_item.date = _['date']
 
         new_item.supply_ability = _['supply_ability']
-        new_item.sell_number = _['sell_number']
-        new_item.sponsored_number = _['sponsored_number']
+        new_item.type_sell_sponsor = _['type_sell_sponsor']
+        new_item.quantity = _['quantity']
         new_item.price = _['price']
         new_item.health_facilities_id = _['health_facilities_id']
 
@@ -594,8 +594,8 @@ async def update_report_supply_organization_detail(request):
         old_item = db.session.query(ReportSupplyOrganizationDetail).filter(ReportSupplyOrganizationDetail.id == _['id']).first()
         old_item.date = _['date']
         old_item.supply_ability = _['supply_ability']
-        old_item.sell_number = _['sell_number']
-        old_item.sponsored_number = _['sponsored_number']
+        old_item.type_sell_sponsor = _['type_sell_sponsor']
+        old_item.quantity = _['quantity']
         old_item.price = _['price']
         old_item.health_facilities_id = _['health_facilities_id']
         old_item.file = _['file']
@@ -665,4 +665,18 @@ async def delete_synthetic_release_detail(request):
         db.session.delete(item_delete)
         db.session.commit()
     return json({"message": "Delete Success"})
+
+
+@app.route('/api/v1/get_detail_ReportSupplyOrganization', methods=["POST"])
+async def get_detail_ReportSupplyOrganization(request):
+    id = request.json
+    item = db.session.query(SyntheticReleaseDetail).filter(SyntheticReleaseDetail.synthetic_release_id == id).all()
+    arr = []
+    for _ in item:
+        obj = to_dict(_)
+        organization_name = db.session.query(Organization.name,Organization.tuyendonvi_id).filter(Organization.id == to_dict(_)['organization_id']).first()
+        obj['organization_name']= organization_name[0]
+        obj['tuyendonvi_id']= organization_name[1]
+        arr.append(obj)
+    return json(arr)
 

@@ -3,7 +3,22 @@
         border: none;
     }
 </style>
-<div block-bind="content">
+
+<div class="col-md-12 col-lg-12 col-sm-12 col-12 d-flex justify-content-center  align-items-center dialog-save-info" 
+  style="position: fixed;height:100%;z-index: 0; opacity: 0; ">
+  <div class="card w-25 m-5">
+    <div class="card-body position-relative">
+        <a class="dialog-out position-absolute" style="top:5px;right:15px;font-size: 20px;"><i class="fa fa-times" aria-hidden="true"></i>
+        </a>
+
+        <label class="border-bottom">Lưu thông tin vật tư trước khi chuyển</label>
+        <button class="btn btn-success dialog-save">Lưu</button>
+        <button class="btn btn-secondary dialog-hide">Không</button>
+    </div>
+  </div>
+</div>
+
+<div block-bind="content" class="conntent">
     <div class="card  card-small mb-4" style="position: relative;">
         <div class="card-header  border-bottom">
             <div class="row">
@@ -23,6 +38,7 @@
                 </div>
             </div>
         </div>
+        <label class="text-right col-12 col-md-12 m-0 text-danger font-italic chu-y" style="display: none;">Chọn vật tư để hiển hiển thị dữ liệu đã tạo</label>
         <div class="card-body">
             <table class="table table-sm table-bordered border">
                 <thead class="thead-light text-center">
