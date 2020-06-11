@@ -202,11 +202,30 @@ define(function (require) {
 					self.getApp().notify({ message: "1 vật tư không được chọn quá 2 lần" }, { type: "danger", delay: 1000 });
 				}
 				else {
+					var typeSellSponsor = "sell"; 
+					var textSellSponsor = "Bán"; 
+
+					var valueFirst = "sponsor"
+					self.$el.find('.selected-item-general').each(function (index, item) {
+						if (itemID == $(item).attr('item_id')) {
+							valueFirst = $(item).find('[col-type="TYPE_SELL_SPONSOR"]').attr('type_sell_sponsor')
+						}
+					})
+					if (valueFirst == "sell"){
+						typeSellSponsor = "sponsor"
+						textSellSponsor = "Tài trợ"; 
+
+					}
+					else{
+						typeSellSponsor = "sell"
+						textSellSponsor = "Bán"; 
+					}
+
 					self.$el.find('#list-item').before(`
 					<div style="width: 1000px;height: 50px;" selected-item-id = "${itemID}" class = "selected-item-new selected-item-general" 
 					item_id = "${dropdownItemClick.attr('item-id')}" item-id = "${dropdownItemClick.attr('item-id')}" id-stt="${itemID + dem}" >
 						<div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
-							<input selected-item-id = "${itemID}" col-type="STT" class="form-control text-center p-1" value="${stt}" style="font-size:14px">
+							<input selected-item-id = "${itemID}" col-type="STT" class="form-control text-center p-1" value="${stt}" style="font-size:14px" readonly>
 						</div>
 						<div style="width: 248px;display: inline-block;padding: 1px;">
 							<input selected-item-id = "${itemID}" col-type="NAME" class="form-control p-1" value="${dropdownItemClick.attr('title')}" readonly style="font-size:14px">
@@ -219,8 +238,8 @@ define(function (require) {
 						</div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
 						<div class="btn-group w-100 type-ban-taitro" selected-item-id = "${itemID}"  role="group" type-ban-taitro = "type-ban-taitro">
-						  <button  type="button" class="btn btn-outline-secondary dropdown-toggle"  col-type="TYPE_SELL_SPONSOR" type_sell_sponsor = "sell" type-ban-taitro = "type-ban-taitro" >
-							Bán
+						  <button  type="button" selected-item-id = "${itemID}" class="btn btn-outline-secondary dropdown-toggle"  col-type="TYPE_SELL_SPONSOR" type_sell_sponsor = "${typeSellSponsor}" type-ban-taitro = "type-ban-taitro" >
+							${textSellSponsor}
 						  </button>
 						  <div class="dropdown-menu">
 						  </div>
@@ -268,7 +287,6 @@ define(function (require) {
 		},
 		clickInput: function () {
 			var self = this;
-
 			// Click vào ô số tự đông thêm dấu chấm
 			var listClick = [
 				{ "col_type": "SUPPLY_ABILITY", "attr": "supply_ability" },
@@ -287,27 +305,6 @@ define(function (require) {
 			})
 			listClick.forEach(function (item, index) {
 				self.$el.find('[col-type="' + item.col_type + '"]').unbind('click').bind('click', function () {
-					if (item.col_type == "SELL_NUMBER") {
-						if ($(this).attr('id-stt') != undefined) {
-							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SPONSORED_NUMBER"]').val(0)
-							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SPONSORED_NUMBER"]').attr("sponsored_number", 0)
-						}
-						else{
-							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').val(0)
-							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER', 0)
-						}
-
-					}
-					if (item.col_type == "SPONSORED_NUMBER") {
-						if ($(this).attr('id-stt') != undefined) {
-							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SELL_NUMBER"]').val(0)
-							self.$el.find('.selected-item-general[id-stt = "' + $(this).attr('id-stt') + '"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER', 0)
-						}
-						else{
-							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').val(0)
-							self.$el.find('.selected-item-general[selected-item-id = "' + $(this).attr('selected-item-id') + '"]').find('[col-type="SELL_NUMBER"]').attr('SELL_NUMBER', 0)
-						}
-					}
 					var clickThis = $(this);
 					clickThis.val(clickThis.attr(item.attr))
 				})
@@ -356,6 +353,25 @@ define(function (require) {
 				};
 				http.send(fd);
 			});
+
+			//check bán hay tài trợ đã có chưa
+				self.$el.find('[col-type="TYPE_SELL_SPONSOR"]').focusout(function () {
+					var those = $(this).attr('type_sell_sponsor');
+					var that = $(this).attr('selected-item-id');
+
+					if (self.$el.find('[col-type="TYPE_SELL_SPONSOR"][selected-item-id = "'+that+'"]').length >1 ){ 
+						if($(self.$el.find('[col-type="TYPE_SELL_SPONSOR"][selected-item-id = "'+that+'"]')[0]).attr('type_sell_sponsor') != those){
+							if($(this).attr('type_sell_sponsor') == "sell"){
+								self.getApp().notify({ message: "Báo cáo đã kê số lượng tài trợ" }, { type: "danger", delay: 1000 });
+							}
+							else{
+								self.getApp().notify({ message: "Báo cáo đã kê số lượng bán" }, { type: "danger", delay: 1000 });
+							}
+						}
+						console.log($(self.$el.find('[col-type="TYPE_SELL_SPONSOR"][selected-item-id = "'+that+'"]')[0]).attr('type_sell_sponsor'))
+					}
+					// console.log($(this).attr('selected-item-id'))
+			})
 		},
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
@@ -471,7 +487,9 @@ define(function (require) {
 		showDetail: function () {
 			var self = this;
 			if (self.model.get('details').length > 0) {
-				self.model.get('details').forEach(function (item, index) {
+				var detailSort = lodash.orderBy(self.model.get('details'), ['created_at'], ['asc']);
+
+				detailSort.forEach(function (item, index) {
 					console.log(item)
 					var String_SupplyAbility = new Number(item.supply_ability).toLocaleString("da-DK");
 					var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
@@ -484,7 +502,6 @@ define(function (require) {
 					else{
 						String_TypeSellSponsor = "Tài trợ"
 					}
-
 					self.$el.find('#list-item').before(`
                     <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old selected-item-general" item_id = ${item.medical_supplies_id} >
                         <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
@@ -501,8 +518,8 @@ define(function (require) {
                         </div>
 						<div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
 						
-						<div class="btn-group w-100 type-ban-taitro" selected-item-id = "${item.id}"  role="group" type-ban-taitro = "type-ban-taitro">
-						  <button  type="button" class="btn btn-outline-secondary dropdown-toggle"  col-type="TYPE_SELL_SPONSOR" type_sell_sponsor = "${item.type_sell_sponsor}" type-ban-taitro = "type-ban-taitro" >
+						<div class="btn-group w-100 type-ban-taitro" selected-item-id = "${item.id}"  item-id = ${item.medical_supplies_id} role="group" type-ban-taitro = "type-ban-taitro">
+						  <button  type="button" selected-item-id = "${item.medical_supplies_id}" class="btn btn-outline-secondary dropdown-toggle"  col-type="TYPE_SELL_SPONSOR" type_sell_sponsor = "${item.type_sell_sponsor}" type-ban-taitro = "type-ban-taitro" >
 							${String_TypeSellSponsor}
 						  </button>
 						  <div class="dropdown-menu">
@@ -511,7 +528,7 @@ define(function (require) {
 
                         </div>
                         <div style="width: 100px; display: inline-block; text-align:center;padding: 1px;">
-                            <input selected-item-id = "${item.id}" col-type="QUANTITY" quantity="${item.quantity}" value = "${String_quantity}" class="form-control text-center p-1"  style="font-size:14px">
+                            <input selected-item-id = "${item.id}" col-type="QUANTITY" quantity="${item.quantity}" value ="${String_quantity}" class="form-control text-center p-1"  style="font-size:14px">
                         </div>
                         <div style="width: 100px;display: inline-block;text-align: center;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="PRICE" price="${item.price}"  value="${String_Price}" class="form-control text-center p-1"  style="font-size:14px">
@@ -647,9 +664,8 @@ define(function (require) {
 						$(item).find('.dropdown-menu').hide();
 					})	
 				})
-				
 			})
-			$(document).unbind('click').bind('click', function (e) {
+			self.$el.find('.out-click').unbind('click').bind('click', function (e) {
 				if ($(e.target).attr('type-ban-taitro') == undefined) {
 					self.$el.find('.type-ban-taitro .dropdown-menu').hide();
 				}

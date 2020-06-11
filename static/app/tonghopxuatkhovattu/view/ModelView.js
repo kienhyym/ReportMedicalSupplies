@@ -319,7 +319,7 @@ define(function (require) {
 				}
 
 			})
-			$(document).unbind('click').bind('click', function (e) {
+			self.$el.find('.out-click').unbind('click').bind('click', function (e) {
 				if ($(e.target).attr('out-side-' + CLASS) == undefined) {
 					self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 				}
