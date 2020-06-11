@@ -260,10 +260,18 @@ define(function (require) {
 		},
 		loadItemDropDown: function (TEXT, CLASS, URL, TYPE) { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
+			var param = TEXT;
+			if (TYPE == "multiple") {
+				var danhSachDaSearch = []
+				self.$el.find('.data-row-old,.data-row-new').each(function (idnex, item) {
+					danhSachDaSearch.push($(item).find('td [attr-type="ORGANIZATION"]').attr('organization-id'))
+				})
+				param = { "text": TEXT, "danhSachDaSearch": danhSachDaSearch }
+			}
 			$.ajax({
 				type: "POST",
 				url: URL,
-				data: JSON.stringify(TEXT),
+				data: JSON.stringify(param),
 				success: function (response) {
 					self.$el.find('.' + CLASS + ' div .dropdown-menu .dropdown-item').remove();
 					var count = response.length
@@ -415,11 +423,12 @@ define(function (require) {
 				url: self.getApp().serviceURL + "/api/v1/get_detail_ReportSupplyOrganization",
 				data: JSON.stringify(self.model.get('id')),
 				success: function (response) {
+					var responseSort = lodash.orderBy(response, ['created_at'], ['asc']);
 					if (response.length > 0) {
 						var demSoyte = 0;
 						var demHospital = 0;
 						var demOther = 0;
-						response.forEach(function (item, index) {
+						responseSort.forEach(function (item, index) {
 							var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
 							if (item.tuyendonvi_id == "6" && item.medical_supplies_id == medical_supplies_id) {
 								var stt = self.$el.find('.class-dropdown-organization-soyte tr').length
@@ -427,7 +436,7 @@ define(function (require) {
 								self.$el.find('.class-dropdown-organization-soyte').append(` 
 										<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 											<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt}" class="form-control text-center" ></td>
-											<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+											<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.organization_id}" value="${item.organization_name}" class="form-control" ></td>
 											<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
 											<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}"  class="form-control text-center"></td>
 											<td>
@@ -454,7 +463,7 @@ define(function (require) {
 								self.$el.find('.class-dropdown-organization-hospital').append(` 
 										<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 											<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt2}" class="form-control text-center" ></td>
-											<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+											<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.organization_id}" value="${item.organization_name}" class="form-control" ></td>
 											<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
 											<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}"  class="form-control text-center"></td>
 											<td>
@@ -482,7 +491,7 @@ define(function (require) {
 								self.$el.find('.class-dropdown-organization-other').append(` 
 										<tr id-row = "${item.id}" class = "data-row-old" synthetic-release-detail-id = "${item.id}">
 											<td><input id-row = "${item.id}" attr-type = "STT" value ="${stt3}" class="form-control text-center" ></td>
-											<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.id}" value="${item.organization_name}" class="form-control" ></td>
+											<td><input id-row = "${item.id}" attr-type = "ORGANIZATION" organization-id = "${item.organization_id}" value="${item.organization_name}" class="form-control" ></td>
 											<td><input id-row = "${item.id}" attr-type = "DATE" id = "date-${item.id}" date-export ="${item.date_export}" class="form-control text-center "></td>
 											<td><input id-row = "${item.id}" attr-type = "QUANTITY" quantity = "${item.quantity}" value = "${String_quantity}"  class="form-control text-center"></td>
 											<td>

@@ -131,11 +131,13 @@ async def load_medical_supplies_dropdown(request):
 # // TÌM KIẾM DANH SÁCH SỎ Y TẾ 
 @app.route('/api/v1/load_organization_dropdown_soyte',methods=['POST'])
 async def load_organization_dropdown_soyte(request):
-    text = request.json
+    data = request.json
+    text = data['text']
+    notid = data['danhSachDaSearch']
     if text is not None and text != "":
         search = "%{}%".format(text)
         searchTitle = "%{}%".format(text.title())
-        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == "6")).all()
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == "6"),Organization.id.notin_(notid)).all()
         arr = []
         for i in list:
             obj =  to_dict(i)
@@ -144,7 +146,7 @@ async def load_organization_dropdown_soyte(request):
             arr.append(obj)
         return json(arr)
     else:
-        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == "6")).all()
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == "6"),Organization.id.notin_(notid)).all()
         arr = []
         for i in list:
             obj =  to_dict(i)
@@ -156,17 +158,19 @@ async def load_organization_dropdown_soyte(request):
 # // TÌM KIẾM DANH SÁCH VIỆN BỆNH VIỆN
 @app.route('/api/v1/load_organization_dropdown_hospital',methods=['POST'])
 async def load_organization_dropdown_hospital(request):
-    text = request.json
+    data = request.json
+    text = data['text']
+    notid = data['danhSachDaSearch']
     if text is not None and text != "":
         search = "%{}%".format(text)
         searchTitle = "%{}%".format(text.title())
-        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc",or_(Organization.tuyendonvi_id == "7",Organization.tuyendonvi_id == "8"))).all()
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc",or_(Organization.tuyendonvi_id == "7",Organization.tuyendonvi_id == "8")),Organization.id.notin_(notid)).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
         return json(arr)
     else:
-        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",or_(Organization.tuyendonvi_id == "7",Organization.tuyendonvi_id == "8"))).all()
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",or_(Organization.tuyendonvi_id == "7",Organization.tuyendonvi_id == "8")),Organization.id.notin_(notid)).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
@@ -175,17 +179,19 @@ async def load_organization_dropdown_hospital(request):
 # // TÌM KIẾM DANH SÁCH KHÁC
 @app.route('/api/v1/load_organization_dropdown_other',methods=['POST'])
 async def load_organization_dropdown_other(request):
-    text = request.json
+    data = request.json
+    text = data['text']
+    notid = data['danhSachDaSearch']
     if text is not None and text != "":
         search = "%{}%".format(text)
         searchTitle = "%{}%".format(text.title())
-        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"])).all()
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"]),Organization.id.notin_(notid)).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
         return json(arr)
     else:
-        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"])).all()
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"]),Organization.id.notin_(notid)).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
@@ -674,9 +680,12 @@ async def get_detail_ReportSupplyOrganization(request):
     arr = []
     for _ in item:
         obj = to_dict(_)
-        organization_name = db.session.query(Organization.name,Organization.tuyendonvi_id).filter(Organization.id == to_dict(_)['organization_id']).first()
+        organization_name = db.session.query(Organization.name,Organization.tuyendonvi_id,Organization.tinhthanh_id).filter(Organization.id == to_dict(_)['organization_id']).first()
         obj['organization_name']= organization_name[0]
         obj['tuyendonvi_id']= organization_name[1]
+        if  organization_name[1] == "6":
+            tinhthanh = db.session.query(TinhThanh.ten).filter(TinhThanh.id == organization_name[2]).first()
+            obj['organization_name']= tinhthanh[0]
         arr.append(obj)
     return json(arr)
 
