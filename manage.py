@@ -108,18 +108,18 @@ def create_test_models():
     init_database(app)
 
     salt = str(generator_salt())
-    # role1 = Role(name='admin')
-    # db.session.add(role1)
-    # user1 = User(email='admin', name='Admin', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
-    # user1.roles.append(role1)
-    # db.session.add(user1)
+    role1 = Role(name='admin')
+    db.session.add(role1)
 
+    user1 = User(email='admin', name='Admin', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
+    user1.roles.append(role1)
+    db.session.add(user1)
 
-
-    user2 = User(email='admin7', name='Admin7', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
+    user2 = User(email='tw', name='Ban chỉ đạo TW', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
+    user2.roles.append(role1)
     db.session.add(user2)
 
-    # db.session.flush()
+    db.session.flush()
     db.session.commit()
 
 notdict = ['_created_at','_updated_at','_deleted','_deleted_at','_etag','id']
@@ -436,10 +436,17 @@ def run():
 
 @manager.command
 def rundev():
-    # organization = Organization(name='admin', tuyendonvi_id='1',type_donvi='admin')
-    # db.session.add(organization)
-    # db.session.commit()
     # create_test_models()
+    role_admin= db.session.query(Role).filter(Role.name == 'admin').first()
+
+    salt = str(generator_salt())
+    user2 = User(email='tw', name='Ban chỉ đạo TW', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
+    user2.roles.append(role_admin)
+    db.session.add(user2)
+    db.session.flush()
+    db.session.commit()
+
+    print ('------------------------------user2_____-',user2)
     """ Starts server on port 12002. """
     run_app(host="0.0.0.0", mode="development")
     # run_app(host="0.0.0.0", mode="production")
