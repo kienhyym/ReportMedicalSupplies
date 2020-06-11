@@ -51,7 +51,7 @@ define(function (require) {
 										self.deleteItem();
 										self.getApp().notify("Lưu thông tin thành công");
 
-										if (self.model.get('id') == null) {
+										if (self.getApp().getRouter().getParam("id") == null) {
 											self.getApp().getRouter().navigate("/tonghopxuatkhovattu/collection");
 										}
 										else {

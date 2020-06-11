@@ -25,6 +25,8 @@ from application.database import db
 import pandas
 
 
+
+
 async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
     if result is not None and "objects" in result:
         objects = to_dict(result["objects"])
@@ -226,11 +228,33 @@ apimanager.create_api(MedicalSupplies,
     postprocess=dict(POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='medical_supplies')
 
+async def check_date_create_form_ReportOrganization(request=None, Model=None, result=None ,**kw):
+    date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
+    timestamps = db.session.query(ReportOrganization.date).filter(ReportOrganization.organization_id == request.json['organization_id']).all()
+    for _ in timestamps:
+        date_string = str(datetime.fromtimestamp(_[0]))[0:10].replace("-", "/")
+        if date_request_string == date_string:
+            return json({
+                "error_code": "create Error",
+                "error_message": "Bạn đã tạo báo cáo ngày này rồi"
+            }, status=520)
+
+async def check_date_create_form_ReportSupplyOrganization(request=None, Model=None, result=None ,**kw):
+    date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
+    timestamps = db.session.query(ReportSupplyOrganization.date).filter(ReportSupplyOrganization.organization_id == request.json['organization_id']).all()
+    for _ in timestamps:
+        date_string = str(datetime.fromtimestamp(_[0]))[0:10].replace("-", "/")
+        if date_request_string == date_string:
+            return json({
+                "error_code": "create Error",
+                "error_message": "Bạn đã tạo báo cáo ngày này rồi"
+            }, status=520)
+
 
 apimanager.create_api(ReportOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name1]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportOrganization,check_dict_like], PUT_SINGLE=[check_medical_supplies_name1]),
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies1],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='report_organization')
 
@@ -244,7 +268,7 @@ apimanager.create_api(ReportOrganizationDetail,
 apimanager.create_api(ReportSupplyOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[check_medical_supplies_name2]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportSupplyOrganization,check_dict_like], PUT_SINGLE=[check_medical_supplies_name2]),
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies2],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='report_supply_organization')
 
@@ -257,15 +281,15 @@ apimanager.create_api(ReportSupplyOrganizationDetail,
 
 
 async def check_date_create_form(request=None, Model=None, result=None ,**kw):
-    timestamp_max = db.session.query(func.max(SyntheticRelease.date)).scalar()
-    date_max_string = str(datetime.fromtimestamp(timestamp_max))[0:10].replace("-", "/")
-    conver_date = datetime.strptime(date_max_string, '%Y/%m/%d')
-    data_max = datetime.timestamp(conver_date)+86400
-    if request.json['date'] <= data_max:
-        return json({
-            "error_code": "create Error",
-            "error_message": "Bạn đã tạo báo cáo ngày này rồi"
-        }, status=520)
+    date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
+    timestamps = db.session.query(SyntheticRelease.date).all()
+    for _ in timestamps:
+        date_string = str(datetime.fromtimestamp(_[0]))[0:10].replace("-", "/")
+        if date_request_string == date_string:
+            return json({
+                "error_code": "create Error",
+                "error_message": "Bạn đã tạo báo cáo ngày này rồi"
+            }, status=520)
 
 
 apimanager.create_api(SyntheticRelease,

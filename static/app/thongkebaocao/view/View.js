@@ -27,8 +27,11 @@ define(function (require) {
 				params['medical_supplies_id'] = self.vattu_id;
 				params['medical_supplies_name'] = self.vattu_ten;
 
-				if (self.$el.find('.type-filter button').attr('filter') == "none" || self.vattu_id == "") {
+				if (self.$el.find('.type-filter button').attr('filter') == "none" ) {
 					self.getApp().notify({ message: "Bạn chưa chọn bộ lọc" }, { type: "danger", delay: 1000 });
+				}
+				else if(self.vattu_id == ""){
+					self.getApp().notify({ message: "Bạn chưa chọn vật tư PCD" }, { type: "danger", delay: 1000 });
 				}
 				else {
 					if (self.$el.find('.type-filter button').attr('filter') == "all") {
