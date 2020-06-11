@@ -328,7 +328,6 @@ define(function (require) {
 		},
 		appendItemInListDropdown: function (CLASS) { //Chọn nhiều item 
 			var self = this;
-
 			self.$el.find('.' + CLASS + ' div .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
 				var dropdownItemClick = $(this);
 				var stt = self.$el.find('.class-' + CLASS + ' tr').length
