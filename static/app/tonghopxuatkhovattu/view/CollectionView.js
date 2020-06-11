@@ -37,7 +37,10 @@ define(function(require) {
                     command: function() {
                         var self = this;
                         self.getApp().getRouter().navigate("/tonghopxuatkhovattu/model");
-                    }
+                    },
+                    visible: function () {
+                        return (this.getApp().hasRole('admin') ===false);
+                    },
                 },
             ],
         }],
