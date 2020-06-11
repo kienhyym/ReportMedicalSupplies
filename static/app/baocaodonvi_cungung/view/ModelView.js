@@ -313,13 +313,13 @@ define(function (require) {
 					var clickThisValue = clickThis.val();
 					if (clickThisValue == null || clickThisValue == '') {
 						clickThis.val(0);
+						clickThis.attr(item.attr, 0)
+
 					}
 					else {
 						clickThis.attr(item.attr, clickThisValue)
 						setTimeout(() => {
 							var clickThisString = new Number(clickThisValue).toLocaleString("da-DK");
-							console.log('clickThisString', clickThisString)
-
 							clickThis.val(clickThisString)
 						}, 200);
 					}
@@ -490,7 +490,6 @@ define(function (require) {
 				var detailSort = lodash.orderBy(self.model.get('details'), ['created_at'], ['asc']);
 
 				detailSort.forEach(function (item, index) {
-					console.log(item)
 					var String_SupplyAbility = new Number(item.supply_ability).toLocaleString("da-DK");
 					var String_quantity = new Number(item.quantity).toLocaleString("da-DK");
 					var String_Price = new Number(item.price).toLocaleString("da-DK");
