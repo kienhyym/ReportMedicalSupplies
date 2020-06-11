@@ -432,31 +432,11 @@ def convert_columexcel_to_string(value):
 def run():
     """ Starts server on port 12002. """
     # run_app(host="0.0.0.0", mode="development")
-    role_admin= db.session.query(Role).filter(Role.name == 'admin').first()
-
-    salt = str(generator_salt())
-    user2 = User(email='tw', name='Ban chỉ đạo TW', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
-    user2.roles.append(role_admin)
-    db.session.add(user2)
-    db.session.flush()
-    db.session.commit()
-
-    print ('------------------------------user2_____-',user2)
     run_app(host="0.0.0.0", mode="production")
 
 @manager.command
 def rundev():
     # create_test_models()
-    role_admin= db.session.query(Role).filter(Role.name == 'admin').first()
-
-    salt = str(generator_salt())
-    user2 = User(email='tw', name='Ban chỉ đạo TW', password=auth.encrypt_password('123456',salt), active=1, salt = salt)
-    user2.roles.append(role_admin)
-    db.session.add(user2)
-    db.session.flush()
-    db.session.commit()
-
-    print ('------------------------------user2_____-',user2)
     """ Starts server on port 12002. """
     run_app(host="0.0.0.0", mode="development")
     # run_app(host="0.0.0.0", mode="production")
