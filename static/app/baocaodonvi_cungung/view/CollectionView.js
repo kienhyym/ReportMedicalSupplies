@@ -19,16 +19,17 @@ define(function(require) {
             name: "defaultgr",
             type: "group",
             groupClass: "toolbar-group",
-            buttons: [{
-                    name: "back",
-                    type: "button",
-                    buttonClass: "btn-default btn-sm btn-secondary",
-                    label: "TRANSLATE:Quay lại",
-                    command: function() {
-                        var self = this;
-                        Backbone.history.history.back();
-                    }
-                },
+            buttons: [
+                // {
+                //     name: "back",
+                //     type: "button",
+                //     buttonClass: "btn-default btn-sm btn-secondary",
+                //     label: "TRANSLATE:Quay lại",
+                //     command: function() {
+                //         var self = this;
+                //         Backbone.history.history.back();
+                //     }
+                // },
                 {
                     name: "CREATE",
                     type: "button",
