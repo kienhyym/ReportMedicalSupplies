@@ -126,14 +126,14 @@ define(function (require) {
 			}],
 		uiControl: {
 			fields: [
-				{
-					field: "organization",
-					uicontrol: "ref",
-					textField: "name",
-					foreignRemoteField: "id",
-					foreignField: "organization_id",
-					dataSource: OrganizationView
-				},
+				// {
+				// 	field: "organization",
+				// 	uicontrol: "ref",
+				// 	textField: "name",
+				// 	foreignRemoteField: "id",
+				// 	foreignField: "organization_id",
+				// 	dataSource: OrganizationView
+				// },
 				{
 					field: "date",
 					uicontrol: "datetimepicker",
@@ -150,6 +150,7 @@ define(function (require) {
 		},
 		render: function () {
 			var self = this;
+			self.$el.find('#organization').val(gonrinApp().currentUser.Organization.name)
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
 			self.listItemRemove = [];
@@ -182,7 +183,6 @@ define(function (require) {
 				var currentUser = gonrinApp().currentUser;
 				self.model.set("organization", currentUser.Organization);
 			}
-
 		},
 		// CHỨC NĂNG CHỌN ITEM.
 		chooseItemInListDropdownItem: function () {

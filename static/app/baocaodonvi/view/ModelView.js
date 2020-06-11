@@ -151,6 +151,8 @@ define(function (require) {
 		},
 		render: function () {
 			var self = this;
+			self.$el.find('#organization').val(gonrinApp().currentUser.Organization.name)
+
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
 			self.listItemRemove = [];
