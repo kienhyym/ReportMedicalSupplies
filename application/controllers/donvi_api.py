@@ -552,14 +552,13 @@ async def organizational_list_statistics1(request):
     
    
     is_admin = await hasRole(request, "admin")
-    print ('___________________',is_admin)
-    if is_admin is True:
-        check_boyte is True
-    else:
-        check_ttdcn = await hasTuyenDonvi(request, "13")
-        check_cdc = await hasTuyenDonvi(request, "9")
-        check_soyte = await hasTuyenDonvi(request, "6")
-        check_boyte = await hasTuyenDonvi(request, "1")
+    donvi = db.session.query(Organization).filter(Organization.tuyendonvi_id == "1").first()
+    currentUser.Organization = donvi
+    
+    check_ttdcn = await hasTuyenDonvi(request, "13")
+    check_cdc = await hasTuyenDonvi(request, "9")
+    check_soyte = await hasTuyenDonvi(request, "6")
+    check_boyte = await hasTuyenDonvi(request, "1")
 
     if check_ttdcn is True:
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
