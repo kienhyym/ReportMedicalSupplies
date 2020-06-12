@@ -245,7 +245,7 @@ async def postprocess_ticket(request=None, Model=None, result=None, **kw):
 apimanager.create_api(Organization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_user], PUT_SINGLE=[validate_user, donvi_prepput_children], DELETE_SINGLE=[validate_user]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[validate_user], PUT_SINGLE=[validate_user, donvi_prepput_children], DELETE_SINGLE=[validate_user]),
     collection_name='donvi')
 
 

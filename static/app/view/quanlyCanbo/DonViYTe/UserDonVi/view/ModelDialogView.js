@@ -187,6 +187,7 @@ define(function (require) {
 					if(self.viewData.organization_id !== null && gonrinApp().hasRole('admin')) {
 						self.model.set("organization_id", self.viewData.organization_id);
 					} else {
+						console.log("adrstfyghj", curUser.organization_id);
 						self.model.set("organization_id", curUser.organization_id);
 					}
 					// self.model.on("change", function () {
