@@ -553,7 +553,7 @@ async def preprocess_create_user(data, Model, **kw):
 apimanager.create_api(User,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[validate_user], POST=[validate_admin,preprocess_create_user], PUT_SINGLE=[change_profile_user], DELETE_SINGLE=[validate_admin_donvi]), #validate_user
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[validate_user], POST=[validate_admin,preprocess_create_user], PUT_SINGLE=[], DELETE_SINGLE=[validate_admin_donvi]), #validate_user,change_profile_user
     exclude_columns= ["password","salt"],
     collection_name='user')
 
