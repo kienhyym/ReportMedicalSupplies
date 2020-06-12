@@ -20,22 +20,66 @@ define(function (require) {
 			self.vattu_ten = "";
 			self.typeFilter();
 			self.loadItemDropdown();
-			self.$el.find(".button-filter").unbind("click").bind("click", function () {
-				self.$el.find('.spinner-border').show()
-				var date = moment(self.$el.find('#date-report').data("gonrin").getValue()*1000).format('MM DD YYYY') + ' 00:00:00';
-				var date_start = Date.parse(date) /1000
-				var date_end = date_start + 86400
+			// self.$el.find(".button-filter").unbind("click").bind("click", function () {
+			// 	self.$el.find('.spinner-border').show()
+			// 	var date = moment(self.$el.find('#date-report').data("gonrin").getValue()*1000).format('MM DD YYYY') + ' 00:00:00';
+			// 	var date_start = Date.parse(date) /1000
+			// 	var date_end = date_start + 86400
 
+			// 	var params = {};
+			// 	params['type_donvi'] = "donvicungung";
+			// 	params['medical_supplies_id'] = self.vattu_id;
+			// 	params['medical_supplies_name'] = self.vattu_ten;
+			// 	params['date_report_start'] =date_start
+			// 	params['date_report_end'] = date_end
+			// 	self.apiFilter(params)
+			// });
+			self.$el.find(".button-filter").unbind("click").bind("click", function () {
 				var params = {};
+				params['type'] = self.$el.find('.type-filter button').attr('filter');
 				params['type_donvi'] = "donvicungung";
 				params['medical_supplies_id'] = self.vattu_id;
 				params['medical_supplies_name'] = self.vattu_ten;
-				params['date_report_start'] =date_start
-				params['date_report_end'] = date_end
-				self.apiFilter(params)
+
+				if (self.$el.find('.type-filter button').attr('filter') == "none" ) {
+					self.getApp().notify({ message: "Bạn chưa chọn bộ lọc" }, { type: "danger", delay: 1000 });
+				}
+				else if(self.vattu_id == ""){
+					self.getApp().notify({ message: "Bạn chưa chọn vật tư PCD" }, { type: "danger", delay: 1000 });
+				}
+				else {
+					if (self.$el.find('.type-filter button').attr('filter') == "all") {
+						params['from_date'] = null;
+						params['to_date'] = null;
+						self.apiFilter(params)
+						self.$el.find('.spinner-border').show()
+
+					}
+					else if (self.$el.find('.type-filter button').attr('filter') == "fromBeforeToDay") {
+						params['from_date'] = null;
+						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
+						self.apiFilter(params)
+						self.$el.find('.spinner-border').show()
+
+					}
+					else if (self.$el.find('.type-filter button').attr('filter') == "fromDayToDay") {
+						params['from_date'] = self.$el.find('#start_time').data("gonrin").getValue()
+						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
+						if (self.$el.find('#start_time').data("gonrin").getValue() > self.$el.find('#end_time').data("gonrin").getValue()){
+							self.getApp().notify({ message: "Ngày bắt đầu không được  lớn hơn ngày kết thúc" }, { type: "danger", delay: 1000 });
+							self.$el.find('.spinner-border').hide()
+						}
+						else{
+							self.apiFilter(params)
+							self.$el.find('.spinner-border').show()
+						}
+					}
+				}
+
 			});
 		},
 		apiFilter : function(params){
+			console.log(params)
 			var self = this;
 			$.ajax({
 				type: "POST",
@@ -95,7 +139,7 @@ define(function (require) {
 		},
 		typeFilter: function () {
 			var self = this;
-			self.$el.find('#date-report').datetimepicker({
+			self.$el.find('#start_time').datetimepicker({
 				textFormat: 'DD-MM-YYYY',
 				extraFormats: ['DDMMYYYY'],
 				parseInputDate: function (val) {
@@ -105,6 +149,45 @@ define(function (require) {
 					return date.unix()
 				}
 			});
+
+			self.$el.find('#end_time').datetimepicker({
+				textFormat: 'DD-MM-YYYY',
+				extraFormats: ['DDMMYYYY'],
+				parseInputDate: function (val) {
+					return moment.unix(val)
+				},
+				parseOutputDate: function (date) {
+					return date.unix()
+				}
+			});
+
+			self.$el.find('.type-filter .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+				self.$el.find('.type-filter button').text($(this).attr('text'))
+				self.$el.find('.type-filter button').attr("filter", $(this).attr('filter'))
+
+				if ($(this).attr('filter') == "none") {
+					self.$el.find('.start-time').hide()
+					self.$el.find('.end-time').hide()
+				}
+				else if ($(this).attr('filter') == "all") {
+					self.$el.find('.start-time').hide()
+					self.$el.find('.end-time').hide()
+				}
+				else if ($(this).attr('filter') == "fromBeforeToDay") {
+					self.$el.find('.start-time').hide()
+					self.$el.find('.end-time').show()
+					self.$el.find('.end_time .input-group .datetimepicker-input').val(moment().format('DD-MM-YYYY'))
+				}
+				else if ($(this).attr('filter') == "fromDayToDay") {
+					self.$el.find('.start-time').show()
+					self.$el.find('.end-time').show()
+					self.$el.find('.start_time .input-group .datetimepicker-input').val(moment().format('DD-MM-YYYY'))
+					self.$el.find('.end_time .input-group .datetimepicker-input').val(moment().format('DD-MM-YYYY'))
+				}
+			})
+
+
+			
 		},
 
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm

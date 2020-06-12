@@ -540,7 +540,7 @@ async def organizational_list_statistics1(request):
     medical_supplies_id = data['medical_supplies_id']
     type_filter = data['type']
     start_time = data['from_date']
-    end_time = data['to_date']
+    end_time = data['to_date']  +86400
     
     # if type_filter == "all":
     #     reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id ==currentUser.organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
@@ -998,13 +998,24 @@ async def get_thongke_tinhthanh_donvicungung(tinhthanh_id, tuyendonvi_id, medica
 @app.route('/api/v1/enterprise_supply_statistics', methods=["POST"])
 async def enterprise_supply_statistics(request):
     data = request.json
-    medical_supplies_id = data['medical_supplies_id']
-    date_start = data['date_report_start']
-    date_end = data['date_report_end']
-    medical_supplies_name = data['medical_supplies_name']
+
+    type= data['type']
+    type_donvi= data['type_donvi']
+    medical_supplies_id= data['medical_supplies_id']
+    medical_supplies_name= data['medical_supplies_name']
+    from_date= data['from_date']
+    to_date= data['to_date']  +86400
+
+    if type == "all":
+        reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.type_sell_sponsor == "sell")).all()
+    if type == "fromDayToDay":
+        reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.type_sell_sponsor == "sell",ReportSupplyOrganizationDetail.date >= from_date,ReportSupplyOrganizationDetail.date <= to_date)).all()
+    if type == "fromBeforeToDay":
+        reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.type_sell_sponsor == "sell",ReportSupplyOrganizationDetail.date <= to_date)).all()
+
+
     arr = []
     obj = {"medical_supplies_name":medical_supplies_name,"data":arr}
-    reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.type_sell_sponsor == "sell",ReportSupplyOrganizationDetail.date >= date_start,ReportSupplyOrganizationDetail.date <= date_end)).all()
     price = 0
     quantity = 0
     sum_price = 0

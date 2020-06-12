@@ -318,6 +318,11 @@ define(function (require) {
 				var dropdownItemClick = $(this);
 				var itemJSON = JSON.parse(dropdownItemClick.attr('item-info'))
 				self.$el.find('.' + CLASS + ' input').val(itemJSON.name);
+				self.$el.find('.chu-y').text(itemJSON.name)
+				self.$el.find('.chu-y').addClass("text-success")
+				self.$el.find('.chu-y').removeClass("text-danger")
+
+
 				self.$el.find('.' + CLASS + ' input').attr('item-id', itemJSON.id);
 				// self.medicalSuppliesId = itemJSON.id
 				self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
