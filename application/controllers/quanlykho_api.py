@@ -228,20 +228,21 @@ apimanager.create_api(MedicalSupplies,
     postprocess=dict(POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='medical_supplies')
 
-async def check_date_create_form_ReportOrganization(request=None, Model=None, result=None ,**kw):
+async def check_date_create_form_ReportOrganization(request=None, data=None, Model=None, **kw):
     date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
-    timestamps = db.session.query(ReportOrganization.date).filter(ReportOrganization.organization_id == request.json['organization_id']).all()
+    timestamps = db.session.query(ReportOrganization.date).filter(ReportOrganization.organization_id == request.json['organization']['id']).all()
     for _ in timestamps:
         date_string = str(datetime.fromtimestamp(_[0]))[0:10].replace("-", "/")
+        print ('______________________',date_request_string,date_string)
         if date_request_string == date_string:
             return json({
                 "error_code": "create Error",
                 "error_message": "Bạn đã tạo báo cáo ngày này rồi"
             }, status=520)
 
-async def check_date_create_form_ReportSupplyOrganization(request=None, Model=None, result=None ,**kw):
+async def check_date_create_form_ReportSupplyOrganization(request=None, data=None, Model=None, **kw):
     date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
-    timestamps = db.session.query(ReportSupplyOrganization.date).filter(ReportSupplyOrganization.organization_id == request.json['organization_id']).all()
+    timestamps = db.session.query(ReportSupplyOrganization.date).filter(ReportSupplyOrganization.organization_id == request.json['organization']['id']).all()
     for _ in timestamps:
         date_string = str(datetime.fromtimestamp(_[0]))[0:10].replace("-", "/")
         if date_request_string == date_string:
@@ -268,7 +269,7 @@ apimanager.create_api(ReportOrganizationDetail,
 apimanager.create_api(ReportSupplyOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportSupplyOrganization,check_dict_like], PUT_SINGLE=[check_medical_supplies_name2]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportSupplyOrganization], PUT_SINGLE=[check_medical_supplies_name2]),
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies2],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='report_supply_organization')
 
@@ -280,7 +281,7 @@ apimanager.create_api(ReportSupplyOrganizationDetail,
     collection_name='report_supply_organization_detail')
 
 
-async def check_date_create_form(request=None, Model=None, result=None ,**kw):
+async def check_date_create_form(request=None, data=None, Model=None, **kw):
     date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
     timestamps = db.session.query(SyntheticRelease.date).all()
     for _ in timestamps:
