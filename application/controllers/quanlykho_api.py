@@ -335,7 +335,6 @@ async def export_excel_cungung(request):
     data = request.json
     dataFrame = []
     list_id = data['data']['data']
-    print ("_____________________",list_id)
     arrHead = []
     arrHead.append('')
     arrHead.append(data['data']['medical_supplies_name'])
@@ -697,8 +696,8 @@ async def delete_synthetic_release_detail(request):
     return json({"message": "Delete Success"})
 
 
-@app.route('/api/v1/get_detail_ReportSupplyOrganization', methods=["POST"])
-async def get_detail_ReportSupplyOrganization(request):
+@app.route('/api/v1/get_detail_SyntheticReleaseDetail', methods=["POST"])
+async def get_detail_SyntheticReleaseDetail(request):
     id = request.json
     item = db.session.query(SyntheticReleaseDetail).filter(SyntheticReleaseDetail.synthetic_release_id == id).all()
     arr = []
@@ -713,3 +712,98 @@ async def get_detail_ReportSupplyOrganization(request):
         arr.append(obj)
     return json(arr)
 
+
+@app.route('/api/v1/export_SyntheticRelease', methods=["POST"])
+async def export_SyntheticRelease(request):
+    data = request.json
+    id = data['idx']
+    vattu_id = data['vattu_id']
+    medicalSupplies = db.session.query(MedicalSupplies.name).filter(MedicalSupplies.id == vattu_id).first()
+    item = db.session.query(SyntheticReleaseDetail).filter(and_(SyntheticReleaseDetail.synthetic_release_id == id,SyntheticReleaseDetail.medical_supplies_id == vattu_id)).all()
+    arr6 = []
+    arr78 = []
+    arrkhac = []
+    for _ in item:
+        obj = to_dict(_)
+        organization_name = db.session.query(Organization.name,Organization.tuyendonvi_id,Organization.tinhthanh_id).filter(Organization.id == to_dict(_)['organization_id']).first()
+        obj['organization_name']= organization_name[0]
+        obj['tuyendonvi_id']= organization_name[1]
+        if  organization_name[1] == "6":
+            tinhthanh = db.session.query(TinhThanh.ten).filter(TinhThanh.id == organization_name[2]).first()
+            obj['organization_name']= tinhthanh[0]
+            arr6.append(obj)
+        elif  organization_name[1] == "7" or organization_name[1] == "8" :
+            arr78.append(obj)
+        else:
+            arrkhac.append(obj)
+    sum6 = 0
+    sum78 = 0
+    sumkhac = 0
+    sumtong = 0
+    for a6 in arr6:
+        sum6 = sum6 +a6['quantity']
+    for a78 in arr78:
+        sum78 = sum78 +a78['quantity']
+    for akhac in arrkhac:
+        sumkhac = sumkhac +akhac['quantity']
+    sumtong = sum6 +sum78 + sumkhac
+    dataFrame = []
+    mang = []
+    mang.append('')
+    mang.append('Tổng cộng xuất')
+    mang.append('')
+    mang.append(int(sumtong))
+    dataFrame.append(mang)
+
+
+    mang = []
+    mang.append('')
+    mang.append('Sở y tế')
+    mang.append('')
+    mang.append(int(sum6))
+    dataFrame.append(mang)
+
+    if len(arr6) >0:
+        for i in range(len(arr6)):
+            mang = []
+            mang.append(i+1)
+            mang.append(arr6[i]['organization_name'])
+            mang.append(str(datetime.fromtimestamp(arr6[i]['date_export']))[0:10].replace("-", "/"))
+            mang.append(int(arr6[i]['quantity']))
+            dataFrame.append(mang)
+
+    mang = []
+    mang.append('')
+    mang.append('Bệnh viện/Viện trực thuộc Bộ Y tế')
+    mang.append('')
+    mang.append(int(sum78))
+    dataFrame.append(mang)
+
+    if len(arr78) >0:
+        for i in range(len(arr78)):
+            mang = []
+            mang.append(i+1)
+            mang.append(arr78[i]['organization_name'])
+            mang.append(str(datetime.fromtimestamp(arr78[i]['date_export']))[0:10].replace("-", "/"))
+            mang.append(int(arr78[i]['quantity']))
+            dataFrame.append(mang)
+   
+    mang = []
+    mang.append('')
+    mang.append('Các Bộ và cơ quan khác')
+    mang.append('')
+    mang.append(int(sumkhac))
+    dataFrame.append(mang)
+
+    if len(arrkhac) >0:
+        for i in range(len(arrkhac)):
+            mang = []
+            mang.append(i+1)
+            mang.append(arrkhac[i]['organization_name'])
+            mang.append(str(datetime.fromtimestamp(arrkhac[i]['date_export']))[0:10].replace("-", "/"))
+            mang.append(int(arrkhac[i]['quantity']))
+            dataFrame.append(mang)
+    df1 = pandas.DataFrame(dataFrame,columns=['STT','Tên đơn vị','Thời gian xuất cấp', medicalSupplies[0]])
+    strig = medicalSupplies[0].replace('%','phần trăm')
+    df1.to_excel("static/uploads/xuất kho tổng hợp vật tư "+strig+".xlsx",index=False)  
+    return json({"message": "/static/uploads/xuất kho tổng hợp vật tư "+strig+".xlsx"})

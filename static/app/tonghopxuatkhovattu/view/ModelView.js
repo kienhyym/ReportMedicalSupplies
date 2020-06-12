@@ -108,6 +108,29 @@ define(function (require) {
 							});
 						}
 					},
+					{
+						name: "export-excel",
+						type: "button",
+						buttonClass: "btn-primary btn-sm",
+						label: "Xuất excel",
+						command: function () {
+							var self = this;
+							if (self.medicalSuppliesId != null){
+								$.ajax({
+									type: "POST",
+									url: self.getApp().serviceURL + "/api/v1/export_SyntheticRelease",
+									data: JSON.stringify({"idx":self.model.get('id'),"vattu_id":self.medicalSuppliesId}),
+									success: function (response) {
+										window.location = String(self.getApp().serviceURL + response.message);								}
+								});
+							}
+							else{
+								self.getApp().notify({ message: "Bạn chưa chọn vật tư" }, { type: "danger", delay: 1000 });
+
+							}
+							
+						}
+					},
 				],
 			}],
 		uiControl: {
@@ -324,7 +347,7 @@ define(function (require) {
 
 
 				self.$el.find('.' + CLASS + ' input').attr('item-id', itemJSON.id);
-				// self.medicalSuppliesId = itemJSON.id
+				self.medicalSuppliesId = itemJSON.id
 				self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 
 				if (self.model.get('id') != null) {
@@ -425,7 +448,7 @@ define(function (require) {
 
 			$.ajax({
 				type: "POST",
-				url: self.getApp().serviceURL + "/api/v1/get_detail_ReportSupplyOrganization",
+				url: self.getApp().serviceURL + "/api/v1/get_detail_SyntheticReleaseDetail",
 				data: JSON.stringify(self.model.get('id')),
 				success: function (response) {
 					var responseSort = lodash.orderBy(response, ['created_at'], ['asc']);
