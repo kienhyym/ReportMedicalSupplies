@@ -214,9 +214,12 @@ define(function (require) {
 					success: function (data) {
 						var curUser = self.getApp().currentUser;
 						var users = data.users;
-						if (!users || users.length == 0) {
+						if (!self.getApp().hasRole('admin') && data.organization_id !== curUser.organization_id) {
 							self.$el.find(".create-account-user").hide();
 						}
+						// if (!users || users.length == 0) {
+						// 	self.$el.find(".create-account-user").hide();
+						// }
 						self.model.set(data);
 						self.getUserDonVi();
 						self.applyBindings();
