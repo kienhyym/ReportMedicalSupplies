@@ -214,7 +214,7 @@ define(function (require) {
 					success: function (data) {
 						var curUser = self.getApp().currentUser;
 						var users = data.users;
-						if (curUser.id == data.id || users.length == 0) {
+						if (!users || users.length == 0) {
 							self.$el.find(".create-account-user").hide();
 						}
 						self.model.set(data);
