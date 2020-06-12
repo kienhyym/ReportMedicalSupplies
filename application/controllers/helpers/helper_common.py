@@ -230,7 +230,6 @@ async def  hasTuyenDonvi(request, tuyendonvi_id):
 
 
 async def validate_admin(request, **kw):
-    
     uid = current_uid(request)
     if uid is None:
         return {'error_code':'SESSION_EXPIRED', 'error_message':'Session Expired!'}
@@ -242,6 +241,21 @@ async def validate_admin(request, **kw):
             list_role.append(role.name)
         if 'admin' not in list_role:
             return {'error_code':'ERROR_PERMISSION', 'error_message':'Permission deny!'}
+
+async def validate_admin_donvi(request, **kw):
+    uid = current_uid(request)
+    if uid is None:
+        return {'error_code':'SESSION_EXPIRED', 'error_message':'Session Expired!'}
+    else:
+        user = db.session.query(User).filter(and_(User.id == uid,User.deleted == False)).first()
+        roles = user.roles
+        list_role = []
+        for role in roles:
+            print('_____________________________',role.name)
+            list_role.append(role.name)
+        if 'admin' not in list_role:
+            if 'admin_donvi' not in list_role:
+                return {'error_code':'ERROR_PERMISSION', 'error_message':'Permission deny!'}
 
 def validate_user(request, **kw):
     uid = current_uid(request)

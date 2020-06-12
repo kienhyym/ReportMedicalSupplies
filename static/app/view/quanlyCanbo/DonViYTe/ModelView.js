@@ -214,9 +214,9 @@ define(function (require) {
 					success: function (data) {
 						var curUser = self.getApp().currentUser;
 						var users = data.users;
-						if (curUser.id == data.id || users.length == 0) {
-							self.$el.find(".users").hide();
-						}
+						// if (curUser.id == data.id || users.length == 0) {
+						// 	self.$el.find(".users").hide();
+						// }
 						self.model.set(data);
 						self.getUserDonVi();
 						self.applyBindings();
@@ -238,7 +238,7 @@ define(function (require) {
 							self.model.set({"xaphuong":null});
 						});
 						self.button_duyet();
-						self.getUserDonVi();
+						// self.getUserDonVi();
 						self.$el.find(".create-account-user").unbind("click").bind("click", function() {
                             var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": null, "create_new": true , "organization_id": self.model.get("id")} });
                             self.$el.find("#content").empty();
