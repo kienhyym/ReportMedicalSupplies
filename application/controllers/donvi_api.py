@@ -998,7 +998,9 @@ async def enterprise_supply_statistics(request):
     medical_supplies_id= data['medical_supplies_id']
     medical_supplies_name= data['medical_supplies_name']
     from_date= data['from_date']
-    to_date= data['to_date']  +86400
+    to_date= data['to_date']
+    if data['to_date'] is not None:
+        to_date = data['to_date'] + 86400
 
     if type == "all":
         reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.type_sell_sponsor == "sell")).all()
