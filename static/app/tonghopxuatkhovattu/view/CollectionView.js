@@ -20,16 +20,6 @@ define(function(require) {
             type: "group",
             groupClass: "toolbar-group",
             buttons: [
-                // {
-                //     name: "back",
-                //     type: "button",
-                //     buttonClass: "btn-default btn-sm btn-secondary",
-                //     label: "TRANSLATE:Quay lại",
-                //     command: function() {
-                //         var self = this;
-                //         Backbone.history.history.back();
-                //     }
-                // },
                 {
                     name: "CREATE",
                     type: "button",
@@ -97,8 +87,6 @@ define(function(require) {
                 sessionKey: this.collectionName + "_filter"
             });
             filter.render();
-            var currentUser = gonrinApp().currentUser;
-
             if (!filter.isEmptyFilter()) {
                 var filters;
                 var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";

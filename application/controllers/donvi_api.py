@@ -540,20 +540,14 @@ async def organizational_list_statistics1(request):
     medical_supplies_id = data['medical_supplies_id']
     type_filter = data['type']
     start_time = data['from_date']
-    end_time = data['to_date']  +86400
-    
-    # if type_filter == "all":
-    #     reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id ==currentUser.organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
-    # elif type_filter == "fromBeforeToDay":
-    #     reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == currentUser.organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
-    # elif type_filter == "fromDayToDay":
-    #     reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == currentUser.organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-
-    
+    end_time = data['to_date']
+    if data['to_date'] is not None:
+        end_time = data['to_date'] + 86400
    
     is_admin = await hasRole(request, "admin")
-    donvi = db.session.query(Organization).filter(Organization.tuyendonvi_id == "1").first()
-    currentUser.Organization = donvi
+    if is_admin == True:
+        donvi = db.session.query(Organization).filter(Organization.tuyendonvi_id == "1").first()
+        currentUser.Organization = donvi
     
     check_ttdcn = await hasTuyenDonvi(request, "13")
     check_cdc = await hasTuyenDonvi(request, "9")
