@@ -340,7 +340,7 @@ async def export_excel_cungung(request):
     arrHead.append('')
     arrHead.append(data['data']['medical_supplies_name'])
     arrHead.append(data['data']['avg_price'])
-    arrHead.append(data['data']['sum_sponsored_sell_number'])
+    arrHead.append(data['data']['quantity'])
     arrHead.append(data['data']['sum_price'])
     dataFrame.append(arrHead)
 
@@ -349,8 +349,8 @@ async def export_excel_cungung(request):
         arr.append(i+1)
         arr.append(list_id[i]['organization_name'])
         arr.append(list_id[i]['price'])
-        arr.append(list_id[i]['sell_number'])
-        arr.append(list_id[i]['sell_number'] * list_id[i]['price'] )
+        arr.append(list_id[i]['quantity'])
+        arr.append(list_id[i]['quantity'] * list_id[i]['price'] )
         dataFrame.append(arr)
     df1 = pandas.DataFrame(dataFrame,columns=['STT','Tên đơn vị','Báo giá(bao gồm VAT)-đồng', 'Số lượng đã và đang ký hợp đồng','Tổng tiền(vnđ)'])
 

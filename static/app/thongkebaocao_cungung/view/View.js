@@ -20,20 +20,6 @@ define(function (require) {
 			self.vattu_ten = "";
 			self.typeFilter();
 			self.loadItemDropdown();
-			// self.$el.find(".button-filter").unbind("click").bind("click", function () {
-			// 	self.$el.find('.spinner-border').show()
-			// 	var date = moment(self.$el.find('#date-report').data("gonrin").getValue()*1000).format('MM DD YYYY') + ' 00:00:00';
-			// 	var date_start = Date.parse(date) /1000
-			// 	var date_end = date_start + 86400
-
-			// 	var params = {};
-			// 	params['type_donvi'] = "donvicungung";
-			// 	params['medical_supplies_id'] = self.vattu_id;
-			// 	params['medical_supplies_name'] = self.vattu_ten;
-			// 	params['date_report_start'] =date_start
-			// 	params['date_report_end'] = date_end
-			// 	self.apiFilter(params)
-			// });
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
 				var params = {};
 				params['type'] = self.$el.find('.type-filter button').attr('filter');
@@ -51,6 +37,8 @@ define(function (require) {
 					if (self.$el.find('.type-filter button').attr('filter') == "all") {
 						params['from_date'] = null;
 						params['to_date'] = null;
+						params['filterString'] =" từ trước đến nay"
+
 						self.apiFilter(params)
 						self.$el.find('.spinner-border').show()
 
@@ -58,6 +46,7 @@ define(function (require) {
 					else if (self.$el.find('.type-filter button').attr('filter') == "fromBeforeToDay") {
 						params['from_date'] = null;
 						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
+						params['filterString'] =" từ trước đến ngày "+String(moment(params['to_date'] * 1000).format('DD MM YYYY'))
 						self.apiFilter(params)
 						self.$el.find('.spinner-border').show()
 
@@ -65,6 +54,7 @@ define(function (require) {
 					else if (self.$el.find('.type-filter button').attr('filter') == "fromDayToDay") {
 						params['from_date'] = self.$el.find('#start_time').data("gonrin").getValue()
 						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
+						params['filterString'] =" từ ngày " + String(moment(params['from_date'] * 1000).format('DD MM YYYY'))+" đến ngày "+String(moment(params['to_date'] * 1000).format('DD MM YYYY'))
 						if (self.$el.find('#start_time').data("gonrin").getValue() > self.$el.find('#end_time').data("gonrin").getValue()){
 							self.getApp().notify({ message: "Ngày bắt đầu không được  lớn hơn ngày kết thúc" }, { type: "danger", delay: 1000 });
 							self.$el.find('.spinner-border').hide()
@@ -79,7 +69,6 @@ define(function (require) {
 			});
 		},
 		apiFilter : function(params){
-			console.log(params)
 			var self = this;
 			$.ajax({
 				type: "POST",
@@ -313,8 +302,7 @@ define(function (require) {
 			params.medical_supplies_name = params.medical_supplies_name.replace('%',' phần trăm')
 			var self = this;
 			self.$el.find('.button-excel').unbind('click').bind('click', function () {
-					var date_report_start = moment(params.date_report_start * 1000).format('DD MM YYYY');
-					var filter = "Thống kê " + params.medical_supplies_name + " trong ngày " + date_report_start;
+					var filter = "Thống kê " + params.medical_supplies_name + params.filterString;
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/export_excel_cungung",
