@@ -214,7 +214,7 @@ define(function (require) {
 					success: function (data) {
 						var curUser = self.getApp().currentUser;
 						var users = data.users;
-						if (!self.getApp().hasRole('admin') && data.organization_id !== curUser.organization_id) {
+						if (!self.getApp().hasRole('admin') && (data.id !== curUser.organization_id)) {
 							self.$el.find(".create-account-user").hide();
 						}
 						// if (!users || users.length == 0) {
