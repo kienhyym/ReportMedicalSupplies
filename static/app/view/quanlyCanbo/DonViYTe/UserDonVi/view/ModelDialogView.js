@@ -205,7 +205,7 @@ define(function (require) {
     		var self = this;
     		var id = self.model.get("id");
     		var password =self.model.get("password");
-			var confirm_pass = self.$el.find("#confirm_password");
+			var confirm_pass = self.model.get("confirm_password");
     		var hoten = self.model.get("name");
 			var accountName = self.model.get("accountName");
 			var macongdan = self.model.get("id_card");
@@ -223,7 +223,7 @@ define(function (require) {
     				return false;
     			}
     		}
-    		if(password!==null && password!="" && password !==confirm_pass){
+    		if(password!==null && password!="" && confirm_pass !== null && confirm_pass !== "" && password !==confirm_pass){
 				self.getApp().notify({ message: "Mật khẩu không khớp." }, { type: "danger" });
 				return false;
 			}
