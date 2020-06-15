@@ -9,8 +9,8 @@ define(function (require) {
 		
 
     var template = gonrin.template(tpl)({});
-	// var XaPhuongDialogView = require('app/DanhMuc/XaPhuong/view/DialogView');
-	// var QuanHuyenDialogView = require('app/DanhMuc/QuanHuyen/view/DialogView');
+	var XaPhuongDialogView = require('app/view/DanhMuc/XaPhuong/SelectView');
+	var QuanHuyenDialogView = require('app/view/DanhMuc/QuanHuyen/SelectView');
 	var TinhThanhDialogView = require('app/view/DanhMuc/TinhThanh/SelectView');
 
     return Gonrin.View.extend({
@@ -20,13 +20,36 @@ define(function (require) {
         collectionName: "",
 		render: function () {
             var self = this;
-            var tinhThanhDialogView = new TinhThanhDialogView();
-            self.$el.find('#matinhthanh').unbind('click').bind('click', function () {
-				tinhThanhDialogView.dialog();
-				tinhThanhDialogView.on('seleted', (data) => {
-                    console.log(data)
-				});
-			})
+            self.$el.find("#matinhthanh").ref({
+                textField: "ten",
+                valueField: "id",
+                dataSource: TinhThanhDialogView,
+            });
+
+            self.$el.find("#maquanhuyen").ref({
+                textField: "ten",
+                valueField: "id",
+                dataSource: QuanHuyenDialogView,
+            });
+
+            self.$el.find("#maxaphuong").ref({
+                textField: "ten",
+                valueField: "id",
+                dataSource: XaPhuongDialogView,
+            });
+
+
+
+            self.$el.find("#matinhthanh").on('change.gonrin', function(e){
+                $(this).attr('id',$(this).data("gonrin").getValue())
+            })
+            self.$el.find("#maquanhuyen").on('change.gonrin', function(e){
+                $(this).attr('id',$(this).data("gonrin").getValue())
+            })
+            self.$el.find("#maxaphuong").on('change.gonrin', function(e){
+                $(this).attr('id',$(this).data("gonrin").getValue())
+            })
+            
 			self.applyBindings();
 			self.registerEvent();
 		},
@@ -38,7 +61,7 @@ define(function (require) {
                     console.log($(item).attr('data-post'),$(item).val())
                 })
                 self.$el.find("[data-postid]").each(function(index,item){
-                    console.log(item)
+                    console.log($(item).attr('data-postid'),$(item).val())
                 })
                 
 
