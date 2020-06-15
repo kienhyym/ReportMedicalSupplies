@@ -292,6 +292,8 @@ define(function (require) {
 
 				if (pointerOutQuantityImportValue == null || pointerOutQuantityImportValue == '') {
 					pointerOutQuantityImport.val(0);
+					pointerOutQuantityImport.attr('quantity_import',0);
+
 				}
 				else {
 					pointerOutQuantityImport.attr("quantity_import", pointerOutQuantityImportValue)
@@ -322,6 +324,8 @@ define(function (require) {
 
 				if (pointerOutQuantityExportValue == null || pointerOutQuantityExportValue == '') {
 					pointerOutQuantityExport.val(0);
+					pointerOutQuantityExport.attr('quantity_export',0);
+
 				}
 				else {
 					pointerOutQuantityExport.attr("quantity_export", pointerOutQuantityExportValue)
@@ -351,6 +355,8 @@ define(function (require) {
 
 				if (pointerOutEstimatesNetAmountValue == null || pointerOutEstimatesNetAmountValue == '') {
 					pointerOutEstimatesNetAmount.val(0);
+					pointerOutEstimatesNetAmount.attr("estimates_net_amount", 0)
+
 				}
 				else {
 					pointerOutEstimatesNetAmount.attr("estimates_net_amount", pointerOutEstimatesNetAmountValue)
@@ -372,6 +378,7 @@ define(function (require) {
 
 				if (pointerOutBeginNetAmountValue == null || pointerOutBeginNetAmountValue == '') {
 					pointerOutBeginNetAmount.val(0);
+					pointerOutBeginNetAmount.attr('begin_net_amount',0);
 				}
 				else {
 					pointerOutBeginNetAmount.attr("begin_net_amount", pointerOutBeginNetAmountValue)
