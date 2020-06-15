@@ -82,12 +82,15 @@ define(function (require) {
     			sessionKey: self.collectionName +"_filter"
 			});
 			var captren_id = self.getApp().currentUser.donvi_id;
-    		filter.render();
+			filter.render();
+			self.$el.find("#grid_search input").val("");
+
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
     			var filters = {"tenkhongdau": {"$likeI":  gonrinApp().convert_khongdau(text) }};
     			self.uiControl.filters = filters;
 			}
+			filter.model.set("text","");
 			var filters_donvidangki = {"captren_id": {"$eq":captren_id  }};
 			self.uiControl.filters = filters_donvidangki;
     		self.applyBindings(); 		

@@ -95,6 +95,9 @@ define(function (require) {
     	},
 	    render: function () {
 			var self = this;
+
+
+
 			self.$el.find("#Tinhthanh").ref({
                 textField: "ten",
                 valueField: "id",
@@ -112,7 +115,8 @@ define(function (require) {
 			});
 			var created_by = self.getApp().currentUser.id;
 			filter.render();
-			
+			self.$el.find("#grid_search input").val('')
+
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
 				var tinhthanh_id = self.$el.find("#Tinhthanh").data("gonrin").getValue(),
 					quanhuyen_id = self.$el.find("#Quanhuyen").data("gonrin").getValue(),
@@ -153,6 +157,9 @@ define(function (require) {
 				]};
 				self.uiControl.filters = filters;
 			}
+
+			filter.model.set("text","");
+
 			var filters_donvidangki = { "$and": [
 				{"type_donvi": {"$eq": "donvinhanuoc"  }}
 			]};

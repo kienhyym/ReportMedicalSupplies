@@ -100,12 +100,15 @@ define(function (require) {
     	},
 	    render: function () {
 			var self = this;
+			self.$el.find("#grid_search input").val("");
+
 			var filter = new CustomFilterView({
     			el: self.$el.find("#grid_search"),
     			sessionKey: self.collectionName +"_filter"
 			});
 			var captren_id = self.getApp().currentUser.id;
-    		filter.render();
+			filter.render();
+
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
 				// var filters = {"unsigned_name": {"$likeI":  gonrinApp().convert_khongdau(text) }};
@@ -115,11 +118,15 @@ define(function (require) {
 				]};
     			self.uiControl.filters = filters;
 			}
+			filter.model.set("text","");
 			var filters_donvidangki = { "$and": [
 				// {"createe_by": {"$eq":captren_id  }},
 				{"type_donvi": {"$eq": "donvicungung"  }}
 			]};
 			self.uiControl.filters = filters_donvidangki;
+
+			
+
     		self.applyBindings(); 		
     		filter.on('filterChanged', function(evt) {
     			var $col = self.getCollectionElement();

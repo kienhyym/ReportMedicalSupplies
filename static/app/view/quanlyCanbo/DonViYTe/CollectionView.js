@@ -98,6 +98,11 @@ define(function (require) {
     	},
 	    render: function () {
 			var self = this;
+			console.log('aaaaaaaaaaaa',self.$el.find("#grid_search input").val()) 
+
+
+
+
 			self.$el.find("#Tinhthanh").ref({
                 textField: "ten",
                 valueField: "id",
@@ -108,13 +113,18 @@ define(function (require) {
                 valueField: "id",
                 dataSource: QuanHuyenSelectView,
 			});
-
+			
 			var filter = new CustomFilterView({
     			el: self.$el.find("#grid_search"),
     			sessionKey: self.collectionName +"_filter"
 			});
 			var captren_id = self.getApp().currentUser.organization_id;
-    		filter.render();
+			filter.render();
+			
+			self.$el.find("#grid_search input").val("");
+
+
+
     		if(!filter.isEmptyFilter()) {
     			var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
     			var filters = { "$and": [
@@ -123,6 +133,10 @@ define(function (require) {
 				]};;
     			self.uiControl.filters = filters;
 			}
+			filter.model.set("text","");
+
+
+
 			var filters_donvidangki = { "$and": [
 				{"parent_id": {"$eq":captren_id  }},
 				{"type_donvi": {"$eq": "donvinhanuoc"  }}
