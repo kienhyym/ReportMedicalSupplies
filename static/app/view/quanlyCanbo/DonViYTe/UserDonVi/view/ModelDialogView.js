@@ -205,7 +205,7 @@ define(function (require) {
     		var self = this;
     		var id = self.model.get("id");
     		var password =self.model.get("password");
-			var confirm_pass = self.model.get("confirm_password");
+			var confirm_pass = self.$el.find("#confirm_password");
     		var hoten = self.model.get("name");
 			var accountName = self.model.get("accountName");
 			var macongdan = self.model.get("id_card");

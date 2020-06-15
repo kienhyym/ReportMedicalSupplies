@@ -412,7 +412,13 @@ define(function (require) {
 							pageSize: 20
 							},
 							onRowClick: function(event) {
-                                if (event.rowId) {
+								var curUser = self.getApp().currentUser;
+								var users = data.users;
+								// console.log("event===================", event);
+								if ((!self.getApp().hasRole('admin') && (event.rowData.organization_id == curUser.organization_id)) || self.getApp().hasRole('admin') ) {
+								// 	self.$el.find(".create-account-user").hide();
+								// }
+                                // if (event.rowId) {
                                     var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": event.rowData } });
                                     self.$el.find("#content").empty(); 
                                     dialogUserDonViView.render();

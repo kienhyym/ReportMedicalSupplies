@@ -287,7 +287,6 @@ async def change_profile(request):
             newpatient.unsigned_name = convert_text_khongdau(newpatient.name)
             db.session.add(newpatient)
             db.session.commit()
-
     return json({"error_code": "Ok", "error_message": "successfully", "data": response_current_user(current_user)},status=200)
 
 
