@@ -60,7 +60,7 @@ async def addUserDonvi(request):
     if request.method == 'POST':
         donvi_id = request.json.get('donvi_id',None)
         password = request.json.get('password', None)
-        cfpassword = request.json.get('password_confirm', None)
+        cfpassword = request.json.get('confirm_password', None)
         macongdan = request.json.get('macongdan', None)
         email = request.json.get('email', None)
         phone_number = request.json.get('phone', None)
