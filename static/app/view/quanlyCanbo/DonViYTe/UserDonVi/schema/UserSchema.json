@@ -38,12 +38,19 @@
     "password": {
         "type": "string"
     },
+    "confirm_password": {
+        "type": "string",
+        "length": null
+    },
     "salt": {
         "type": "string"
     },
     "active": {
         "type": "boolean",
         "default": true
+    },
+    "donvi": {
+        "type": "dict"
     },
     "roles": {
         "type": "list"

@@ -178,8 +178,8 @@ define(function (require) {
 					success: function (data) {
 						var curUser = self.getApp().currentUser;
 						var users = data.users;
-						if (curUser.id == data.id || users.length == 0) {
-							self.$el.find(".users").hide();
+						if (!self.getApp().hasRole('admin') && (data.id !== curUser.organization_id)) {
+							self.$el.find(".create-account-user").hide();
 						}
 						self.model.set(data);
 						self.getUserDonVi();
@@ -363,7 +363,9 @@ define(function (require) {
 							pageSize: 20
 							},
 							onRowClick: function(event) {
-                                if (event.rowId) {
+                                var curUser = self.getApp().currentUser;
+								var users = data.users;
+								if ((!self.getApp().hasRole('admin') && (event.rowData.organization_id == curUser.organization_id)) || self.getApp().hasRole('admin') ) {
                                     var dialogUserDonViView = new UserDonViDialogView({ "viewData": { "donvi": "", "data": event.rowData } });
                                     self.$el.find("#content").empty(); 
                                     dialogUserDonViView.render();
