@@ -221,8 +221,17 @@ define(function (require) {
 						// 	self.$el.find(".create-account-user").hide();
 						// }
 						self.model.set(data);
-						self.getUserDonVi();
+						
 						self.applyBindings();
+						var tuyendonvi_id = data.tuyendonvi_id;
+						self.filter_parent(tuyendonvi_id);
+						self.model.on("change", function() {
+							console.log("32456");
+							var tuyendonvi_id = self.model.get("tuyendonvi_id");
+							self.filter_parent(tuyendonvi_id);
+						});
+						self.getUserDonVi();
+						
 						if(!self.getApp().hasRole('admin')) {
 							self.$el.find(".tuyendonvi input").prop("disabled", true);
 							self.$el.find("#parent_donvi").hide();
@@ -240,6 +249,7 @@ define(function (require) {
 							self.getFieldElement("xaphuong").data("gonrin").setFilters(filterobj);
 							self.model.set({"xaphuong":null});
 						});
+						
 						self.button_duyet();
 						// self.getUserDonVi();
 						self.$el.find(".create-account-user").unbind("click").bind("click", function() {
@@ -270,6 +280,96 @@ define(function (require) {
 					self.getApp().getRouter().navigate("admin/donvi/collection");
 				} else {
 					self.getApp().getRouter().navigate("canbo/donvi/collection");
+				}
+			}
+		},
+		disabled_select_captren: function (status = 0) {
+			var self = this;
+			//0 la khong the an nut,1 la co the an nut
+			if (status == 1) {
+				self.$el.find("#donvicaptren").prop('disabled', false);
+			} else {
+				self.$el.find("#donvicaptren").prop('disabled', true);
+			}
+		},
+		filter_parent: function (tuyendonvi_id) {
+			var self = this;
+			var tinhthanh_id = self.model.get("tinhthanh_id");
+			var quanhuyen_id = self.model.get("quanhuyen_id");
+			if (tuyendonvi_id == "6" || tuyendonvi_id == "7" || tuyendonvi_id == "8") {
+								self.$el.find("#donvicaptren").prop('disabled', false);
+								var filters = {"tuyendonvi_id": {"$eq": "1" }};
+								self.getFieldElement("parent").data("gonrin").setFilters(filters);
+			} else if (tuyendonvi_id == "9" || tuyendonvi_id == "10" || tuyendonvi_id == "11") {
+				var tinhthanh_id = self.model.get("tinhthanh_id");
+				if (!tinhthanh_id || tinhthanh_id == null ) {
+					self.disabled_select_captren(0);
+				} else {
+					self.disabled_select_captren(1);
+					var filters = { "$or": [
+							{"tuyendonvi_id": {"$eq": "6" }},
+							{"tuyendonvi_id": {"$eq": "7" }},
+							{"tuyendonvi_id": {"$eq": "8" }},
+					]};
+					var filterobj = {
+						"$and": [
+							{
+								"tinhthanh_id": {
+									"$eq": self.model.get("tinhthanh_id")
+								}
+							},
+							filters
+						]
+					}
+					self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
+				}
+			} else if (tuyendonvi_id == "12" || tuyendonvi_id == "13" || tuyendonvi_id == "14" || tuyendonvi_id == "15") {
+				var tinhthanh_id = self.model.get("tinhthanh_id");
+				if (!tinhthanh_id || tinhthanh_id == null ) {
+					self.disabled_select_captren(0);
+				} else {
+					self.disabled_select_captren(1);
+					var filters = { "$or": [
+						{"tuyendonvi_id": {"$eq": "9" }},
+						{"tuyendonvi_id": {"$eq": "10" }},
+						{"tuyendonvi_id": {"$eq": "11" }},
+					]};
+					var filterobj = {
+						"$and": [
+							{
+								"tinhthanh_id": {
+									"$eq": self.model.get("tinhthanh_id")
+								}
+							},
+							filters
+						]
+					}
+					self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
+				}
+			} else if (tuyendonvi_id == "16" || tuyendonvi_id == "17") {
+				var quanhuyen_id = self.model.get("quanhuyen_id");
+				if (!quanhuyen_id || quanhuyen_id == null ) {
+					self.disabled_select_captren(0);
+				} else {
+					console.log("ok mo");
+					self.disabled_select_captren(1);
+					var filters = { "$or": [
+						{"tuyendonvi_id": {"$eq": "12" }},
+						{"tuyendonvi_id": {"$eq": "13" }},
+						{"tuyendonvi_id": {"$eq": "14" }},
+						{"tuyendonvi_id": {"$eq": "15" }}
+					]};
+					var filterobj = {
+						"$and": [
+							{
+								"quanhuyen_id": {
+									"$eq": self.model.get("quanhuyen_id")
+								}
+							},
+							filters
+						]
+					}
+					self.getFieldElement("parent").data("gonrin").setFilters(filterobj);
 				}
 			}
 		},
