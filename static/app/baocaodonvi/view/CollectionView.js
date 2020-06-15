@@ -100,50 +100,38 @@ define(function(require) {
         },
         render: function() {
             var self = this;
-            var filter = new CustomFilterView({
-                el: self.$el.find("#grid_search"),
-                sessionKey: this.collectionName + "_filter"
-            });
-            filter.render();
-            var currentUser = gonrinApp().currentUser;
-
-            if (!filter.isEmptyFilter()) {
-                var filters;
-                var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
-                if(gonrinApp().hasRole("admin")) {
-                    filters = {"$and": [
-                        { "code": { "$likeI": text } },
-                    ]};
-                } else {
-                    filters = {"$and": [
-                        { "code": { "$likeI": text } },
-                        { "organization_id": {"$eq": currentUser.organization_id}}
-                    ]};
+            self.$el.find('#grid_search_time').datetimepicker({
+                textFormat: 'DD-MM-YYYY',
+                extraFormats: ['DDMMYYYY'],
+                parseInputDate: function (val) {
+                    return moment.unix(val)
+                },
+                parseOutputDate: function (date) {
+                    return date.unix()
                 }
-                self.uiControl.filters = filters;
-            }
-            var filterobj;
-            if(gonrinApp().hasRole("admin")) {
-            } else {
-                filterobj = {"$and": [
-                    { "organization_id": {"$eq": currentUser.organization_id}}
-                ]};
-            }
-            self.uiControl.filters = filterobj;
+            });
+            var currentUser = gonrinApp().currentUser;
+            var filters;
+            filters = {
+                "$and": [
+                    { "organization_id": { "$eq": currentUser.organization_id } }
+                ]
+            };
+            self.uiControl.filters = filters;
             self.applyBindings();
 
-            filter.on('filterChanged', function(evt) {
+            self.$el.find('#grid_search_time').blur(function (e) {
                 var $col = self.getCollectionElement();
-                var text = !!evt.data.text ? evt.data.text.trim() : "";
-                if ($col) {
-                    if (text !== null) {
-                        var filters = { "code": { "$likeI": text } };
-                        $col.data('gonrin').filter(filters);
-                    } else {
-                        self.uiControl.filters = null;
-                    }
-                }
-                self.applyBindings();
+
+                var value = self.$el.find('#grid_search_time').data("gonrin").getValue();
+                filters = {
+                    "$and": [
+                        { "date": { "$gte": value } },
+                        { "date": { "$lt": value + 86400 } },
+                        { "organization_id": { "$eq": currentUser.organization_id } }
+                    ]
+                };
+                $col.data('gonrin').filter(filters);
             });
             return this;
         },
