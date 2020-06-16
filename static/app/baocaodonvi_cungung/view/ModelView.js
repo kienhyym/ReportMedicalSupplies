@@ -448,7 +448,7 @@ define(function (require) {
                             item-id = "${item.id}" 
 							title="${item.name}"
 							unit="${item.unit}"
-                            class="dropdown-item" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px">${item.name}</button>
+                            class="dropdown-item" media_check_out = "media_check_out" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px">${item.name}</button>
                             `)
 						})
 						if (count == 0) {
@@ -479,10 +479,6 @@ define(function (require) {
 					}
 				});
 			})
-			self.$el.find('.out-click').bind('click', function () {
-				self.$el.find('.dropdown-menu-item').hide()
-			})
-
 		},
 		showDetail: function () {
 			var self = this;
@@ -650,13 +646,17 @@ define(function (require) {
 		dropdownBanTaiTro: function () {
 			var self = this;
 			self.$el.find('.type-ban-taitro').each(function(index,item){
+				// self.$el.find('.type-ban-taitro .dropdown-menu').hide();
+
 				$(item).find('button').unbind('click').bind('click', function (){
+					self.$el.find('.type-ban-taitro').find('.dropdown-menu').hide()
+					self.$el.find('.type-ban-taitro').find('.dropdown-menu .dropdown-item').remove()
 					$(item).find('.dropdown-menu').show();
-					$(item).find('.dropdown-menu .dropdown-item').remove()
 					$(item).find('.dropdown-menu').append(`
 						<a class="dropdown-item" value ="sell" text = "Bán" >Bán</a>
 						<a class="dropdown-item" value ="sponsor"  text = "Tài trợ" >Tài trợ</a>`	
 					)	
+
 					$(item).find('.dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
 						$(item).find('button').text($(this).text());
 						$(item).find('button').attr('type_sell_sponsor',$(this).attr('value'));
@@ -664,9 +664,13 @@ define(function (require) {
 					})	
 				})
 			})
+
 			self.$el.find('.out-click').unbind('click').bind('click', function (e) {
 				if ($(e.target).attr('type-ban-taitro') == undefined) {
 					self.$el.find('.type-ban-taitro .dropdown-menu').hide();
+				}
+				if ($(e.target).attr('media_check_out') == undefined) {
+					self.$el.find('.media_check_out').hide();
 				}
 			})
 

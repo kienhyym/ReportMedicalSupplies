@@ -72,7 +72,7 @@ define(function (require) {
             },
             pagination: {
                 page: 1,
-                pageSize: 20
+                pageSize: 15
             },
         },
         render: function () {

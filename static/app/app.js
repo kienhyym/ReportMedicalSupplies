@@ -108,7 +108,6 @@ require(['jquery',
 
 
 				self.currentUser = new Gonrin.User(data);
-				console.log('---currentUser', self.currentUser)
 				var tpl = gonrin.template(layout)({});
 				$('.content-contain').html(tpl);
 				this.$header = $('body').find(".main-sidebar");
