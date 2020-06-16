@@ -105,6 +105,7 @@ require(['jquery',
 				loader.show();
 				self.currentTenant = data.current_tenant_id;
 				self.currentUser = new Gonrin.User(data);
+				self.chartCountNumberOfMonth();
 
 
 				self.currentUser = new Gonrin.User(data);
@@ -124,6 +125,83 @@ require(['jquery',
 					self.router.navigate("changepassword");
 				});
 				loader.hide();
+			},
+			chartCountNumberOfMonth: function () {
+				var self = this;
+				$.ajax({
+					url: self.serviceURL + "/api/v1/count_of_month_csyte",
+					method: "POST",
+					data: JSON.stringify(
+						{
+							"nam": Number(moment().format('YYYY')),
+						}
+					),
+					contentType: "application/json",
+					success: function (data) {
+						var ctx = document.getElementById('myChart');
+						var myChart = new Chart(ctx, {
+							type: 'line',
+							data: {
+								labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+								datasets: [
+									{
+										label: 'Số lượng nhập',
+										data: data.quantity_import,
+										backgroundColor: 'rgba(65, 183, 255, 1)',
+										borderColor: 'rgba(65, 183, 255, 1)',
+										borderWidth: 1,
+										fill: false
+									},
+									{
+										label: 'Số lượng sử dụng',
+										data: data.quantity_export,
+										backgroundColor: 'rgba(255, 144, 55, 1)',
+										borderColor: 'rgba(255, 144, 55, 1)',
+										borderWidth: 1,
+										fill: false
+
+									},
+									{
+										label: 'Số lượng tồn trong tháng',
+										data: data.net_amount,
+										backgroundColor: 'rgba(255, 33, 0, 1)',
+										borderColor: 'rgba(255, 33, 0, 1)',
+										borderWidth: 1,
+										fill: false
+
+									},
+									{
+										label: 'Số lượng tồn',
+										data: data.estimates_net_amount,
+										backgroundColor: 'rgba(114, 182, 17, 1)',
+										borderColor: 'rgba(114, 182, 17, 1)',
+										borderWidth: 1,
+										fill: false
+									},
+								]
+							},
+							options: {
+								responsive: true,
+								title: {
+									display: true,
+									text: 'Biểu đồ thống kê vật tư PCD COVID-19'
+								},
+								legend: {
+									fullWidth: 'true',
+									labels: {
+										padding: 20,
+									},
+									align:"start"
+								}
+							}
+						});
+					}
+				})
+
+				var kichthuocmanhinh = $(window).width();
+				if(kichthuocmanhinh < 768){
+					$('#myChart').attr('height','400')
+				}
 			},
 			bind_event: function () {
 				var self = this;
