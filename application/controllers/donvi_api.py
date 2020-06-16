@@ -1132,18 +1132,19 @@ async def count_of_month_csyte(request):
     net_amount = []
     estimates_net_amount = []
 
-    medicalSupplies = db.session.query(MedicalSupplies.id).all()
+    medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).all()
     medical_supplies_id = medicalSupplies[1][0]
     data_init_12_month = []
     tong_dau = 0
-    organization = db.session.query(Organization.id).all()
+    organization = db.session.query(Organization.id).filter(Organization.tuyendonvi_id.in_(["6","7","8","9","12","13","14","15","16","17"])).all()
     if organization is not None:
-        for organization_id in organization:
-            count = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == organization_id[0],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= int(data_12_month[0]['timestamp_start_month'])*1000)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if count is not None:
-                tong_dau = tong_dau + count[0]
+        for id in organization:
+            print("________________________________",id)
+    #         count = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == organization_id[0],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= int(data_12_month[0]['timestamp_start_month'])*1000)).order_by(ReportOrganizationDetail.date.asc()).first()
+    #         if count is not None:
+    #             tong_dau = tong_dau + count[0]
     for month in data_12_month:
-        sl_nhap_xuat = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= int(month['timestamp_start_month']),ReportOrganizationDetail.date <= int(month['timestamp_end_month']))).all()
+        sl_nhap_xuat = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(organization),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= int(month['timestamp_start_month']),ReportOrganizationDetail.date <= int(month['timestamp_end_month']))).all()
         if len(sl_nhap_xuat) > 0:
             quantity_import.append(sl_nhap_xuat[0][0])
             quantity_export.append(sl_nhap_xuat[0][1])
