@@ -39,15 +39,18 @@ define(function (require) {
             });
 
 
-
             self.$el.find("#matinhthanh").on('change.gonrin', function(e){
-                $(this).attr('id',$(this).data("gonrin").getValue())
+                $(this).attr('data-id',$(this).data("gonrin").getValue())
+                self.$el.find("#maquanhuyen").data("gonrin").setFilters({"tinhthanh_id": { "$eq": $(this).data("gonrin").getValue()}});
+
             })
             self.$el.find("#maquanhuyen").on('change.gonrin', function(e){
-                $(this).attr('id',$(this).data("gonrin").getValue())
+                $(this).attr('data-id',$(this).data("gonrin").getValue())
+                self.$el.find("#maxaphuong").data("gonrin").setFilters({"quanhuyen_id": { "$eq": $(this).data("gonrin").getValue()}});
+
             })
             self.$el.find("#maxaphuong").on('change.gonrin', function(e){
-                $(this).attr('id',$(this).data("gonrin").getValue())
+                $(this).attr('data-id',$(this).data("gonrin").getValue())
             })
             
 			self.applyBindings();
@@ -56,33 +59,30 @@ define(function (require) {
 
 		registerEvent: function () {
             var self = this;
+            var param = {};
             self.$el.find(".btn-register").unbind("click").bind("click", function () {
                 self.$el.find("[data-post]").each(function(index,item){
-                    console.log($(item).attr('data-post'),$(item).val())
+                    var attr = $(item).attr('data-post');
+                    param[attr] = $(item).val();
                 })
                 self.$el.find("[data-postid]").each(function(index,item){
-                    console.log($(item).attr('data-postid'),$(item).val())
+                    var attr = $(item).attr('data-postid');
+                    param[attr] = $(item).attr('data-id');
                 })
-                
 
-                // $.ajax({
-                //     method: "POST",
-                //     url:self.getApp().serviceURL + "/api/v1/dangky_donvi_cungung",
-                //     data: JSON.stringify({
-                //         email: self.$el.find("#txtemail").val(),
-                //         name: self.$el.find("#txtname").val(),
-                //         phone_number: self.$el.find("#txtphone").val(),
-                //         password: self.$el.find("#txtpass").val()
-                //     }), 
-                //     success: function (response) {
-                //         if (response) {
-				// 			self.getApp().notify("Đăng ký thành công");
-                //             self.getApp().getRouter().navigate("login");
-                //         }
-                //     }, error: function (xhr) {
-                //         console.log('xhr',xhr);
-                //     }
-                // })
+                $.ajax({
+                    method: "POST",
+                    url:self.getApp().serviceURL + "/api/v1/dangky_donvi_cungung",
+                    data: JSON.stringify(param), 
+                    success: function (response) {
+                        if (response) {
+							self.getApp().notify("Đăng ký thành công");
+                            self.getApp().getRouter().navigate("login");
+                        }
+                    }, error: function (xhr) {
+                        console.log('xhr',xhr);
+                    }
+                })
             });
         }
 	});

@@ -1051,3 +1051,45 @@ async def enterprise_supply_statistics(request):
 
 
 
+
+
+@app.route('/api/v1/dangky_donvi_cungung', methods=['POST'])
+async def dangky_donvi_cungung(request):
+
+    data = request.json
+    print("data=============",data)
+
+    organization = Organization()
+    organization.id = default_uuid()
+    organization.name = data.get("donvi_name",None)
+    organization.unsigned_name = convert_text_khongdau(organization.name)
+    organization.phone = data.get("donvi_phone",None)
+    organization.email = data.get("donvi_email",None)
+    organization.tinhthanh_id = data.get("tinhthanh_id",None)
+    organization.quanhuyen_id = data.get("quanhuyen_id",None)
+    organization.xaphuong_id = data.get("xaphuong_id",None)
+    organization.ghichu = data.get("ghichu",None)
+    organization.donvi_diachi = data.get("donvi_diachi",None)
+    organization.active = 1
+    organization.type_donvi = "donvicungung"
+    db.session.add(organization)
+    db.session.flush()
+    # # print("organization=============", to_dict(organization))
+    salt = generator_salt()
+    user = User()
+    user.id = default_uuid()
+    user.name = data.get("name",None)
+    user.phone = data.get("phone",None)
+    user.email = data.get("phone",None)
+    user.unsigned_name = convert_text_khongdau(user.name)
+    user.salt = salt
+    user.password = auth.encrypt_password(data.get("password",None), str(salt))
+    user.organization_id = organization.id
+    user.active = 1
+    role_admin_donvi = db.session.query(Role).filter(Role.name == 'admin_donvi').first()
+    user.roles.append(role_admin_donvi)
+    db.session.add(user)
+    # print("user===========================", to_dict(user))
+    db.session.commit()
+
+    return json({"error_code":"OK","error_message":"successful"},status=200)
