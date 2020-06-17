@@ -1136,7 +1136,7 @@ async def count_of_month_csyte(request):
     medical_supplies_id = medicalSupplies[1][0]
     data_init_12_month = []
     tong_dau = 0
-    organization = db.session.query(Organization.id).filter(Organization.tuyendonvi_id.in_(["6","7","8","9","12","13","14","15","16","17"])).all()
+    organization = db.session.query(Organization.id).filter(and_(Organization.tuyendonvi_id.in_(["6","7","8","9","12","13","14","15","16","17"]),Organization.type_donvi=="donvinhanuoc")).all()
     if organization is not None:
         for id in organization:
             print("________________________________",id)
@@ -1157,3 +1157,13 @@ async def count_of_month_csyte(request):
             estimates_net_amount.append(0)
     obj = {"quantity_import":quantity_import,"quantity_export":quantity_export,"net_amount":net_amount,"estimates_net_amount":estimates_net_amount}
     return json(obj)
+
+
+@app.route('/api/v1/count_of_day',methods=['POST'])
+async def count_of_day(request):
+    date = request.json
+    date_conver_start_day= datetime.strptime(str(date), "%Y/%m/%d")
+    timestamp_start_day = datetime.timestamp(date_conver_start_day)
+    sl_baocao_csyte = db.session.query(ReportOrganization).filter(and_(ReportOrganization.date >= int(timestamp_start_day),ReportOrganization.date <= int(timestamp_start_day)+84600)).all()
+    sl_baocao_cungung = db.session.query(ReportSupplyOrganization).filter(and_(ReportSupplyOrganization.date >= int(timestamp_start_day),ReportSupplyOrganization.date <= int(timestamp_start_day)+84600)).all()
+    return json({"sl_baocao_csyte":len(sl_baocao_csyte),"sl_baocao_cungung":len(sl_baocao_cungung)})
