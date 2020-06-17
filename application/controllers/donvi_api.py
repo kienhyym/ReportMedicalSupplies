@@ -1137,9 +1137,9 @@ async def count_of_month_csyte(request):
     data_init_12_month = []
     tong_dau = 0
     organization = db.session.query(Organization.id).filter(and_(Organization.tuyendonvi_id.in_(["6","7","8","9","12","13","14","15","16","17"]),Organization.type_donvi=="donvinhanuoc")).all()
-    if organization is not None:
-        for id in organization:
-            print("________________________________",id)
+    # if organization is not None:
+    #     for id in organization:
+            # print("________________________________",id)
     #         count = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == organization_id[0],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= int(data_12_month[0]['timestamp_start_month'])*1000)).order_by(ReportOrganizationDetail.date.asc()).first()
     #         if count is not None:
     #             tong_dau = tong_dau + count[0]
@@ -1167,3 +1167,53 @@ async def count_of_day(request):
     sl_baocao_csyte = db.session.query(ReportOrganization).filter(and_(ReportOrganization.date >= int(timestamp_start_day),ReportOrganization.date <= int(timestamp_start_day)+84600)).all()
     sl_baocao_cungung = db.session.query(ReportSupplyOrganization).filter(and_(ReportSupplyOrganization.date >= int(timestamp_start_day),ReportSupplyOrganization.date <= int(timestamp_start_day)+84600)).all()
     return json({"sl_baocao_csyte":len(sl_baocao_csyte),"sl_baocao_cungung":len(sl_baocao_cungung)})
+
+
+@app.route('/api/v1/count_of_month_cungung',methods=['POST'])
+async def count_of_month_cungung(request):
+    date = request.json
+    date = 2020
+    date_after = int(date) + 1
+    month = [1,2,3,4,5,6,7,8,9,10,11,12]
+    data_12_month = []
+    for th in month:
+        th_after = int(th)+1
+        if th == 12:
+            date_conver_start_month= datetime.strptime(str(date)+"/"+str(th)+"/01", "%Y/%m/%d")
+            timestamp_start_month = datetime.timestamp(date_conver_start_month)
+
+            date_conver_end_month= datetime.strptime(str(date_after)+"/01/01", "%Y/%m/%d")
+            timestamp_end_month = datetime.timestamp(date_conver_end_month)
+            obj = {"timestamp_start_month":timestamp_start_month,"timestamp_end_month":timestamp_end_month}
+            data_12_month.append(obj)
+        if th < 12:
+            date_conver_start_month= datetime.strptime(str(date)+"/"+str(th)+"/01", "%Y/%m/%d")
+            timestamp_start_month = datetime.timestamp(date_conver_start_month)
+
+            date_conver_end_month= datetime.strptime(str(date)+"/"+str(th_after)+"/01", "%Y/%m/%d")
+            timestamp_end_month = datetime.timestamp(date_conver_end_month)
+            obj = {"timestamp_start_month":timestamp_start_month,"timestamp_end_month":timestamp_end_month}
+            data_12_month.append(obj)
+
+    quantity  = []
+    price = []
+    supply_ability = []
+    price_quantity = []
+
+    medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).all()
+    medical_supplies_id = medicalSupplies[1][0]
+    organization = db.session.query(Organization.id).filter(and_(Organization.type_donvi=="donvicungung")).all()
+    for month in data_12_month:
+        sl_cungung = db.session.query(func.sum(ReportSupplyOrganizationDetail.supply_ability),func.sum(ReportSupplyOrganizationDetail.quantity),func.avg(ReportSupplyOrganizationDetail.price),func.sum(ReportSupplyOrganizationDetail.quantity * ReportSupplyOrganizationDetail.price)).group_by(ReportSupplyOrganizationDetail.medical_supplies_id).filter(and_(ReportSupplyOrganizationDetail.organization_id.in_(organization),ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.date >= int(month['timestamp_start_month']),ReportSupplyOrganizationDetail.date <= int(month['timestamp_end_month']),ReportSupplyOrganizationDetail.type_sell_sponsor == "sell")).all()
+        if len(sl_cungung) > 0:
+            supply_ability.append(sl_cungung[0][0])
+            quantity.append(sl_cungung[0][1])
+            price.append(sl_cungung[0][2])
+            price_quantity.append(sl_cungung[0][3])
+        else:
+            supply_ability.append(0)
+            quantity.append(0)
+            price.append(0)
+            price_quantity.append(0)
+    obj = {"supply_ability":supply_ability,"quantity":quantity,"price":price,"price_quantity":price_quantity}
+    return json(obj)

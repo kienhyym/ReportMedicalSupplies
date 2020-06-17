@@ -87,7 +87,7 @@ class ReportSupplyOrganizationDetail(CommonModel):
     medical_supplies = relationship('MedicalSupplies')
 
     supply_ability = db.Column(DECIMAL(25,3), default=0) # Khả năng cung cấp
-    type_sell_sponsor = db.Column(String()) # số lượng cung cấp thực tế "sell" ,"sponsor"
+    type_sell_sponsor = db.Column(String()) # type cung cấp thực tế "sell" ,"sponsor"
     quantity = db.Column(DECIMAL(25,3), default=0) # số lượng xuất thực tế 
 
     price = db.Column(DECIMAL(25,3), default=0) # Đơn giá
