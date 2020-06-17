@@ -89,14 +89,14 @@
       <!-- / .main-navbar -->
       <div class="main-content-container container-fluid px-lg-4 px-sm-0 content-area">
         <br>
-        <div class="row">
-        <div class="col-4 p-0">
-          <div class="col-12 mt-2">
+        <div class="row dashboard-main">
+          <div class="col-6 mt-3">
             <div class="card border-left-primary shadow h-100 py-2">
               <div class="card-body">
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Số lượng báo cáo đơn vị y tế trong ngày</div>
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Số lượng báo cáo của đơn vị y
+                      tế trong ngày</div>
                     <div class="h5 mb-0 font-weight-bold text-gray-800 value-slbaocao-csyte">0</div>
                   </div>
                   <div class="col-auto">
@@ -108,12 +108,13 @@
           </div>
 
           <!-- Earnings (Monthly) Card Example -->
-          <div class="col-12 mt-3">
+          <div class="col-6 mt-3">
             <div class="card border-left-success shadow h-100 py-2">
               <div class="card-body">
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Số lượng báo cáo đơn vị cung ứng trong ngày</div>
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Số lượng báo cáo của đơn vị
+                      cung ứng trong ngày</div>
                     <div class="h5 mb-0 font-weight-bold text-gray-800 value-slbaocao-cungung">0</div>
                   </div>
                   <div class="col-auto">
@@ -123,20 +124,53 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-8 p-0 d-flex justify-content-start">
-          <div class="card w-100">
-            <div class="card-body">
-              <canvas id="myChart" width="400" height="200"></canvas>
-              <canvas id="myChart2" width="400" height="200"></canvas>
+          <div class="col-6 mt-3 d-flex justify-content-start">
+            <div class="card w-100">
+              <div class="card-body">
+                <canvas id="myChart1" width="400" height="200"></canvas>
+                <div class="row">
+                  <div class="col-2 pr-1">
+                    <select id="year1" class="form-control form-control-sm p-1"></select>
+                  </div>
+                  <div class="col-10 pl-1">
+                    <div style="position: relative;" class="seach-yte">
+                      <input type="text" class="form-control form-control-sm search-item"
+                        placeholder="Nhập tên vật tư để tìm kiếm" class-name="seach-yte">
+                      <div class="card" style="position: absolute;top: 35px;left: 5px;width: 380px;">
+                        <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:380px;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 mt-3 d-flex justify-content-start">
+            <div class="card w-100">
+              <div class="card-body">
+                <canvas id="myChart2" width="400" height="200"></canvas>
 
+                <div class="row">
+                  <div class="col-2 pr-1">
+                    <select id="year2" class="form-control form-control-sm p-1"></select>
+                  </div>
+                  <div class="col-10 pl-1">
+                    <div style="position: relative;" class="seach-cung-ung">
+                      <input type="text" class="form-control form-control-sm search-item"
+                        placeholder="Nhập tên vật tư để tìm kiếm" class-name="seach-cung-ung">
+                      <div class="card" style="position: absolute;top: 35px;left: 5px;width: 380px;">
+                        <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:380px;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              </div>
+            </div>
           </div>
         </div>
       </div>
-      </div>
-    </main>
   </div>
+  </main>
+</div>
 </div>

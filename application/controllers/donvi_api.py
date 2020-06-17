@@ -1171,8 +1171,9 @@ async def count_of_day(request):
 
 @app.route('/api/v1/count_of_month_cungung',methods=['POST'])
 async def count_of_month_cungung(request):
-    date = request.json
-    date = 2020
+    data = request.json
+    date = data['nam']
+    medical_supplies_id = data['medical_supplies_id']
     date_after = int(date) + 1
     month = [1,2,3,4,5,6,7,8,9,10,11,12]
     data_12_month = []
@@ -1199,9 +1200,9 @@ async def count_of_month_cungung(request):
     price = []
     supply_ability = []
     price_quantity = []
-
-    medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).all()
-    medical_supplies_id = medicalSupplies[1][0]
+    if medical_supplies_id is None:
+        medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).all()
+        medical_supplies_id = medicalSupplies[1][0]
     organization = db.session.query(Organization.id).filter(and_(Organization.type_donvi=="donvicungung")).all()
     for month in data_12_month:
         sl_cungung = db.session.query(func.sum(ReportSupplyOrganizationDetail.supply_ability),func.sum(ReportSupplyOrganizationDetail.quantity),func.avg(ReportSupplyOrganizationDetail.price),func.sum(ReportSupplyOrganizationDetail.quantity * ReportSupplyOrganizationDetail.price)).group_by(ReportSupplyOrganizationDetail.medical_supplies_id).filter(and_(ReportSupplyOrganizationDetail.organization_id.in_(organization),ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.date >= int(month['timestamp_start_month']),ReportSupplyOrganizationDetail.date <= int(month['timestamp_end_month']),ReportSupplyOrganizationDetail.type_sell_sponsor == "sell")).all()
@@ -1209,7 +1210,7 @@ async def count_of_month_cungung(request):
             supply_ability.append(sl_cungung[0][0])
             quantity.append(sl_cungung[0][1])
             price.append(sl_cungung[0][2])
-            price_quantity.append(sl_cungung[0][3])
+            price_quantity.append(sl_cungung[0][3]/1000)
         else:
             supply_ability.append(0)
             quantity.append(0)
