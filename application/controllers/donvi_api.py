@@ -1102,8 +1102,9 @@ async def dangky_donvi_cungung(request):
 
 @app.route('/api/v1/count_of_month_csyte',methods=['POST'])
 async def count_of_month_csyte(request):
-    date = request.json
-    date = 2020
+    data = request.json
+    medical_supplies_id = data['medical_supplies_id']
+    date = data['nam']
     date_after = int(date) + 1
     month = [1,2,3,4,5,6,7,8,9,10,11,12]
     data_12_month = []
@@ -1131,9 +1132,9 @@ async def count_of_month_csyte(request):
     quantity_export = []
     net_amount = []
     estimates_net_amount = []
-
-    medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).all()
-    medical_supplies_id = medicalSupplies[1][0]
+    if medical_supplies_id is None:
+        medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).first()
+        medical_supplies_id = medicalSupplies[1][0]
     data_init_12_month = []
     tong_dau = 0
     organization = db.session.query(Organization.id).filter(and_(Organization.tuyendonvi_id.in_(["6","7","8","9","12","13","14","15","16","17"]),Organization.type_donvi=="donvinhanuoc")).all()
@@ -1195,7 +1196,7 @@ async def count_of_month_cungung(request):
             timestamp_end_month = datetime.timestamp(date_conver_end_month)
             obj = {"timestamp_start_month":timestamp_start_month,"timestamp_end_month":timestamp_end_month}
             data_12_month.append(obj)
-
+    object ={}
     quantity  = []
     price = []
     supply_ability = []
@@ -1203,6 +1204,7 @@ async def count_of_month_cungung(request):
     if medical_supplies_id is None:
         medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).all()
         medical_supplies_id = medicalSupplies[1][0]
+        object['medical_supplies_name'] = medicalSupplies[1][1]
     organization = db.session.query(Organization.id).filter(and_(Organization.type_donvi=="donvicungung")).all()
     for month in data_12_month:
         sl_cungung = db.session.query(func.sum(ReportSupplyOrganizationDetail.supply_ability),func.sum(ReportSupplyOrganizationDetail.quantity),func.avg(ReportSupplyOrganizationDetail.price),func.sum(ReportSupplyOrganizationDetail.quantity * ReportSupplyOrganizationDetail.price)).group_by(ReportSupplyOrganizationDetail.medical_supplies_id).filter(and_(ReportSupplyOrganizationDetail.organization_id.in_(organization),ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.date >= int(month['timestamp_start_month']),ReportSupplyOrganizationDetail.date <= int(month['timestamp_end_month']),ReportSupplyOrganizationDetail.type_sell_sponsor == "sell")).all()
@@ -1216,5 +1218,8 @@ async def count_of_month_cungung(request):
             quantity.append(0)
             price.append(0)
             price_quantity.append(0)
-    obj = {"supply_ability":supply_ability,"quantity":quantity,"price":price,"price_quantity":price_quantity}
-    return json(obj)
+    object["supply_ability"]=supply_ability
+    object["quantity"]=quantity
+    object["price"]=price
+    object["price_quantity"]=price_quantity
+    return json(object)

@@ -136,6 +136,8 @@ require(['jquery',
 					$("#year1").append(options)
 					$("#year2").append(options)
 
+
+				
 				}
 			},
 			chartCountNumberOfMonth: function () {
@@ -207,8 +209,38 @@ require(['jquery',
 					})
 					arrChart.push(myChart)
 				})
+
+				$.ajax({
+					url: self.serviceURL + "/api/v1/count_of_month_cungung",
+					method: "POST",
+					data: JSON.stringify(
+						{
+							"nam": new Date().getFullYear(),
+							"medical_supplies_id": null,
+						}
+					),
+					contentType: "application/json",
+					success: function (response) {
+						$('.seach-cung-ung input').val(response.medical_supplies_name)
+
+						arrChart[1].data.datasets[0].data = response.supply_ability
+						arrChart[1].data.datasets[1].data = response.quantity
+						arrChart[1].data.datasets[2].data = response.price
+						arrChart[1].data.datasets[3].data = response.price_quantity
+
+						arrChart[1].data.datasets[0].label = "Khả năng cung ứng"
+						arrChart[1].data.datasets[1].label = "Số lượng bán thực tế"
+						arrChart[1].data.datasets[2].label = "Giá bán thực tế"
+						arrChart[1].data.datasets[3].label = "Tổng tiền bán thực tế (/1000vnđ)"
+
+						arrChart[1].options.title.text = 'Biểu đồ thống kê vật tư ' + response.medical_supplies_name + ' của đơn vị cung ứng năm ' + $('#year2').val();
+						arrChart[1].update();
+					}
+				})
 				self.searchItem(arrChart);
 				self.changeYear(arrChart);
+
+
 
 			},
 			countNumberOfDay: function () {
@@ -355,12 +387,12 @@ require(['jquery',
 					$('.' + CLASS + ' input').attr('item-id', itemJSON.id);
 					self.medicalSuppliesId = itemJSON.id
 					$('.' + CLASS + ' div .dropdown-menu').hide();
-					if(CLASS == "seach-yte"){
-						var URL =  self.serviceURL + "/api/v1/count_of_month_csyte";
+					if (CLASS == "seach-yte") {
+						var URL = self.serviceURL + "/api/v1/count_of_month_csyte";
 						var nam = Number($('#year1').val());
 					}
-					if(CLASS == "seach-cung-ung"){
-						var URL =  self.serviceURL + "/api/v1/count_of_month_cungung";
+					if (CLASS == "seach-cung-ung") {
+						var URL = self.serviceURL + "/api/v1/count_of_month_cungung";
 						var nam = Number($('#year2').val());
 
 					}
