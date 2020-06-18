@@ -1136,7 +1136,7 @@ async def count_of_month_csyte(request):
         medical_supplies_id = medicalSupplies[1][0]
     data_init_12_month = []
     data_after_12_month = []
-    organization = db.session.query(Organization.id).filter(and_(Organization.tuyendonvi_id.in_(["6","7","8","9","12","13","14","15","16","17"]),Organization.type_donvi=="donvinhanuoc")).all()
+    organization = db.session.query(Organization.id).filter(and_(Organization.tuyendonvi_id.in_(["6","7","8","9","11","12","13","14","15","16","17"]),Organization.type_donvi=="donvinhanuoc")).all()
     for month in data_12_month:
         tong_dau = 0
         if organization is not None:
