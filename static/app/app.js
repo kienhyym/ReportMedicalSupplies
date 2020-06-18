@@ -120,7 +120,7 @@ require(['jquery',
 					self.router.navigate("changepassword");
 				});
 				loader.hide();
-				$('.today').text('20/2/2020')
+				$('.today').text(Number(new Date().getDate())+"/"+Number(new Date().getMonth()+1)+"/"+new Date().getFullYear())
 
 
 				if (self.hasRole('admin') === false) {
