@@ -216,11 +216,15 @@ define(function (require) {
 				});
 			})
 			self.$el.find('.search-item').keyup(function name() {
+				var selectedList = [];
+				self.$el.find('.selected-item-general').each(function (index, item) {
+					selectedList.push($(item).attr('item_id'))
+				})
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown2",
-					data: JSON.stringify(text),
+					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
