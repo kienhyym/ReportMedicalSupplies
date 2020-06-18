@@ -253,8 +253,8 @@ define(function (require) {
 						</div>
 						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
 						<div style="position: relative;">
-						<div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${itemID}">
-							<input selected-item-id = "${itemID}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="null" class-name = "dropdown-${itemID}">
+						<div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${itemID}-${typeSellSponsor}">
+							<input selected-item-id = "${itemID}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="null" class-name = "dropdown-${itemID}-${typeSellSponsor}">
 							<div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
 								<div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
 							</div>
@@ -370,7 +370,6 @@ define(function (require) {
 						}
 						console.log($(self.$el.find('[col-type="TYPE_SELL_SPONSOR"][selected-item-id = "'+that+'"]')[0]).attr('type_sell_sponsor'))
 					}
-					// console.log($(this).attr('selected-item-id'))
 			})
 		},
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
@@ -381,7 +380,6 @@ define(function (require) {
 				self.$el.find('.selected-item-general').each(function (index, item) {
 					selectedList.push($(item).attr('item_id'))
 				})
-				console.log(selectedList)
 
 				$.ajax({
 					type: "POST",
@@ -530,8 +528,8 @@ define(function (require) {
 						</div>
 						<div style="width: 116px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">
-                            <div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${item.id}">
-                                <input selected-item-id = "${item.id}" value="${item.health_facilities_name}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="${item.health_facilities_id}" class-name = "dropdown-${item.id}">
+                            <div style="width: 100%;display: inline-block;padding: 1px;position: relative;" class="dropdown-${item.id}-${item.type_sell_sponsor}">
+                                <input selected-item-id = "${item.id}" value="${item.health_facilities_name}" type="text" class="form-control" placeholder="Nhập tên đơn vị" item-id="${item.health_facilities_id}" class-name = "dropdown-${item.id}-${item.type_sell_sponsor}">
                                 <div class="card" style="position: absolute;top: 45px;left: 5px;width: 280px;">
                                     <div class="dropdown-menu" style="height: 110px;overflow-x: hidden;width:280px;"></div>
                                 </div>
@@ -561,7 +559,6 @@ define(function (require) {
 			var self = this;
 			var arr = [];
 			self.$el.find('.selected-item-new').each(function (index, item) {
-				var ccName = $(item).attr('selected-item-id')
 				var obj = {
 					"report_supply_organization_id": report_supply_organization_id,
 					"organization_id": self.model.get('organization_id'),
@@ -570,7 +567,7 @@ define(function (require) {
 					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
 					"type_sell_sponsor": $(item).find('[col-type="TYPE_SELL_SPONSOR"]').attr('type_sell_sponsor'),
 					"quantity": $(item).find('[col-type="QUANTITY"]').attr('quantity'),
-					"health_facilities_id": self.$el.find('.dropdown-' + ccName + " input").attr('item-id'),
+					"health_facilities_id": $(item).find('div div div input').attr('item-id'),
 					"price": $(item).find('[col-type="PRICE"]').attr('price'),
 					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href')
 				}
@@ -594,14 +591,13 @@ define(function (require) {
 			var self = this;
 			var arr = [];
 			self.$el.find('.selected-item-old').each(function (index, item) {
-				var ccName = $(item).attr('selected-item-id')
 				var obj = {
 					"id": $(item).attr('selected-item-id'),
 					"supply_ability": $(item).find('[col-type="SUPPLY_ABILITY"]').attr('supply_ability'),
 					"type_sell_sponsor": $(item).find('[col-type="TYPE_SELL_SPONSOR"]').attr('type_sell_sponsor'),
 					"quantity": Number($(item).find('[col-type="QUANTITY"]').attr('quantity')),
 					"price": $(item).find('[col-type="PRICE"]').attr('price'),
-					"health_facilities_id": self.$el.find('.dropdown-' + ccName + " input").attr('item-id'),
+					"health_facilities_id": $(item).find('div div div input').attr('item-id'),
 					"file": $(item).find('[col-type="DOWNLOAD"]').attr('href'),
 					"date": self.model.get('date')
 				}
@@ -680,7 +676,12 @@ define(function (require) {
 			var self = this;
 			var listDropDown = [
 				{
-					"class_name": "dropdown-" + id,
+					"class_name": "dropdown-" +id+"-sell",
+					"url": self.getApp().serviceURL + "/api/v1/load_organization_dropdown_all",
+					"type": "single"
+				},
+				{
+					"class_name": "dropdown-" +id+"-sponsor",
 					"url": self.getApp().serviceURL + "/api/v1/load_organization_dropdown_all",
 					"type": "single"
 				},
@@ -752,7 +753,7 @@ define(function (require) {
 				self.medicalSuppliesId = itemJSON.id
 				self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 			})
-			$(document).unbind('click').bind('click', function (e) {
+			self.$el.find('.out-click2').unbind('click').bind('click', function (e) {
 				if ($(e.target).attr('out-side-' + CLASS) == undefined) {
 					self.$el.find('.' + CLASS + ' div .dropdown-menu').hide();
 				}
