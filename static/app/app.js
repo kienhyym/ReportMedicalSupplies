@@ -120,6 +120,9 @@ require(['jquery',
 					self.router.navigate("changepassword");
 				});
 				loader.hide();
+				$('.today').text('20/2/2020')
+
+
 				if (self.hasRole('admin') === false) {
 					$('.dashboard-main').remove()
 				}
@@ -249,7 +252,14 @@ require(['jquery',
 					),
 					contentType: "application/json",
 					success: function (response) {
-						console.log(response.quantity_import[0])
+						var date = new Date().getMonth();
+						response.net_amount[0].forEach(function (item, index) {
+							console.log(date, index)
+							if (index > date) {
+								response.net_amount[0].splice(index, 1, 0);
+							}
+						})
+
 						$('.seach-yte input').val(response.medical_supplies_name[0])
 
 						arrChart[0].data.datasets[0].data = response.quantity_import[0]
@@ -314,9 +324,19 @@ require(['jquery',
 								contentType: "application/json",
 								success: function (response) {
 									if (item == "year1") {
-										arrChart[0].data.datasets[0].data = response.quantity_import
-										arrChart[0].data.datasets[1].data = response.quantity_export
-										arrChart[0].data.datasets[2].data = response.net_amount
+										if (nam === new Date().getFullYear()) {
+											var date = new Date().getMonth();
+											response.net_amount[0].forEach(function (item, index) {
+												console.log(date, index)
+												if (index > date) {
+													response.net_amount[0].splice(index, 1, 0);
+												}
+											})
+										}
+
+										arrChart[0].data.datasets[0].data = response.quantity_import[0]
+										arrChart[0].data.datasets[1].data = response.quantity_export[0]
+										arrChart[0].data.datasets[2].data = response.net_amount[0]
 										arrChart[0].data.datasets[3].data = response.estimates_net_amount
 
 										arrChart[0].data.datasets[0].label = "Tổng số lượng nhập"
@@ -438,9 +458,18 @@ require(['jquery',
 						contentType: "application/json",
 						success: function (response) {
 							if ($(myChart).attr('id') == 0) {
-								myChart.data.datasets[0].data = response.quantity_import
-								myChart.data.datasets[1].data = response.quantity_export
-								myChart.data.datasets[2].data = response.net_amount
+								if (nam === new Date().getFullYear()) {
+									var date = new Date().getMonth();
+									response.net_amount[0].forEach(function (item, index) {
+										console.log(date, index)
+										if (index > date) {
+											response.net_amount[0].splice(index, 1, 0);
+										}
+									})
+								}
+								myChart.data.datasets[0].data = response.quantity_import[0]
+								myChart.data.datasets[1].data = response.quantity_export[0]
+								myChart.data.datasets[2].data = response.net_amount[0]
 								myChart.data.datasets[3].data = response.estimates_net_amount
 
 								myChart.data.datasets[0].label = "Tổng số lượng nhập"
