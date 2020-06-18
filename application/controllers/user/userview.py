@@ -65,7 +65,7 @@ async def do_login(request):
     
     data = param['data']
     password = param['password']
-    user = db.session.query(User).filter(or_(User.phone == data, User.email == data, User.accountName == data)).first()
+    user = db.session.query(User).filter(and_(or_(User.phone == data, User.email == data, User.accountName == data),User.active==1)).first()
     if user is None or user.deleted == True:
         return json({"error_code":"LOGIN_FAILED", "error_message":u"Tài khoản không tồn tại"}, status=520)
     else:
