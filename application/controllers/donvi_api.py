@@ -1131,9 +1131,12 @@ async def count_of_month_csyte(request):
     quantity_export = []
     net_amount = []
     estimates_net_amount = []
+    object = {}
     if medical_supplies_id is None:
         medicalSupplies = db.session.query(MedicalSupplies.id,MedicalSupplies.name).first()
-        medical_supplies_id = medicalSupplies[1][0]
+        medical_supplies_id = medicalSupplies[0]
+        object["medical_supplies_name"] = medicalSupplies[1],
+
     data_init_12_month = []
     data_after_12_month = []
     organization = db.session.query(Organization.id).filter(and_(Organization.tuyendonvi_id.in_(["6","7","8","9","11","12","13","14","15","16","17"]),Organization.type_donvi=="donvinhanuoc")).all()
@@ -1165,9 +1168,11 @@ async def count_of_month_csyte(request):
             estimates_net_amount.append(0)
     for i in range(len(data_after_12_month)):
         data_after_12_month[i] = data_after_12_month[i]+data_init_12_month[i]
-    obj = {"quantity_import":quantity_import,"quantity_export":quantity_export,"net_amount":data_after_12_month,"estimates_net_amount":estimates_net_amount}
-
-    return json(obj)
+    object["quantity_import"] = quantity_import,
+    object["quantity_export"] = quantity_export,
+    object["net_amount"] = data_after_12_month,
+    object["estimates_net_amount"]= estimates_net_amount
+    return json(object)
 
 
 @app.route('/api/v1/count_of_day',methods=['POST'])

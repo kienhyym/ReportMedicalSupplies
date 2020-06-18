@@ -137,7 +137,7 @@ require(['jquery',
 					$("#year2").append(options)
 
 
-				
+
 				}
 			},
 			chartCountNumberOfMonth: function () {
@@ -237,6 +237,36 @@ require(['jquery',
 						arrChart[1].update();
 					}
 				})
+
+				$.ajax({
+					url: self.serviceURL + "/api/v1/count_of_month_csyte",
+					method: "POST",
+					data: JSON.stringify(
+						{
+							"nam": new Date().getFullYear(),
+							"medical_supplies_id": null,
+						}
+					),
+					contentType: "application/json",
+					success: function (response) {
+						console.log(response.quantity_import[0])
+						$('.seach-yte input').val(response.medical_supplies_name[0])
+
+						arrChart[0].data.datasets[0].data = response.quantity_import[0]
+						arrChart[0].data.datasets[1].data = response.quantity_export[0]
+						arrChart[0].data.datasets[2].data = response.net_amount[0]
+						arrChart[0].data.datasets[3].data = response.estimates_net_amount
+
+						arrChart[0].data.datasets[0].label = "Tổng số lượng nhập"
+						arrChart[0].data.datasets[1].label = "Tổng số lượng sử dụng"
+						arrChart[0].data.datasets[2].label = "Tổng số lượng tồn"
+						arrChart[0].data.datasets[3].label = "Tổng dự kiến nhu cầu nhập"
+
+						arrChart[0].options.title.text = 'Biểu đồ thống kê vật tư ' + $('.seach-yte input').val() + ' của cơ sở y tế năm ' + $('#year2').val();
+						arrChart[0].update();
+					}
+				})
+
 				self.searchItem(arrChart);
 				self.changeYear(arrChart);
 
