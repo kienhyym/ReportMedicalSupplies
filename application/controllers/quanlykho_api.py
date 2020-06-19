@@ -15,6 +15,7 @@ import os, sys
 import aiofiles
 from gatco.response import json, text, html
 
+from operator import itemgetter
 
 from application.models.model_quanlykho import *
 from application.models.models import Organization, User
@@ -36,7 +37,9 @@ async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
         results_per_page = request.args.get("results_per_page",None)
         if page is not None and results_per_page is not None and int(page) != 1:
             i = i + int(results_per_page)*int(page)
-        for obj in objects:
+        lit =  sorted(objects, key=itemgetter('date'), reverse=True) 
+        print ("______________________________",lit)
+        for obj in lit:
             if obj is not None:
                 obj_tmp = to_dict(obj)
                 obj_tmp["stt"] = i
