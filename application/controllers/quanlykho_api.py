@@ -31,7 +31,7 @@ async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
     if result is not None and "objects" in result:
         objects = to_dict(result["objects"])
         data = []
-        i =1
+        i =len(objects)
         page = request.args.get("page",None)
         results_per_page = request.args.get("results_per_page",None)
         if page is not None and results_per_page is not None and int(page) != 1:
@@ -40,7 +40,7 @@ async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
             if obj is not None:
                 obj_tmp = to_dict(obj)
                 obj_tmp["stt"] = i
-                i = i +1
+                i = i-1
                 data.append(obj_tmp)
         result = data
 
