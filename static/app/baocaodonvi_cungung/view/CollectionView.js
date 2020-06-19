@@ -71,7 +71,7 @@ define(function (require) {
 
             },
             pagination: {
-                page: 1,
+                // page: 1,
                 pageSize: 15
             },
         },
