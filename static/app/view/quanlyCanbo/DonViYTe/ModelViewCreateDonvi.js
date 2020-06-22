@@ -22,7 +22,17 @@ define(function (require) {
 				type: "group",
 				groupClass: "toolbar-group",
 				buttons: [
-
+					{
+						name: "back",
+						type: "button",
+						buttonClass: "btn-default btn-sm",
+					   label: "TRANSLATE:BACK",
+					   // visible: false,
+						command: function(){
+							var self = this;
+							Backbone.history.history.back();  
+						}
+					},
 					{
 						name: "save",
 						type: "button",
