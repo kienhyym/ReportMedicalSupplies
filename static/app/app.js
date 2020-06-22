@@ -123,7 +123,7 @@ require(['jquery',
 				$('.today').text(Number(new Date().getDate())+"/"+Number(new Date().getMonth()+1)+"/"+new Date().getFullYear())
 
 
-				if (self.hasRole('admin') === false) {
+				if (self.hasRole('admin') === false && gonrinApp().currentUser.Organization.tuyendonvi_id !== "1" ) {
 					$('.dashboard-main').remove()
 				}
 				else {
