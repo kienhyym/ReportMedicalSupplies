@@ -5,7 +5,14 @@
         <div class="d-flex justify-content-between">
             <h3 class="card-title">Danh sách tổng hợp xuất kho vật tư</h3>
         </div>
-        <div id="grid_search"></div>
+        <div class="d-flex justify-content-end">
+            <div>
+                <button class="btn btn-secondary xoaloc">xóa lọc</button>
+            </div>
+            <div class="col-3">
+            <input id="grid_search_time">
+            </div>
+        </div>
         <div id="grid" data-bind='collection:$collection'></div>
     </div>
 </div>

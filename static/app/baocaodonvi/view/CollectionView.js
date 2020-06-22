@@ -78,6 +78,8 @@ define(function(require) {
                     label: "Thời gian báo cáo",
                     template: function(rowData) {
                         if (!!rowData.date) {
+                            console.log(rowData)
+
                             return `
                                         <div>${ moment(rowData.date*1000).format("DD/MM/YYYY") }</div>
                                     `;
@@ -100,6 +102,10 @@ define(function(require) {
         },
         render: function() {
             var self = this;
+            self.$el.find('.xoaloc').unbind('click').bind('click',function(){
+                self.getApp().getRouter().refresh();
+            })
+
             self.$el.find('#grid_search_time').datetimepicker({
                 textFormat: 'DD-MM-YYYY',
                 extraFormats: ['DDMMYYYY'],

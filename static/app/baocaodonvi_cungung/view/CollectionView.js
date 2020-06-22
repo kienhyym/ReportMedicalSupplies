@@ -77,6 +77,9 @@ define(function (require) {
         },
         render: function () {
             var self = this;
+            self.$el.find('.xoaloc').unbind('click').bind('click',function(){
+                self.getApp().getRouter().refresh();
+            })
             self.$el.find('#grid_search_time').datetimepicker({
                 textFormat: 'DD-MM-YYYY',
                 extraFormats: ['DDMMYYYY'],
