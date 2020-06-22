@@ -1082,7 +1082,7 @@ async def dangky_donvi_cungung(request):
         user.id = default_uuid()
         user.name = data.get("name",None)
         user.phone = data.get("phone",None)
-        user.email = data.get("phone",None)
+        user.email = data.get("email",None)
         user.unsigned_name = convert_text_khongdau(user.name)
         user.salt = salt
         user.password = auth.encrypt_password(data.get("password",None), str(salt))
