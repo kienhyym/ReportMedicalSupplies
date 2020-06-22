@@ -192,7 +192,6 @@ define(function (require) {
 		chooseItemInListDropdownItem: function () {
 			var self = this;
 			self.$el.find('.dropdown-item').unbind('click').bind('click', function () {
-				console.log("__________self.listItemRemove ________", self.listItemRemove)
 				var stt = self.$el.find('[col-type="STT"]').length + 1;
 				var dropdownItemClick = $(this);
 				var beginNetAmount = new Number(dropdownItemClick.attr('begin_net_amount')).toLocaleString("da-DK");
@@ -235,6 +234,10 @@ define(function (require) {
 				self.clickImportExport();
 				self.$el.find('.selected-item-new div .fa-trash').unbind('click').bind('click', function () {
 					self.$el.find('.selected-item-new[selected-item-id="' + $(this).attr('selected-item-id') + '"]').remove();
+					self.$el.find('[col-type="STT"]').each(function(index,item){
+						$(item).val(index+1)
+					})
+
 				})
 			})
 		},
@@ -631,6 +634,9 @@ define(function (require) {
 			self.$el.find('.selected-item-old div .fa-trash').unbind('click').bind('click', function () {
 				self.$el.find('.selected-item-old[selected-item-id="' + $(this).attr('selected-item-id') + '"]').remove();
 				self.listItemRemove.push($(this).attr('selected-item-id'))
+				self.$el.find('[col-type="STT"]').each(function(index,item){
+					$(item).val(index+1)
+				})
 			})
 		},
 		deleteItem: function () {
