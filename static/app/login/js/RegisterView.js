@@ -55,6 +55,9 @@ define(function (require) {
 
             self.applyBindings();
             self.registerEvent();
+            self.$el.find("#btn-back").unbind("click").bind("click", function () {
+				window.location.replace(self.getApp().serviceURL);
+			});
         },
 
         registerEvent: function () {
