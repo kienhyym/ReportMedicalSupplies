@@ -86,6 +86,8 @@ define(function (require) {
 						<tr class="text-center">
 							<th>I</th>
 							<th class="text-left">${response.medical_supplies_name}</th>
+							<th class="text-left"></th>
+
 							<th>${avg_price}</th>
 							<th>${quantity}</th>
 							<th>${sum_price}</th>
@@ -96,11 +98,12 @@ define(function (require) {
 							var price = new Number(item.price).toLocaleString("da-DK");
 							var quantity = new Number(item.quantity).toLocaleString("da-DK");
 							var sum_price2 = new Number(item.quantity * item.price).toLocaleString("da-DK");
-	
+							
 							self.$el.find('#danhSachDonVi').append(`
 							<tr class="text-center">
 							<td>${index+1}</td>
 								<td class="text-left">${item.organization_name}</td>
+								<td class="text-left">${moment(item.date*1000).format('DD/MM/YYYY')}</td>
 								<td>${price}</td>
 								<td>${quantity}</td>
 								<td>${sum_price2}</td>
