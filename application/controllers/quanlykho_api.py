@@ -28,24 +28,35 @@ import pandas
 
 
 
-async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
+async def postprocess_add_stt2(request=None, Model=None, result=None, **kw):
     if result is not None and "objects" in result:
-        objects = to_dict(result["objects"])
+        lit =  sorted(to_dict(result["objects"]), key=itemgetter('created_at'), reverse=True)
         data = []
-        i =len(objects)
+        i =1
         page = request.args.get("page",None)
         results_per_page = request.args.get("results_per_page",None)
-        if page is not None and results_per_page is not None and int(page) != 1:
-            i = i + int(results_per_page)*int(page)
-        lit =  sorted(objects, key=itemgetter('created_at'), reverse=True) 
-        print ("______________________________",lit)
+        if page is not None and results_per_page is not None and int(page) > 1:
+            i = i + int(results_per_page)*(int(page)-1)
         for obj in lit:
             if obj is not None:
-                obj_tmp = to_dict(obj)
-                obj_tmp["stt"] = i
-                i = i-1
-                data.append(obj_tmp)
-        result = data
+                obj["stt"] = i
+                i = i + 1
+        result = lit
+
+async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
+    if result is not None and "objects" in result:
+        lit =  sorted(to_dict(result["objects"]), key=itemgetter('date'), reverse=True)
+        data = []
+        i =1
+        page = request.args.get("page",None)
+        results_per_page = request.args.get("results_per_page",None)
+        if page is not None and results_per_page is not None and int(page) > 1:
+            i = i + int(results_per_page)*(int(page)-1)
+        for obj in lit:
+            if obj is not None:
+                obj["stt"] = i
+                i = i + 1
+        result = lit
 
 async def check_dict_like(request=None, data=None, Model=None, **kw):
     pass
@@ -228,7 +239,7 @@ apimanager.create_api(MedicalSupplies,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[], PUT_SINGLE=[]),
-    postprocess=dict(POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
+    postprocess=dict(POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt2]),
     collection_name='medical_supplies')
 
 async def check_date_create_form_ReportOrganization(request=None, data=None, Model=None, **kw):
