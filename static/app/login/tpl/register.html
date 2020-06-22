@@ -1,37 +1,37 @@
 <div class="card col-8" style=" margin: 0px auto;">
-<h4 class="mt-3 border-bottom text-center">Tạo đơn vị và Tài khoản sử dụng</h4>
+<h4 class="mt-3 border-bottom text-center">Tạo đơn vị và tài khoản sử dụng cho đơn vị cung ứng</h4>
 <div class="card-body">
     <div class="row">
         <h4 class="text-uppercase col-md-12 p-2">Thông tin người dùng</h4> 
         <div class="col-md-6 col-sm-12 col-12 border-right">
             <div class="form-group required">
               <label>Họ và tên</label>
-              <input  type="text" data-post="name" placeholder="Nhập số họ tên người dùng" class="form-control text-uppercase">
+              <input  type="text" id="tennguoidung" data-post="name" placeholder="Nhập số họ tên người dùng" class="form-control text-uppercase">
           </div>
             <div class="form-group required">
                 <label>Số điện thoại</label>
-                <input  type="text" data-post="phone" placeholder="Nhập số điện thoại người dùng" class="form-control">
+                <input  type="text" id="sodienthoai" data-post="phone" placeholder="Nhập số điện thoại người dùng" class="form-control">
             </div>
         </div>
         <div class="col-md-6 col-sm-12 col-12">
-            <div class="form-group required">
+            <div class="form-group ">
                 <label>Email</label>
-                <input  type="text" data-post="email" placeholder="" class="form-control text-lowercase">
+                <input  type="text" id="email"  data-post="email" placeholder="" class="form-control text-lowercase">
             </div>
             <div class="form-group required">
                 <label>Mật khẩu</label>
-                <input type="password" data-post="password" placeholder="Nhập mật khẩu" class="form-control ">
+                <input type="password" id="pass"  data-post="password" placeholder="Nhập mật khẩu" class="form-control ">
             </div>
             <div class="form-group required">
                 <label >Xác nhận mật khẩu</label>
-                <input type="password"  placeholder="Xác nhận mật khẩu" class="form-control" >
+                <input type="password" id="pass2"  placeholder="Xác nhận mật khẩu" class="form-control" >
             </div>
         </div>
         <h4 class="text-uppercase col-md-12 p-2">Thông tin đơn vị</h4>
         <div class="col-md-6 col-sm-12 col-12 border-right">
             <div class="form-group required">
               <label>Tên Đơn Vị</label>
-              <input type="text" data-post="donvi_name" placeholder="Nhập tên đơn vị" class="form-control text-uppercase">
+              <input type="text" id="tendonvi" data-post="donvi_name" placeholder="Nhập tên đơn vị" class="form-control text-uppercase">
             </div>
             <div class="form-group">
               <label>Số điện thoại</label>
@@ -44,15 +44,15 @@
           </div>
 
           <div class="col-md-6 col-sm-12 col-12">
-            <div class="form-group">
+            <div class="form-group required">
               <label>Tỉnh/Thành phố</label>
-              <input id="matinhthanh" type="text" data-postid="tinhthanh_id" data-id = "" placeholder="" class="form-control">
+              <input id="matinhthanh"  type="text" data-postid="tinhthanh_id" data-id = "" placeholder="" class="form-control">
             </div>
-            <div class="form-group">
+            <div class="form-group required">
               <label>Quận/Huyện</label>
               <input id="maquanhuyen" type="text" data-postid="quanhuyen_id" data-id = "" placeholder="" class="form-control">
             </div>
-            <div class="form-group">
+            <div class="form-group required">
               <label>Xã/Phường</label>
               <input id = "maxaphuong" type="text" data-postid="xaphuong_id" data-id = "" placeholder=""  class="form-control">
             </div>
@@ -64,14 +64,14 @@
           </div>
         </div>
         <div class="col-md-6 col-sm-12 col-12">
-          <div class="form-group">
+          <div class="form-group required">
             <label>Địa chỉ</label>
-            <textarea  rows="2" data-post="donvi_diachi" placeholder="Nhập địa chỉ" class="form-control"></textarea>
+            <textarea id="diachi" rows="2" data-post="donvi_diachi" placeholder="Nhập địa chỉ" class="form-control"></textarea>
           </div>
         </div>
     </div>
     <div class="text-right">
-        <button class="btn btn-success btn-register">Tạo mới</button>
+        <button class="btn btn-success btn-register">Đăng ký</button>
     </div>
 
 </div>

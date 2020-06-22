@@ -75,7 +75,31 @@ define(function (require) {
     			},
     			]
     	},
-    	tools : [ {
+    	tools : [ 
+			{
+				name: "back",
+				type: "button",
+				buttonClass: "btn-default btn-sm",
+				label: "TRANSLATE:BACK",
+				// visible: function () {
+				// 	var self = this;
+				// 	var uid = "id";
+				// 	if (self.getApp().currentUser) {
+				// 		uid = self.getApp().currentUser.donvi_id;
+				// 	}
+				// 	var id_donvi = this.getApp().getRouter().getParam("id");
+				// 	if (uid === id_donvi || !id_donvi) {
+				// 		return false;
+				// 	} else {
+				// 		return true;
+				// 	}
+				// },
+				command: function () {
+					var self = this;
+					Backbone.history.history.back();
+				}
+			},
+			{
 			name : "save",
 			type : "button",
 			buttonClass : "btn-success btn-sm",
