@@ -149,12 +149,14 @@ define(function(require) {
                 sessionKey: this.collectionName + "_filter"
             });
             filter.render();
+			self.$el.find("#grid_search input").val("");
 
             if (!filter.isEmptyFilter()) {
                 var text = !!filter.model.get("text") ? filter.model.get("text").trim() : "";
                 var filters = { "name": { "$likeI": text } };
                 self.uiControl.filters = filters;
             }
+            filter.model.set("text","");
             self.applyBindings();
 
             filter.on('filterChanged', function(evt) {
