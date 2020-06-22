@@ -122,12 +122,12 @@ define(function(require) {
 
             self.$el.find('#grid_search_time').blur(function (e) {
                 var $col = self.getCollectionElement();
-
                 var value = self.$el.find('#grid_search_time').data("gonrin").getValue();
+                console.log(value)
                 filters = {
                     "$and": [
                         { "date": { "$gte": value } },
-                        { "date": { "$lt": value + 86400 } },
+                        { "date": { "$lt": Number(value + 86400) } },
                         { "organization_id": { "$eq": currentUser.organization_id } }
                     ]
                 };
