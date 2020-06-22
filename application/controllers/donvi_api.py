@@ -1063,7 +1063,7 @@ async def dangky_donvi_cungung(request):
     if checktontai is None:
         organization = Organization()
         organization.id = default_uuid()
-        organization.name = data.get("donvi_name",None)
+        organization.name = data.get("donvi_name",None).upper()
         organization.unsigned_name = convert_text_khongdau(organization.name)
         organization.phone = data.get("donvi_phone",None)
         organization.email = data.get("donvi_email",None)
@@ -1080,7 +1080,7 @@ async def dangky_donvi_cungung(request):
         salt = generator_salt()
         user = User()
         user.id = default_uuid()
-        user.name = data.get("name",None)
+        user.name = data.get("name",None).upper()
         user.phone = data.get("phone",None)
         user.email = data.get("email",None)
         user.unsigned_name = convert_text_khongdau(user.name)
