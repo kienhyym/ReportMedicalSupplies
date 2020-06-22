@@ -138,9 +138,9 @@ require(['jquery',
 					}
 					$("#year1").append(options)
 					$("#year2").append(options)
-
-
-
+				}
+				if(self.hasRole('admin') === true ){
+					$('#info_myself').hide()
 				}
 			},
 			chartCountNumberOfMonth: function () {

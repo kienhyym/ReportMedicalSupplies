@@ -20,12 +20,31 @@ from operator import itemgetter
 from application.models.model_quanlykho import *
 from application.models.models import Organization, User
 from application.models.model_danhmuc import TinhThanh
+from application.extensions import auth
+from application.controllers.helpers.helper_common import *            
 
-from application.controllers.helpers.helper_common import validate_user, convert_text_khongdau, current_uid, get_current_user
+# from application.controllers.helpers.helper_common import validate_user, convert_text_khongdau, current_uid, get_current_user
 from application.database import db
 import pandas
 
 
+
+@app.route('/api/v1/changepassword', methods=['POST'])
+async def changepassword(request):
+    data = request.json
+    password_old = data['password_old']
+    password_new = data['password_new']
+    user_id = data['user_id']
+    user = db.session.query(User).filter(User.id == user_id).first()
+    if user is not None:
+        print('___________________________',user.password,auth.encrypt_password(str(password_old), str(salt)))
+        if user.password == auth.encrypt_password(str(password_old)):
+
+            newpass= auth.encrypt_password(str(password_new), str(salt))
+            user.password = newpass
+            user.salt = salt
+            # db.session.commit()
+            return json({})
 
 
 async def postprocess_add_stt2(request=None, Model=None, result=None, **kw):

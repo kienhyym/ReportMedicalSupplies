@@ -24,29 +24,25 @@ define(function (require) {
 		changepasswordEvent: function (id) {
 			var self = this;
 			self.$el.find("#btn-back").unbind("click").bind("click", function () {
-				Backbone.history.history.back();
+				window.location.replace(self.getApp().serviceURL);
 			});
 			self.$el.find("#btn-changepassword").unbind("click").bind("click", function () {
-				if (self.$el.find("#txtpass").val() === undefined || self.$el.find("#txtpass").val() === "") {
-					self.getApp().notify("mật khẩu cũ không được bỏ trống");
-					return false;
-				}
 				if (self.$el.find("#txtpass2").val() === undefined || self.$el.find("#txtpass2").val() === "") {
-					self.getApp().notify("Mật khẩu mới không được bỏ trống");
+					self.getApp().notify({ message: "Mật khẩu mới không được bỏ trống" }, { type: "danger", delay: 1000 });
 					return false;
 				}
 				if (self.$el.find("#txtpass3").val() !== self.$el.find("#txtpass2").val()) {
-					self.getApp().notify("Mật khẩu mới viết không giống ở trên");
+					self.getApp().notify({ message: "Mật khẩu mới viết không giống ở trên" }, { type: "danger", delay: 1000 });
 					return false;
 				}
 				$.ajax({
 					type: 'POST',
-					url: self.getApp().serviceURL + "/api/v1/changepassword",
+					url: self.getApp().serviceURL + "/api/v1/user/changepw",
 					dataType: 'json',
 					data: JSON.stringify({
 						user_id: id,
-						password_old: self.$el.find("#txtpass").val(),
-						password_new: self.$el.find("#txtpass2").val(),
+						password: self.$el.find("#txtpass3").val(),
+						confirm_password: self.$el.find("#txtpass2").val(),
 					}),
 					success: function (response) {
 						if (response) {
@@ -58,7 +54,8 @@ define(function (require) {
 
 
 					}, error: function (xhr) {
-						self.getApp().notify("Mật khẩu cũ không chính xác ");
+						self.getApp().notify({ message: "Mật khẩu cũ không chính xác" }, { type: "danger", delay: 1000 });
+
 					}
 				})
 			});

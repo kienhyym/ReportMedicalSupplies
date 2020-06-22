@@ -24,8 +24,6 @@ define(function (require) {
             $("#forgot-btn").unbind('click').bind('click', function () {
                 self.getApp().getRouter().navigate("forgot");
             });
-
-
             return this;
         },
         processLogin: function () {
