@@ -160,6 +160,12 @@ define(function (require) {
 				this.model.set('id', id);
 				this.model.fetch({
 					success: function (data) {
+						if (self.getApp().hasRole('admin') ===true){
+							self.$el.find('[btn-name="save"]').hide()
+							self.$el.find('[btn-name="delete"]').hide()
+						}
+						
+
 						self.applyBindings();
 						// self.showDetail();
 						self.$el.find('.chu-y').show()
