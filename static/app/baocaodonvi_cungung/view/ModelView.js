@@ -263,29 +263,31 @@ define(function (require) {
 						</div>
 						<div style="width: 90px;display: inline-block;text-align: center;padding: 1px;">
 						<div style="position: relative;">
-							<input selected-item-id = "${itemID}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
+							<input selected-item-id = "${itemID}" id-stt="${itemID + dem}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
 							<button class= "btn btn-outline-secondary pl-1 pr-1">Tải lên</button>
-							<a selected-item-id = "${itemID}" col-type="DOWNLOAD" href="#" class= "btn btn-outline-secondary pl-1 pr-1">Xem</a>
+							<a selected-item-id = "${itemID}" id-stt="${itemID + dem}" col-type="DOWNLOAD"  class= "btn btn-outline-secondary pl-1 pr-1 text-muted" style="opacity:0">Xem</a>
 						</div>
 						</div>
 						<div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
-								<i selected-item-id = "${itemID}" class="fa fa-trash" style="font-size: 17px"></i>
+								<i selected-item-id = "${itemID}" id-stt="${itemID + dem}" class="fa fa-trash" style="font-size: 17px"></i>
 							</div>
 					</div>
 					`)
 				}
 				self.searchItem(itemID)
 				self.dropdownBanTaiTro()
-
 				self.$el.find('.dropdown-menu-item').hide()
 				self.$el.find('.search-item').val('')
 				self.clickInput();
-				self.$el.find('.selected-item-new div .fa-trash').unbind('click').bind('click', function () {
-					self.$el.find('.selected-item-new[selected-item-id="' + $(this).attr('selected-item-id') + '"]').remove();
+				self.$el.find('.fa-trash').unbind('click').bind('click', function () {
+					self.$el.find('.selected-item-new[id-stt="'+$(this).attr('id-stt') + '"]').remove();
+					self.$el.find('[col-type="STT"]').each(function(index,item){
+						$(item).val(index+1)
+					})
 				})
 			})
 		},
-		clickInput: function () {
+		clickInput: function (itemID) {
 			var self = this;
 			// Click vào ô số tự đông thêm dấu chấm
 			var listClick = [
@@ -326,7 +328,8 @@ define(function (require) {
 				});
 			})
 			// Upload file
-			self.$el.find("[col-type='FILE']").on("change", function () {
+			self.$el.find('[col-type="FILE"]').on("change", function () {
+				var contro = $(this)
 				var http = new XMLHttpRequest();
 				var fd = new FormData();
 				fd.append('file', this.files[0]);
@@ -345,7 +348,9 @@ define(function (require) {
 						if (http.readyState === 4) {
 							var data_file = JSON.parse(http.responseText), link, p, t;
 							self.getApp().notify("Tải file thành công");
-							self.$el.find("[col-type='DOWNLOAD']").attr('href', data_file.link)
+							self.$el.find('[id-stt= "'+contro.attr('id-stt')+'"][col-type="DOWNLOAD"]').attr('href', data_file.link)
+							self.$el.find('[id-stt= "'+contro.attr('id-stt')+'"][col-type="DOWNLOAD"]').css('opacity','1')
+
 						}
 					} else {
 						self.getApp().notify("Không thể tải tệp tin lên máy chủ");
@@ -364,11 +369,11 @@ define(function (require) {
 							if($(this).attr('type_sell_sponsor') == "sell"){
 								self.getApp().notify({ message: "Báo cáo đã kê số lượng tài trợ" }, { type: "danger", delay: 1000 });
 							}
-							else{
+							if($(this).attr('type_sell_sponsor') == "sponsor"){
 								self.getApp().notify({ message: "Báo cáo đã kê số lượng bán" }, { type: "danger", delay: 1000 });
 							}
 						}
-						console.log($(self.$el.find('[col-type="TYPE_SELL_SPONSOR"][selected-item-id = "'+that+'"]')[0]).attr('type_sell_sponsor'))
+						$(self.$el.find('[col-type="TYPE_SELL_SPONSOR"][selected-item-id = "'+that+'"]')[0]).attr('type_sell_sponsor')
 					}
 			})
 		},
@@ -496,7 +501,7 @@ define(function (require) {
 						String_TypeSellSponsor = "Tài trợ"
 					}
 					self.$el.find('#list-item').before(`
-                    <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old selected-item-general" item_id = ${item.medical_supplies_id} >
+                    <div style="width: 1000px;height: 50px;" selected-item-id = "${item.id}" class = "selected-item-old selected-item-general" item_id = "${item.medical_supplies_id}" id-stt="${item.id}" >
                         <div style="width: 28px; display: inline-block;text-align: center;padding: 1px;">
                             <input selected-item-id = "${item.id}" col-type="STT" value="${index + 1}" class="form-control text-center p-1"  readonly style="font-size:14px">
                         </div>
@@ -538,9 +543,9 @@ define(function (require) {
 						</div>
 						<div style="width: 90px;display: inline-block;text-align: center;padding: 1px;">
 							<div style="position: relative;">
-								<input selected-item-id = "${item.id}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
+								<input selected-item-id = "${item.id}" id-stt="${item.id}" col-type="FILE" type="file" style="width:35px; position: absolute; opacity: 0;"> 
 								<button class= "btn btn-outline-secondary pl-1 pr-1">Tải lên</button>
-								<a selected-item-id = "${item.id}" col-type="DOWNLOAD" href="${item.file}"  class= "btn btn-outline-secondary pl-1 pr-1">Xem</a>
+								<a selected-item-id = "${item.id}" id-stt="${item.id}" col-type="DOWNLOAD" href="${item.file}"  class= "btn btn-outline-secondary pl-1 pr-1">Xem</a>
 							</div>
 						</div>
                         <div style="width: 14px;display: inline-block;text-align: center;padding: 1px;">
@@ -549,7 +554,12 @@ define(function (require) {
                     </div>
 					`)
 					self.searchItem(item.id)
+					if(item.file == null || item.file == '#'){
+						self.$el.find('[selected-item-id = "'+item.id+'"][col-type="DOWNLOAD"]').removeAttr('href')
+						self.$el.find('[selected-item-id = "'+item.id+'"][col-type="DOWNLOAD"]').css('opacity','0')
+					}
 				})
+
 				self.clickInput();
 				self.dropdownBanTaiTro()
 
@@ -559,6 +569,7 @@ define(function (require) {
 			var self = this;
 			var arr = [];
 			self.$el.find('.selected-item-new').each(function (index, item) {
+				
 				var obj = {
 					"report_supply_organization_id": report_supply_organization_id,
 					"organization_id": self.model.get('organization_id'),
@@ -619,6 +630,9 @@ define(function (require) {
 			self.$el.find('.selected-item-old div .fa-trash').unbind('click').bind('click', function () {
 				self.$el.find('.selected-item-old[selected-item-id="' + $(this).attr('selected-item-id') + '"]').remove();
 				self.listItemRemove.push($(this).attr('selected-item-id'))
+				self.$el.find('[col-type="STT"]').each(function(index,item){
+					$(item).val(index+1)
+				})
 			})
 		},
 		deleteItem: function () {

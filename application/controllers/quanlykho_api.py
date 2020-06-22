@@ -644,7 +644,7 @@ async def create_report_supply_organization_detail(request):
         new_item.price = _['price']
         new_item.health_facilities_id = _['health_facilities_id']
 
-        new_item.file = _['file']
+        new_item.file = _.get('file',None)
 
         db.session.add(new_item)
         db.session.commit()
@@ -661,7 +661,7 @@ async def update_report_supply_organization_detail(request):
         old_item.quantity = _['quantity']
         old_item.price = _['price']
         old_item.health_facilities_id = _['health_facilities_id']
-        old_item.file = _['file']
+        old_item.file =_.get('file',None)
         db.session.commit()
     return json({"message": "Update Success"})
 
