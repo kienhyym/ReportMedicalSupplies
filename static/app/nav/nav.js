@@ -136,7 +136,7 @@ define(function (require) {
         //     }
         // },
         {
-            "text": "Báo cáo trang thiết bị",
+            "text": "Báo cáo sử dụng vật tư PCD",
             "type": "view",
             "collectionName": "report_organization",
             "route": "baocaodonvi/collection",
@@ -147,7 +147,7 @@ define(function (require) {
             }
         },
         {
-            "text": "Tổng hợp xuất kho vật tư PCD",
+            "text": "Tổng hợp xuất kho vật tư",
             "type": "view",
             "route": "tonghopxuatkhovattu/collection",
             "$ref": "app/tonghopxuatkhovattu/view/CollectionView",
@@ -157,7 +157,7 @@ define(function (require) {
             }
         },
         {
-            "text": "Báo cáo vật tư PCD ĐV cung ứng",
+            "text": "Báo cáo cung ứng vật tư PCD",
             "type": "view",
             "route": "baocaodonvi_cungung/collection",
             "$ref": "app/baocaodonvi_cungung/view/CollectionView",

@@ -110,7 +110,7 @@ define(function (require) {
 										}
 									}
 									catch (err) {
-										self.getApp().notify({ message: "Lỗi truy cập dữ liệu, vui lòng thử lại sau" }, { type: "danger", delay: 1000 });
+										self.getApp().notify({ message: "Tên đăng nhập hoặc số điện thoại đã tồn tại" }, { type: "danger", delay: 1000 });
 									}
 								}
 							});
