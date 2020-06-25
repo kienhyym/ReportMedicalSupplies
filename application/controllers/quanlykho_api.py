@@ -216,10 +216,11 @@ async def load_organization_dropdown_hospital(request):
 async def load_organization_dropdown_other(request):
     # item_delete = db.session.query(TuyenDonVi).filter(TuyenDonVi.id == "10").first()
     item_delete2 = db.session.query(Organization).filter(Organization.tuyendonvi_id == "10").first()
-    # item_delete3 = db.session.query(ReportOrganization).filter(ReportOrganization.organization_id == to_dict(item_delete2)['id']).all()
-    # for _ in item_delete3:
-    db.session.delete(item_delete2)
-    db.session.commit()
+    item_delete3 = db.session.query(ReportOrganization).filter(ReportOrganization.organization_id == to_dict(item_delete2)['id']).all()
+    print ("_________-",item_delete3)
+    for _ in item_delete3:
+        db.session.delete(_)
+        db.session.commit()
 
 
     data = request.json
