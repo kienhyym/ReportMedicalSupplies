@@ -220,13 +220,13 @@ async def load_organization_dropdown_other(request):
     if text is not None and text != "":
         search = "%{}%".format(text)
         searchTitle = "%{}%".format(text.title())
-        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"]),Organization.id.notin_(notid)).all()
+        list = db.session.query(Organization).filter(and_(or_(Organization.name.like(search),Organization.name.like(searchTitle),Organization.unsigned_name.like(search)),Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"]),Organization.id.notin_(notid),Organization.active == 1).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
         return json(arr)
     else:
-        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"]),Organization.id.notin_(notid)).all()
+        list = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc"),Organization.tuyendonvi_id.notin_(["6","7","8"]),Organization.id.notin_(notid),Organization.active == 1).all()
         arr = []
         for i in list:
             arr.append(to_dict(i))
