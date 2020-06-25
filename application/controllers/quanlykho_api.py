@@ -19,7 +19,7 @@ from operator import itemgetter
 
 from application.models.model_quanlykho import *
 from application.models.models import Organization, User
-from application.models.model_danhmuc import TinhThanh
+from application.models.model_danhmuc import TinhThanh,TuyenDonVi
 from application.extensions import auth
 from application.controllers.helpers.helper_common import *            
 
