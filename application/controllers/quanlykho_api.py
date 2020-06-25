@@ -214,6 +214,11 @@ async def load_organization_dropdown_hospital(request):
 # // TÌM KIẾM DANH SÁCH KHÁC
 @app.route('/api/v1/load_organization_dropdown_other',methods=['POST'])
 async def load_organization_dropdown_other(request):
+    item_delete = db.session.query(TuyenDonVi).filter(TuyenDonVi.id == "10").first()
+    db.session.delete(item_delete)
+    db.session.commit()
+
+
     data = request.json
     text = data['text']
     notid = data['danhSachDaSearch']
