@@ -129,6 +129,7 @@ define(function (require) {
 				});
 			} else {
 				self.applyBindings();
+				self.$el.find('[btn-name="delete"]').hide()
 			}
 
 		},
