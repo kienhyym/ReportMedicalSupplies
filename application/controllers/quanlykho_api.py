@@ -285,6 +285,9 @@ async def get_all_medical_supplies_and_date_init(request):
     data = request.json
     organization_id = data["organization_id"]
     date = data["date"]
+    date_string = str(datetime.fromtimestamp(date))[0:10].replace("-", "/")
+    conver_date = datetime.strptime(date_string, "%Y/%m/%d")
+    date_timestamp = datetime.timestamp(conver_date)
     arr = []
     query_date_init = db.session.query(func.min(ReportOrganization.date)).filter(ReportOrganization.organization_id == organization_id).all()
     if query_date_init is not None:
@@ -296,7 +299,7 @@ async def get_all_medical_supplies_and_date_init(request):
         obj = to_dict(medicalSupplie)
         if date_init is not None: 
             medical_supplies_init = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(medicalSupplie)['id'],ReportOrganizationDetail.date == date_init)).order_by(ReportOrganizationDetail.date.asc()).first()
-            medical_supplies_import_export = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(medicalSupplie)['id'],ReportOrganizationDetail.date >= date_init,ReportOrganizationDetail.date < date)).all()
+            medical_supplies_import_export = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(medicalSupplie)['id'],ReportOrganizationDetail.date >= date_init,ReportOrganizationDetail.date < date_timestamp)).all()
             if len(medical_supplies_import_export) == 0:
                 if medical_supplies_init is not None:
                     obj['begin_net_amount'] = medical_supplies_init[0]

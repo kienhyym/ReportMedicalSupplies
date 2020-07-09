@@ -55,11 +55,15 @@ define(function (require) {
                         }
                     }
 
-                    that.attr(item, that.val())
+                    setTimeout(() => {
+                        var ValueString = new Number(that.val()).toLocaleString("da-DK");
+                        that.attr(item, that.val())
+                    }, 100);
+
                     setTimeout(() => {
                         var ValueString = new Number(that.val()).toLocaleString("da-DK");
                         that.val(ValueString);
-                    }, 100);
+                    }, 200);
                     element = "";
                 })
                 self.$el.find('.' + item).keyup(function () {

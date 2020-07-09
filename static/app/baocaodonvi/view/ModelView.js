@@ -240,12 +240,30 @@ define(function (require) {
 		},
 		changeTime : function(){
 			var self = this;
-			// self.$el.find('#day-create').on('change.gonrin', function(e){
-			// 	console.log(self.$el.find('#day-create').data('gonrin').getValue());
-			// });
 			self.model.on('change:date',function(){
-				self.$el.find('.begin-net-amount').each((index,element,)=>{
-					console.log($(element).attr('begin-net-amount'))
+				$.ajax({
+					url: self.getApp().serviceURL + "/api/v1/get_all_medical_supplies_and_date_init",
+					method: "POST",
+					data:JSON.stringify({"organization_id":gonrinApp().currentUser.Organization.id,"date":self.model.get('date')}),
+					contentType: "application/json",
+					success: function (data) {
+						var arr = lodash.orderBy(data.medicalSupplies, ['name'], ['asc']);
+
+						arr.forEach((element,index) =>{
+							$(self.$el.find('.begin-net-amount')[index]).attr('begin-net-amount',element.begin_net_amount)
+							var ValueString = new Number(element.begin_net_amount).toLocaleString("da-DK");
+							$(self.$el.find('.begin-net-amount')[index]).val(ValueString)
+
+							var beginNetAmount = element.begin_net_amount
+							var quantityImport = $(self.$el.find('.quantity-import')[index]).attr('quantity-import')
+							var quantityExport = $(self.$el.find('.quantity-export')[index]).attr('quantity-export')
+							var endNetAmount = Number(beginNetAmount) + Number(quantityImport) - Number(quantityExport)
+							$(self.$el.find('.end-net-amount')[index]).attr('begin-net-amount',endNetAmount)
+							var ValueStringendNetAmount = new Number(endNetAmount).toLocaleString("da-DK");
+							$(self.$el.find('.end-net-amount')[index]).val(ValueStringendNetAmount)
+
+						})
+					}
 				})
 			})
 		}
