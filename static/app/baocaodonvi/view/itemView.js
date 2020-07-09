@@ -35,16 +35,17 @@ define(function (require) {
             self.applyBindings();
             self.registerEvent();
         },
-
         registerEvent: function () {
             const self = this;
+
             var clas = ["begin-net-amount", "quantity-import", "quantity-export", "end-net-amount", "estimates-net-amount"]
             clas.forEach(function (item, idex) {
                 self.$el.find('.' + item).unbind('click').bind('click', function () {
-                    self.$el.find('.' + item).val($(this).attr(item))
+                    $(this).val($(this).attr(item))
                 })
                 var element = "";
                 self.$el.find('.' + item).focusout(function () {
+                    var that = $(this)
                     for (var i = 0; i < item.length; i++) {
                         if (item[i] === "-") {
                             element = element + "_"
@@ -54,10 +55,12 @@ define(function (require) {
                         }
                     }
 
-                    $(this).attr(item, $(this).val())
-                    var ValueString = new Number(self.model.get(element)).toLocaleString("da-DK");
-                    $(this).val(ValueString);
-                    element = ""
+                    that.attr(item, that.val())
+                    setTimeout(() => {
+                        var ValueString = new Number(that.val()).toLocaleString("da-DK");
+                        that.val(ValueString);
+                    }, 100);
+                    element = "";
                 })
                 self.$el.find('.' + item).keyup(function () {
                     var num = $(this).attr(item)
@@ -70,12 +73,8 @@ define(function (require) {
             })
 
 
-
-
-
             self.model.on("change", () => {
                 var endNetAmountValueString = new Number(self.model.get('begin_net_amount') + self.model.get('quantity_import') - self.model.get('quantity_export')).toLocaleString("da-DK");
-                console.log(self.$el.find('.begin-net-amount').attr('begin-net-amount'))
                 self.model.set('end_net_amount', self.model.get('begin_net_amount') + self.model.get('quantity_import') - self.model.get('quantity_export'))
                 self.$el.find('.end-net-amount').val(endNetAmountValueString)
                 self.$el.find('.end-net-amount', self.model.get('begin_net_amount') + self.model.get('quantity_import') - self.model.get('quantity_export'))

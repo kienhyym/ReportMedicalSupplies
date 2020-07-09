@@ -41,7 +41,6 @@ define(function (require) {
 							self.model.save(null, {
 								success: function (model, respose, options) {
 									self.getApp().notify("Lưu thông tin thành công");
-									console.log(self.listItemView)
 									self.listItemView.forEach((item, index) => {
 										item.model.set('date', self.model.get('date'))
 										if (item.model.get('report_organization_id') == null){
@@ -131,13 +130,14 @@ define(function (require) {
 			self.$el.find('#organization').val(gonrinApp().currentUser.Organization.name)
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
+			self.changeTime();
+
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({
 					success: function (data) {
 						self.applyBindings();
 						self.showDeltail();
-						self.changeTime();
 					},
 					error: function (xhr, status, error) {
 						try {
@@ -158,7 +158,6 @@ define(function (require) {
 				var currentUser = gonrinApp().currentUser;
 				self.model.set("organization", currentUser.Organization);
 				self.showlistMedicalSupplies();
-				self.changeTime();
 			}
 
 		},
@@ -171,7 +170,6 @@ define(function (require) {
 				contentType: "application/json",
 				success: function (data) {
 					self.listItemView = [];
-					console.log(data)
 					var arr = lodash.orderBy(data.medicalSupplies, ['name'], ['asc']);
 					arr.forEach((element, index) => {
 						var view = new itemView()
@@ -242,6 +240,14 @@ define(function (require) {
 		},
 		changeTime : function(){
 			var self = this;
+			// self.$el.find('#day-create').on('change.gonrin', function(e){
+			// 	console.log(self.$el.find('#day-create').data('gonrin').getValue());
+			// });
+			self.model.on('change:date',function(){
+				self.$el.find('.begin-net-amount').each((index,element,)=>{
+					console.log($(element).attr('begin-net-amount'))
+				})
+			})
 		}
 	});
 
