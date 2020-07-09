@@ -77,27 +77,6 @@ async def postprocess_add_stt(request=None, Model=None, result=None, **kw):
                 i = i + 1
         result = lit
 
-async def check_dict_like(request=None, data=None, Model=None, **kw):
-    pass
-        # del data['organization']
-
-async def get_name_medical_supplies1(request=None, Model=None, result=None ,**kw):
-        for _ in result['details']:
-            medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == _['medical_supplies_id']).first()
-            _['medical_supplies_name']= to_dict(medicalSupplies)['name']
-            _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == result["organization_id"],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'],ReportOrganizationDetail.date < _['date'])).all()
-            begin_net_amount = 0
-            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == result["organization_id"],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'])).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amount is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
-                _['check_begin_net_amount'] = to_dict(reportOrganizatiobegin_net_amount)['date']
-            else:
-                _['check_begin_net_amount'] = None
-            if len(reportOrganizationDetail)>0:
-                _['begin_net_amount']= reportOrganizationDetail[0][0] + begin_net_amount
-            else:
-                _['begin_net_amount']= 0 + begin_net_amount
 
 async def get_name_medical_supplies2(request=None, Model=None, result=None ,**kw):
         for _ in result['details']:
@@ -261,17 +240,6 @@ apimanager.create_api(MedicalSupplies,
     postprocess=dict(POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt2]),
     collection_name='medical_supplies')
 
-async def check_date_create_form_ReportOrganization(request=None, data=None, Model=None, **kw):
-    date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
-    timestamps = db.session.query(ReportOrganization.date).filter(ReportOrganization.organization_id == request.json['organization']['id']).all()
-    for _ in timestamps:
-        date_string = str(datetime.fromtimestamp(_[0]))[0:10].replace("-", "/")
-        print ('______________________',date_request_string,date_string)
-        if date_request_string == date_string:
-            return json({
-                "error_code": "create Error",
-                "error_message": "Bạn đã tạo báo cáo ngày này rồi"
-            }, status=520)
 
 async def check_date_create_form_ReportSupplyOrganization(request=None, data=None, Model=None, **kw):
     date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
@@ -284,19 +252,120 @@ async def check_date_create_form_ReportSupplyOrganization(request=None, data=Non
                 "error_message": "Bạn đã tạo báo cáo ngày này rồi"
             }, status=520)
 
+#############################################################      BÁO CÁO CƠ SỞ Y TẾ       ##########################################
+# ====================> Thêm tên ,đơn vị tính, ngày khởi tạo cho detail 
+async def get_info_medical_supplies(request=None, Model=None, result=None ,**kw):
+    date_init = db.session.query(func.min(ReportOrganization.date)).filter(ReportOrganization.organization_id == result['organization_id']).all()
+    if date_init is not None:
+        result['date_init'] = date_init[0][0]
+    else:
+        result['date_init'] = None
+    for _ in result['details']:
+        medicalSupplies = db.session.query(MedicalSupplies).filter(MedicalSupplies.id == _['medical_supplies_id']).first()
+        _['medical_supplies_name']= to_dict(medicalSupplies)['name']
+        _['medical_supplies_unit']= to_dict(medicalSupplies)['unit']
+        if date_init is not None:
+            medical_supplies_init = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == result['organization_id'],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'],ReportOrganizationDetail.date == date_init[0][0])).order_by(ReportOrganizationDetail.date.asc()).first()
+            medical_supplies_import_export = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == result['organization_id'],ReportOrganizationDetail.medical_supplies_id == _['medical_supplies_id'],ReportOrganizationDetail.date >= date_init[0][0],ReportOrganizationDetail.date < result['date'])).all()
+            if len(medical_supplies_import_export) == 0:
+                if medical_supplies_init is not None:
+                    _['begin_net_amount'] = medical_supplies_init[0]
+                else:
+                    _['begin_net_amount'] = 0
+            else:
+                if medical_supplies_init is not None:
+                    _['begin_net_amount'] = medical_supplies_init[0] + medical_supplies_import_export[0][0]
+                else:
+                    _['begin_net_amount'] = medical_supplies_import_export[0][0]
+
+
+# ====================> lấy tất cả vật tư và ngày khởi tạo tồn kho 
+@app.route('/api/v1/get_all_medical_supplies_and_date_init',methods=['POST'])
+async def get_all_medical_supplies_and_date_init(request):  
+    data = request.json
+    organization_id = data["organization_id"]
+    date = data["date"]
+    arr = []
+    query_date_init = db.session.query(func.min(ReportOrganization.date)).filter(ReportOrganization.organization_id == organization_id).all()
+    if query_date_init is not None:
+        date_init = query_date_init[0][0]
+    else:
+        date_init = None
+    medicalSupplies = db.session.query(MedicalSupplies).all()
+    for medicalSupplie in medicalSupplies:
+        obj = to_dict(medicalSupplie)
+        if date_init is not None: 
+            medical_supplies_init = db.session.query(ReportOrganizationDetail.begin_net_amount).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(medicalSupplie)['id'],ReportOrganizationDetail.date == date_init)).order_by(ReportOrganizationDetail.date.asc()).first()
+            medical_supplies_import_export = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == to_dict(medicalSupplie)['id'],ReportOrganizationDetail.date >= date_init,ReportOrganizationDetail.date < date)).all()
+            if len(medical_supplies_import_export) == 0:
+                if medical_supplies_init is not None:
+                    obj['begin_net_amount'] = medical_supplies_init[0]
+                else:
+                    obj['begin_net_amount'] = 0
+                arr.append(obj)
+            else:
+                if medical_supplies_init is not None:
+                    obj['begin_net_amount'] = medical_supplies_init[0] + medical_supplies_import_export[0][0]
+                else:
+                    obj['begin_net_amount'] = medical_supplies_import_export[0][0]
+                arr.append(obj)
+        else:
+            obj['begin_net_amount'] = 0
+            arr.append(obj)
+    return json({"medicalSupplies":arr,"date_init":date_init})
+
+async def del_date_init(request=None, data=None, Model=None, **kw):
+        del data['date_init']
+
+# ====================> kiểm tra xem đã tạo báo cáo trong ngày chưa nếu rồi ko cho tạo
+async def check_date_create_form_ReportOrganization(request=None, data=None, Model=None, **kw):
+    date_init = db.session.query(ReportOrganization.date).filter(ReportOrganization.organization_id == data.get('organization')['id']).order_by(ReportOrganization.date.asc()).first()
+    if date_init is not None:
+        if data.get('date') < date_init[0]:
+            return json({
+                    "error_code": "create Error",
+                    "error_message": "Bạn không được tạo báo cáo trước ngày khởi tạo tồn kho"
+                }, status=520)
+    date_request_string = str(datetime.fromtimestamp(request.json['date']))[0:10].replace("-", "/")
+    timestamps = db.session.query(ReportOrganization.date).filter(ReportOrganization.organization_id == data.get('organization')['id']).all()
+    for _ in timestamps:
+        date_string = str(datetime.fromtimestamp(_[0]))[0:10].replace("-", "/")
+        if date_request_string == date_string:
+            return json({
+                "error_code": "create Error",
+                "error_message": "Bạn đã tạo báo cáo ngày này rồi"
+            }, status=520)
+
 
 apimanager.create_api(ReportOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportOrganization,check_dict_like], PUT_SINGLE=[check_medical_supplies_name1]),
-    postprocess=dict(GET_SINGLE=[get_name_medical_supplies1],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportOrganization], PUT_SINGLE=[del_date_init]),
+    postprocess=dict(GET_SINGLE=[get_info_medical_supplies],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='report_organization')
+
+
+
+
+#############################################################        CHI TIẾT BÁO CÁO CƠ SỞ Y TẾ       ##########################################
+#======================>  Chuyển thành số trước khi lưu và xóa trường đã thêm chi tiết báo cáo đơn vị 
+async def conver_decimal(request=None, data=None, Model=None, **kw):
+        data['begin_net_amount'] = int(data['begin_net_amount'])
+        data['quantity_import'] = int(data['quantity_import'])
+        data['quantity_export'] = int(data['quantity_export'])
+        data['end_net_amount'] = int(data['end_net_amount'])
+        data['quantity_original'] = int(data['quantity_original'])
+        data['estimates_net_amount'] = int(data['estimates_net_amount'])
+        if data.get('medical_supplies_unit') is not None:
+            del data['medical_supplies_unit']
+            del data['medical_supplies_name']
+
 
 apimanager.create_api(ReportOrganizationDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
-    postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[],),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[conver_decimal], PUT_SINGLE=[conver_decimal]),
+    postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[]),
     collection_name='report_organization_detail')
 
 apimanager.create_api(ReportSupplyOrganization,
@@ -309,7 +378,7 @@ apimanager.create_api(ReportSupplyOrganization,
 apimanager.create_api(ReportSupplyOrganizationDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_dict_like], PUT_SINGLE=[]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[], PUT_SINGLE=[]),
     postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[]),
     collection_name='report_supply_organization_detail')
 

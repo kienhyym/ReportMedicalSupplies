@@ -78,8 +78,6 @@ define(function(require) {
                     label: "Thời gian báo cáo",
                     template: function(rowData) {
                         if (!!rowData.date) {
-                            console.log(rowData)
-
                             return `
                                         <div>${ moment(rowData.date*1000).format("DD/MM/YYYY") }</div>
                                     `;
@@ -129,7 +127,6 @@ define(function(require) {
             self.$el.find('#grid_search_time').blur(function (e) {
                 var $col = self.getCollectionElement();
                 var value = self.$el.find('#grid_search_time').data("gonrin").getValue();
-                console.log(value)
                 filters = {
                     "$and": [
                         { "date": { "$gte": value } },
