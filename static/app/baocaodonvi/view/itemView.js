@@ -83,7 +83,6 @@ define(function (require) {
                 var quantityExport = Number(self.model.get('quantity_export'));
                 var endNetAmount = beginNetAmount + quantityImport - quantityExport;
                 var endNetAmountValueString = new Number(endNetAmount).toLocaleString("da-DK");
-                console.log(beginNetAmount,'---',quantityImport,'---',quantityExport,'----',endNetAmount)
                 self.model.set('begin_net_amount', beginNetAmount)
                 self.model.set('quantity_import', quantityImport)
                 self.model.set('quantity_export', quantityExport)
