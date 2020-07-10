@@ -177,7 +177,7 @@ define(function (require) {
             "entries": [
                 
                 {
-                    "text": "Báo cáo cơ sở y tế",
+                    "text": "Báo cáo của cơ sở y tế",
                     "type": "view",
                     "route": "thongkebaocao/search",
                     "$ref": "app/thongkebaocao/view/View",
@@ -187,7 +187,7 @@ define(function (require) {
                     }
                 },
                 {
-                    "text": "Báo cáo đơn vị cung ứng",
+                    "text": "Báo cáo của đơn vị cung ứng",
                     "type": "view",
                     "route": "thongkebaocao_cungung/search",
                     "$ref": "app/thongkebaocao_cungung/view/View",
