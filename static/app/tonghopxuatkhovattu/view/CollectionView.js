@@ -20,19 +20,19 @@ define(function(require) {
             type: "group",
             groupClass: "toolbar-group",
             buttons: [
-                {
-                    name: "back",
-                    type: "button",
-                    buttonClass: "btn-default btn-sm",
-                    label: "TRANSLATE:BACK",
-                    visible: function () {
-                        return true;
-                    },
-                    command: function () {
-                        var self = this;
-                        Backbone.history.history.back();
-                    }
-                },
+                // {
+                //     name: "back",
+                //     type: "button",
+                //     buttonClass: "btn-default btn-sm",
+                //     label: "TRANSLATE:BACK",
+                //     visible: function () {
+                //         return true;
+                //     },
+                //     command: function () {
+                //         var self = this;
+                //         Backbone.history.history.back();
+                //     }
+                // },
                 {
                     name: "CREATE",
                     type: "button",
