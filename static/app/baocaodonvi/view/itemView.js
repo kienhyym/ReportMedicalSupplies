@@ -78,7 +78,7 @@ define(function (require) {
 
 
             self.model.on("change", () => {
-                var beginNetAmount = Number(self.model.get('begin_net_amount'));
+                var beginNetAmount = Number(self.$el.find('.begin-net-amount').val());
                 var quantityImport = Number(self.model.get('quantity_import'));
                 var quantityExport = Number(self.model.get('quantity_export'));
                 var endNetAmount = beginNetAmount + quantityImport - quantityExport;
