@@ -248,7 +248,6 @@ define(function (require) {
 					contentType: "application/json",
 					success: function (data) {
 						var arr = lodash.orderBy(data.medicalSupplies, ['name'], ['asc']);
-
 						arr.forEach((element,index) =>{
 							$(self.$el.find('.begin-net-amount')[index]).attr('begin-net-amount',element.begin_net_amount)
 							var ValueString = new Number(element.begin_net_amount).toLocaleString("da-DK");
