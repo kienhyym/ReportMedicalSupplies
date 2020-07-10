@@ -136,7 +136,7 @@ define(function (require) {
         //     }
         // },
         {
-            "text": "Báo cáo của cơ sở y tế",
+            "text": "Báo cáo sử dụng vật tư PCD",
             "type": "view",
             "collectionName": "report_organization",
             "route": "baocaodonvi/collection",
@@ -157,7 +157,7 @@ define(function (require) {
             }
         },
         {
-            "text": "Báo cáo của đơn vị cung ứng",
+            "text": "Báo cáo cung ứng vật tư PCD",
             "type": "view",
             "route": "baocaodonvi_cungung/collection",
             "$ref": "app/baocaodonvi_cungung/view/CollectionView",
