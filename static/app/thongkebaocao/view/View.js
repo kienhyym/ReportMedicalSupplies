@@ -173,7 +173,7 @@ define(function (require) {
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown2",
+					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
 					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
@@ -223,7 +223,7 @@ define(function (require) {
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
-					url: self.getApp().serviceURL + "/api/v1/load_medical_supplies_dropdown2",
+					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
 					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();

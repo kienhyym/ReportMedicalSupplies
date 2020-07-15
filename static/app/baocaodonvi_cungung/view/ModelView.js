@@ -245,9 +245,21 @@ define(function (require) {
 				self.listItemView.push(view)
 				view.$el.find('.stt').val(stt)
 				view.$el.find('.medical-supplies-name').val(medicalSupplies.name)
-				view.$el.find('.medical-supplies-name')[0].style.height = view.$el.find('.medical-supplies-name')[0].scrollHeight + "px"
-				view.$el.find('.health-facilities-id')[0].style.height = view.$el.find('.medical-supplies-name')[0].scrollHeight + "px"
-				view.$el.find('.stt,.unit,.supply-ability,.type-sell-sponsor,.quantity,.price,.upload-file,.file,.tailieu').css('height', view.$el.find('.medical-supplies-name')[0].scrollHeight + "px")
+
+				var heightMax = view.$el.find('.medical-supplies-name')[0].scrollHeight
+				if (heightMax < view.$el.find('.health-facilities-id')[0].scrollHeight){
+					heightMax = view.$el.find('.health-facilities-id')[0].scrollHeight
+				}
+
+				view.$el.find('.medical-supplies-name')[0].style.height = heightMax + "px"
+				view.$el.find('.health-facilities-id')[0].style.height = heightMax + "px"
+				view.$el.find('.stt,.unit,.supply-ability,.type-sell-sponsor,.quantity,.price,.upload-file,.file,.tailieu').css('height', heightMax + "px")
+
+				// view.$el.find('.medical-supplies-name')[0].style.height = view.$el.find('.medical-supplies-name')[0].scrollHeight + "px"
+				// view.$el.find('.health-facilities-id')[0].style.height = view.$el.find('.medical-supplies-name')[0].scrollHeight + "px"
+				// view.$el.find('.stt,.unit,.supply-ability,.type-sell-sponsor,.quantity,.price,.upload-file,.file,.tailieu').css('height', view.$el.find('.medical-supplies-name')[0].scrollHeight + "px")
+				
+				
 				view.$el.find('.unit').val(medicalSupplies.unit)
 				view.model.set('medical_supplies_id', medicalSupplies.id)
 				view.model.set('organization_id', gonrinApp().currentUser.Organization.id)
@@ -295,9 +307,10 @@ define(function (require) {
 				if (heightMax < view.$el.find('.health-facilities-id')[0].scrollHeight){
 					heightMax = view.$el.find('.health-facilities-id')[0].scrollHeight
 				}
+
 				view.$el.find('.medical-supplies-name')[0].style.height = heightMax + "px"
 				view.$el.find('.health-facilities-id')[0].style.height = heightMax + "px"
-				view.$el.find('.stt,.unit,.supply-ability,.type-sell-sponsor,.quantity,.price,.upload-file,.file,.tailieu').css('height', view.$el.find('.medical-supplies-name')[0].scrollHeight + "px")
+				view.$el.find('.stt,.unit,.supply-ability,.type-sell-sponsor,.quantity,.price,.upload-file,.file,.tailieu').css('height', heightMax + "px")
 			})
 		},
 		listRemove: function () {
