@@ -91,21 +91,21 @@ async def get_name_medical_supplies2(request=None, Model=None, result=None ,**kw
                 
 
 
-async def check_medical_supplies_name1(request=None, data=None, Model=None, **kw):
-        for _ in data['details']:
-            del _['medical_supplies_name']
-            del _['medical_supplies_unit']
-            del _['begin_net_amount']
 
-async def check_medical_supplies_name2(request=None, data=None, Model=None, **kw):
+async def delete_element_report_supply_organization(request=None, data=None, Model=None, **kw):
         for _ in data['details']:
             del _['medical_supplies_name']
             del _['medical_supplies_unit']
             del _['health_facilities_name']
 
+async def delete_element_report_supply_organization_details(request=None, data=None, Model=None, **kw):
+        del data['medical_supplies_name']
+        del data['medical_supplies_unit']
+        del data['health_facilities_name']
 
-@app.route('/api/v1/load_medical_supplies_dropdown2',methods=['POST'])
-async def load_medical_supplies_dropdown2(request):
+
+@app.route('/api/v1/seach_medical_supplies',methods=['POST'])
+async def seach_medical_supplies(request):
     data = request.json
     text =data['text']
     if text is not None and text != "":
@@ -374,14 +374,14 @@ apimanager.create_api(ReportOrganizationDetail,
 apimanager.create_api(ReportSupplyOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportSupplyOrganization], PUT_SINGLE=[check_medical_supplies_name2]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportSupplyOrganization], PUT_SINGLE=[delete_element_report_supply_organization]),
     postprocess=dict(GET_SINGLE=[get_name_medical_supplies2],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='report_supply_organization')
 
 apimanager.create_api(ReportSupplyOrganizationDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
-    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[], PUT_SINGLE=[]),
+    preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[], PUT_SINGLE=[delete_element_report_supply_organization_details]),
     postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[]),
     collection_name='report_supply_organization_detail')
 

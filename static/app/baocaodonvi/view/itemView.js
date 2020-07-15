@@ -43,20 +43,9 @@ define(function (require) {
                 self.$el.find('.' + item).unbind('click').bind('click', function () {
                     $(this).val($(this).attr(item))
                 })
-                var element = "";
                 self.$el.find('.' + item).focusout(function () {
                     var that = $(this)
-                    for (var i = 0; i < item.length; i++) {
-                        if (item[i] === "-") {
-                            element = element + "_"
-                        }
-                        else {
-                            element = element + item[i]
-                        }
-                    }
-
                     setTimeout(() => {
-                        var ValueString = new Number(that.val()).toLocaleString("da-DK");
                         that.attr(item, that.val())
                     }, 100);
 
@@ -64,7 +53,6 @@ define(function (require) {
                         var ValueString = new Number(that.val()).toLocaleString("da-DK");
                         that.val(ValueString);
                     }, 200);
-                    element = "";
                 })
                 self.$el.find('.' + item).keyup(function () {
                     var num = $(this).attr(item)
