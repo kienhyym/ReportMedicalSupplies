@@ -254,7 +254,6 @@ require(['jquery',
 					success: function (response) {
 						var date = new Date().getMonth();
 						response.net_amount[0].forEach(function (item, index) {
-							console.log(date, index)
 							if (index > date) {
 								response.net_amount[0].splice(index, 1, 0);
 							}
@@ -327,7 +326,6 @@ require(['jquery',
 										if (nam === new Date().getFullYear()) {
 											var date = new Date().getMonth();
 											response.net_amount[0].forEach(function (item, index) {
-												console.log(date, index)
 												if (index > date) {
 													response.net_amount[0].splice(index, 1, 0);
 												}
@@ -461,7 +459,6 @@ require(['jquery',
 								if (nam === new Date().getFullYear()) {
 									var date = new Date().getMonth();
 									response.net_amount[0].forEach(function (item, index) {
-										console.log(date, index)
 										if (index > date) {
 											response.net_amount[0].splice(index, 1, 0);
 										}

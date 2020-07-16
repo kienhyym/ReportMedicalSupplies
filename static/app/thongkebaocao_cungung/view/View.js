@@ -20,6 +20,7 @@ define(function (require) {
 			self.vattu_ten = "";
 			self.typeFilter();
 			self.loadItemDropdown();
+
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
 				var params = {};
 				params['type'] = self.$el.find('.type-filter button').attr('filter');
@@ -186,19 +187,16 @@ define(function (require) {
 			var self = this;
 			self.$el.find('.search-item').unbind('click').bind('click', function () {
 				$(this).select();
-				var selectedList = [];
-				self.$el.find('.selected-item-general').each(function (index, item) {
-					selectedList.push($(item).attr('item_id'))
-				})
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
-					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
+					data: JSON.stringify({ "text": "" }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
-						response.forEach(function (item, index) {
+						var arr = lodash.orderBy(response, ['name'], ['asc']);
+						arr.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
                             item-id = "${item.id}" 
@@ -240,11 +238,12 @@ define(function (require) {
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
-					data: JSON.stringify(text),
+					data: JSON.stringify({ "text": text }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
-						response.forEach(function (item, index) {
+						var arr = lodash.orderBy(response, ['name'], ['asc']);
+						arr.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
                             item-id = "${item.id}" 
