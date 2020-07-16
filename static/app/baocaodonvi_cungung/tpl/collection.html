@@ -6,11 +6,12 @@
             <h3 class="card-title">Danh sách báo cáo của đơn vị cung ứng</h3>
         </div>
         <div class="d-flex justify-content-end">
+
+            <div class="col-3">
+                <input id="grid_search_time">
+            </div>
             <div>
                 <button class="btn btn-secondary xoaloc">xóa lọc</button>
-            </div>
-            <div class="col-3">
-            <input id="grid_search_time">
             </div>
         </div>
         <div id="grid" data-bind='collection:$collection'></div>
