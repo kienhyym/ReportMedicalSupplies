@@ -294,6 +294,9 @@ define(function (require) {
 							return
 						}
 					})
+					self.$el.find('.stt').each(function (index, item) {
+						$(item).val(index + 1)
+					})
 				})
 				self.sellOrSponsor(medicalSupplies.id);
 
