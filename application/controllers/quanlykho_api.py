@@ -123,6 +123,27 @@ async def seach_medical_supplies(request):
             arr.append(to_dict(i))
         return json(arr)
 
+# // TÌM KIẾM DANH SÁCH VÂT TƯ Y TẾ BÁO CÁO ĐƠN VỊ CUNG ỨNG
+@app.route('/api/v1/seach_medical_supplies_supply_organization',methods=['POST']) 
+async def seach_medical_supplies_supply_organization(request):
+    data = request.json
+    text =  data['text']
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(MedicalSupplies).filter(and_(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search)),MedicalSupplies.id.notin_(data['selectedList']))).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+    else:
+        list = db.session.query(MedicalSupplies).filter(MedicalSupplies.id.notin_(data['selectedList'])).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+
+
 # // TÌM KIẾM DANH SÁCH VÂT TƯ Y TẾ 
 @app.route('/api/v1/load_medical_supplies_dropdown',methods=['POST'])
 async def load_medical_supplies_dropdown(request):
