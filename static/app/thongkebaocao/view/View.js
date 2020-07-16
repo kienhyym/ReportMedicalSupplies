@@ -14,7 +14,7 @@ define(function (require) {
 			var self = this;
 			self.function_filter();
 		},
-		function_filter: function(){
+		function_filter: function () {
 			var self = this;
 			self.vattu_id = "";
 			self.vattu_ten = "";
@@ -27,10 +27,10 @@ define(function (require) {
 				params['medical_supplies_id'] = self.vattu_id;
 				params['medical_supplies_name'] = self.vattu_ten;
 
-				if (self.$el.find('.type-filter button').attr('filter') == "none" ) {
+				if (self.$el.find('.type-filter button').attr('filter') == "none") {
 					self.getApp().notify({ message: "Bạn chưa chọn bộ lọc" }, { type: "danger", delay: 1000 });
 				}
-				else if(self.vattu_id == ""){
+				else if (self.vattu_id == "") {
 					self.getApp().notify({ message: "Bạn chưa chọn vật tư PCD" }, { type: "danger", delay: 1000 });
 				}
 				else {
@@ -51,11 +51,11 @@ define(function (require) {
 					else if (self.$el.find('.type-filter button').attr('filter') == "fromDayToDay") {
 						params['from_date'] = self.$el.find('#start_time').data("gonrin").getValue()
 						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
-						if (self.$el.find('#start_time').data("gonrin").getValue() > self.$el.find('#end_time').data("gonrin").getValue()){
+						if (self.$el.find('#start_time').data("gonrin").getValue() > self.$el.find('#end_time').data("gonrin").getValue()) {
 							self.getApp().notify({ message: "Ngày bắt đầu không được  lớn hơn ngày kết thúc" }, { type: "danger", delay: 1000 });
 							self.$el.find('.spinner-border').hide()
 						}
-						else{
+						else {
 							self.apiFilter(params)
 							self.$el.find('.spinner-border').show()
 
@@ -65,7 +65,7 @@ define(function (require) {
 
 			});
 		},
-		apiFilter : function(params){
+		apiFilter: function (params) {
 			var self = this;
 			$.ajax({
 				type: "POST",
@@ -82,7 +82,7 @@ define(function (require) {
 
 						self.$el.find('#danhSachDonVi').append(`
 						<tr class="text-center">
-							<td>${index+1}</td>
+							<td>${index + 1}</td>
 							<td class="text-left">${item.organization_name}</td>
 							<td>${quantity_import}</td>
 							<td>${quantity_export}</td>
@@ -134,6 +134,8 @@ define(function (require) {
 			});
 
 			self.$el.find('.type-filter .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+				self.$el.find('#end_time').data("gonrin").setValue(moment().unix())
+				self.$el.find('#start_time').data("gonrin").setValue(moment().unix())
 				self.$el.find('.type-filter button').text($(this).attr('text'))
 				self.$el.find('.type-filter button').attr("filter", $(this).attr('filter'))
 
@@ -159,7 +161,7 @@ define(function (require) {
 			})
 
 
-			
+
 		},
 
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
@@ -287,7 +289,7 @@ define(function (require) {
 		},
 		exportExcel: function (data, params) {
 			var self = this;
-			params.medical_supplies_name = params.medical_supplies_name.replace('%',' phần trăm')
+			params.medical_supplies_name = params.medical_supplies_name.replace('%', ' phần trăm')
 
 			self.$el.find('.button-excel').unbind('click').bind('click', function () {
 				if (params.type == "all") {

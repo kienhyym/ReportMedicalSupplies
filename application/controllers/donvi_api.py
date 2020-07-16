@@ -495,7 +495,7 @@ def convert_columexcel_to_string(value):
         return str(value).strip()
 
 @app.route('/api/v1/organizational_list_donvicungung',methods=['POST'])
-async def organizational_list_statistics(request):
+async def organizational_list_donvicungung(request):
     uid_current = current_uid(request)
     if uid_current is None:
         return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
@@ -509,6 +509,8 @@ async def organizational_list_statistics(request):
     medical_supplies_id = data['medical_supplies_id']
     start_time = data['start_time']
     end_time = data['end_time']
+    print('________________________',start_time)
+
     donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
     if donvi is None:
         return json(status=520)
@@ -997,11 +999,17 @@ async def enterprise_supply_statistics(request):
     type_donvi= data['type_donvi']
     medical_supplies_id= data['medical_supplies_id']
     medical_supplies_name= data['medical_supplies_name']
-    from_date= data['from_date']
-    to_date= data['to_date']
-    if data['to_date'] is not None:
-        to_date = data['to_date'] + 86400
-
+    if data.get('from_date') is not None:
+        start_date= data['from_date']
+        date_string_start_date = str(datetime.fromtimestamp(start_date))[0:10].replace("-", "/")
+        conver_date_start_date = datetime.strptime(date_string_start_date, "%Y/%m/%d")
+        from_date = datetime.timestamp(conver_date_start_date)
+    if data.get('to_date') is not None:
+        end_date = data['to_date']
+        date_string_end_date = str(datetime.fromtimestamp(end_date))[0:10].replace("-", "/")
+        conver_date_end_date = datetime.strptime(date_string_end_date, "%Y/%m/%d")
+        to_date = datetime.timestamp(conver_date_end_date)+ 86400
+        
     if type == "all":
         reportSupplyOrganizationDetails = db.session.query(ReportSupplyOrganizationDetail).filter(and_(ReportSupplyOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportSupplyOrganizationDetail.type_sell_sponsor == "sell")).all()
     if type == "fromDayToDay":
