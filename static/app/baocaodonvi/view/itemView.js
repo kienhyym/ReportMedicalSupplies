@@ -78,7 +78,16 @@ define(function (require) {
 
 
             self.model.on("change", () => {
-                var beginNetAmount = Number(self.$el.find('.begin-net-amount').attr('begin-net-amount'));
+                var beginNetAmount = Number(self.model.get('begin_net_amount'));
+                var quantityImport = Number(self.model.get('quantity_import'));
+                var quantityExport = Number(self.model.get('quantity_export'));
+                var endNetAmount = beginNetAmount + quantityImport - quantityExport;
+                var endNetAmountValueString = new Number(endNetAmount).toLocaleString("da-DK");
+                self.$el.find('.end-net-amount').val(endNetAmountValueString)
+                self.trigger("change", self.model.toJSON());
+            });
+            self.$el.find('.begin-net-amount').change(() => {
+                var beginNetAmount = Number(self.model.get('begin_net_amount'));
                 var quantityImport = Number(self.model.get('quantity_import'));
                 var quantityExport = Number(self.model.get('quantity_export'));
                 var endNetAmount = beginNetAmount + quantityImport - quantityExport;
