@@ -69,7 +69,7 @@ define(function (require) {
 			var self = this;
 			$.ajax({
 				type: "POST",
-				url: self.getApp().serviceURL + "/api/v1/organizational_list_statistics1",
+				url: self.getApp().serviceURL + "/api/v1/statistical_data_of_health_facilities",
 				data: JSON.stringify(params),
 				success: function (response) {
 					self.$el.find('.spinner-border').hide()
@@ -168,19 +168,15 @@ define(function (require) {
 			var self = this;
 			self.$el.find('.search-item').unbind('click').bind('click', function () {
 				$(this).select();
-				var selectedList = [];
-				self.$el.find('.selected-item-general').each(function (index, item) {
-					selectedList.push($(item).attr('item_id'))
-				})
-				var text = $(this).val()
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
-					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
+					data: JSON.stringify({ "text": "" }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
-						response.forEach(function (item, index) {
+						var arr = lodash.orderBy(response, ['name'], ['asc']);
+						arr.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
                             item-id = "${item.id}" 
@@ -218,19 +214,16 @@ define(function (require) {
 				});
 			})
 			self.$el.find('.search-item').keyup(function name() {
-				var selectedList = [];
-				self.$el.find('.selected-item-general').each(function (index, item) {
-					selectedList.push($(item).attr('item_id'))
-				})
 				var text = $(this).val()
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
-					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
+					data: JSON.stringify({ "text": text }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
-						response.forEach(function (item, index) {
+						var arr = lodash.orderBy(response, ['name'], ['asc']);
+						arr.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
                             item-id = "${item.id}" 

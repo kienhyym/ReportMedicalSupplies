@@ -514,37 +514,44 @@ async def organizational_list_donvicungung(request):
     donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
     if donvi is None:
         return json(status=520)
-    arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
-    thongkes = await get_thongke_tinhthanh_donvicungung(donvi.quanhuyen_id, "16", medical_supplies_id, start_time, end_time)
-    for thongke in thongkes:
-        arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-        arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-        arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-        arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
-    thongkes.append(arr_thongke1)
-    print("abc========================", thongkes)
-    return json(thongkes)
+    thongke_tong = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+    thongkesolieu = await get_thongke_tinhthanh_donvicungung(donvi.quanhuyen_id, "16", medical_supplies_id, start_time, end_time)
+    for thongke in thongkesolieu:
+        thongke_tong['quantity_import'] =  thongke_tong['quantity_import'] + thongke["quantity_import"]
+        thongke_tong['quantity_export'] = thongke_tong['quantity_export'] + thongke["quantity_export"]
+        thongke_tong['net_amount'] = thongke_tong['net_amount'] + thongke["net_amount"]
+        thongke_tong['estimates_net_amount'] = thongke_tong['estimates_net_amount'] + thongke["estimates_net_amount"]
+    thongkesolieu.append(thongke_tong)
+    print("abc========================", thongkesolieu)
+    return json(thongkesolieu)
 
 
-@app.route('/api/v1/organizational_list_statistics1',methods=['POST'])
-async def organizational_list_statistics1(request):
+@app.route('/api/v1/statistical_data_of_health_facilities',methods=['POST'])
+async def statistical_data_of_health_facilities(request):
     uid_current = current_uid(request)
     if uid_current is None:
         return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
-    
     currentUser = db.session.query(User).filter(User.id == uid_current).first()
     if currentUser is None:
         return json({"error_code": "SESSION_EXPIRED", "error_message": "Hết phiên làm việc, vui lòng đăng nhập lại"}, status=520)
-
     data = request.json
 
     type_donvi = data['type_donvi']
     medical_supplies_id = data['medical_supplies_id']
     type_filter = data['type']
-    start_time = data['from_date']
-    end_time = data['to_date']
-    if data['to_date'] is not None:
-        end_time = data['to_date'] + 86400
+    start_time = None
+    if data.get('from_date') is not None:
+        start_date= data['from_date']
+        date_string_start_date = str(datetime.fromtimestamp(start_date))[0:10].replace("-", "/")
+        conver_date_start_date = datetime.strptime(date_string_start_date, "%Y/%m/%d")
+        start_time = datetime.timestamp(conver_date_start_date)
+    
+    end_time = None
+    if data.get('to_date') is not None:
+        end_date = data['to_date']
+        date_string_end_date = str(datetime.fromtimestamp(end_date))[0:10].replace("-", "/")
+        conver_date_end_date = datetime.strptime(date_string_end_date, "%Y/%m/%d")
+        end_time = datetime.timestamp(conver_date_end_date)+ 86400
    
     is_admin = await hasRole(request, "admin")
     if is_admin == True:
@@ -560,331 +567,92 @@ async def organizational_list_statistics1(request):
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
         if donvi is None:
             return json(status=520)
-        arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
-        thongkes = await get_thongke_xaphuong(donvi.quanhuyen_id, "16", medical_supplies_id, start_time, end_time,type_filter)
-        for thongke in thongkes:
-            arr_thongke1['quantity_import'] =  arr_thongke1['quantity_import'] + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = arr_thongke1['quantity_export'] + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = arr_thongke1['net_amount'] + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = arr_thongke1['estimates_net_amount'] + thongke["estimates_net_amount"]
-        thongkes.append(arr_thongke1)
-        return json(thongkes)
+        thongke_tong = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+        thongkesolieu = await trungtam_dachucnang_thongke(donvi.quanhuyen_id, medical_supplies_id, start_time, end_time,type_filter)
+        for thongke in thongkesolieu:
+            thongke_tong['quantity_import'] =  thongke_tong['quantity_import'] + thongke["quantity_import"]
+            thongke_tong['quantity_export'] = thongke_tong['quantity_export'] + thongke["quantity_export"]
+            thongke_tong['net_amount'] = thongke_tong['net_amount'] + thongke["net_amount"]
+            thongke_tong['estimates_net_amount'] = thongke_tong['estimates_net_amount'] + thongke["estimates_net_amount"]
+        thongkesolieu.append(thongke_tong)
+        return json(thongkesolieu)
+
     elif check_cdc is True:
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
         if donvi is None:
             return json(status=520)
-        arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
-        thongkes = await get_thongke_quanhuyen(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16",type_filter)
-        for thongke in thongkes:
-            print ('___________________',thongke['quantity_import'])
-            arr_thongke1['quantity_import'] =  int(arr_thongke1['quantity_import']) + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = int(arr_thongke1['quantity_export']) + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = int(arr_thongke1['net_amount']) + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = int(arr_thongke1['estimates_net_amount']) + thongke["estimates_net_amount"]
-        thongkes.append(arr_thongke1)
-        return json(thongkes)
+        thongke_tong = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+        thongkesolieu = await cdc_thongke(donvi.tinhthanh_id, medical_supplies_id, start_time, end_time,type_filter)
+        for thongke in thongkesolieu:
+            thongke_tong['quantity_import'] =  int(thongke_tong['quantity_import']) + thongke["quantity_import"]
+            thongke_tong['quantity_export'] = int(thongke_tong['quantity_export']) + thongke["quantity_export"]
+            thongke_tong['net_amount'] = int(thongke_tong['net_amount']) + thongke["net_amount"]
+            thongke_tong['estimates_net_amount'] = int(thongke_tong['estimates_net_amount']) + thongke["estimates_net_amount"]
+        thongkesolieu.append(thongke_tong)
+        return json(thongkesolieu)
 
     elif check_soyte is True:
         donvi = db.session.query(Organization).filter(Organization.id == currentUser.organization_id).first()
         if donvi is None:
             return json(status=520)
-        arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
-        thongkes = await get_thongke_quanhuyen_soyte(donvi.tinhthanh_id, "13", medical_supplies_id, start_time, end_time, "16",type_filter)
-        for thongke in thongkes:
-            print ('___________________',thongke['quantity_import'])
-            arr_thongke1['quantity_import'] =  int(arr_thongke1['quantity_import']) + thongke["quantity_import"]
-            arr_thongke1['quantity_export'] = int(arr_thongke1['quantity_export']) + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = int(arr_thongke1['net_amount']) + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = int(arr_thongke1['estimates_net_amount']) + thongke["estimates_net_amount"]
-        thongkes.append(arr_thongke1)
-        return json(thongkes)
+        thongke_tong = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+        thongkesolieu = await soyte_thongke(donvi.tinhthanh_id, medical_supplies_id, start_time, end_time,type_filter)
+        for thongke in thongkesolieu:
+            thongke_tong['quantity_import'] =  int(thongke_tong['quantity_import']) + thongke["quantity_import"]
+            thongke_tong['quantity_export'] = int(thongke_tong['quantity_export']) + thongke["quantity_export"]
+            thongke_tong['net_amount'] = int(thongke_tong['net_amount']) + thongke["net_amount"]
+            thongke_tong['estimates_net_amount'] = int(thongke_tong['estimates_net_amount']) + thongke["estimates_net_amount"]
+        thongkesolieu.append(thongke_tong)
+        return json(thongkesolieu)
 
     elif check_boyte is True:
-        arr_thongke1 = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
-        thongkes = await get_thongke_tinhthanh_boyte( "13", medical_supplies_id, start_time, end_time, "16",type_filter)
-        for thongke in thongkes:
-            arr_thongke1['quantity_import'] =  int(arr_thongke1['quantity_import']) + thongke["quantity_import"] 
-            arr_thongke1['quantity_export'] = int(arr_thongke1['quantity_export']) + thongke["quantity_export"]
-            arr_thongke1['net_amount'] = int(arr_thongke1['net_amount']) + thongke["net_amount"]
-            arr_thongke1['estimates_net_amount'] = int(arr_thongke1['estimates_net_amount']) + thongke["estimates_net_amount"]
-        thongkes.append(arr_thongke1)
-        return json(thongkes)
+        thongke_tong = {"organization_name": "Tổng", "quantity_import": 0, "quantity_export": 0, "net_amount": 0, "estimates_net_amount": 0}
+        thongkesolieu = await boyte_thongke(medical_supplies_id, start_time, end_time,type_filter)
+        for thongke in thongkesolieu:
+            thongke_tong['quantity_import'] =  int(thongke_tong['quantity_import']) + thongke["quantity_import"] 
+            thongke_tong['quantity_export'] = int(thongke_tong['quantity_export']) + thongke["quantity_export"]
+            thongke_tong['net_amount'] = int(thongke_tong['net_amount']) + thongke["net_amount"]
+            thongke_tong['estimates_net_amount'] = int(thongke_tong['estimates_net_amount']) + thongke["estimates_net_amount"]
+        thongkesolieu.append(thongke_tong)
+        return json(thongkesolieu)
 
-async def get_thongke_xaphuong(quanhuyen_id, tuyendonvi_id, medical_supplies_id, start_time, end_time,type_filter):
-    xaphuongs = db.session.query(XaPhuong).filter(XaPhuong.quanhuyen_id == quanhuyen_id).all()
+async def trungtam_dachucnang_thongke(quanhuyen_id, medical_supplies_id, start_time, end_time,type_filter):
     list_item  = []
-    for xaphuong in xaphuongs:
-        organization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.xaphuong_id == xaphuong.id, Organization.tuyendonvi_id == "16")).first()
-        if organization is None:
-            continue
-        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+    list_organization = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen_id, Organization.tuyendonvi_id == "16")).all()
+    if len(list_organization) == 0:
+        obj = {'organization_name':'','quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+        list_item.append(obj)
+        return list_item
+    else:
+        for organization in list_organization:
+            obj = {'organization_name':to_dict(organization)['name'],'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
 
-        obj['organization_name'] =  to_dict(organization)['name']
-        # reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-        if type_filter == "all":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
-            begin_net_amount = 0
-            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amount is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
-
-        elif type_filter == "fromBeforeToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
-            begin_net_amount = 0
-            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amount is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
-
-        elif type_filter == "fromDayToDay":
-            # TRONG KHOẢNG THỜI GIAN
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-            begin_net_amount = 0
-            reportOrganizatiobegin_net_amountfromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amountfromDayToDay is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amountfromDayToDay)['begin_net_amount']
-        # TRƯỚC KHOẢNG THỜI GIAN
-            reportOrganizationDetailBefore = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-            if len(reportOrganizationDetailBefore) > 0:
-                begin_net_amount = reportOrganizationDetailBefore[0][0]
-            reportOrganizatiobegin_net_amounBeforefromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amounBeforefromDayToDay is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amounBeforefromDayToDay)['begin_net_amount'] + begin_net_amount
-
-
-
-
-        if len(reportOrganizationDetail) > 0:
-            obj['quantity_import'] = reportOrganizationDetail[0][0]
-            obj['quantity_export'] = reportOrganizationDetail[0][1]
-            obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
-            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-            list_item.append(obj)
-        else:
-            obj['quantity_import'] = 0
-            obj['quantity_export'] = 0
-            obj['net_amount'] = 0
-            obj['estimates_net_amount'] = 0
-            list_item.append(obj)
-    return list_item
-
-
-async def get_thongke_quanhuyen(tinhthanh_id, tuyendonvi_id, medical_supplies_id, start_time, end_time, mode_tuyendv_xa,type_filter):
-    list_item = []
-    quanHuyens = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == tinhthanh_id).all()
-    for quanHuyen in quanHuyens:
-        listIDorganizations = []
-        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-        organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == to_dict(quanHuyen)['id'], Organization.tuyendonvi_id == "13")).all()
-        for organization_huyen in organization_huyens:
-            listIDorganizations.append(to_dict(organization_huyen)['id'])
-        organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == to_dict(quanHuyen)['id'], Organization.tuyendonvi_id == "16")).all()
-        for organizations_xa in organizations_xas:
-            listIDorganizations.append(to_dict(organizations_xa)['id'])
-        if type_filter == "all":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
-            begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount'] + begin_net_amount
-        elif type_filter == "fromBeforeToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
-            begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount'] + begin_net_amount
-
-        elif type_filter == "fromDayToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-            # TRONG KHOẢN THỜI GIAN
-            begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amountfromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amountfromDayToDay is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amountfromDayToDay)['begin_net_amount'] + begin_net_amount       
-            # TỒN TRƯỚC TRƯỚC KHOẢNG THỜI GIAN
-            reportOrganizationDetailBefore = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
-            if len(reportOrganizationDetailBefore) > 0:
-                begin_net_amount = reportOrganizationDetailBefore[0][0] + begin_net_amount
-            for idOrganizationsBefore in listIDorganizations:
-                reportOrganizatiobegin_net_amountBefore = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizationsBefore,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amountBefore is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amountBefore)['begin_net_amount'] + begin_net_amount 
-
-        if len(reportOrganizationDetail) > 0:
-            obj['quantity_import'] = reportOrganizationDetail[0][0]
-            obj['quantity_export'] = reportOrganizationDetail[0][1]
-            obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
-            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-            obj['organization_name'] = quanHuyen.ten
-            list_item.append(obj)
-        else:
-            obj['quantity_import'] = 0
-            obj['quantity_export'] = 0
-            obj['net_amount'] = 0 + begin_net_amount
-            obj['estimates_net_amount'] = 0
-            obj['organization_name'] = quanHuyen.ten
-            list_item.append(obj)
-    return list_item
-
-
-async def get_thongke_quanhuyen_soyte(tinhthanh_id, tuyendonvi_id, medical_supplies_id, start_time, end_time, mode_tuyendv_xa,type_filter):
-    list_item  = []
-    tuyenduoi = ["9","11"]
-    for td in tuyenduoi:
-        orgCanBoYTe = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == tinhthanh_id, Organization.tuyendonvi_id == td)).first()
-        # reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-        if type_filter == "all":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
-            begin_net_amount = 0
-            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amount is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
-
-        elif type_filter == "fromBeforeToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
-            begin_net_amount = 0
-            reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amount is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
-
-        elif type_filter == "fromDayToDay":
-            # TRONG KHOẢNG THỜI GIAN
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-            begin_net_amount = 0
-            reportOrganizatiobegin_net_amountfromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amountfromDayToDay is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amountfromDayToDay)['begin_net_amount'] + begin_net_amount
-        # TRƯỚC KHOẢNG THỜI GIAN
-            reportOrganizationDetailBefore = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-            if len(reportOrganizationDetailBefore) > 0:
-                begin_net_amount = reportOrganizationDetailBefore[0][0]
-            reportOrganizatiobegin_net_amounBeforefromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-            if reportOrganizatiobegin_net_amounBeforefromDayToDay is not None:
-                begin_net_amount = to_dict(reportOrganizatiobegin_net_amounBeforefromDayToDay)['begin_net_amount'] + begin_net_amount
-       
-        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-        obj['organization_name'] = to_dict(orgCanBoYTe)['name']
-        if len(reportOrganizationDetail) > 0:
-            obj['quantity_import'] = reportOrganizationDetail[0][0]
-            obj['quantity_export'] = reportOrganizationDetail[0][1]
-            obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
-            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-            list_item.append(obj)
-        else:
-            list_item.append(obj)
-
-    quanhuyens = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == tinhthanh_id).all()
-    for quanhuyen in quanhuyens:
-        tuyenhuyen = ["12","13","14","15"]
-        tuyenxa = ["17","16"]
-        listIDorganizations = []
-        for tuyenhuyen_id in tuyenhuyen:
-            organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenhuyen_id)).all()
-            for organization_huyen in organization_huyens:
-                listIDorganizations.append(to_dict(organization_huyen)['id'])
-        for tuyenxa_id in tuyenxa:
-            organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == quanhuyen.id, Organization.tuyendonvi_id == tuyenxa_id)).all()
-            for organizations_xa in organizations_xas:
-                listIDorganizations.append(to_dict(organizations_xa)['id'])
-        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-        obj['organization_name'] = quanhuyen.ten
-        # reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-        if type_filter == "all":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
-            begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount'] + begin_net_amount
-
-        elif type_filter == "fromBeforeToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
-            begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount'] + begin_net_amount
-
-        elif type_filter == "fromDayToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-            # TRONG KHOẢN THỜI GIAN
-            begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amountfromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amountfromDayToDay is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amountfromDayToDay)['begin_net_amount'] + begin_net_amount       
-            # TỒN TRƯỚC TRƯỚC KHOẢNG THỜI GIAN
-            reportOrganizationDetailBefore = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
-            if len(reportOrganizationDetailBefore) > 0:
-                begin_net_amount = reportOrganizationDetailBefore[0][0] + begin_net_amount
-            for idOrganizationsBefore in listIDorganizations:
-                reportOrganizatiobegin_net_amountBefore = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizationsBefore,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amountBefore is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amountBefore)['begin_net_amount'] + begin_net_amount
-
-
-        if len(reportOrganizationDetail) > 0:
-            obj['quantity_import'] = reportOrganizationDetail[0][0]
-            obj['quantity_export'] = reportOrganizationDetail[0][1]
-            obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
-            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-            list_item.append(obj)
-        else:
-            obj['quantity_import'] = 0
-            obj['quantity_export'] = 0
-            obj['net_amount'] = 0 + begin_net_amount
-            obj['estimates_net_amount'] = 0
-            list_item.append(obj)
-    return list_item
-
-
-
-async def get_thongke_tinhthanh_boyte( tuyendonvi_id, medical_supplies_id, start_time, end_time, mode_tuyendv_xa,type_filter):
-    list_item  = []
-    canBoYTe = ["7","8"]
-    tuyentinh = ["9","11"]
-    tuyenhuyen = ["12","13","14","15"]
-    tuyenxa = ["17","16"]
-    tuyensoyte = "6"
-    for td in canBoYTe:
-
-        organizationCanBoYTe = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc",Organization.tuyendonvi_id == td)).all()
-        for orgCanBoYTe in organizationCanBoYTe:
-            # reportOrganizationDetailCDC = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
             if type_filter == "all":
-                reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
+                reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
                 begin_net_amount = 0
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount']
 
             elif type_filter == "fromBeforeToDay":
-                reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
+                reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
                 begin_net_amount = 0
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount']
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount']
 
             elif type_filter == "fromDayToDay":
-                # TRONG KHOẢNG THỜI GIAN
-                reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-                begin_net_amount = 0
-                reportOrganizatiobegin_net_amountfromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amountfromDayToDay is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amountfromDayToDay)['begin_net_amount']
+            # TRONG KHOẢNG THỜI GIAN
+                reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
             # TRƯỚC KHOẢNG THỜI GIAN
-                reportOrganizationDetailBefore = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
-                if len(reportOrganizationDetailBefore) > 0:
-                    begin_net_amount = reportOrganizationDetailBefore[0][0]
-                reportOrganizatiobegin_net_amounBeforefromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(orgCanBoYTe)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amounBeforefromDayToDay is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amounBeforefromDayToDay)['begin_net_amount'] + begin_net_amount
-            
+                begin_net_amount = 0
+                report_organization_detail_before_sum_quantity = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= start_time)).all()
+                if len(report_organization_detail_before_sum_quantity) > 0:
+                    begin_net_amount = report_organization_detail_before_sum_quantity[0][0]
+                report_organization_begin_net_amoun_before_from_daytoday = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == to_dict(organization)['id'],ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_begin_net_amoun_before_from_daytoday is not None:
+                    begin_net_amount = to_dict(report_organization_begin_net_amoun_before_from_daytoday)['begin_net_amount'] + begin_net_amount
 
-            obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-            obj['organization_name'] = to_dict(orgCanBoYTe)['name']
             if len(reportOrganizationDetail) > 0:
                 obj['quantity_import'] = reportOrganizationDetail[0][0]
                 obj['quantity_export'] = reportOrganizationDetail[0][1]
@@ -892,74 +660,259 @@ async def get_thongke_tinhthanh_boyte( tuyendonvi_id, medical_supplies_id, start
                 obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
                 list_item.append(obj)
             else:
+                obj['quantity_import'] = 0
+                obj['quantity_export'] = 0
+                obj['net_amount'] = 0
+                obj['estimates_net_amount'] = 0
                 list_item.append(obj)
+        return list_item
 
 
-    tinhthanhs = db.session.query(TinhThanh).order_by(TinhThanh.ma.asc()).all()
-    for tinhthanh in tinhthanhs:
-        listIDorganizations = []
-        obj = {'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
-        organization_tinhthanh = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyensoyte)).first()
-        if organization_tinhthanh is not None:
-            listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
-        for tuyentinh_id in tuyentinh:
-            organization_tinhthanhs = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyentinh_id)).all()
-            for organization_tinhthanh in organization_tinhthanhs:
-                listIDorganizations.append(to_dict(organization_tinhthanh)['id'])
-        for tuyenhuyen_id in tuyenhuyen:
-            organization_huyens = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyenhuyen_id)).all()
-            for organization_huyen in organization_huyens:
-                listIDorganizations.append(to_dict(organization_huyen)['id'])
-        for tuyenxa_id in tuyenxa:
-            organizations_xas = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id == tuyenxa_id)).all()
-            for organizations_xa in organizations_xas:
-                listIDorganizations.append(to_dict(organizations_xa)['id'])
-        # reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+async def cdc_thongke(tinhthanh_id, medical_supplies_id, start_time, end_time,type_filter):
+    list_item = []
+    danhsach_quanhuyen = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == tinhthanh_id).all()
+    for quanhuyen in danhsach_quanhuyen:
+        obj = {'organization_name':to_dict(quanhuyen)['ten'],'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+        list_organizations_id = db.session.query(Organization.id).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == to_dict(quanhuyen)['id'], Organization.tuyendonvi_id.in_(["12","13","16"]))).all()
         if type_filter == "all":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
             begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount'] + begin_net_amount
+            for organization_id in list_organizations_id:
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount'] + begin_net_amount
+
         elif type_filter == "fromBeforeToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
             begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amount is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amount)['begin_net_amount'] + begin_net_amount
+            for organization_id in list_organizations_id:
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount'] + begin_net_amount
 
         elif type_filter == "fromDayToDay":
-            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
             # TRONG KHOẢN THỜI GIAN
-            begin_net_amount = 0
-            for idOrganizations in listIDorganizations:
-                reportOrganizatiobegin_net_amountfromDayToDay = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizations,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amountfromDayToDay is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amountfromDayToDay)['begin_net_amount'] + begin_net_amount       
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
             # TỒN TRƯỚC TRƯỚC KHOẢNG THỜI GIAN
-            reportOrganizationDetailBefore = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(listIDorganizations),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
-            if len(reportOrganizationDetailBefore) > 0:
-                begin_net_amount = reportOrganizationDetailBefore[0][0] + begin_net_amount
-            for idOrganizationsBefore in listIDorganizations:
-                reportOrganizatiobegin_net_amountBefore = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == idOrganizationsBefore,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
-                if reportOrganizatiobegin_net_amountBefore is not None:
-                    begin_net_amount = to_dict(reportOrganizatiobegin_net_amountBefore)['begin_net_amount'] + begin_net_amount 
+            begin_net_amount = 0
+            report_organization_detail_before_sum_quantity = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
+            if len(report_organization_detail_before_sum_quantity) > 0:
+                begin_net_amount = report_organization_detail_before_sum_quantity[0][0] + begin_net_amount
+            for organization_id in list_organizations_id:
+                report_organization_begin_net_amoun_before_from_daytoday = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_begin_net_amoun_before_from_daytoday is not None:
+                    begin_net_amount = to_dict(report_organization_begin_net_amoun_before_from_daytoday)['begin_net_amount'] + begin_net_amount 
 
         if len(reportOrganizationDetail) > 0:
             obj['quantity_import'] = reportOrganizationDetail[0][0]
             obj['quantity_export'] = reportOrganizationDetail[0][1]
             obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
             obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
-            obj['organization_name'] = tinhthanh.ten
             list_item.append(obj)
         else:
             obj['quantity_import'] = 0
             obj['quantity_export'] = 0
             obj['net_amount'] = 0 + begin_net_amount
             obj['estimates_net_amount'] = 0
-            obj['organization_name'] = tinhthanh.ten
+            list_item.append(obj)
+    return list_item
+
+
+async def soyte_thongke(tinhthanh_id, medical_supplies_id, start_time, end_time,type_filter):
+    list_item  = []
+    tuyenduoi = ["9","11"]
+    for td in tuyenduoi:
+        organizations = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == tinhthanh_id, Organization.tuyendonvi_id == td)).all()
+        if len(organizations) > 0 :
+            for organization in organizations:
+                organization_id = to_dict(organization)['id']
+                organization_name = to_dict(organization)['name']
+                obj = {'organization_name':organization_name,'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+
+                if type_filter == "all":
+                    reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
+                    begin_net_amount = 0
+                    report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
+                    if report_organization_detail_begin_net_amount is not None:
+                        begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount']
+
+                elif type_filter == "fromBeforeToDay":
+                    reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
+                    begin_net_amount = 0
+                    report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                    if report_organization_detail_begin_net_amount is not None:
+                        begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount']
+
+                elif type_filter == "fromDayToDay":
+                # TRONG KHOẢNG THỜI GIAN
+                    reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+                # TRƯỚC KHOẢNG THỜI GIAN
+                    begin_net_amount = 0
+                    report_organization_detail_before_sum_quantity = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
+                    if len(report_organization_detail_before_sum_quantity) > 0:
+                        begin_net_amount = report_organization_detail_before_sum_quantity[0][0]
+                    report_organization_begin_net_amoun_before_from_daytoday = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                    if report_organization_begin_net_amoun_before_from_daytoday is not None:
+                        begin_net_amount = to_dict(report_organization_begin_net_amoun_before_from_daytoday)['begin_net_amount'] + begin_net_amount
+
+                if len(reportOrganizationDetail) > 0:
+                    obj['quantity_import'] = reportOrganizationDetail[0][0]
+                    obj['quantity_export'] = reportOrganizationDetail[0][1]
+                    obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
+                    obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+                    list_item.append(obj)
+                else:
+                    obj['quantity_import'] = 0
+                    obj['quantity_export'] = 0
+                    obj['net_amount'] = 0 + begin_net_amount
+                    obj['estimates_net_amount'] = 0
+                    list_item.append(obj)  
+
+
+    danhsach_quanhuyen = db.session.query(QuanHuyen).filter(QuanHuyen.tinhthanh_id == tinhthanh_id).all()
+    for quanhuyen in danhsach_quanhuyen:
+        obj = {'organization_name':to_dict(quanhuyen)['ten'],'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+        list_organizations_id = db.session.query(Organization.id).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.quanhuyen_id == to_dict(quanhuyen)['id'], Organization.tuyendonvi_id.in_(["12","13","14","15","16","17"]))).all()
+        if type_filter == "all":
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
+            begin_net_amount = 0
+            for organization_id in list_organizations_id:
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount'] + begin_net_amount
+
+        elif type_filter == "fromBeforeToDay":
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
+            begin_net_amount = 0
+            for organization_id in list_organizations_id:
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount'] + begin_net_amount
+
+        elif type_filter == "fromDayToDay":
+            # TRONG KHOẢN THỜI GIAN
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+            # TỒN TRƯỚC TRƯỚC KHOẢNG THỜI GIAN
+            begin_net_amount = 0
+            report_organization_detail_before_sum_quantity = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
+            if len(report_organization_detail_before_sum_quantity) > 0:
+                begin_net_amount = report_organization_detail_before_sum_quantity[0][0] + begin_net_amount
+            for organization_id in list_organizations_id:
+                report_organization_begin_net_amoun_before_from_daytoday = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_begin_net_amoun_before_from_daytoday is not None:
+                    begin_net_amount = to_dict(report_organization_begin_net_amoun_before_from_daytoday)['begin_net_amount'] + begin_net_amount 
+
+        if len(reportOrganizationDetail) > 0:
+            obj['quantity_import'] = reportOrganizationDetail[0][0]
+            obj['quantity_export'] = reportOrganizationDetail[0][1]
+            obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
+            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+            list_item.append(obj)
+        else:
+            obj['quantity_import'] = 0
+            obj['quantity_export'] = 0
+            obj['net_amount'] = 0 + begin_net_amount
+            obj['estimates_net_amount'] = 0
+            list_item.append(obj)
+    return list_item
+
+
+
+async def boyte_thongke(medical_supplies_id, start_time, end_time,type_filter):
+    list_item  = []
+    tuyenduoi = ["7","8"]
+    for td in tuyenduoi:
+        organizations = db.session.query(Organization).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tuyendonvi_id == td)).all()
+        if len(organizations) > 0 :
+            for organization in organizations:
+                organization_id = to_dict(organization)['id']
+                organization_name = to_dict(organization)['name']
+                obj = {'organization_name':organization_name,'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+
+                if type_filter == "all":
+                    reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
+                    begin_net_amount = 0
+                    report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
+                    if report_organization_detail_begin_net_amount is not None:
+                        begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount']
+
+                elif type_filter == "fromBeforeToDay":
+                    reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
+                    begin_net_amount = 0
+                    report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                    if report_organization_detail_begin_net_amount is not None:
+                        begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount']
+
+                elif type_filter == "fromDayToDay":
+                # TRONG KHOẢNG THỜI GIAN
+                    reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+                # TRƯỚC KHOẢNG THỜI GIAN
+                    begin_net_amount = 0
+                    report_organization_detail_before_sum_quantity = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id  == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
+                    if len(report_organization_detail_before_sum_quantity) > 0:
+                        begin_net_amount = report_organization_detail_before_sum_quantity[0][0]
+                    report_organization_begin_net_amoun_before_from_daytoday = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                    if report_organization_begin_net_amoun_before_from_daytoday is not None:
+                        begin_net_amount = to_dict(report_organization_begin_net_amoun_before_from_daytoday)['begin_net_amount'] + begin_net_amount
+
+                if len(reportOrganizationDetail) > 0:
+                    obj['quantity_import'] = reportOrganizationDetail[0][0]
+                    obj['quantity_export'] = reportOrganizationDetail[0][1]
+                    obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
+                    obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+                    list_item.append(obj)
+                else:
+                    obj['quantity_import'] = 0
+                    obj['quantity_export'] = 0
+                    obj['net_amount'] = 0 + begin_net_amount
+                    obj['estimates_net_amount'] = 0
+                    list_item.append(obj) 
+
+
+    danhsach_tinhthanh = db.session.query(TinhThanh).order_by(TinhThanh.ma.asc()).all()
+    for tinhthanh in danhsach_tinhthanh:
+        obj = {'organization_name':to_dict(tinhthanh)['ten'],'quantity_import':0,'quantity_export':0,'net_amount':0,'estimates_net_amount':0}
+        list_organizations_id = db.session.query(Organization.id).filter(and_(Organization.type_donvi == "donvinhanuoc", Organization.tinhthanh_id == to_dict(tinhthanh)['id'], Organization.tuyendonvi_id.in_(["6","9","11","12","13","14","15","16","17"]))).all()
+        if type_filter == "all":
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).all()
+            begin_net_amount = 0
+            for organization_id in list_organizations_id:
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount'] + begin_net_amount
+
+        elif type_filter == "fromBeforeToDay":
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).all()
+            begin_net_amount = 0
+            for organization_id in list_organizations_id:
+                report_organization_detail_begin_net_amount = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date <= end_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_detail_begin_net_amount is not None:
+                    begin_net_amount = to_dict(report_organization_detail_begin_net_amount)['begin_net_amount'] + begin_net_amount
+
+        elif type_filter == "fromDayToDay":
+            # TRONG KHOẢN THỜI GIAN
+            reportOrganizationDetail = db.session.query(func.sum(ReportOrganizationDetail.quantity_import),func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export),func.sum(ReportOrganizationDetail.estimates_net_amount)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date >= start_time,ReportOrganizationDetail.date <= end_time)).all()
+            # TỒN TRƯỚC TRƯỚC KHOẢNG THỜI GIAN
+            begin_net_amount = 0
+            report_organization_detail_before_sum_quantity = db.session.query(func.sum(ReportOrganizationDetail.quantity_import)-func.sum(ReportOrganizationDetail.quantity_export)).group_by(ReportOrganizationDetail.medical_supplies_id).filter(and_(ReportOrganizationDetail.organization_id.in_(list_organizations_id),ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).all()
+            if len(report_organization_detail_before_sum_quantity) > 0:
+                begin_net_amount = report_organization_detail_before_sum_quantity[0][0] + begin_net_amount
+            for organization_id in list_organizations_id:
+                report_organization_begin_net_amoun_before_from_daytoday = db.session.query(ReportOrganizationDetail).filter(and_(ReportOrganizationDetail.organization_id == organization_id,ReportOrganizationDetail.medical_supplies_id == medical_supplies_id,ReportOrganizationDetail.date < start_time)).order_by(ReportOrganizationDetail.date.asc()).first()
+                if report_organization_begin_net_amoun_before_from_daytoday is not None:
+                    begin_net_amount = to_dict(report_organization_begin_net_amoun_before_from_daytoday)['begin_net_amount'] + begin_net_amount 
+
+        if len(reportOrganizationDetail) > 0:
+            obj['quantity_import'] = reportOrganizationDetail[0][0]
+            obj['quantity_export'] = reportOrganizationDetail[0][1]
+            obj['net_amount'] = reportOrganizationDetail[0][2] + begin_net_amount
+            obj['estimates_net_amount'] = reportOrganizationDetail[0][3]
+            list_item.append(obj)
+        else:
+            obj['quantity_import'] = 0
+            obj['quantity_export'] = 0
+            obj['net_amount'] = 0 + begin_net_amount
+            obj['estimates_net_amount'] = 0
             list_item.append(obj)
     return list_item
 
