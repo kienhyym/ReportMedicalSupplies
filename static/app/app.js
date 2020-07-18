@@ -389,7 +389,7 @@ require(['jquery',
 					})
 					$('.' + item.class_name + ' input').unbind('click').bind('click', function () {
 						$(this).select();
-						self.loadItemDropDown($(this).val(), $(this).attr('class-name'), item.url, item.type, item.chart)
+						self.loadItemDropDown("", $(this).attr('class-name'), item.url, item.type, item.chart)
 					})
 				})
 			},
@@ -402,7 +402,8 @@ require(['jquery',
 					success: function (response) {
 						$('.' + CLASS + ' div .dropdown-menu .dropdown-item').remove();
 						var count = response.length
-						response.forEach(function (item, index) {
+						var arr = lodash.orderBy(response, ['name'], ['asc']);
+						arr.forEach(function (item, index) {
 							var itemSTRING = JSON.stringify(item)
 							$('.' + CLASS + ' div .dropdown-menu').append(`
 							<button item-info = '${itemSTRING}' out-side-${CLASS} class='dropdown-item' style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:13px'>${item.name}</button>`)
