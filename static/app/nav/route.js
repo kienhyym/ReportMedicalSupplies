@@ -194,6 +194,43 @@ define(function(require) {
             "route": "tonghopxuatkhovattu/model(/:id)",
             "$ref": "app/tonghopxuatkhovattu/view/ModelView",
         },
+        {   
+            "text": "Mã Hiệu Vật Tư",
+            "type": "view",
+            "collectionName": "code_supplies",
+            "route": "code_supplies/collection",
+            "$ref": "app/view/DanhMuc/MaHieuVatTu/CollectionView",
+        },
+        {
+            "collectionName": "code_supplies",
+            "route": "code_supplies/model(/:id)",
+            "$ref": "app/view/DanhMuc/MaHieuVatTu/ModelView",
+        },
+        {   
+            "text": "Nhóm Vật Tư",
+            "type": "view",
+            "collectionName": "group_supplies",
+            "route": "group_supplies/collection",
+            "$ref": "app/view/DanhMuc/NhomVatTu/CollectionView",
+        },
+        {
+            "collectionName": "group_supplies",
+            "route": "group_supplies/model(/:id)",
+            "$ref": "app/view/DanhMuc/NhomVatTu/ModelView",
+        },
+        {   
+            "text": "Hãng Sản Xuất",
+            "type": "view",
+            "collectionName": "brands",
+            "route": "brands/collection",
+            "$ref": "app/view/DanhMuc/HangSanXuat/CollectionView",
+        },
+        {
+            "collectionName": "brands",
+            "route": "brands/model(/:id)",
+            "$ref": "app/view/DanhMuc/HangSanXuat/ModelView",
+        },
+       
         
     ];
 

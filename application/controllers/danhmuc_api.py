@@ -12,6 +12,7 @@ import time
 
 from application.models.model_danhmuc import QuocGia, TinhThanh, QuanHuyen, XaPhuong, ThonXom,\
      TuyenDonVi,DanToc
+from application.models.model_quanlykho import Brands, GroupSupplies,CodeSupplies
 from application.controllers.helpers.helper_common import validate_user, convert_text_khongdau
 from application.database import db
 
@@ -28,6 +29,31 @@ async def update_name_khongdau(request=None, data=None, Model=None, **kw):
     elif "name" in data:
         data["tenkhongdau"]  = convert_text_khongdau(data["name"])
     
+
+apimanager.create_api(Brands,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_user, check_exist_danhmuc], PUT_SINGLE=[validate_user]),
+    postprocess=dict(POST=[],PUT_SINGLE=[]),
+    collection_name='brands'
+
+)
+apimanager.create_api(GroupSupplies,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_user, check_exist_danhmuc], PUT_SINGLE=[validate_user]),
+    postprocess=dict(POST=[],PUT_SINGLE=[]),
+    collection_name='group_supplies'
+
+)
+apimanager.create_api(CodeSupplies,
+    methods=['GET', 'POST', 'DELETE', 'PUT'],
+    url_prefix='/api/v1',
+    preprocess=dict(GET_SINGLE=[validate_user], GET_MANY=[validate_user], POST=[validate_user, check_exist_danhmuc], PUT_SINGLE=[validate_user]),
+    postprocess=dict(POST=[],PUT_SINGLE=[]),
+    collection_name='code_supplies'
+
+)
 
 
 apimanager.create_api(QuocGia,

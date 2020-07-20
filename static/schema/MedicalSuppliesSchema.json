@@ -39,5 +39,26 @@
     },
     "name_not_tone_mark": {
         "type": "string"
+    },
+    "national_id": {
+        "type": "string"
+    },
+    "brands_id": {
+        "type": "string"
+    },
+    "group_supplies_id": {
+        "type": "string"
+    },
+    "code_supplies": {
+        "type": "string"
+    },
+    "national": {
+        "type": "dict"
+    },
+    "brands": {
+        "type": "dict"
+    },
+    "group_supplies": {
+        "type": "dict"
     }
 }

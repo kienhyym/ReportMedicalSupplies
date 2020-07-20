@@ -4,15 +4,15 @@ define(function (require) {
         _                   = require('underscore'),
         Gonrin				= require('gonrin');
     
-    var template 			= require('text!app/view/DanhMuc/QuocGia/tpl/collection.html'),
-    	schema 				= require('json!app/view/DanhMuc/QuocGia/Schema.json');
+    var template 			= require('text!app/view/DanhMuc/NhomVatTu/tpl/collection.html'),
+    	schema 				= require('json!app/view/DanhMuc/NhomVatTu/Schema.json');
     var CustomFilterView      = require('app/base/view/CustomFilterView');
 
     return Gonrin.CollectionDialogView.extend({
     	template : template,
     	modelSchema	: schema,
     	urlPrefix: "/api/v1/",
-    	collectionName: "quocgia",
+    	collectionName: "brands",
     	textField: "ten",
     	valueField: "id",
     	tools : [
@@ -47,8 +47,8 @@ define(function (require) {
     	],
     	uiControl:{
     		fields: [
-	    	     { field: "ma", label: "Mã", width:150},
-		     	 { field: "ten", label: "Tên", width:250 },
+	    	     { field: "code", label: "Mã", width:150},
+		     	 { field: "name", label: "Tên", width:250 },
 		    ],
 		    onRowClick: function(event){
 	    		this.uiControl.selectedItems = event.selectedItems;
@@ -56,10 +56,10 @@ define(function (require) {
 				self.trigger("onSelected");
 				self.close();
 	    	},
-	    	// onRendered: function(e){
-	    	// 	this.trigger("onRendered");
-			//     gonrinApp().responsive_table();
-            // }
+	    	onRendered: function(e){
+	    		this.trigger("onRendered");
+			    gonrinApp().responsive_table();
+            }
     	},
     	render:function(){
     		var self= this;

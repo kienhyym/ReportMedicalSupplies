@@ -6,7 +6,10 @@ define(function (require) {
 
 	var template = require('text!app/vattuyte/tpl/model.html'),
 		schema = require('json!schema/MedicalSuppliesSchema.json');
-
+	var BrandsSelectView = require('app/view/DanhMuc/HangSanXuat/SelectView');
+	var GroupSuppliesSelectView = require('app/view/DanhMuc/NhomVatTu/SelectView');
+	var CodeSuppliesSelectView = require('app/view/DanhMuc/MaHieuVatTu/SelectView');
+	var QuocGiaSelectView = require('app/view/DanhMuc/QuocGia/SelectView');
 	return Gonrin.ModelView.extend({
 		template: template,
 		modelSchema: schema,
@@ -97,7 +100,33 @@ define(function (require) {
 			}],
 		uiControl: {
 			fields: [
-
+				{
+					field:"brands",
+					uicontrol:"ref",
+					textField: "name",
+					//chuyen sang thanh object
+					foreignRemoteField: "id",
+					foreignField: "brands_id",
+					dataSource: BrandsSelectView
+				},
+				{
+					field:"group_supplies",
+					uicontrol:"ref",
+					textField: "name",
+					//chuyen sang thanh object
+					foreignRemoteField: "id",
+					foreignField: "group_supplies_id",
+					dataSource: GroupSuppliesSelectView
+				},
+				{
+					field:"national",
+					uicontrol:"ref",
+					textField: "ten",
+					//chuyen sang thanh object
+					foreignRemoteField: "id",
+					foreignField: "national_id",
+					dataSource: QuocGiaSelectView
+				},
 			]
 		},
 		render: function () {
@@ -111,6 +140,19 @@ define(function (require) {
 				this.model.set('id', id);
 				this.model.fetch({
 					success: function (data) {
+						console.log(data)
+						if(data.attributes.group_supplies == null || data.attributes.group_supplies == undefined){
+							self.$el.find('#manhomvattu').val("")
+						}else{
+							self.$el.find('#manhomvattu').text(data.changed.group_supplies.code)
+						}
+						if(data.attributes.code_supplies == null || data.attributes.code_supplies == undefined){
+							self.$el.find('#mahieuvattu').val("")
+						}else{
+							self.$el.find('#mahieuvattu').val(data.changed.code_supplies.code)
+						}
+						
+						
 						self.applyBindings();
 					},
 					error: function (xhr, status, error) {

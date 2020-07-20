@@ -1,3 +1,5 @@
+const { contains } = require('jquery');
+
 define(function (require) {
 	"use strict";
 	var $ = require('jquery'),
@@ -131,11 +133,15 @@ define(function (require) {
 			var id = this.getApp().getRouter().getParam("id");
 			self.model.set('date', moment().unix());
 			self.changeTime();
-
+			// self.$el.find(".medical-supplies-name").on('click',function(){
+			// 	console.log("aob")
+			// })
+			
 			if (id) {
 				this.model.set('id', id);
 				this.model.fetch({
 					success: function (data) {
+
 						self.applyBindings();
 						self.showDeltail();
 					},
@@ -187,6 +193,7 @@ define(function (require) {
 
 						view.$el.find('.stt').val(index + 1)
 						view.$el.find('.medical-supplies-name').val(element.name)
+						
 						view.$el.find('.begin-net-amount').val(element.begin_net_amount)
 						view.$el.find('.end-net-amount').val(element.begin_net_amount)
 
@@ -194,13 +201,18 @@ define(function (require) {
 						view.$el.find('.medical-supplies-name')[0].style.height = view.$el.find('.medical-supplies-name')[0].scrollHeight + "px"
 						view.$el.find('.stt,.unit,.begin-net-amount,.quantity-import,.quantity-export,.end-net-amount,.estimates-net-amount').css('height', view.$el.find('.medical-supplies-name')[0].scrollHeight + "px")
 					})
+					
 				}
 			})
+			
 		},
 		showDeltail: function () {
 			var self = this;
 			self.listItemView = [];
 			var arr = lodash.orderBy(self.model.get('details'), ['medical_supplies_name'], ['asc']);
+			
+			
+			
 			arr.forEach((element, index) => {
 				var view = new itemView()
 				view.render();
@@ -212,6 +224,12 @@ define(function (require) {
 				}
 				view.$el.find('.stt').val(index + 1)
 				view.$el.find('.medical-supplies-name').val(element.medical_supplies_name)
+				view.$el.find('.id_sup').val(element.medical_supplies_id)
+				// console.log("======",view.$el.find('.medical-supplies-name').val())
+				view.$el.find('.medical-supplies-name').bind('click',function(){
+					self.showInfor(view.$el.find('.id_sup').val())
+					// alert(view.$el.find('.id_sup').val());
+				})
 				view.$el.find('.unit').val(element.medical_supplies_unit)
 
 				view.$el.find('.begin-net-amount').attr('begin-net-amount',element.begin_net_amount)
@@ -248,6 +266,7 @@ define(function (require) {
 					contentType: "application/json",
 					success: function (data) {
 						var arr = lodash.orderBy(data.medicalSupplies, ['name'], ['asc']);
+						
 						arr.forEach((element,index) =>{
 							$(self.$el.find('.begin-net-amount')[index]).attr('begin-net-amount',element.begin_net_amount)
 							var ValueString = new Number(element.begin_net_amount).toLocaleString("da-DK");
@@ -264,6 +283,54 @@ define(function (require) {
 						})
 					}
 				})
+			})
+		},
+		showInfor: function(id){
+			var self = this;
+			$.ajax({
+				url:self.getApp().serviceURL + "/api/v1/medical_supplies/"+id,
+				method:"GET",
+				contentType: "application/json",
+				success: function(data){
+					console.log(data)
+					if(data !== null || data !== undefined){
+						self.$el.find("#code").val(data.code)
+						self.$el.find("#name").val(data.name)
+						self.$el.find("#unit").val(data.unit)
+						self.$el.find("#code_supplies").val(data.code_supplies);
+						// for (var prop in data){
+						// 	console.log("Object1: " + prop);
+						// }
+						// console.log(data)
+						if(data.brands == null || data.brands == undefined){
+							self.$el.find("#brands").val("")
+						}else{
+							self.$el.find("#brands").val(data.brands['name'])
+						}
+						if(data.group_supplies == null || data.group_supplies == undefined){
+							self.$el.find("#group_supplies").val("");
+							self.$el.find("#manhomvattu").val("")
+						}else{
+							self.$el.find("#group_supplies").val(data.group_supplies['name'])
+							self.$el.find("#manhomvattu").text(data.group_supplies['code'])
+						}
+						if(data.national == null || data.national == undefined){
+							self.$el.find("#national").val("")
+						}else{
+							self.$el.find("#national").val(data.national['ten'])
+						}
+						
+						// if(data.hasOwnProperty('group_supplies') in data){
+						// 	self.$el.find("#ma_nhomvattu").val(data.group_supplies['code'])
+						// }
+						// if(data.hasOwnProperty('code_supplies') in data){
+						// 	self.$el.find("#ma_hieuvt").val(data.code_supplies['code'])
+						// }
+						
+						
+					}
+					
+				}
 			})
 		}
 	});

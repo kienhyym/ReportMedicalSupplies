@@ -111,6 +111,36 @@ define(function (require) {
                     return this.userHasRole("admin");
                 }
             },
+            {
+                "text": "Hãng Sản Xuất",
+                "type": "view",
+                "collectionName": "brands",
+                "route": "brands/collection",
+                "$ref": "app/view/DanhMuc/HangSanXuat/CollectionView",
+                "visible": function () {
+                    return this.userHasRole("admin");
+                }
+            },
+            {
+                "text": "Nhóm Vật Tư",
+                "type": "view",
+                "collectionName": "group_supplies",
+                "route": "group_supplies/collection",
+                "$ref": "app/view/DanhMuc/NhomVatTu/CollectionView",
+                "visible": function () {
+                    return this.userHasRole("admin");
+                }
+            },
+            {
+                "text": "Mã Hiệu Vật Tư",
+                "type": "view",
+                "collectionName": "code_supplies",
+                "route": "code_supplies/collection",
+                "$ref": "app/view/DanhMuc/MaHieuVatTu/CollectionView",
+                "visible": function () {
+                    return this.userHasRole("admin");
+                }
+            },
             ]
         },
         {

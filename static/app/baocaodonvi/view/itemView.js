@@ -32,6 +32,7 @@ define(function (require) {
         },
         render: function () {
             var self = this;
+            self.$el.find(".medical-supplies-name ").css("cursor","pointer")
             self.applyBindings();
             self.registerEvent();
         },

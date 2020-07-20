@@ -19,7 +19,7 @@ class Config(object):
     
     BUCKET_NAME = "bacsixa"
     # FS_ROOT= "/home/chinh/Documents/workspace/baocaovattuyte/repo/static/files/uploads/"
-    FS_ROOT_FILE= "/home/chinh/Documents/workspace/baocaovattuyte/repo/static/files/uploads/"
+    FS_ROOT_FILE= "/home/winter/Documents/workspace/baocaovattu/repo/static/files/uploads/"
     IMAGE_SERVICE_URL = 'https://drlinks.yte360.com/static/images/uploads'
     # FILE_SERVICE_URL = '/files/uploads'#lay static_url + FILE_SERVICE_URL + file=file_url
 

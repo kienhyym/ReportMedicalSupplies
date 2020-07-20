@@ -1,0 +1,24 @@
+{
+    "id": {
+        "type": "string",
+        "primary": true
+    },
+    "name": {
+        "type": "string",
+        "length": 255
+    },
+    "code": {
+        "type": "string",
+        "length": 255
+    },
+    "national_id": {
+        "type": "string"
+    },
+    "active": {
+        "type": "number",
+        "default": 0
+    },
+    "national": {
+        "type": "dict"
+    }
+}
