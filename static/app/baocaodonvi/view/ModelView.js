@@ -311,7 +311,7 @@ define(function (require) {
 						}
 						if(data.group_supplies == null || data.group_supplies == undefined){
 							self.$el.find("#group_supplies").val("");
-							self.$el.find("#manhomvattu").val("")
+							self.$el.find("#manhomvattu").text("")
 						}else{
 							self.$el.find("#group_supplies").val(data.group_supplies['name'])
 							self.$el.find("#manhomvattu").text(data.group_supplies['code'])
