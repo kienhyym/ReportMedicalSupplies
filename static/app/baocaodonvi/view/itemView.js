@@ -39,7 +39,7 @@ define(function (require) {
         registerEvent: function () {
             const self = this;
 
-            var clas = ["begin-net-amount", "quantity-import", "quantity-export", "end-net-amount", "estimates-net-amount"]
+            var clas = ["begin-net-amount", "quantity-import", "quantity-export", "estimates-net-amount"]
             clas.forEach(function (item, idex) {
                 self.$el.find('.' + item).unbind('click').bind('click', function () {
                     $(this).val($(this).attr(item))
@@ -48,12 +48,24 @@ define(function (require) {
                     var that = $(this)
                     setTimeout(() => {
                         that.attr(item, that.val())
-                    }, 100);
-
+                    }, 50);
                     setTimeout(() => {
                         var ValueString = new Number(that.val()).toLocaleString("da-DK");
                         that.val(ValueString);
-                    }, 200);
+                    }, 100);
+                    setTimeout(() => {
+                        var element = '';
+                        for (var i = 0; i < item.length; i++) {
+                            if (item[i] === "-") {
+                                element = element + "_"
+                            }
+                            else {
+                                element = element + item[i]
+                            }
+                        }
+                        self.model.set(element, Number(that.attr(item)))
+                        element = ''
+                    }, 150);
                 })
                 self.$el.find('.' + item).keyup(function () {
                     var num = $(this).attr(item)
@@ -67,16 +79,20 @@ define(function (require) {
 
 
             self.model.on("change", () => {
-                var beginNetAmount = Number(self.$el.find('.begin-net-amount').val());
+                var beginNetAmount = Number(self.model.get('begin_net_amount'));
                 var quantityImport = Number(self.model.get('quantity_import'));
                 var quantityExport = Number(self.model.get('quantity_export'));
                 var endNetAmount = beginNetAmount + quantityImport - quantityExport;
                 var endNetAmountValueString = new Number(endNetAmount).toLocaleString("da-DK");
-                self.model.set('begin_net_amount', beginNetAmount)
-                self.model.set('quantity_import', quantityImport)
-                self.model.set('quantity_export', quantityExport)
-                self.model.set('end_net_amount', endNetAmount)
-
+                self.$el.find('.end-net-amount').val(endNetAmountValueString)
+                self.trigger("change", self.model.toJSON());
+            });
+            self.$el.find('.begin-net-amount').change(() => {
+                var beginNetAmount = Number(self.model.get('begin_net_amount'));
+                var quantityImport = Number(self.model.get('quantity_import'));
+                var quantityExport = Number(self.model.get('quantity_export'));
+                var endNetAmount = beginNetAmount + quantityImport - quantityExport;
+                var endNetAmountValueString = new Number(endNetAmount).toLocaleString("da-DK");
                 self.$el.find('.end-net-amount').val(endNetAmountValueString)
                 self.trigger("change", self.model.toJSON());
             });

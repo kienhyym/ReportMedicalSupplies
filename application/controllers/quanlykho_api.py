@@ -123,6 +123,27 @@ async def seach_medical_supplies(request):
             arr.append(to_dict(i))
         return json(arr)
 
+# // TÌM KIẾM DANH SÁCH VÂT TƯ Y TẾ BÁO CÁO ĐƠN VỊ CUNG ỨNG
+@app.route('/api/v1/seach_medical_supplies_supply_organization',methods=['POST']) 
+async def seach_medical_supplies_supply_organization(request):
+    data = request.json
+    text =  data['text']
+    if text is not None and text != "":
+        search = "%{}%".format(text)
+        searchTitle = "%{}%".format(text.title())
+        list = db.session.query(MedicalSupplies).filter(and_(or_(MedicalSupplies.name.like(search),MedicalSupplies.name.like(searchTitle),MedicalSupplies.name_not_tone_mark.like(search)),MedicalSupplies.id.notin_(data['selectedList']))).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+    else:
+        list = db.session.query(MedicalSupplies).filter(MedicalSupplies.id.notin_(data['selectedList'])).all()
+        arr = []
+        for i in list:
+            arr.append(to_dict(i))
+        return json(arr)
+
+
 # // TÌM KIẾM DANH SÁCH VÂT TƯ Y TẾ 
 @app.route('/api/v1/load_medical_supplies_dropdown',methods=['POST'])
 async def load_medical_supplies_dropdown(request):
@@ -340,14 +361,22 @@ async def check_date_create_form_ReportOrganization(request=None, data=None, Mod
             }, status=520)
 
 
+# ====================> Gán giá trị khởi tạo tồn ban đầu
+async def set_init_report_organization(request=None, Model=None, result=None, **kw):
+    date_init = db.session.query(ReportOrganization.date).filter(ReportOrganization.organization_id == result.get('organization')['id']).order_by(ReportOrganization.date.asc()).first()
+    date_string_date_init = str(datetime.fromtimestamp(date_init[0]))[0:10].replace("-", "/")
+    date_string = str(datetime.fromtimestamp(result.get('date')))[0:10].replace("-", "/")
+    if date_string_date_init == date_string:
+        report_organization_detail = db.session.query(ReportOrganizationDetail).filter(ReportOrganizationDetail.id == result.get('id')).first()
+        report_organization_detail.quantity_original = result['begin_net_amount']
+        db.session.commit()
+
 apimanager.create_api(ReportOrganization,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[check_date_create_form_ReportOrganization], PUT_SINGLE=[del_date_init]),
     postprocess=dict(GET_SINGLE=[get_info_medical_supplies],POST=[],PUT_SINGLE=[],GET_MANY=[postprocess_add_stt]),
     collection_name='report_organization')
-
-
 
 
 #############################################################        CHI TIẾT BÁO CÁO CƠ SỞ Y TẾ       ##########################################
@@ -368,7 +397,7 @@ apimanager.create_api(ReportOrganizationDetail,
     methods=['GET', 'POST', 'DELETE', 'PUT'],
     url_prefix='/api/v1',
     preprocess=dict(GET_SINGLE=[], GET_MANY=[], POST=[conver_decimal], PUT_SINGLE=[conver_decimal]),
-    postprocess=dict(GET_SINGLE=[],POST=[],PUT_SINGLE=[]),
+    postprocess=dict(GET_SINGLE=[],POST=[set_init_report_organization],PUT_SINGLE=[set_init_report_organization]),
     collection_name='report_organization_detail')
 
 apimanager.create_api(ReportSupplyOrganization,

@@ -186,6 +186,8 @@ define(function (require) {
 				});
 			} else {
 				self.applyBindings();
+				self.$el.find('[btn-name="export-excel"]').hide()
+
 			}
 
 		},

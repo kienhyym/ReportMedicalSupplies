@@ -66,7 +66,7 @@ define(function (require) {
 			var self = this;
 			$.ajax({
 				type: "POST",
-				url: self.getApp().serviceURL + "/api/v1/organizational_list_statistics1",
+				url: self.getApp().serviceURL + "/api/v1/statistical_data_of_health_facilities",
 				data: JSON.stringify(params),
 				success: function (response) {
 					self.$el.find('.spinner-border').hide()

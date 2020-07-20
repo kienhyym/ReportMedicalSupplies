@@ -14,12 +14,13 @@ define(function (require) {
 			var self = this;
 			self.function_filter();
 		},
-		function_filter: function(){
+		function_filter: function () {
 			var self = this;
 			self.vattu_id = "";
 			self.vattu_ten = "";
 			self.typeFilter();
 			self.loadItemDropdown();
+
 			self.$el.find(".button-filter").unbind("click").bind("click", function () {
 				var params = {};
 				params['type'] = self.$el.find('.type-filter button').attr('filter');
@@ -27,17 +28,17 @@ define(function (require) {
 				params['medical_supplies_id'] = self.vattu_id;
 				params['medical_supplies_name'] = self.vattu_ten;
 
-				if (self.$el.find('.type-filter button').attr('filter') == "none" ) {
+				if (self.$el.find('.type-filter button').attr('filter') == "none") {
 					self.getApp().notify({ message: "Bạn chưa chọn bộ lọc" }, { type: "danger", delay: 1000 });
 				}
-				else if(self.vattu_id == ""){
+				else if (self.vattu_id == "") {
 					self.getApp().notify({ message: "Bạn chưa chọn vật tư PCD" }, { type: "danger", delay: 1000 });
 				}
 				else {
 					if (self.$el.find('.type-filter button').attr('filter') == "all") {
 						params['from_date'] = null;
 						params['to_date'] = null;
-						params['filterString'] =" từ trước đến nay"
+						params['filterString'] = " từ trước đến nay"
 
 						self.apiFilter(params)
 						self.$el.find('.spinner-border').show()
@@ -46,7 +47,7 @@ define(function (require) {
 					else if (self.$el.find('.type-filter button').attr('filter') == "fromBeforeToDay") {
 						params['from_date'] = null;
 						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
-						params['filterString'] =" từ trước đến ngày "+String(moment(params['to_date'] * 1000).format('DD MM YYYY'))
+						params['filterString'] = " từ trước đến ngày " + String(moment(params['to_date'] * 1000).format('DD MM YYYY'))
 						self.apiFilter(params)
 						self.$el.find('.spinner-border').show()
 
@@ -54,21 +55,23 @@ define(function (require) {
 					else if (self.$el.find('.type-filter button').attr('filter') == "fromDayToDay") {
 						params['from_date'] = self.$el.find('#start_time').data("gonrin").getValue()
 						params['to_date'] = self.$el.find('#end_time').data("gonrin").getValue()
-						params['filterString'] =" từ ngày " + String(moment(params['from_date'] * 1000).format('DD MM YYYY'))+" đến ngày "+String(moment(params['to_date'] * 1000).format('DD MM YYYY'))
-						if (self.$el.find('#start_time').data("gonrin").getValue() > self.$el.find('#end_time').data("gonrin").getValue()){
+						params['filterString'] = " từ ngày " + String(moment(params['from_date'] * 1000).format('DD MM YYYY')) + " đến ngày " + String(moment(params['to_date'] * 1000).format('DD MM YYYY'))
+						if (self.$el.find('#start_time').data("gonrin").getValue() > self.$el.find('#end_time').data("gonrin").getValue()) {
 							self.getApp().notify({ message: "Ngày bắt đầu không được  lớn hơn ngày kết thúc" }, { type: "danger", delay: 1000 });
 							self.$el.find('.spinner-border').hide()
 						}
-						else{
+						else {
 							self.apiFilter(params)
 							self.$el.find('.spinner-border').show()
 						}
 					}
 				}
 
+
+
 			});
 		},
-		apiFilter : function(params){
+		apiFilter: function (params) {
 			var self = this;
 			$.ajax({
 				type: "POST",
@@ -93,17 +96,17 @@ define(function (require) {
 							<th>${sum_price}</th>
 						</tr>
 						`)
-					if (response.data.length >0){
+					if (response.data.length > 0) {
 						response.data.forEach(function (item, index) {
 							var price = new Number(item.price).toLocaleString("da-DK");
 							var quantity = new Number(item.quantity).toLocaleString("da-DK");
 							var sum_price2 = new Number(item.quantity * item.price).toLocaleString("da-DK");
-							
+
 							self.$el.find('#danhSachDonVi').append(`
 							<tr class="text-center">
-							<td>${index+1}</td>
+							<td>${index + 1}</td>
 								<td class="text-left">${item.organization_name}</td>
-								<td class="text-left">${moment(item.date*1000).format('DD/MM/YYYY')}</td>
+								<td class="text-left">${moment(item.date * 1000).format('DD/MM/YYYY')}</td>
 								<td>${price}</td>
 								<td>${quantity}</td>
 								<td>${sum_price2}</td>
@@ -154,6 +157,9 @@ define(function (require) {
 			});
 
 			self.$el.find('.type-filter .dropdown-menu .dropdown-item').unbind('click').bind('click', function () {
+				self.$el.find('#end_time').data("gonrin").setValue(moment().unix())
+				self.$el.find('#start_time').data("gonrin").setValue(moment().unix())
+
 				self.$el.find('.type-filter button').text($(this).attr('text'))
 				self.$el.find('.type-filter button').attr("filter", $(this).attr('filter'))
 
@@ -179,26 +185,22 @@ define(function (require) {
 			})
 
 
-			
+
 		},
 
 		loadItemDropdown: function () { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
 			self.$el.find('.search-item').unbind('click').bind('click', function () {
 				$(this).select();
-				var selectedList = [];
-				self.$el.find('.selected-item-general').each(function (index, item) {
-					selectedList.push($(item).attr('item_id'))
-				})
-				var text = $(this).val()
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
-					data: JSON.stringify({ "text": text, "selectedList": selectedList }),
+					data: JSON.stringify({ "text": "" }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
-						response.forEach(function (item, index) {
+						var arr = lodash.orderBy(response, ['name'], ['asc']);
+						arr.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
                             item-id = "${item.id}" 
@@ -240,11 +242,12 @@ define(function (require) {
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/seach_medical_supplies",
-					data: JSON.stringify(text),
+					data: JSON.stringify({ "text": text }),
 					success: function (response) {
 						self.$el.find('.dropdown-menu-item .dropdown-item').remove();
 						var count = response.length
-						response.forEach(function (item, index) {
+						var arr = lodash.orderBy(response, ['name'], ['asc']);
+						arr.forEach(function (item, index) {
 							self.$el.find('.dropdown-menu-item').append(`
                             <button
                             item-id = "${item.id}" 
@@ -302,10 +305,10 @@ define(function (require) {
 			})
 		},
 		exportExcel: function (data, params) {
-			params.medical_supplies_name = params.medical_supplies_name.replace('%',' phần trăm')
+			params.medical_supplies_name = params.medical_supplies_name.replace('%', ' phần trăm')
 			var self = this;
 			self.$el.find('.button-excel').unbind('click').bind('click', function () {
-					var filter = "Thống kê " + params.medical_supplies_name + params.filterString;
+				var filter = "Thống kê " + params.medical_supplies_name + params.filterString;
 				$.ajax({
 					type: "POST",
 					url: self.getApp().serviceURL + "/api/v1/export_excel_cungung",
