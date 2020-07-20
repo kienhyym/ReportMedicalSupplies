@@ -131,16 +131,16 @@ define(function (require) {
                     return this.userHasRole("admin");
                 }
             },
-            {
-                "text": "Mã Hiệu Vật Tư",
-                "type": "view",
-                "collectionName": "code_supplies",
-                "route": "code_supplies/collection",
-                "$ref": "app/view/DanhMuc/MaHieuVatTu/CollectionView",
-                "visible": function () {
-                    return this.userHasRole("admin");
-                }
-            },
+            // {
+            //     "text": "Mã Hiệu Vật Tư",
+            //     "type": "view",
+            //     "collectionName": "code_supplies",
+            //     "route": "code_supplies/collection",
+            //     "$ref": "app/view/DanhMuc/MaHieuVatTu/CollectionView",
+            //     "visible": function () {
+            //         return this.userHasRole("admin");
+            //     }
+            // },
             ]
         },
         {
