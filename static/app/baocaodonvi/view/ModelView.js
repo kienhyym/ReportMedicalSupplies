@@ -224,9 +224,11 @@ define(function (require) {
 				}
 				view.$el.find('.stt').val(index + 1)
 				view.$el.find('.medical-supplies-name').val(element.medical_supplies_name)
-				view.$el.find('.id_sup').val(element.medical_supplies_id)
+				view.$el.find('.id_sup').val(element.medical_supplies_id);
+				
 				// console.log("======",view.$el.find('.medical-supplies-name').val())
 				view.$el.find('.medical-supplies-name').bind('click',function(){
+					// alert(element.medical_supplies_id)
 					self.showInfor(view.$el.find('.id_sup').val())
 					// alert(view.$el.find('.id_sup').val());
 				})
