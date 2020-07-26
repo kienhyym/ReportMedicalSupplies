@@ -115,20 +115,21 @@ define(function (require) {
 						label: "Xuất excel",
 						command: function () {
 							var self = this;
-							if (self.medicalSuppliesId != null){
+							if (self.medicalSuppliesId != null) {
 								$.ajax({
 									type: "POST",
 									url: self.getApp().serviceURL + "/api/v1/export_SyntheticRelease",
-									data: JSON.stringify({"idx":self.model.get('id'),"vattu_id":self.medicalSuppliesId}),
+									data: JSON.stringify({ "idx": self.model.get('id'), "vattu_id": self.medicalSuppliesId }),
 									success: function (response) {
-										window.location = String(self.getApp().serviceURL + response.message);								}
+										window.location = String(self.getApp().serviceURL + response.message);
+									}
 								});
 							}
-							else{
+							else {
 								self.getApp().notify({ message: "Bạn chưa chọn vật tư" }, { type: "danger", delay: 1000 });
 
 							}
-							
+
 						}
 					},
 				],
@@ -160,11 +161,11 @@ define(function (require) {
 				this.model.set('id', id);
 				this.model.fetch({
 					success: function (data) {
-						if (self.getApp().hasRole('admin') ===true){
+						if (self.getApp().hasRole('admin') === true) {
 							self.$el.find('[btn-name="save"]').hide()
 							self.$el.find('[btn-name="delete"]').hide()
 						}
-						
+
 
 						self.applyBindings();
 						// self.showDetail();
@@ -281,13 +282,8 @@ define(function (require) {
 						self.loadItemDropDown($(this).val(), $(this).attr('class-name'), item.url, item.type)
 
 					}
-
-
-
 				})
 			})
-
-
 		},
 		loadItemDropDown: function (TEXT, CLASS, URL, TYPE) { // Đổ danh sách Item vào ô tìm kiếm
 			var self = this;
@@ -299,6 +295,7 @@ define(function (require) {
 				})
 				param = { "text": TEXT, "danhSachDaSearch": danhSachDaSearch }
 			}
+			
 			$.ajax({
 				type: "POST",
 				url: URL,
